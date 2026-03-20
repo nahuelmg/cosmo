@@ -20,6 +20,20 @@ You now have the full skill library, planning scaffold, and CLAUDE.md ready.
 
 ---
 
+## Step 0.5: Gather Client Content
+
+Before writing any code, send the client the **content intake form** (`skills/web-dev-general/templates/content-intake.md`). This collects everything you'll need:
+
+- Brand assets (logo, colors, fonts)
+- Copy/text for each page
+- Images and media
+- Credentials (domain registrar, hosting, analytics)
+- Content for dynamic sections (products, services, team bios)
+
+**Don't start building until you have at least**: logo, brand colors, and copy for the main page. You can build with placeholders, but swapping real content later always takes longer than expected.
+
+---
+
 ## Step 1: Define the Project
 
 Open Claude Code in the project directory and run:
@@ -111,13 +125,42 @@ Add multi-page navigation:
 
 ---
 
-## Step 6: Polish
+## Step 6: Polish + Device Testing
 
 - Dark/light mode toggle
 - Loading skeletons (match final layout dimensions)
 - Error states with helpful messages
 - Responsive layout (mobile/tablet/desktop)
 - Micro-interactions and transitions
+
+### Mock Data Fidelity Check
+
+Before moving to API integration, verify the mock data is realistic enough:
+
+```
+[ ] Every filter/selector visibly changes the displayed data
+[ ] Loading states appear and resolve correctly
+[ ] Error states render when simulated
+[ ] Data looks plausible (right date ranges, reasonable values, proper formats)
+[ ] Empty states handled (no items, no results, first-time user)
+```
+
+If a UI control does nothing with mock data, fix the mock provider now — don't wait until real data reveals it.
+
+### Device Testing
+
+Deploy to a preview URL and test on your **actual phone**:
+
+```
+[ ] Layout doesn't overflow horizontally
+[ ] Text is readable without zooming
+[ ] Touch targets are large enough (min 44x44px)
+[ ] Charts/visualizations render correctly
+[ ] Scroll behavior feels natural
+[ ] No stale cached version (hard refresh if needed)
+```
+
+Do this after each milestone, not just at the end. Real devices expose problems that browser dev tools simulators miss.
 
 **Time estimate**: 3-5 conversation turns
 
@@ -127,12 +170,26 @@ Add multi-page navigation:
 
 When the UI is complete with mock data:
 
-1. **Create the API client module** (`lib/[service]-client.ts`)
-2. **Create BFF routes** (`app/api/[resource]/route.ts`)
-3. **Implement ApiProvider** (same interface as MockProvider)
-4. **Switch env var**: `NEXT_PUBLIC_DATA_SOURCE=api`
-5. **Add polling/caching** (TanStack Query refetchInterval)
-6. **Test error states** (disconnect API, test graceful degradation)
+1. **Compatibility check first** — before building the full integration, deploy a minimal test route that calls the external API and returns the status code. Verify it works from your hosting platform (Vercel, Netlify, etc.). Some APIs block cloud provider IPs. Discovering this after building the full integration wastes hours.
+   ```typescript
+   // app/api/test-external/route.ts — deploy this FIRST
+   export async function GET() {
+     try {
+       const res = await fetch('https://api.example.com/ping');
+       return Response.json({ status: res.status, ok: res.ok });
+     } catch (e) {
+       return Response.json({ error: String(e) }, { status: 502 });
+     }
+   }
+   ```
+2. **Create the API client module** (`lib/[service]-client.ts`)
+3. **Create BFF routes** (`app/api/[resource]/route.ts`)
+4. **Implement ApiProvider** (same interface as MockProvider)
+5. **Switch env var**: `NEXT_PUBLIC_DATA_SOURCE=api`
+6. **Add polling/caching** (TanStack Query refetchInterval)
+7. **Test error states** (disconnect API, test graceful degradation)
+
+**If the API is blocked**: Check `references/apis/` for a documented fallback. If none exists, evaluate alternatives before building further.
 
 **Time estimate**: 3-5 conversation turns
 
@@ -163,15 +220,35 @@ After the project is done:
 
 1. **New domain?** Create `skills/domains/<domain>/SKILL.md` with patterns specific to this project type
 2. **New general patterns?** Update `skills/web-dev-general/SKILL.md` with any new discoveries
-3. **Copy updated skills back** to the `web_dev` template repo so future projects benefit
-4. **Fill in the retrospective** in your project tracker
+3. **New research?** Extract validated findings to `references/` (libraries, APIs, deployment notes)
+4. **Copy everything back** to the `web_dev` template repo so future projects benefit
+5. **Fill in the retrospective** in your project tracker
 
 ```bash
-# Copy updated skills back to template
+# Copy updated skills and references back to template
 cp -r skills/ ~/Desktop/web_dev/skills/
+cp -r references/ ~/Desktop/web_dev/references/
 cd ~/Desktop/web_dev
-git add skills/ && git commit -m "chore: update skills from <project-name>" && git push
+git add skills/ references/ && git commit -m "chore: update from <project-name>" && git push
 ```
+
+---
+
+## Multi-Session Projects
+
+If a project spans multiple conversations (most will), **always end a session properly**:
+
+```
+/gsd:pause-work
+```
+
+This saves a context handoff file so the next session can resume without losing state. Starting the next session:
+
+```
+/gsd:resume-work
+```
+
+**Don't just close the conversation** — context is lost and the next session starts cold, wasting turns on re-orientation.
 
 ---
 

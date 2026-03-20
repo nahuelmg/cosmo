@@ -231,6 +231,24 @@ export const dataProvider = createDataProvider();
 4. **Test isolation**: Tests run against predictable data
 5. **Seamless swap**: Change one env var to switch to real data
 
+### Mock Data Fidelity
+
+Mock data must be realistic enough that every UI control has a visible effect. If a control does nothing with mock data, bugs hide until real data arrives — which is always the worst time to discover them.
+
+**Fidelity checklist** (verify before moving to API integration):
+
+```
+[ ] Every filter/selector visibly changes the displayed data
+[ ] Every parameter the API accepts is respected by the mock (intervals, ranges, etc.)
+[ ] Data timestamps are recent enough to look plausible
+[ ] Loading states appear and resolve (add artificial delay if needed)
+[ ] Empty states handled (no items, no search results, first-time user)
+[ ] Multi-entity mocks are distinct (not all identical — vary names, values, images)
+[ ] Error states can be triggered (e.g., invalid ID returns error)
+```
+
+**Lesson learned**: A mock provider that ignores parameters (e.g., always returns daily data regardless of interval selection) ships a UI control that does nothing — and you only discover it when a user tests on their phone in production.
+
 ### BFF (Backend For Frontend) Pattern
 
 Never call external APIs directly from the browser. Route through server-side API handlers:

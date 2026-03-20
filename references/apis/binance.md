@@ -122,4 +122,42 @@ function computeLimit(range: TimeRange, interval: string): number {
 
 ---
 
+## Fallback: CoinGecko API
+
+If Binance is blocked (e.g., from Vercel), CoinGecko is the recommended alternative.
+
+**Status**: Not yet tested in production — validate before relying on it.
+
+**Base URL**: `https://api.coingecko.com/api/v3`
+
+**Key differences from Binance**:
+
+| Feature | Binance | CoinGecko |
+|---------|---------|-----------|
+| Auth | None | None (free tier) or API key (Pro) |
+| Rate limit | 1200/min | 10-30/min (free), 500/min (Pro) |
+| OHLCV data | Full OHLCV per candle | OHLC only (no volume in OHLC endpoint) |
+| Cloud-friendly | No (blocks AWS) | Yes |
+| Interval options | 1m to 1M (15 options) | 1d, 7d, 14d, 30d only (OHLC) |
+| Real-time price | Yes (ticker) | Yes (simple/price) |
+
+**Endpoints to investigate**:
+- `GET /coins/{id}/ohlc?vs_currency=usd&days=30` — OHLC data (limited intervals)
+- `GET /coins/{id}/market_chart?vs_currency=usd&days=30` — price + volume (not OHLCV)
+- `GET /coins/markets?vs_currency=usd` — list with price, 24h change, market cap
+- `GET /simple/price?ids=bitcoin&vs_currencies=usd` — current price only
+
+**ID mapping**: CoinGecko uses slug IDs (`bitcoin`, `ethereum`) — same as our app IDs, no mapping needed.
+
+**Trade-offs**:
+- Lower rate limit means more aggressive caching needed (5-10 min instead of 1 min)
+- OHLC endpoint only supports daily+ granularity — no minute/hourly candles on free tier
+- Market chart endpoint gives price points but not full OHLCV
+- Free tier has no SLA — may throttle during high traffic
+
+**When to use**: Production deployments on Vercel/Netlify where Binance is blocked. Use Binance locally for development (faster, more data).
+
+---
+
 *Last verified: 2026-03-18*
+*CoinGecko fallback: documented but NOT yet tested in production — validate first*
