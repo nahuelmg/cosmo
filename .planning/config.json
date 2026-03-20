@@ -1,0 +1,7 @@
+{
+  "model_profile": "quality",
+  "auto_commit": true,
+  "auto_verify": true,
+  "parallel_execution": true,
+  "max_parallel_agents": 3
+}
