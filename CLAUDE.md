@@ -8,6 +8,7 @@ Before starting any work, read the relevant skill files:
 2. **If domain matches**: Check `skills/domains/` for a matching domain skill
 3. **For design decisions**: Defer to ui-ux-pro-max (referenced in `skills/design/README.md`)
 4. **For prompt guidance**: See `skills/web-dev-general/prompt-patterns.md`
+5. **Before researching a library/API**: Check `references/` first — may already have validated findings
 
 ## Project Startup
 
@@ -32,5 +33,6 @@ Config is in `.planning/config.json`.
 
 1. Extract domain skill if new domain (see `skills/README.md`)
 2. Update general skill with new patterns
-3. Copy updated `skills/` back to the `web_dev` template repo
-4. Fill in project tracker retrospective
+3. Extract research findings to `references/` (see `references/README.md`)
+4. Copy updated `skills/` and `references/` back to the `web_dev` template repo
+5. Fill in project tracker retrospective
