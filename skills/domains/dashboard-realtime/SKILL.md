@@ -110,6 +110,41 @@ export function ChartComponent({ data }: Props) {
 - `ISeriesMarkersPluginApi<Time>` not `<unknown>` — TypeScript generics must match
 - Empty data array makes chart render blank canvas — use sentinel data point instead
 
+<!-- Added from crypto-dashboard retrospective -->
+**Critical: `subscribeCrosshairMove` fires synchronously during `setData()`**
+
+This is not documented prominently but is the source of two classes of bugs:
+
+1. **Infinite loop**: If `setData()` fires the crosshair callback → callback updates state → re-render → effect calls `setData()` again → repeat. Fix: use a `prevDataRef` to skip `setData()` when data reference hasn't changed.
+
+2. **Stale series ref**: When switching chart types (remove old series, add new), calling `newSeries.setData(data)` before updating `seriesRef.current = newSeries` means the crosshair callback reads the stale ref → `param.seriesData.get(oldSeries)` returns undefined → crosshair shows dashes. **Always update `seriesRef.current = newSeries` BEFORE calling `newSeries.setData(data)`.**
+
+```typescript
+// WRONG — crosshair fires during setData, reads old/removed series
+const newSeries = chart.addSeries(LineSeries, options)
+newSeries.setData(lineData)          // ← crosshair fires here with stale ref
+priceSeriesRef.current = newSeries   // ← too late
+
+// CORRECT
+const newSeries = chart.addSeries(LineSeries, options)
+priceSeriesRef.current = newSeries   // ← update ref first
+newSeries.setData(lineData)          // ← crosshair now reads correct ref
+```
+
+**`prevDataRef` pattern for multi-series charts (breaks the infinite loop):**
+
+```typescript
+const prevDataRef = useRef<Map<string, DataType[] | undefined>>(new Map())
+
+// In effect:
+if (prevDataRef.current.get(assetId) !== queryResult.data) {
+  prevDataRef.current.set(assetId, queryResult.data)
+  series.setData(queryResult.data ?? [])
+}
+// On series removal:
+prevDataRef.current.delete(assetId)
+```
+
 ---
 
 ## 2. Data Pipeline Architecture
@@ -330,6 +365,9 @@ if (series) chart.removeSeries(series);
 seriesMap.current.delete(assetId);
 ```
 
+<!-- Added from crypto-dashboard retrospective -->
+**`useQueries` result array always has a new reference** — TanStack Query v5 structural sharing operates on individual query results, but the array wrapper returned by `useQueries` is always a new object. Putting `results` directly in `useEffect` dependencies triggers the effect on every render. Use `prevDataRef` to guard each `series.setData()` call individually, rather than trying to stabilize the array reference.
+
 ---
 
 ## 6. Mock Data Strategy for Dashboards
@@ -399,4 +437,76 @@ export function formatCompact(value: number): string {
 
 ---
 
-*Last updated: 2026-03-20 — extracted from Asset Price Dashboard project (v1.0–v1.3)*
+---
+
+<!-- Added from crypto-dashboard retrospective -->
+## 8. API Validation Before Phase Planning
+
+Do this BEFORE designing the provider interface and BFF routes for any real-time data API:
+
+```
+[ ] Can the API be reached from the target deployment? (Vercel/AWS blocks some APIs)
+    — Test: deploy a minimal BFF route to Vercel and curl it, or check the API's known blocklist.
+    — Binance REST API returns 451/403 from Vercel. CoinGecko works.
+
+[ ] Does the API return ALL the fields your UI needs from a single endpoint?
+    — CoinGecko /ohlc returns [ts, o, h, l, c] — no volume. Volume is a second endpoint.
+    — Check the actual JSON response shape in a browser or curl before designing types.
+
+[ ] What granularity does the API use per time range?
+    — CoinGecko free /ohlc auto-selects: 30min (1d), 4h (1w/1m), 4-day (6m+).
+    — This means "current price" differs across ranges. Design your UI expecting this.
+
+[ ] What is the rate limit and how many requests does your UI make per user interaction?
+    — If switching ranges makes 2 parallel requests × 6 ranges = 12 calls, and limit is 30/min,
+      you can only support 2.5 users switching simultaneously before hitting limits.
+
+[ ] Does the API require auth, and where does the key live?
+    — Client-side = leaked. Server-side BFF = safe. Plan the key location upfront.
+
+[ ] Does the API's free tier cover your UX design?
+    — CoinGecko free OHLC only supports 1d candle granularity effectively.
+      If your UI shows 1m/5m/1h intervals, they may not work with the free tier.
+```
+
+---
+
+## 9. Known Pitfalls (CryptoDash v1.0 Retrospective)
+
+These cost real debugging time. Documenting here so the next dashboard project avoids them:
+
+### Chart Library
+
+| Pitfall | Impact | Solution |
+|---------|--------|----------|
+| `series.setData()` fires `subscribeCrosshairMove` synchronously | Infinite render loop in multi-series charts | `prevDataRef` pattern: guard each `setData()` with reference equality check |
+| Series ref must be updated BEFORE `setData()` when switching types | Crosshair shows `—` for all line/area candles | `seriesRef.current = newSeries` then `newSeries.setData(data)`, never after |
+| Empty `data` array crashes on crosshair move | Chart appears blank, broken | Use sentinel data point or guard `setData()` against empty arrays |
+
+### Dark Theme
+
+| Pitfall | Impact | Solution |
+|---------|--------|----------|
+| Native `<select>` text invisible | Users can't see dropdown options | Add `[color-scheme:dark]` to every `<select>` in dark UIs |
+| `ThemeProvider` starts in light mode | Dark dashboard briefly flashes light | `enableSystem={false}` `defaultTheme="dark"` |
+| `dark:` utilities do nothing | All dark mode styling missing | `@custom-variant dark (&:is(.dark *))` in globals.css (Tailwind v4 only) |
+
+### Layout
+
+| Pitfall | Impact | Solution |
+|---------|--------|----------|
+| Header controls shift when OHLCV values appear | Jarring UX every time user hovers chart | Right-anchor all controls with `ml-auto` — never let dynamic left content push controls |
+| Popup/dropdown content clipped | Combobox shows 1 item only | Never use `overflow-hidden` on a popup container with a scrollable child list |
+
+### API Integration
+
+| Pitfall | Impact | Solution |
+|---------|--------|----------|
+| Entire API provider invalid (Binance blocked) | Phase 7 replanned | Spike API connectivity from Vercel before designing the data layer |
+| Missing fields (CoinGecko has no volume) | Volume always 0 in live mode | Check actual JSON response before designing types |
+| Price inconsistency across ranges | User confusion | Document as expected behavior from auto-granularity; not all APIs work the same way |
+| Parallel requests double rate limit consumption | Rate limit hit 2x faster | Budget total requests per user action before adding parallel fetches |
+
+---
+
+*Last updated: 2026-03-21 — retrospective additions from CryptoDash v1.0 project*

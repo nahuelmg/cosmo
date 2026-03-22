@@ -143,6 +143,31 @@ Map their response to our existing {{TypeName}} interface.
 
 **Key insight**: Always reference existing provider patterns. Claude will match the abstraction level, error handling, and caching strategy of what's already there.
 
+<!-- Added from crypto-dashboard retrospective -->
+### API pre-validation spike (run BEFORE planning integration)
+
+```
+Before we plan the {{API name}} integration, let's validate the API is usable:
+
+1. Can we reach {{API base URL}} from Vercel serverless functions?
+   Check if {{API name}} is known to block AWS/cloud IPs.
+
+2. Fetch {{endpoint}} and show me the actual JSON response shape.
+   Do NOT assume all fields exist — show me exactly what comes back.
+
+3. What is the rate limit and how many requests will our UI make per:
+   - Page load (initial fetch for all panels)
+   - Range/filter change (user interaction)
+   - Background polling (60s interval × open panels)
+
+4. Does the free tier support the intervals/granularity our UI needs?
+   (Some APIs return different granularities automatically based on time range.)
+
+Only proceed to building the provider after we have answers to all four.
+```
+
+**Why this pattern**: In CryptoDash v1.0, the entire Phase 7 API target (Binance) turned out to be blocked from Vercel. We also discovered CoinGecko's `/ohlc` endpoint has no volume field — only found when testing live mode. Both added unplanned work. A 10-minute spike at planning time would have caught both.
+
 ---
 
 ## 6. Refactoring
@@ -222,4 +247,102 @@ or abstractions unless the existing ones genuinely don't work.
 
 ---
 
-*Last updated: 2026-03-20 — extracted from Asset Price Dashboard project conversations*
+<!-- Added from crypto-dashboard retrospective -->
+---
+
+## 9. Dark Theme Verification
+
+When building dark-first UIs, add this to the visual verification prompt:
+
+```
+Before marking this complete, verify dark theme rendering:
+
+[ ] Native browser controls (select, input[type=date], checkbox) look correct in dark mode
+    — Add [color-scheme:dark] to any <select> or date input that uses text-white
+[ ] Dropdown/popup containers don't clip their scrollable children
+    — Remove overflow-hidden from any popup that contains a scrollable list
+[ ] ThemeProvider is set to enableSystem={false} and defaultTheme="dark"
+    — Otherwise OS light mode preference will override the dark default
+```
+
+---
+
+<!-- Added from 3d-printing-landing retrospective -->
+---
+
+## 10. Bilingual Content & i18n
+
+### Pre-implementation validation pattern
+
+Before starting any phase that involves translation:
+
+```
+Before building the {{component name}}, verify:
+
+1. All translation namespaces this component needs exist in both es.json and en.json:
+   - Namespace: {{Nav / Hero / QuoteForm / etc.}}
+   - Keys needed: {{list specific keys}}
+
+2. If this is a wave with multiple tasks, verify keys exist BEFORE the component task,
+   not after. Translation lookups fail at runtime if keys are missing.
+
+3. For any component that uses both getTranslations() (server) AND useTranslations() (client):
+   - Server component fetches and passes serialized data as props
+   - Client component uses useTranslations() only for interactive labels (aria-labels, etc.)
+   - Never call getTranslations() in a client component
+```
+
+### Bilingual content architecture decision prompt
+
+Ask this BEFORE building any bilingual content section:
+
+```
+For the {{section name}} section, we need to decide the bilingual content strategy:
+
+Option A: Translation files (messages/es.json + messages/en.json)
+- Use for: UI strings, labels, error messages, short copy
+- Access via: getTranslations() in server components, useTranslations() in client components
+
+Option B: BilingualText data fields ({ es: string; en: string })
+- Use for: Business content that varies per entity (service names, material descriptions)
+- Access via: data[field][locale] in any component (no i18n library needed)
+
+Option C: Separate page files per locale
+- Use for: Long-form content (blog posts, legal pages) that differs structurally by language
+- Access via: File-based routing ([locale]/page.tsx)
+
+Decision for {{section name}}: {{Option A/B/C}}
+Reason: {{why this choice fits this content type}}
+```
+
+**Rule of thumb**:
+- Labels → Option A (translation files)
+- Product/service data → Option B (BilingualText in data files)
+- Long-form content → Option C (page files)
+
+### i18n URL strategy decision prompt
+
+Decide this BEFORE building legal pages or multi-locale routes:
+
+```
+For {{legal pages / blog posts / etc.}}, decide the URL slug strategy:
+
+Option A: Same slug across locales
+- /aviso-legal (ES) and /en/aviso-legal (EN)
+- Simpler: one page file handles both locales
+- Downside: English users see Spanish URL slug
+
+Option B: Translated slugs
+- /aviso-legal (ES) and /en/legal-notice (EN)
+- Requires: separate page files OR dynamic routing with locale-based slug mapping
+- Better: semantically correct for English SEO
+
+Decision: {{Option A or B}}
+Implementation path: {{if B: describe the routing approach}}
+```
+
+**Choose before starting legal pages, not after.** Changing URL structure after launch breaks inbound links.
+
+---
+
+*Last updated: 2026-03-22 — retrospective additions from 3D Printing Barcelona landing page project*
