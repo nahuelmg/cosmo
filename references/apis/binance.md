@@ -1,6 +1,6 @@
 # Binance REST API
 
-> Source: Asset Dashboard project (2026-03-17). Verified in production.
+> Last verified: 2026-03-17 in production.
 
 ## Overview
 

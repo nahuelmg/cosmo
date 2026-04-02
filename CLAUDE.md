@@ -54,8 +54,9 @@ Config is in `.planning/config.json`.
 
 ## After Project Completion
 
-1. Extract domain skill if new domain (see `skills/README.md`)
-2. Update general skill with new patterns
-3. Extract research findings to `references/` (see `references/README.md`)
-4. Copy updated `skills/` and `references/` back to the `web_dev` template repo
-5. Fill in project tracker retrospective
+1. Run `/gsd:audit-milestone` then `/gsd:complete-milestone`
+2. Fill in project tracker retrospective (`skills/web-dev-general/templates/project-tracker.md`)
+3. Extract domain skill if new domain (see `skills/README.md`)
+4. Update general skill with new patterns
+5. Extract research findings to `references/` (see `references/README.md`)
+6. Sync back to template: `./extract-learnings.sh`

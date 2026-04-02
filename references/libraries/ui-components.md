@@ -1,6 +1,6 @@
 # UI Component Libraries
 
-> Source: Asset Dashboard project (2026-03-16). Verified in production.
+> Last verified: 2026-03-16 in production.
 
 ## Comparison
 

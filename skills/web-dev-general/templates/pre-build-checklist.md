@@ -4,8 +4,6 @@
 > Each section is a gate — don't proceed past it until all boxes are checked.
 > Time investment: ~30–60 minutes. Saves 4–8 hours of rework.
 
-*Created from CryptoDash v1.0 retrospective — every item here caused real problems.*
-
 ---
 
 ## Phase 1: Planning & Scope
@@ -14,7 +12,7 @@
 
 ```
 [ ] Define the ONE core user action (not 5 features — the single most important thing)
-    — "User can view a price chart" not "Users can view charts, track portfolio, compare assets"
+    — "User can browse products" not "Users can browse, filter, compare, and wishlist products"
 
 [ ] Define what is explicitly OUT of scope for v1
     — Write it down. Prevents scope creep when building.
@@ -85,7 +83,7 @@ Do this BEFORE designing the DataProvider interface or any BFF routes.
 [ ] Test API reachability from target deployment:
     — Deploy a minimal 10-line BFF route to Vercel and call the API from it.
     — OR: check the API's documentation for known IP blocklists.
-    — Binance REST API blocks Vercel/AWS IPs. CoinGecko does not.
+    — Some APIs (financial, payment, social) block requests from cloud provider IPs (AWS/Vercel/Netlify). Check the API's documentation or test with a deployed function.
     — If blocked: find an alternative API NOW, not after building the data layer.
 
 [ ] Fetch the actual endpoint and inspect the JSON response:
@@ -96,13 +94,12 @@ Do this BEFORE designing the DataProvider interface or any BFF routes.
     [ ] Expected field 2: _____ — present? Y/N
     [ ] Expected field 3: _____ — present? Y/N
 
-    — CoinGecko /ohlc returns [ts, o, h, l, c] — NO volume. Volume is a separate endpoint.
     — Don't design a type assuming a field exists. Check first.
 
 [ ] Verify free tier granularity covers your UI design:
-    — CoinGecko free OHLC auto-selects candle size: 30min (1d), 4h (1w/1m), 4day (6m+)
-    — This means the "current price" differs across time ranges. Is your UI OK with this?
-    — If you need consistent granularity, you need a paid tier or different API.
+    — Some APIs return different data granularity or format depending on the query parameters or tier.
+      Verify the free tier supports what your UI needs.
+    — If you need consistent granularity, you may need a paid tier or different API.
 
 [ ] Calculate rate limit budget:
     Rate limit: ___ calls/min
@@ -113,7 +110,7 @@ Do this BEFORE designing the DataProvider interface or any BFF routes.
     Total worst-case per minute with N concurrent users: ___
 
     — If total > rate limit: reduce parallelism, add caching, or get a paid key.
-    — CoinGecko free: 30/min. Adding a parallel volume fetch halved this budget.
+    — Adding parallel fetches halves your per-endpoint budget. Calculate total request volume before implementing.
 
 [ ] Document where auth keys live:
     [ ] No key needed (public API)
@@ -121,7 +118,6 @@ Do this BEFORE designing the DataProvider interface or any BFF routes.
     [ ] Key is client-side (NEXT_PUBLIC_ prefix) — reconsider. Public = leaked.
 ```
 
-<!-- Added from 3d-printing-landing retrospective -->
 ### Form Submission Service (if using Formspree / Resend / EmailJS / etc.)
 
 If the project has a contact or lead form, do this during the build phase (not at deployment):
@@ -143,13 +139,13 @@ If the project has a contact or lead form, do this during the build phase (not a
 
 ```
 [ ] Define the DataProvider interface methods — ONLY what has a concrete caller right now:
-    — Don't add speculative methods (getCurrentPrice, getHistoricalVol, etc.)
+    — Don't add speculative methods
     — Every method added without a caller is dead code from day one.
 
 [ ] Define shared types in types/index.ts — ONLY types used by 2+ consumers:
-    — Don't define Holding, HoldingRow, etc. upfront for components that don't exist yet.
+    — Don't define types upfront for components that don't exist yet.
     — Components will define inline types; extract to shared only when there's actual reuse.
-    — Pay attention to naming: unrealizedPnl vs unrealizedPnL. Pick one and document it.
+    — Pay attention to naming consistency across types. Pick one convention and document it.
 
 [ ] Decide state management per feature:
     Feature: _______
@@ -161,10 +157,10 @@ If the project has a contact or lead form, do this during the build phase (not a
     — Zustand ephemeral: cross-component coordination that resets on reload (comparison selections)
     — useState: form fields, open/close, local-only UI state
 
-[ ] For multi-chart or multi-series components, plan for:
-    [ ] What happens when series data changes? (setData() fires crosshair events)
+[ ] For components using canvas/imperative libraries (charts, maps, editors), plan for:
+    [ ] What happens when data changes? (imperative updates may fire events synchronously)
     [ ] Do you need the prevDataRef pattern to prevent infinite render loops?
-    [ ] When switching chart types, will you update the series ref BEFORE setData()?
+    [ ] When switching visualization types, will you update refs BEFORE calling imperative setters?
 ```
 
 ---
@@ -203,7 +199,7 @@ For every form:
 
 For every panel/section with controls (range selectors, toggles, etc.):
 [ ] Controls are right-anchored if left content is dynamic
-[ ] Verified controls don't shift when data loads or crosshair activates
+[ ] Verified controls don't shift when data loads or overlays appear
 
 For every API call added:
 [ ] Recalculate rate limit budget (see Phase 3)
@@ -222,7 +218,7 @@ For every API call added:
     [ ] Loading states appear (TanStack Query isPending, not isLoading)
     [ ] Error states appear when API fails (simulate with wrong API key)
     [ ] Data displays correctly (not all zeros, not stale mock data)
-    [ ] Volume data (if applicable) comes from the correct endpoint
+    [ ] All data fields come from the correct endpoints
     [ ] Rate limits not hit during normal usage
 
 [ ] Vercel environment variables set:
@@ -241,20 +237,14 @@ For every API call added:
 
 In rough order of "time lost":
 
-1. **API blocked from Vercel** — Spike connectivity FIRST. (Binance → CoinGecko pivot)
-2. **setData() fires crosshair synchronously** — prevDataRef pattern in multi-series charts
-3. **Series ref must precede setData()** — L/A header showing `—` for 2 phases of testing
-4. **native `<select>` invisible text** — [color-scheme:dark] on every select in dark UIs
-5. **`overflow-hidden` on popup** — Combobox clipped to 1 row for entire Phase 5
-6. **Tailwind v4 dark: not working** — @custom-variant dark missing
-7. **`useQueries` array always new ref** — infinite render loop in comparison chart
-8. **API response fields missing** — volume: 0 for entire live mode until post-launch fix
-9. **Vite/Node version mismatch** — dependency pinning at the start, not after errors
-10. **ThemeProvider OS preference** — enableSystem=false for dark-first dashboards
+1. **External API blocked from hosting provider** — test connectivity FIRST
+2. **Native browser controls invisible in dark mode** — add [color-scheme:dark] on every select/date input
+3. **`overflow-hidden` on popup** — Combobox clipped to 1 row; inner list should own overflow-y-auto
+4. **Tailwind v4 dark: not working** — @custom-variant dark missing
+5. **API response fields missing** — always inspect actual JSON before designing types
+6. **Vite/Node version mismatch** — dependency pinning at the start, not after errors
+7. **ThemeProvider defaulting to OS preference** — set enableSystem=false for dark-first UIs
 
----
-
-<!-- Added from 3d-printing-landing retrospective -->
 ---
 
 ## Phase 8: Landing Page Pre-Launch Gate
@@ -326,5 +316,4 @@ In rough order of "time lost":
 
 ---
 
-*Created: 2026-03-21 — from CryptoDash v1.0 retrospective*
-*Updated: 2026-03-22 — landing page pre-launch gate added from 3D Printing Barcelona retrospective*
+*Last updated: 2026-03-22*

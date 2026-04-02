@@ -1,126 +1,86 @@
-# Client Content Checklist
+# Content Gap Checklist
 
-> Use this as a reference when the client's materials are incomplete. Send them the relevant sections for whatever is missing — not the whole form.
->
-> See `client-intake.md` for the process of extracting a structured brief from what the client already provided.
+> **When to use**: After processing the client folder with `client-intake.md`. Review what was extracted from their materials, then use this checklist to identify gaps and decide what to do about each one.
 
 ---
 
-# Content Intake — {{Project Name}}
+## Blocking — Cannot Start Phase 1
 
-Hi {{Client Name}},
+These must be resolved (obtained from client OR generated) before any build work begins.
 
-To get started on your website, I need the following materials. Please provide everything in a shared Google Drive folder or similar.
-
-**Deadline for materials**: {{date — ideally 3-5 days before dev starts}}
-
----
-
-## 1. Brand Assets
-
-- [ ] **Logo** — vector format preferred (SVG, AI, EPS). If unavailable, high-res PNG (min 1000px wide, transparent background)
-- [ ] **Brand colors** — hex codes, RGB, or Pantone. At minimum: primary color, secondary color, accent color
-- [ ] **Fonts** — font family names (e.g., "Inter", "Playfair Display"). If custom fonts, provide the font files (.woff2, .ttf)
-- [ ] **Brand guidelines** — if you have a brand manual or style guide, share it
-
-**If you don't have any of these**, I can propose a color palette and typography based on your industry and preferences. Just let me know:
-- Colors you like or dislike
-- Feeling you want the site to convey (professional, playful, minimal, bold, etc.)
+- [ ] **Primary brand color** — at least one definitive color the client identifies with
+  - _If missing_: Ask client for color preferences or "feeling" (professional, playful, bold, etc.), then use ui-ux-pro-max `--design-system` to generate a palette
+- [ ] **Logo file** — SVG preferred, high-res PNG (1000px+, transparent bg) acceptable
+  - _If missing_: Use text-based logo with brand font as placeholder; flag for client follow-up
+- [ ] **Core value proposition** — what the business does, for whom, and why it matters (1-2 sentences)
+  - _If missing_: Draft from whatever context exists (client folder, their current site, social media). Get client sign-off before building
+- [ ] **Call-to-action** — what the site should drive visitors to do (book, call, buy, etc.)
+  - _If missing_: Infer from business type. Confirm with client
+- [ ] **Page list** — which pages the site needs
+  - _If missing_: Default to Home / About / Services / Contact. Confirm with client
+- [ ] **Contact info** — at minimum: email or phone number
+  - _If missing_: Cannot launch a business site without this. Ask client directly
 
 ---
 
-## 2. Text Content
+## Needed Before Launch — Build With Placeholders, Replace Before Deploy
 
-For each page, provide the text you want displayed. I can write placeholder text and refine later, but real content leads to a better result.
-
-### Homepage
-- [ ] Headline / tagline
-- [ ] Subheadline (1-2 sentences explaining what you do)
-- [ ] Key benefits or features (3-5 bullet points)
-- [ ] Call-to-action text (what should visitors do? "Book a consultation", "View our menu", etc.)
-
-### About Page
-- [ ] Company story / mission (1-3 paragraphs)
-- [ ] Team member names, roles, and headshots (if applicable)
-
-### Services / Products Page
-- [ ] List of services or products with:
-  - Name
-  - Short description (1-2 sentences)
-  - Price (if public)
-  - Image (if applicable)
-
-### Contact Page
-- [ ] Physical address (if applicable)
-- [ ] Phone number
-- [ ] Email address
-- [ ] Business hours
-- [ ] Social media links (Instagram, Facebook, LinkedIn, etc.)
-- [ ] Google Maps location (share the Google Maps link)
-
-### Other Pages
-- [ ] {{List any additional pages and what content they need}}
-
----
-
-## 3. Images & Media
-
-- [ ] **Hero image** — main banner photo (min 1920x1080px, landscape)
-- [ ] **Product/service photos** — one per item (min 800x600px)
-- [ ] **Team photos** — headshots (min 400x400px, consistent style preferred)
-- [ ] **Gallery/portfolio images** — if applicable
-- [ ] **Video content** — YouTube/Vimeo links, or raw video files
-
-**Photo tips**:
-- Higher resolution is always better — I can crop and optimize
-- Consistent lighting and style makes the site look more professional
-- If you don't have professional photos, let me know — I can suggest stock photo sources
+- [ ] **Full color palette** — primary, secondary, accent, neutrals (hex codes)
+  - _If missing_: Generate with ui-ux-pro-max `--design-system` from primary color
+- [ ] **Typography** — font families for headings and body
+  - _If missing_: Generate with ui-ux-pro-max `--design-system`; default to Inter + a complementary display font
+- [ ] **Homepage headline + subheadline**
+  - _If missing_: Write draft from value proposition. Mark for client review
+- [ ] **Key benefits / features** — 3-5 bullet points for homepage
+  - _If missing_: Draft from services list or business description
+- [ ] **About text** — company story or mission (1-3 paragraphs)
+  - _If missing_: Build with placeholder. Flag as required before launch
+- [ ] **Service/product descriptions** — name + short description per item, price if public
+  - _If missing_: Build cards with placeholder text. Flag as required
+- [ ] **Hero image** — main banner (min 1920x1080, landscape)
+  - _If missing_: Use curated stock photo (Unsplash/Pexels) matched to industry. Replace before launch if client has own photography
+- [ ] **Product/service images** — one per item (min 800x600)
+  - _If missing_: Stock photos or solid-color placeholder cards
+- [ ] **Team photos** — headshots (min 400x400, consistent style)
+  - _If missing_: Use initials/avatars as placeholder. Skip team section if not critical
+- [ ] **Business hours**
+  - _If missing_: Omit section, ask client
+- [ ] **Physical address** (if brick-and-mortar)
+  - _If missing_: Omit map section, ask client
+- [ ] **Social media profile URLs**
+  - _If missing_: Omit social links, ask client
+- [ ] **Domain access** — registrar login or ability to update DNS
+  - _If missing_: Can build and preview without it. Must resolve before deploy
+- [ ] **Contact form destination** — email address for form submissions
+  - _If missing_: Use the primary contact email. Confirm with client
+- [ ] **Legal text** — privacy policy, terms if needed
+  - _If missing_: Note as required for launch; client responsibility
 
 ---
 
-## 4. Accounts & Credentials
+## Nice to Have — Generate Alternatives If Missing
 
-I'll need access to (or you'll need to set up):
-
-- [ ] **Domain registrar** — where your domain (e.g., yoursite.com) is managed (GoDaddy, Namecheap, Google Domains, etc.)
-- [ ] **Current hosting** — if migrating from an existing site
-- [ ] **Google Analytics** — existing account, or I'll set one up
-- [ ] **Google Search Console** — for SEO (I can set this up)
-- [ ] **Email service** — if the site has a contact form that sends emails (SendGrid, Resend, etc.)
-- [ ] **Social media accounts** — for linking (not credentials, just the profile URLs)
-
-**Important**: Share credentials via a secure method (password manager invite, not email/WhatsApp).
-
----
-
-## 5. Functional Requirements
-
-- [ ] **Contact form**: Where should submissions go? (email address)
-- [ ] **Appointment booking**: Do you use a booking system? (Calendly, Google Calendar, custom?)
-- [ ] **Payments**: Do you need to accept payments online? (Stripe, MercadoPago, etc.)
-- [ ] **Newsletter**: Do you collect email subscribers? (Mailchimp, ConvertKit, etc.)
-- [ ] **Chat widget**: Do you want live chat? (WhatsApp button, Intercom, etc.)
-- [ ] **Languages**: Do you need the site in multiple languages?
-
----
-
-## 6. References
-
-- [ ] **Sites you like** — 2-3 websites whose style or layout you admire (from any industry)
-- [ ] **Sites you don't like** — any examples of what you want to avoid
-- [ ] **Competitor sites** — your direct competitors' websites
-
----
-
-## Timeline
-
-| Milestone | Target Date |
-|-----------|------------|
-| Content materials received | {{date}} |
-| First draft / preview | {{date}} |
-| Feedback round | {{date}} |
-| Final delivery | {{date}} |
-
----
-
-*Please reach out if any of this is unclear. The more complete the materials, the faster and better the result.*
+- [ ] **Brand guidelines document** — full style guide or brand manual
+  - _If missing_: Build design system from logo + colors + font choices. No blocker
+- [ ] **Reference sites** — 2-3 sites the client admires, plus competitors
+  - _If missing_: Research competitors independently. Pick layout direction based on industry conventions
+- [ ] **Anti-references** — sites or styles the client wants to avoid
+  - _If missing_: Skip. Present first draft and iterate
+- [ ] **Gallery / portfolio images**
+  - _If missing_: Omit section or use stock. Add later when client provides
+- [ ] **Video content** — YouTube/Vimeo links or raw files
+  - _If missing_: Omit video sections. Not essential for most sites
+- [ ] **Google Analytics account**
+  - _If missing_: Set up new one during deploy phase
+- [ ] **Google Search Console**
+  - _If missing_: Set up during deploy phase
+- [ ] **Newsletter / email service** — Mailchimp, ConvertKit, etc.
+  - _If missing_: Build signup form UI, wire integration later
+- [ ] **Booking system** — Calendly, Google Calendar, etc.
+  - _If missing_: Use simple contact form as fallback. Integrate booking tool later
+- [ ] **Payment processor** — Stripe, MercadoPago, etc.
+  - _If missing_: Only relevant if e-commerce. Skip until needed
+- [ ] **Chat widget preference** — WhatsApp button, Intercom, etc.
+  - _If missing_: Default to WhatsApp button if client has WhatsApp business. Otherwise skip
+- [ ] **Multi-language requirement**
+  - _If missing_: Build single-language. Easier to add i18n later than to remove it

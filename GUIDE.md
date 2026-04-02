@@ -192,12 +192,26 @@ Add multi-page navigation:
 
 ## Step 6: Polish + Device Testing
 
-Run a UX validation pass before polishing:
+### Design Review (do this FIRST)
+
+Compare the built UI against `design-system/MASTER.md` to catch visual drift:
+
+```
+[ ] Colors match the design system (primary, secondary, accent, backgrounds)
+[ ] Typography matches (font families, scale, weights)
+[ ] Style effects are applied (shadows, blur, border-radius per the chosen style)
+[ ] Dark/light mode contrast meets the design system's accessibility targets
+[ ] Component spacing follows the defined spacing scale (4/8dp rhythm)
+[ ] Visual hierarchy is consistent across all pages
+```
+
+Then run a UX validation pass using ui-ux-pro-max:
 ```bash
 python3 skills/design/ui-ux-pro-max/scripts/search.py "animation accessibility z-index loading" --domain ux
 ```
 
-Then apply polish:
+### Apply Polish
+
 - Dark/light mode toggle
 - Loading skeletons (match final layout dimensions)
 - Error states with helpful messages
@@ -271,8 +285,51 @@ When the UI is complete with mock data:
 1. Connect repo to Vercel (or chosen platform)
 2. Set environment variables in hosting dashboard
 3. Push to trigger deploy
-4. Run post-launch checklist (see `skills/web-dev-general/templates/client-handoff.md`)
-5. Verify on mobile device
+4. Verify on mobile device
+5. Run the post-launch checklist (see Step 8.5)
+
+---
+
+## Step 8.5: Post-Launch Verification
+
+Within 48 hours of going live, verify everything works in production:
+
+### Immediate (within 1 hour)
+
+```
+[ ] Site loads on production domain (HTTPS, www + non-www)
+[ ] All pages render correctly (click through every route)
+[ ] Forms submit successfully (test a real submission, check inbox)
+[ ] Mobile layout works (test on actual phone, not just devtools)
+[ ] Environment variables are correct (not localhost URLs, not placeholder keys)
+```
+
+### Within 24 hours
+
+```
+[ ] Analytics is collecting data (check GA/Plausible dashboard for real pageviews)
+[ ] Error tracking is active (if using Sentry/LogRocket — trigger a test error, verify it appears)
+[ ] Core Web Vitals pass (run PageSpeed Insights on production URL):
+    [ ] LCP < 2.5s
+    [ ] CLS < 0.1
+    [ ] FID < 100ms
+[ ] SEO basics verified:
+    [ ] /sitemap.xml loads with real domain URLs
+    [ ] /robots.txt allows indexing
+    [ ] OG tags render correctly (paste URL in Twitter/LinkedIn share preview)
+    [ ] Google Search Console connected and sitemap submitted
+```
+
+### Within 48 hours
+
+```
+[ ] No recurring errors in error tracking dashboard
+[ ] API rate limits not being hit (check external API dashboard if available)
+[ ] SSL certificate is valid and auto-renewing
+[ ] Client confirmed they can access the handoff documentation
+```
+
+If any check fails, fix it immediately — post-launch bugs are the most visible and the most damaging to client trust.
 
 ---
 
@@ -281,27 +338,48 @@ When the UI is complete with mock data:
 1. Copy `skills/web-dev-general/templates/client-handoff.md` into the project
 2. Fill in all sections (credentials, how to update content, support terms)
 3. Send to client
-4. Log effort in `skills/web-dev-general/templates/project-tracker.md`
 
 ---
 
-## Step 10: Extract Learnings
+## Step 10: Complete the Milestone
 
-After the project is done:
+Run the GSD milestone completion flow:
+
+```
+/gsd:audit-milestone
+/gsd:complete-milestone
+```
+
+Then fill in the project tracker:
+
+1. Copy `skills/web-dev-general/templates/project-tracker.md` into the project (if not already there)
+2. Fill in actual turns, hours, and status for each phase
+3. Fill in the **Retrospective** section:
+   - What went well
+   - What was harder than expected
+   - What to do differently next time
+4. Log any scope changes that happened
+
+The tracker data builds your pricing reference — the more projects you log, the more accurate your estimates become.
+
+---
+
+## Step 11: Extract Learnings
+
+After the project is done, extract what you learned back to the template:
 
 1. **New domain?** Create `skills/domains/<domain>/SKILL.md` with patterns specific to this project type
 2. **New general patterns?** Update `skills/web-dev-general/SKILL.md` with any new discoveries
 3. **New research?** Extract validated findings to `references/` (libraries, APIs, deployment notes)
-4. **Copy everything back** to the `web_dev` template repo so future projects benefit
-5. **Fill in the retrospective** in your project tracker
+4. **Fill in the retrospective** in your project tracker
+
+Then sync everything back to the template repo:
 
 ```bash
-# Copy updated skills and references back to template
-cp -r skills/ ~/Desktop/web_dev/skills/
-cp -r references/ ~/Desktop/web_dev/references/
-cd ~/Desktop/web_dev
-git add skills/ references/ && git commit -m "chore: update from <project-name>" && git push
+./extract-learnings.sh
 ```
+
+This script compares your project's `skills/` and `references/` against the template, shows what changed, and copies updates back with a commit. No more manual `cp -r`.
 
 ---
 
@@ -332,8 +410,10 @@ This saves a context handoff file so the next session can resume without losing 
 | `/gsd:plan-phase N` | Create execution plan for a phase |
 | `/gsd:execute-phase N` | Build everything in the phase plan |
 | `/gsd:verify-work` | Check if what was built actually works |
+| `/gsd:pause-work` | End a session — saves context for next time |
+| `/gsd:resume-work` | Start a session — restores context from last time |
 | `/gsd:audit-milestone` | Before marking a version complete |
-| `/gsd:complete-milestone` | Archive and tag a shipped version |
+| `/gsd:complete-milestone` | Archive and tag a shipped version (Step 10) |
 | `/gsd:new-milestone` | Start the next version cycle |
 | `/gsd:debug` | Systematic bug investigation |
 | `/gsd:quick` | Small task without full planning overhead |
@@ -342,18 +422,23 @@ This saves a context handoff file so the next session can resume without losing 
 
 ## Project Type Cheat Sheet
 
+> Turn estimates include design system generation, client intake processing, and post-launch verification.
+> A "turn" = one conversation with Claude producing committed code (~15-45 min wall time).
+> Calibrate these after each project using your project tracker data.
+
 ### Landing Page / Business Site
 ```
 Phases: Foundation → Content/Data → Sections → Nav/Footer → Polish → Deploy
 Stack: Next.js + Tailwind + shadcn (no backend usually)
-Turns: ~15-20
+Turns: ~18-25
+Domain skill: skills/domains/landing-page/SKILL.md
 ```
 
 ### Data Dashboard
 ```
 Phases: Foundation → Data Layer → Charts → Nav → Polish → API → Features
 Stack: Next.js + Tailwind + LWC/Recharts + TanStack Query + Zustand
-Turns: ~25-35
+Turns: ~28-38
 Domain skill: skills/domains/dashboard-realtime/SKILL.md
 ```
 
@@ -361,7 +446,7 @@ Domain skill: skills/domains/dashboard-realtime/SKILL.md
 ```
 Phases: Foundation → Product Data → Catalog UI → Cart → Checkout → Payment → Deploy
 Stack: Next.js + Tailwind + Stripe/MercadoPago + DB
-Turns: ~30-40
+Turns: ~32-45
 Domain skill: skills/domains/ecommerce/SKILL.md
 ```
 
@@ -369,9 +454,9 @@ Domain skill: skills/domains/ecommerce/SKILL.md
 ```
 Phases: Foundation → Content → Project Gallery → About/Contact → Polish → Deploy
 Stack: Next.js + Tailwind + CMS (optional)
-Turns: ~12-18
+Turns: ~15-22
 ```
 
 ---
 
-*Last updated: 2026-03-20*
+*Last updated: 2026-04-02*

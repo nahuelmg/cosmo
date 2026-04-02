@@ -47,10 +47,9 @@ Follow this exact order. Each step builds on the previous one. Do not skip ahead
 [ ] Verify dev server runs, types compile, tests pass
 ```
 
-<!-- Added from 3d-printing-landing retrospective -->
 ```
 [ ] Validate package name: no capitals, spaces, or special characters (npm rejects them)
-    — "3D_company" fails; use "3d-printing-company". Check BEFORE running create-next-app.
+    — Check BEFORE running create-next-app. Use lowercase letters, hyphens, numbers only.
 [ ] If using --src-dir: middleware goes at src/middleware.ts (NOT project root)
     — Root middleware.ts is silently ignored by Turbopack with --src-dir projects.
     — Also use relative imports in middleware (./i18n/routing), not @/ aliases (Edge runtime limitation).
@@ -62,7 +61,6 @@ Follow this exact order. Each step builds on the previous one. Do not skip ahead
     — Deployment without this will silently use wrong defaults (localhost in sitemap, etc.).
 ```
 
-<!-- Added from crypto-dashboard retrospective -->
 ### Pre-Scaffolding Validation (do BEFORE writing any code)
 
 These checks take 5–10 minutes and have each saved hours of rework:
@@ -73,21 +71,17 @@ These checks take 5–10 minutes and have each saved hours of rework:
 [ ] Check what the component library installer actually installs (shadcn defaults change)
     — shadcn@latest now defaults to Base UI (base-nova), not Radix UI. APIs differ.
 [ ] Verify target deployment environment can reach external APIs
-    — Binance, some payment APIs, block AWS/Vercel IPs. Test with: curl from a Vercel
-      function OR check the API's known blocklist before building the entire data layer.
+    — Some external APIs block cloud provider IPs (AWS, Vercel, Netlify). Test with: curl from a
+      serverless function OR check the API's known blocklist before building the entire data layer.
 [ ] For any 3rd-party API: read the ACTUAL response JSON before designing types
-    — CoinGecko /ohlc returns [ts, o, h, l, c] — NO volume. Volume requires a second
-      endpoint. Don't design a 5-field type assuming all 5 values come from one call.
+    — Read the actual API response before designing types — many endpoints return fewer fields
+      than you expect. Don't design types assuming all fields come from one call.
 [ ] For Tailwind v4: add @custom-variant dark (&:is(.dark *)) in globals.css
     — Without this, .dark class toggling has ZERO effect on dark: utilities.
 [ ] For Tailwind v4 + vitest: disable PostCSS in vitest config
     — String-form @tailwindcss/postcss plugin is incompatible with vitest's environment.
 [ ] For Linux + Node 18: add @tailwindcss/oxide-linux-x64-gnu as explicit dependency
     — Native binary not auto-resolved as optional dep on this platform/version combo.
-```
-
-<!-- Added from 3d-printing-landing retrospective -->
-```
 [ ] After running shadcn init, immediately restore your design tokens:
     — shadcn init rewrites :root in globals.css with its default palette.
     — This is not a one-time risk — it WILL happen every time you run shadcn init.
@@ -106,10 +100,10 @@ src/
 │   ├── page.tsx            # Home/main page
 │   └── [feature]/page.tsx  # Feature pages
 ├── components/
-│   ├── [domain]/           # Domain components (chart/, portfolio/, product/)
+│   ├── [domain]/           # Domain components (dashboard/, catalog/, product/)
 │   ├── nav/                # Navigation components
 │   └── ui/                 # Primitive UI components (shadcn or equivalent)
-├── hooks/                  # Custom React hooks (useAsset, useCart, etc.)
+├── hooks/                  # Custom React hooks (useProduct, useCart, etc.)
 ├── lib/                    # Pure utility functions (formatting, math, helpers)
 │   └── __tests__/          # Unit tests for lib functions
 ├── providers/              # Data provider abstraction
@@ -127,14 +121,14 @@ src/
 
 | Item | Convention | Example |
 |------|-----------|---------|
-| Components | PascalCase | `ChartHeader.tsx`, `AssetPicker.tsx` |
-| Files | kebab-case | `chart-header.tsx`, `asset-picker.tsx` |
-| Hooks | camelCase with `use` prefix | `useAsset.ts`, `usePriceHistory.ts` |
-| Stores | kebab-case with `-store` suffix | `portfolio-store.ts`, `interval-store.ts` |
-| Types | PascalCase interfaces | `Asset`, `Transaction`, `OHLCVPoint` |
+| Components | PascalCase | `ProductCard.tsx`, `ItemPicker.tsx` |
+| Files | kebab-case | `product-card.tsx`, `item-picker.tsx` |
+| Hooks | camelCase with `use` prefix | `useProduct.ts`, `useOrderHistory.ts` |
+| Stores | kebab-case with `-store` suffix | `cart-store.ts`, `filter-store.ts` |
+| Types | PascalCase interfaces | `Product`, `Order`, `TimeSeriesPoint` |
 | Utilities | camelCase functions | `formatCurrency()`, `formatPercent()` |
 | Tests | Same name with `.test.ts` | `formatting.test.ts` |
-| API routes | Folder per resource | `api/assets/[id]/history/route.ts` |
+| API routes | Folder per resource | `api/products/[id]/reviews/route.ts` |
 
 ---
 
@@ -142,13 +136,13 @@ src/
 
 ### Design Principles
 
-1. **Self-contained over prop-heavy**: Components that own their own data fetching (via hooks) are easier to use than components requiring 10 props. Example: `<PortfolioStatsRow />` takes zero props — it reads from its own hook internally.
+1. **Self-contained over prop-heavy**: Components that own their own data fetching (via hooks) are easier to use than components requiring 10 props. Example: `<OrderSummary />` takes zero props — it reads from its own hook internally.
 
 2. **Props for variation, hooks for data**: Use props for visual configuration (size, variant, className). Use hooks for data fetching and state.
 
-3. **Composition over configuration**: Prefer composing small components over building one mega-component with many flags. A chart page is `<ChartHeader />` + `<ChartContainer />` + `<ChartControls />`, not `<Chart showHeader showControls headerVariant="full" />`.
+3. **Composition over configuration**: Prefer composing small components over building one mega-component with many flags. A feature page is `<PageHeader />` + `<DataGrid />` + `<FilterBar />`, not `<Page showHeader showFilters headerVariant="full" />`.
 
-4. **Domain components vs UI primitives**: Domain components (`chart/`, `portfolio/`) contain business logic. UI primitives (`ui/`) are pure visual components (Button, Dialog, Skeleton) — use a component library like shadcn/ui for these.
+4. **Domain components vs UI primitives**: Domain components (`dashboard/`, `catalog/`) contain business logic. UI primitives (`ui/`) are pure visual components (Button, Dialog, Skeleton) — use a component library like shadcn/ui for these.
 
 ### State Management Hierarchy
 
@@ -240,8 +234,8 @@ Define all design tokens as CSS custom properties. Use OKLCH color space for per
 
 ### Key Lessons
 
-- **Canvas-based libraries can't read CSS vars**: Libraries like Lightweight Charts render on `<canvas>` and need hex/rgb colors passed imperatively. Create a theme object (`CHART_THEMES`) with dark/light variants and update it on theme change.
-- **`tabular-nums` on body**: Financial/data-heavy UIs need tabular (monospace) numbers so columns align. Set `font-variant-numeric: tabular-nums` on body.
+- **Canvas-based libraries can't read CSS vars**: Canvas-based libraries (charting, maps, drawing) render outside the DOM's CSS cascade and need hex/rgb colors passed imperatively. Create a theme object (`CANVAS_THEMES`) with dark/light variants and update it on theme change.
+- **`tabular-nums` on body**: Data-heavy UIs (financial, analytics, tables) benefit from tabular (monospace) numbers so columns align. Set `font-variant-numeric: tabular-nums` on body.
 - **shadcn/ui integration**: shadcn uses CSS variable naming conventions. Install it early and let it generate the token structure — then customize the values.
 
 ---
@@ -262,7 +256,7 @@ DataProvider interface
 ```typescript
 // providers/types.ts — define the contract
 export interface DataProvider {
-  getAsset(id: string): Promise<Asset>;
+  getItem(id: string): Promise<Item>;
   getItems(filters: Filters): Promise<Item[]>;
   // ... whatever your domain needs
 }
@@ -307,7 +301,7 @@ Mock data must be realistic enough that every UI control has a visible effect. I
 Never call external APIs directly from the browser. Route through server-side API handlers:
 
 ```
-Browser → /api/assets/[id] → Server-side route → External API (Binance, Stripe, etc.)
+Browser → /api/products/[id] → Server-side route → External API (Stripe, Twilio, etc.)
 ```
 
 Benefits:
@@ -329,7 +323,7 @@ useQuery({
 });
 ```
 
-WebSocket adds reconnection logic, heartbeat management, message parsing, and state sync complexity. Only use it for chat, live collaboration, or trading — not for dashboards showing prices that update every minute.
+WebSocket adds reconnection logic, heartbeat management, message parsing, and state sync complexity. Only use it for chat, live collaboration, or trading — not for dashboards that update every few minutes.
 
 ---
 
@@ -417,12 +411,12 @@ NEXT_PUBLIC_API_URL=...           # API base URL (if separate backend)
 
 - **Auto-deploy**: Push to `main`/`master` triggers build
 - **Build time**: ~50-60 seconds for a medium Next.js app
-- **Serverless functions**: API routes become serverless functions — they run in AWS, which some APIs block (e.g., Binance blocks AWS IPs)
+- **Serverless functions**: API routes become serverless functions — they run in AWS, which some external APIs block
 - **Cache**: `s-maxage` in response headers enables Vercel's CDN edge caching
 
 ### Known Deployment Issues
 
-- **Blocked APIs from Vercel**: Some services (Binance, certain payment providers) block requests from cloud provider IPs. Solutions: use a proxy, switch to a cloud-friendly API (CoinGecko), or deploy the BFF elsewhere.
+- **Blocked APIs from Vercel**: Some external services block requests from cloud provider IPs. Solutions: use a proxy, switch to a cloud-friendly API, or deploy the BFF elsewhere.
 - **Environment variable propagation**: Vercel caches builds — changing an env var requires a redeploy, not just a restart.
 
 ---
@@ -466,10 +460,10 @@ When choosing between options, evaluate in this order:
 - **Don't abstract prematurely**: Three similar lines of code is better than a premature utility function. Extract when you see the pattern a third time.
 - **Don't mock in integration tests**: If the test is supposed to verify the real data flow, use the real thing. Mocks hide bugs.
 - **Don't add config flags for one-off variations**: If there's only one place that needs different behavior, just write different code there.
-- **Don't define shared types speculatively**: Only extract a type to `types/index.ts` when it's actually imported by 2+ consumers. Speculative shared types accumulate naming drift and dead code. <!-- Added from crypto-dashboard retrospective -->
-- **Don't over-specify interfaces at definition time**: Only add methods to an interface when there is a concrete caller. A `getCurrentPrice()` method on a DataProvider that nothing calls is dead code from day one. <!-- Added from crypto-dashboard retrospective -->
-- **Don't add parallel API calls without budgeting rate limits**: Adding a second parallel fetch effectively halves your calls-per-minute budget. Calculate total request volume before implementing. <!-- Added from crypto-dashboard retrospective -->
-- **Don't defer form service validation to deployment**: If a contact form is the primary conversion mechanism, test it with a real endpoint during development. A form that silently simulates success is untestable until it fails in production. <!-- Added from 3d-printing-landing retrospective -->
+- **Don't define shared types speculatively**: Only extract a type to `types/index.ts` when it's actually imported by 2+ consumers. Speculative shared types accumulate naming drift and dead code.
+- **Don't over-specify interfaces at definition time**: Only add methods to an interface when there is a concrete caller. A `getLatestData()` method on a DataProvider that nothing calls is dead code from day one.
+- **Don't add parallel API calls without budgeting rate limits**: Adding a second parallel fetch effectively halves your calls-per-minute budget. Calculate total request volume before implementing.
+- **Don't defer form service validation to deployment**: If a contact form is the primary conversion mechanism, test it with a real endpoint during development. A form that silently simulates success is untestable until it fails in production.
 
 ---
 
@@ -484,50 +478,50 @@ When choosing between options, evaluate in this order:
 | shadcn component conflicts with base-ui | shadcn uses Radix; mixing with @base-ui causes API clashes | Use native HTML elements instead of conflicting primitives |
 | vitest 4.x fails on Node 18 | Requires Node >= 20 | Pin to vitest 1.6.0 |
 | Next.js 15 `params` is now a Promise | Breaking change from 14 → 15 | `const { id } = await params;` in route handlers |
-| Tailwind v4 `dark:` utilities have no effect | `@custom-variant dark` not configured | Add `@custom-variant dark (&:is(.dark *));` to globals.css <!-- Added from crypto-dashboard retrospective --> |
-| Tailwind v4 custom animations not working | Keyframes in `@theme inline {}` instead of `@theme {}` | Put keyframes in `@theme {}` (generates utilities); put CSS var mappings in `@theme inline {}` <!-- Added from crypto-dashboard retrospective --> |
-| Vite fails on Node 18 with rolldown error | Vite 5.4+ requires Node 20+ | Pin `"vite": "5.3.6"` via npm overrides in package.json <!-- Added from crypto-dashboard retrospective --> |
-| `@tailwindcss/oxide` fails on Linux/Node 18 | Native platform binary not resolved as optional dep | Add `@tailwindcss/oxide-linux-x64-gnu` as explicit dependency <!-- Added from crypto-dashboard retrospective --> |
-| vitest + Tailwind v4 PostCSS conflict | String-form PostCSS plugin incompatible with vitest env | `css: { postcss: { plugins: [] } }` in vitest.config.mts <!-- Added from crypto-dashboard retrospective --> |
-| npm rejects project directory name | Capital letters, underscores, or special chars in directory name | Pre-validate: lowercase letters, hyphens, numbers only. Use temp dir + move if needed. <!-- Added from 3d-printing-landing retrospective --> |
-| middleware.ts at project root ignored (--src-dir) | Next.js --src-dir layout expects middleware at src/middleware.ts, not root | Move to src/middleware.ts; use relative imports for Edge runtime compat <!-- Added from 3d-printing-landing retrospective --> |
-| Build fails on template-level non-code directories | tsconfig **/*.ts glob includes skills/, docs/, scripts/ in the project template | Add non-code dirs to tsconfig "exclude": ["node_modules", "skills", "docs"] <!-- Added from 3d-printing-landing retrospective --> |
-| .env.example missing from repo | First env var added without creating documentation | Create .env.example in same commit as first env var usage <!-- Added from 3d-printing-landing retrospective --> |
+| Tailwind v4 `dark:` utilities have no effect | `@custom-variant dark` not configured | Add `@custom-variant dark (&:is(.dark *));` to globals.css |
+| Tailwind v4 custom animations not working | Keyframes in `@theme inline {}` instead of `@theme {}` | Put keyframes in `@theme {}` (generates utilities); put CSS var mappings in `@theme inline {}` |
+| Vite fails on Node 18 with rolldown error | Vite 5.4+ requires Node 20+ | Pin `"vite": "5.3.6"` via npm overrides in package.json |
+| `@tailwindcss/oxide` fails on Linux/Node 18 | Native platform binary not resolved as optional dep | Add `@tailwindcss/oxide-linux-x64-gnu` as explicit dependency |
+| vitest + Tailwind v4 PostCSS conflict | String-form PostCSS plugin incompatible with vitest env | `css: { postcss: { plugins: [] } }` in vitest.config.mts |
+| npm rejects project directory name | Capital letters, underscores, or special chars in directory name | Pre-validate: lowercase letters, hyphens, numbers only. Use temp dir + move if needed. |
+| middleware.ts at project root ignored (--src-dir) | Next.js --src-dir layout expects middleware at src/middleware.ts, not root | Move to src/middleware.ts; use relative imports for Edge runtime compat |
+| Build fails on template-level non-code directories | tsconfig **/*.ts glob includes skills/, docs/, scripts/ in the project template | Add non-code dirs to tsconfig "exclude": ["node_modules", "skills", "docs"] |
+| .env.example missing from repo | First env var added without creating documentation | Create .env.example in same commit as first env var usage |
 
 ### Runtime Issues
 
 | Issue | Diagnosis | Fix |
 |-------|----------|-----|
-| Chart crashes in React StrictMode | `series` refs become stale after double-mount/unmount | Clear series refs in cleanup function |
+| Canvas library crashes in React StrictMode | Refs become stale after double-mount/unmount | Clear refs in cleanup function |
 | Canvas library ignores CSS variables | Canvas renders outside the DOM's CSS cascade | Maintain a hex color theme object, update imperatively on theme change |
 | Layout shift on data load | Container size changes when data arrives | Use fixed heights or skeleton placeholders that match final dimensions |
 | API works locally but not on Vercel | External API blocks cloud provider IPs | Use a cloud-friendly API or proxy |
 | Dropdown items not responding to clicks | Wrong event handler (`onSelect` vs `onClick`) | Check the component library's actual event API (Base UI vs Radix) |
 | Component crashes with context error | Base UI `GroupLabel` requires `Menu.Group` parent | Check composition rules — they differ between component libraries |
 | Stale closure in event handlers | `useEffect` captures old state in callback | Use `useRef` for lookup maps that change independently of the handler lifecycle |
-| OHLCV row causes layout jitter on hover | Conditionally rendered crosshair info changes height | Use `invisible` class to reserve height; show/hide with opacity, not mount/unmount |
-| Volume bars invisible in light mode | Colors hardcoded to dark theme hex values | Accept theme-aware colors as params; compute from `resolvedTheme` |
+| Dynamic overlay content causes layout jitter | Conditionally rendered content changes container height | Use `invisible` class to reserve height; toggle with opacity, not mount/unmount |
+| Canvas elements invisible in light/dark mode | Colors hardcoded to one theme | Accept theme-aware colors as params; compute from `resolvedTheme` |
 | `useSearchParams` crashes in Next.js 15 | nuqs/useSearchParams requires Suspense boundary | Wrap with `<Suspense fallback={...}>` |
-| Native `<select>` text invisible in dark themes | `text-white` inherits to `<option>`; browser renders native dropdown with light background | Add `[color-scheme:dark]` class to `<select>` to force browser dark-mode native rendering <!-- Added from crypto-dashboard retrospective --> |
-| Header/nav controls shift when dynamic content appears left | Controls in left-to-right flex row shift right when left content width changes | Group controls in `ml-auto` div — always right-anchor controls that should be fixed in position <!-- Added from crypto-dashboard retrospective --> |
-| `React.MutableRefObject` TypeScript error in React 19 | `MutableRefObject` deprecated; `RefObject` is now mutable by default | Use `React.RefObject<T>` instead of `React.MutableRefObject<T>` <!-- Added from crypto-dashboard retrospective --> |
-| TanStack Query v5 skeleton gate doesn't trigger | Using `isLoading` instead of `isPending` | In TanStack v5, `isPending` = "no data yet" (skeleton gate); `isLoading` = "fetching + no data" — use `isPending` for the "show skeleton" check <!-- Added from crypto-dashboard retrospective --> |
-| Combobox/popup content clipped to one line | `overflow-hidden` on the popup element clips scrollable children | Never put `overflow-hidden` on a popup container that has a scrollable child list — let the inner list handle `overflow-y-auto` <!-- Added from crypto-dashboard retrospective --> |
-| ThemeProvider starts in light mode for dark-first UI | `enableSystem` defaults to `true`, uses OS preference | Set `enableSystem={false}` and `defaultTheme="dark"` for dashboards that are always dark <!-- Added from crypto-dashboard retrospective --> |
-| z.coerce.number() breaks zodResolver type inference | z.coerce changes inferred input type to unknown; z.infer<> propagates this to useForm<> | Define explicit type manually instead of z.infer<>: type QuoteFormData = { quantity: number; ... } <!-- Added from 3d-printing-landing retrospective --> |
-| Radix/shadcn Select (and similar) reject register() | react-hook-form register() requires native DOM inputs with ref/onChange/name; Radix Select is controlled | Use <Controller> for any non-native input: Select, Switch, RadioGroup, DatePicker, Combobox <!-- Added from 3d-printing-landing retrospective --> |
-| Translation keys missing when client component renders | Wave ordering placed message file updates in task 2, but component needing the keys was in task 1 | When splitting into server/client waves, verify all translation keys exist BEFORE (or in same task as) the component that needs them <!-- Added from 3d-printing-landing retrospective --> |
-| External form service untested with real endpoint | Formspree/Resend URL not configured during dev; form used simulated success throughout | Create the form endpoint during the phase that builds the form. Test a real submission before marking the phase complete. <!-- Added from 3d-printing-landing retrospective --> |
+| Native `<select>` text invisible in dark themes | `text-white` inherits to `<option>`; browser renders native dropdown with light background | Add `[color-scheme:dark]` class to `<select>` to force browser dark-mode native rendering |
+| Header/nav controls shift when dynamic content appears left | Controls in left-to-right flex row shift right when left content width changes | Group controls in `ml-auto` div — always right-anchor controls that should be fixed in position |
+| `React.MutableRefObject` TypeScript error in React 19 | `MutableRefObject` deprecated; `RefObject` is now mutable by default | Use `React.RefObject<T>` instead of `React.MutableRefObject<T>` |
+| TanStack Query v5 skeleton gate doesn't trigger | Using `isLoading` instead of `isPending` | In TanStack v5, `isPending` = "no data yet" (skeleton gate); `isLoading` = "fetching + no data" — use `isPending` for the "show skeleton" check |
+| Combobox/popup content clipped to one line | `overflow-hidden` on the popup element clips scrollable children | Never put `overflow-hidden` on a popup container that has a scrollable child list — let the inner list handle `overflow-y-auto` |
+| ThemeProvider starts in light mode for dark-first UI | `enableSystem` defaults to `true`, uses OS preference | Set `enableSystem={false}` and `defaultTheme="dark"` for dark-first UIs |
+| z.coerce.number() breaks zodResolver type inference | z.coerce changes inferred input type to unknown; z.infer<> propagates this to useForm<> | Define explicit type manually instead of z.infer<> |
+| Radix/shadcn Select (and similar) reject register() | react-hook-form register() requires native DOM inputs with ref/onChange/name; Radix Select is controlled | Use <Controller> for any non-native input: Select, Switch, RadioGroup, DatePicker, Combobox |
+| Translation keys missing when client component renders | Wave ordering placed message file updates in task 2, but component needing the keys was in task 1 | When splitting into server/client waves, verify all translation keys exist BEFORE (or in same task as) the component that needs them |
+| External form service untested with real endpoint | Formspree/Resend URL not configured during dev; form used simulated success throughout | Create the form endpoint during the phase that builds the form. Test a real submission before marking the phase complete. |
 
 ### Data Issues
 
 | Issue | Diagnosis | Fix |
 |-------|----------|-----|
-| Prices missing for "today" | Daily candle not closed until end of UTC day | Fall back to most recent available candle |
-| Chart shows flat line for future dates | No data points for dates after last candle | Return sentinel data point (e.g., `{ time: cutoff, value: 0 }`) instead of empty array |
-| Time series gaps | Not all assets have data for every date | Forward-fill: carry last known price forward |
-| Mock data doesn't respond to interval changes | Mock provider ignores interval parameter | Route sub-daily intervals to hourly dataset |
-| API returns different field count than expected | Assumed endpoint returns all fields (e.g., OHLCV) | Always check actual JSON response shape — many APIs omit fields (e.g., CoinGecko /ohlc has no volume) <!-- Added from crypto-dashboard retrospective --> |
+| Latest data missing for current period | Period not closed until end of UTC day | Fall back to most recent available data point |
+| Visualization shows empty space for future dates | No data points after latest entry | Return sentinel data point or trim the axis |
+| Time series gaps | Not all entities have data for every date | Forward-fill: carry last known value forward |
+| Mock data doesn't respond to parameter changes | Mock provider ignores parameters | Ensure mock provider respects all parameters the real API accepts |
+| API returns different field count than expected | Assumed endpoint returns all fields | Always check actual JSON response shape — many APIs omit fields or return fewer than documented |
 
 ---
 
@@ -584,9 +578,9 @@ These are defaults based on proven results. Override when project requirements d
 | URL State | nuqs | Type-safe URL search params, Next.js integrated |
 | Testing | vitest | Fast, ESM-native, Jest-compatible API |
 | Icons | lucide-react | Tree-shakeable, consistent style, large library |
-| Charts | lightweight-charts (TradingView) | Canvas performance, financial chart features |
+| Charts | Project-dependent | Recharts (general), Lightweight Charts (financial), Chart.js (simple) |
 | Deployment | Vercel | Zero-config Next.js deployment |
 
 ---
 
-*Last updated: 2026-03-22 — retrospective additions from 3D Printing Barcelona landing page project*
+*Last updated: 2026-04-02*

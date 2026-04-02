@@ -170,4 +170,3 @@ If a skill grows too large (> 500 lines), split it into sub-files and reference 
 ---
 
 *Skill library created: 2026-03-20*
-*Source project: Asset Price Dashboard (v1.0–v1.3)*

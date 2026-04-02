@@ -30,7 +30,7 @@ Start with fake data. Build the UI first, connect real data later.
 ### What fails (vague, open-ended)
 
 ```
-Build me a dashboard for crypto prices.
+Build me a dashboard.
 ```
 
 **Why it fails**: No stack preference, no scope boundary, no data strategy. Claude will ask 5 clarifying questions or make assumptions that need correction.
@@ -143,7 +143,6 @@ Map their response to our existing {{TypeName}} interface.
 
 **Key insight**: Always reference existing provider patterns. Claude will match the abstraction level, error handling, and caching strategy of what's already there.
 
-<!-- Added from crypto-dashboard retrospective -->
 ### API pre-validation spike (run BEFORE planning integration)
 
 ```
@@ -166,7 +165,7 @@ Before we plan the {{API name}} integration, let's validate the API is usable:
 Only proceed to building the provider after we have answers to all four.
 ```
 
-**Why this pattern**: In CryptoDash v1.0, the entire Phase 7 API target (Binance) turned out to be blocked from Vercel. We also discovered CoinGecko's `/ohlc` endpoint has no volume field — only found when testing live mode. Both added unplanned work. A 10-minute spike at planning time would have caught both.
+**Why this pattern**: Some APIs block cloud provider IPs, and many endpoints return fewer fields than documented. A 10-minute spike at planning time catches both issues before you build the entire data layer around wrong assumptions.
 
 ---
 
@@ -247,7 +246,6 @@ or abstractions unless the existing ones genuinely don't work.
 
 ---
 
-<!-- Added from crypto-dashboard retrospective -->
 ---
 
 ## 9. Dark Theme Verification
@@ -267,7 +265,6 @@ Before marking this complete, verify dark theme rendering:
 
 ---
 
-<!-- Added from 3d-printing-landing retrospective -->
 ---
 
 ## 10. Bilingual Content & i18n
@@ -345,4 +342,4 @@ Implementation path: {{if B: describe the routing approach}}
 
 ---
 
-*Last updated: 2026-03-22 — retrospective additions from 3D Printing Barcelona landing page project*
+*Last updated: 2026-04-02*

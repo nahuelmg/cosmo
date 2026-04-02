@@ -33,20 +33,17 @@
 
 A **turn** = one conversation with Claude that produces committed code. Typically 15-45 minutes of wall time including review.
 
-### Reference baseline (from Asset Price Dashboard)
+### Reference baseline
 
-| Phase | Turns | What was built |
-|-------|-------|---------------|
-| Foundation | 3 | Next.js scaffold, OKLCH tokens, types, formatting utils |
-| Data layer | 3 | BTC JSON data, DataProvider interface, MockProvider, hooks |
-| Core charts | 3 | Lightweight Charts, candlestick/line/area, controls |
-| Navigation | 2 | Asset picker, URL state, top nav |
-| Polish | 3 | Dark mode, comparison chart, skeletons |
-| Binance API | 4 | Client module, BFF routes, ApiProvider, polling |
-| Error states | 1 | Error boundaries, stale indicators, loading |
-| Interval selector | 2 | Candle interval store, UI, data pipeline |
-| Portfolio features | 6 | Zustand store, CRUD, math, summary, chart |
-| **Total** | **27** | **13 phases, v1.0–v1.3** |
+| Phase | Typical Turns | What's built |
+|-------|---------------|--------------|
+| Foundation | 2-3 | Framework scaffold, design tokens, types, formatting utils |
+| Data layer | 3-4 | Mock data, DataProvider interface, MockProvider, hooks |
+| Core UI | 4-6 | Primary components, layouts, domain-specific views |
+| Navigation | 2-3 | Routes, nav bar, URL state, item switching |
+| Polish | 3-4 | Dark mode, skeletons, error states, responsive |
+| API integration | 3-5 | Client module, BFF routes, ApiProvider, polling |
+| Domain features | 3-8 | Varies by project type and complexity |
 
 ---
 

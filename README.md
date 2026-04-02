@@ -26,7 +26,8 @@ Skills are updated after each project. See `skills/README.md` for the extraction
 
 | Skill | Status |
 |-------|--------|
-| General web dev methodology | Active (extracted from Asset Dashboard v1.0-v1.3) |
+| General web dev methodology | Active |
 | Dashboard / real-time data | Active |
-| Landing page | Placeholder |
+| Landing page | Active |
 | E-commerce | Placeholder |
+| Contact backend | Active |
