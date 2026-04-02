@@ -6,7 +6,7 @@
 
 1. **Always read this file first** when starting a new web project
 2. **Then check `skills/domains/`** for a matching domain skill (dashboard, landing page, ecommerce, etc.)
-3. **For design decisions**, defer to ui-ux-pro-max — this skill covers engineering, not aesthetics
+3. **For design decisions**, use the ui-ux-pro-max search tool at `skills/design/ui-ux-pro-max/scripts/search.py` — this skill covers engineering, not aesthetics. See `skills/design/README.md` for full usage.
 4. **Update this file** after each project with new patterns learned (see `skills/README.md` for the extraction process)
 
 ---
@@ -205,6 +205,12 @@ const [editItem, setEditItem] = useState<Item | null>(null);
 ## 4. Design Token Management
 
 ### Approach: CSS Variables + Framework Theme
+
+**Before defining tokens**, generate a design system using ui-ux-pro-max:
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "<product_type> <industry>" --design-system --persist -p "Project Name"
+```
+Use the recommended colors, fonts, and style from the output as the starting point for tokens below. Convert hex colors to OKLCH.
 
 Define all design tokens as CSS custom properties. Use OKLCH color space for perceptual uniformity. Map tokens to the CSS framework's theme system.
 

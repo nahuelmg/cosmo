@@ -1,6 +1,8 @@
-# Client Content Intake Form
+# Client Content Checklist
 
-> Send this to the client before starting development. Collect everything needed so you're not blocked waiting for assets mid-build.
+> Use this as a reference when the client's materials are incomplete. Send them the relevant sections for whatever is missing — not the whole form.
+>
+> See `client-intake.md` for the process of extracting a structured brief from what the client already provided.
 
 ---
 

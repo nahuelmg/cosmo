@@ -6,9 +6,32 @@ Before starting any work, read the relevant skill files:
 
 1. **Always read first**: `skills/web-dev-general/SKILL.md` — general methodology, architecture patterns, quality standards
 2. **If domain matches**: Check `skills/domains/` for a matching domain skill
-3. **For design decisions**: Defer to ui-ux-pro-max (referenced in `skills/design/README.md`)
+3. **For design decisions**: Read `skills/design/README.md` and use the ui-ux-pro-max search tool (see below)
 4. **For prompt guidance**: See `skills/web-dev-general/prompt-patterns.md`
 5. **Before researching a library/API**: Check `references/` first — may already have validated findings
+
+## Design Decisions (ui-ux-pro-max)
+
+All visual and UX design decisions **must** be informed by the ui-ux-pro-max toolkit. Do not guess colors, fonts, styles, or layouts — search for recommendations first.
+
+**At project start (Phase 1 — Foundation):**
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system --persist -p "Project Name"
+```
+This generates a design system (style, colors, fonts, effects) and persists it to `design-system/MASTER.md`. Use the output to define your CSS design tokens.
+
+**During UI build (Phase 3+):**
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain>
+```
+Domains: `product`, `style`, `color`, `typography`, `chart`, `ux`, `landing`, `prompt`
+
+**Before delivery (Phase 5 — Polish):**
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "animation accessibility z-index loading" --domain ux
+```
+
+See `skills/design/README.md` for full usage reference.
 
 ## Project Startup
 

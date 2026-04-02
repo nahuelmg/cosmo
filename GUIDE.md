@@ -20,17 +20,29 @@ You now have the full skill library, planning scaffold, and CLAUDE.md ready.
 
 ---
 
-## Step 0.5: Gather Client Content
+## Step 0.5: Process Client Materials
 
-Before writing any code, send the client the **content intake form** (`skills/web-dev-general/templates/content-intake.md`). This collects everything you'll need:
+The client gives you a folder with their materials — a PDF spec, logos, images, color palettes, whatever they have. Process it using the client intake template:
 
-- Brand assets (logo, colors, fonts)
-- Copy/text for each page
-- Images and media
-- Credentials (domain registrar, hosting, analytics)
-- Content for dynamic sections (products, services, team bios)
+```
+Read everything in the client folder at <path>.
+Extract a structured brief following skills/web-dev-general/templates/client-intake.md.
+```
 
-**Don't start building until you have at least**: logo, brand colors, and copy for the main page. You can build with placeholders, but swapping real content later always takes longer than expected.
+Claude reads the PDF, catalogs images/logos, extracts brand colors, and produces a **`CLIENT-BRIEF.md`** in the project root with:
+- Project summary and extracted requirements
+- Pages/sections described
+- Brand assets provided (logo, colors, fonts, photos)
+- Functional requirements (forms, booking, payments, languages)
+- **Gaps** — what's still needed from the client
+
+**Blocking gaps** (cannot start without): project name, at least one logo, core page copy or enough context to draft it, primary brand color.
+
+**Non-blocking gaps** (can start, need before launch): legal info, contact details, final images, domain credentials.
+
+If the client gave you minimal materials, consult `skills/web-dev-general/templates/content-intake.md` for a checklist of what to ask for. Send them the relevant sections — not the whole form.
+
+See `skills/web-dev-general/templates/client-intake.md` for the full process.
 
 ---
 
@@ -48,14 +60,50 @@ This will:
 - Generate `PROJECT.md` with requirements
 - Create a `ROADMAP.md` with phased plan
 
-**Before running this**, have answers ready for:
-- What does the client need? (1-2 sentences)
-- Who are the users?
-- What's the core action? (the ONE thing users must do)
-- Any design references? (competitor sites, Figma, mood boards)
-- Deployment target? (Vercel, Netlify, client's hosting)
-- Timeline / deadline?
-- Content ready? (copy, images, logos from client)
+**Answer questions from `CLIENT-BRIEF.md`** (generated in Step 0.5):
+
+| GSD asks | Answer from |
+|----------|-------------|
+| What does the client need? | CLIENT-BRIEF.md → Project Summary |
+| Who are the users? | CLIENT-BRIEF.md → Project Summary |
+| Core action? | CLIENT-BRIEF.md → Requirements (highest priority) |
+| Design references? | CLIENT-BRIEF.md → Brand Direction → Reference sites |
+| Deployment target? | CLIENT-BRIEF.md → Constraints |
+| Timeline? | CLIENT-BRIEF.md → Constraints |
+| Content ready? | CLIENT-BRIEF.md → Gaps section |
+
+---
+
+## Step 1.5: Generate the Design System
+
+Before writing any code, establish the visual identity using ui-ux-pro-max:
+
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "<product_type> <industry> <keywords>" --design-system --persist -p "Project Name"
+```
+
+Use the style keywords from `CLIENT-BRIEF.md → Brand Direction` in the query.
+
+**Examples:**
+```bash
+# Dental clinic landing page
+python3 skills/design/ui-ux-pro-max/scripts/search.py "healthcare dental clinic professional trust" --design-system --persist -p "Dental Clinic"
+
+# SaaS analytics dashboard
+python3 skills/design/ui-ux-pro-max/scripts/search.py "saas dashboard analytics modern data" --design-system --persist -p "Analytics Pro"
+```
+
+This creates `design-system/MASTER.md` — the source of truth for all visual decisions (style, colors, fonts, effects).
+
+**Reconcile with client brand** (from `CLIENT-BRIEF.md → Brand Assets`):
+- **Client provided colors** → override the recommended palette. Keep client's primary; supplement with ui-ux-pro-max for secondary/accent/backgrounds.
+- **Client provided fonts** → use them. Skip ui-ux-pro-max font recommendations.
+- **Client provided style references** → search for the closest style in ui-ux-pro-max and follow its implementation guidelines.
+- **Client provided nothing visual** → use ui-ux-pro-max recommendations as-is.
+
+Document any overrides in `design-system/MASTER.md` so they persist across sessions.
+
+**Time estimate**: 1 conversation turn
 
 ---
 
@@ -70,7 +118,7 @@ The first phase is always the same (adapted to the stack):
 
 Foundation phase typically includes:
 1. Framework scaffold (Next.js, Nuxt, etc.)
-2. Design tokens (colors, typography, spacing)
+2. **Design tokens derived from `design-system/MASTER.md`** (colors, typography, spacing)
 3. TypeScript types for all data shapes
 4. Formatting utilities with tests
 5. Dev server running
@@ -109,6 +157,23 @@ Now build the primary interface. This varies by project type:
 
 Use the domain skill from `skills/domains/` if one exists.
 
+**Design consultation during build**: When building new components or pages, consult ui-ux-pro-max for specific guidance:
+```bash
+# Style details for a specific component pattern
+python3 skills/design/ui-ux-pro-max/scripts/search.py "card pricing glassmorphism" --domain style
+
+# UX patterns for forms, navigation, etc.
+python3 skills/design/ui-ux-pro-max/scripts/search.py "form validation feedback" --domain ux
+
+# Landing page section structure
+python3 skills/design/ui-ux-pro-max/scripts/search.py "hero social-proof testimonial" --domain landing
+
+# Chart type recommendations
+python3 skills/design/ui-ux-pro-max/scripts/search.py "trend comparison realtime" --domain chart
+```
+
+Always check the persisted `design-system/MASTER.md` first — it's the baseline. Use domain searches for deeper dives into specific decisions.
+
 **Time estimate**: 5-8 conversation turns
 
 ---
@@ -127,6 +192,12 @@ Add multi-page navigation:
 
 ## Step 6: Polish + Device Testing
 
+Run a UX validation pass before polishing:
+```bash
+python3 skills/design/ui-ux-pro-max/scripts/search.py "animation accessibility z-index loading" --domain ux
+```
+
+Then apply polish:
 - Dark/light mode toggle
 - Loading skeletons (match final layout dimensions)
 - Error states with helpful messages
