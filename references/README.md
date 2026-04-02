@@ -26,7 +26,11 @@ references/
 │   ├── vercel.md              ← Vercel-specific notes and gotchas
 │   └── ...
 └── patterns/                  ← Validated architectural patterns
-    └── ...
+    ├── i18n-next-intl.md      ← Complete next-intl bilingual setup
+    ├── layout-shell.md        ← Server/client split header + footer + mobile nav
+    ├── seo-metadata.md        ← Per-page metadata, JSON-LD, sitemap, robots
+    ├── scroll-animations.md   ← FadeIn component with Intersection Observer
+    └── design-tokens-starter.md ← OKLCH tokens + Tailwind v4 globals.css
 ```
 
 ## What to Save
