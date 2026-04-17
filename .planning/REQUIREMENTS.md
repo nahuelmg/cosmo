@@ -164,13 +164,95 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmapper) | — | Pending |
+| FOUND-01 | Phase 1 — Foundation | Pending |
+| FOUND-02 | Phase 1 — Foundation | Pending |
+| FOUND-03 | Phase 1 — Foundation | Pending |
+| FOUND-04 | Phase 1 — Foundation | Pending |
+| I18N-05 | Phase 1 — Foundation | Pending |
+| I18N-06 | Phase 1 — Foundation | Pending |
+| I18N-07 | Phase 1 — Foundation | Pending |
+| DATA-01 | Phase 2 — Content Layer | Pending |
+| DATA-02 | Phase 2 — Content Layer | Pending |
+| DATA-03 | Phase 2 — Content Layer | Pending |
+| DATA-04 | Phase 2 — Content Layer | Pending |
+| DATA-05 | Phase 2 — Content Layer | Pending |
+| DATA-06 | Phase 2 — Content Layer | Pending |
+| DATA-07 | Phase 2 — Content Layer | Pending |
+| DATA-08 | Phase 2 — Content Layer | Pending |
+| I18N-03 | Phase 2 — Content Layer | Pending |
+| NAV-01 | Phase 3 — Layout Shell | Pending |
+| NAV-02 | Phase 3 — Layout Shell | Pending |
+| NAV-03 | Phase 3 — Layout Shell | Pending |
+| NAV-04 | Phase 3 — Layout Shell | Pending |
+| NAV-05 | Phase 3 — Layout Shell | Pending |
+| I18N-01 | Phase 3 — Layout Shell | Pending |
+| I18N-04 | Phase 3 — Layout Shell | Pending |
+| HOME-01 | Phase 4 — Core Pages | Pending |
+| HOME-02 | Phase 4 — Core Pages | Pending |
+| HOME-03 | Phase 4 — Core Pages | Pending |
+| HOME-04 | Phase 4 — Core Pages | Pending |
+| HOME-05 | Phase 4 — Core Pages | Pending |
+| HOME-06 | Phase 4 — Core Pages | Pending |
+| HOME-07 | Phase 4 — Core Pages | Pending |
+| PEOP-01 | Phase 4 — Core Pages | Pending |
+| PEOP-02 | Phase 4 — Core Pages | Pending |
+| PEOP-03 | Phase 4 — Core Pages | Pending |
+| PEOP-04 | Phase 4 — Core Pages | Pending |
+| PEOP-05 | Phase 4 — Core Pages | Pending |
+| PEOP-06 | Phase 4 — Core Pages | Pending |
+| PEOP-07 | Phase 4 — Core Pages | Pending |
+| PEOP-08 | Phase 4 — Core Pages | Pending |
+| PEOP-09 | Phase 4 — Core Pages | Pending |
+| PEOP-10 | Phase 4 — Core Pages | Pending |
+| PEOP-11 | Phase 4 — Core Pages | Pending |
+| PEOP-12 | Phase 4 — Core Pages | Pending |
+| RSCH-01 | Phase 4 — Core Pages | Pending |
+| RSCH-02 | Phase 4 — Core Pages | Pending |
+| PUBS-01 | Phase 4 — Core Pages | Pending |
+| PUBS-02 | Phase 4 — Core Pages | Pending |
+| PUBS-03 | Phase 4 — Core Pages | Pending |
+| PUBS-04 | Phase 4 — Core Pages | Pending |
+| CLUB-01 | Phase 4 — Core Pages | Pending |
+| CLUB-02 | Phase 4 — Core Pages | Pending |
+| OTRCH-01 | Phase 4 — Core Pages | Pending |
+| OTRCH-02 | Phase 4 — Core Pages | Pending |
+| OTRCH-03 | Phase 4 — Core Pages | Pending |
+| CONT-01 | Phase 4 — Core Pages | Pending |
+| CONT-02 | Phase 4 — Core Pages | Pending |
+| CONT-03 | Phase 4 — Core Pages | Pending |
+| CONT-04 | Phase 4 — Core Pages | Pending |
+| CONT-05 | Phase 4 — Core Pages | Pending |
+| I18N-02 | Phase 4 — Core Pages | Pending |
+| SEO-01 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-02 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-03 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-04 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-05 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-06 | Phase 5 — SEO & Discoverability | Pending |
+| A11Y-01 | Phase 6 — Polish (A11y & Performance) | Pending |
+| A11Y-02 | Phase 6 — Polish (A11y & Performance) | Pending |
+| A11Y-03 | Phase 6 — Polish (A11y & Performance) | Pending |
+| A11Y-04 | Phase 6 — Polish (A11y & Performance) | Pending |
+| A11Y-05 | Phase 6 — Polish (A11y & Performance) | Pending |
+| PERF-01 | Phase 6 — Polish (A11y & Performance) | Pending |
+| PERF-02 | Phase 6 — Polish (A11y & Performance) | Pending |
+| PERF-03 | Phase 6 — Polish (A11y & Performance) | Pending |
+| PERF-04 | Phase 6 — Polish (A11y & Performance) | Pending |
+| PERF-05 | Phase 6 — Polish (A11y & Performance) | Pending |
 
 **Coverage:**
 - v1 requirements: 75 total
-- Mapped to phases: 0 (roadmap not yet created)
-- Unmapped: 75 ⚠️
+- Mapped to phases: 75 ✓
+- Unmapped: 0
+
+**Per-phase counts:**
+- Phase 1 — Foundation: 7
+- Phase 2 — Content Layer: 9
+- Phase 3 — Layout Shell: 7
+- Phase 4 — Core Pages: 36
+- Phase 5 — SEO & Discoverability: 6
+- Phase 6 — Polish (A11y & Performance): 10
 
 ---
 *Requirements defined: 2026-04-17*
-*Last updated: 2026-04-17 after initial definition*
+*Last updated: 2026-04-17 after roadmap creation*
