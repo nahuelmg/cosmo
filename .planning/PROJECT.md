@@ -91,7 +91,7 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 ## Constraints
 
-- **Tech stack**: Next.js 15 (App Router) + TypeScript strict + Tailwind v4 — per `web-dev-general` defaults; no deviation without reason
+- **Tech stack**: Next.js 16 (App Router) + TypeScript strict + Tailwind v4 — per `web-dev-general` defaults (skill references Next.js 15 but current stable is 16.2.x as of 2026-04; version bump validated in research)
 - **i18n**: next-intl with Spanish default, English toggle — affects routing structure from Phase 1
 - **Content editability**: All people/publications/research/outreach content must live in structured data files (JSON/YAML), not hardcoded in components — non-technical group members must be able to edit
 - **Design direction**: Minimal, typography-driven, restrained — no gradients, no AI-generic aesthetic, no flashy animations; references are nature.com / Max Planck institutes
