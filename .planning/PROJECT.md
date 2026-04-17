@@ -27,12 +27,13 @@ A credible, professional academic presence that makes it easy for visitors to fi
 - [ ] Individual detail pages at `/people/[slug]` for PIs, Postdocs, PhDs only
 - [ ] Research page with intro + grid of research areas (Dark Matter, Gravitational Waves, Early Universe, Artificial Intelligence)
 - [ ] Publications page grouped by year with filter/search by year, author, topic
+- [ ] Journal Club page with upcoming sessions + past sessions archive (speaker, date, title, paper link)
 - [ ] Outreach page with grid of activities (talks, workshops, school visits, articles)
 - [ ] Contact page with postal address, office location, email, embedded Google Map, social links
-- [ ] Top-level nav: Home, People, Research, Publications, Outreach, Contact
+- [ ] Top-level nav: Home, People, Research, Publications, Journal Club, Outreach, Contact
 
 **Data & Content Architecture**
-- [ ] Structured content files: `content/people.json`, `content/publications.json`, `content/research.json`, `content/outreach.json`
+- [ ] Structured content files: `content/people.json`, `content/publications.json`, `content/research.json`, `content/journal-club.json`, `content/outreach.json`
 - [ ] Person shape: slug, name, role, category (PI/postdoc/phd/undergrad/past), photo, short_bio, full_bio, research_interests, publications_selected, contact, social_links
 - [ ] Publication shape: id, authors, title, journal, year, arxiv, doi, topic_tags
 - [ ] Group-wide config (site name, tagline, affiliations) in a single config file — easy to change placeholder group name later
@@ -50,7 +51,6 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 **Deployment**
 - [ ] Deployable to Vercel out of the box
-- [ ] Static-export capable as an escape hatch (for potential university hosting)
 
 ### Out of Scope
 
@@ -64,6 +64,8 @@ A credible, professional academic presence that makes it easy for visitors to fi
 - **Animations beyond hero carousel fade** — "no flashy animations" is an explicit design constraint
 - **Search beyond publications filter** — no general site search in v1
 - **Commenting / discussion** — not the job of an institutional group site
+- **Static-export hosting** — decided Vercel-only after research surfaced dual-build overhead; revisit only if hosting requirement changes
+- **"Join the group" section** — prospective students contact via the general Contact page; no dedicated prospective-student block in v1
 
 ## Context
 
@@ -95,7 +97,7 @@ A credible, professional academic presence that makes it easy for visitors to fi
 - **i18n**: next-intl with Spanish default, English toggle — affects routing structure from Phase 1
 - **Content editability**: All people/publications/research/outreach content must live in structured data files (JSON/YAML), not hardcoded in components — non-technical group members must be able to edit
 - **Design direction**: Minimal, typography-driven, restrained — no gradients, no AI-generic aesthetic, no flashy animations; references are nature.com / Max Planck institutes
-- **Deployment**: Vercel-first but static-export-compatible to preserve the option of university hosting later
+- **Deployment**: Vercel (App Router features available; middleware OK; default Image loader OK) — static export explicitly out of scope
 - **Performance**: Static generation where possible, Next.js Image for all photos, self-hosted fonts — Core Web Vitals per `web-dev-general` targets
 - **Accessibility**: WCAG AA non-negotiable (academic audience expects this)
 - **SEO**: Schema.org Organization + Person, OG/Twitter cards, sitemap, robots.txt — institutional credibility depends on being findable
@@ -109,7 +111,9 @@ A credible, professional academic presence that makes it easy for visitors to fi
 |----------|-----------|---------|
 | Placeholder content throughout | User will provide real names, bios, photos, publications after build; keeps build unblocked | — Pending |
 | Group name in single config file | User uncertain on final branding ("Grupo de Cosmología UBA" placeholder); one-line swap later | — Pending |
-| Vercel-first, static-export-compatible | Hosting target undecided; keep both doors open without over-engineering | — Pending |
+| Vercel-only deployment | Research flagged dual-build overhead (CI matrix, middleware ban, custom image loader); simpler to commit and revisit only if hosting changes | ✓ Good |
+| Journal Club as 7th nav page | Every peer cosmology site has a seminars/journal-club listing; near-table-stakes for credibility | — Pending |
+| Keep auto-fade carousel (user preference) | Research flagged auto-rotate as anti-pattern but user chose to keep with ≥6s dwell + prefers-reduced-motion respected | — Pending |
 | JSON/YAML content files over CMS | Academic maintainers edit infrequently; JSON is simpler than CMS infra | — Pending |
 | Defer arXiv/ADS publication importer to v2 | Significant scope; placeholder data is enough to validate the page layout now | — Pending |
 | next-intl for i18n | Standard for Next.js App Router + Spanish default requirement | — Pending |
