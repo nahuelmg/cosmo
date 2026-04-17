@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "siteName": "Grupo de Cosmología",
+    "institution": "FCEN · UBA"
+  },
+  "nav": {
+    "home": "Inicio",
+    "people": "Personas",
+    "research": "Investigación",
+    "publications": "Publicaciones",
+    "journalClub": "Journal Club",
+    "outreach": "Divulgación",
+    "contact": "Contacto"
+  },
+  "locale": {
+    "switchTo": "English",
+    "current": "Español"
+  },
+  "footer": {
+    "affiliationUba": "Universidad de Buenos Aires",
+    "affiliationFcen": "Facultad de Ciencias Exactas y Naturales",
+    "affiliationConicet": "CONICET",
+    "copyright": "© {year} Grupo de Cosmología — FCEN / UBA"
+  }
+}
