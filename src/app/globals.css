@@ -1,1 +1,66 @@
 @import "tailwindcss";
+
+/* Map next/font CSS variables to Tailwind font utilities (font-serif, font-sans).
+   @theme inline is required — without it Tailwind compiles the literal font name
+   and bypasses the next/font subsetting. See RESEARCH.md Pitfall #5. */
+@theme inline {
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+/* Design tokens — all values traceable to design-system/cosmology-group-uba/MASTER.md */
+@theme {
+  /* ── Surfaces — warm-academic, two tiers only, NO borders ── */
+  --color-surface:     oklch(0.995 0.003 85);
+  --color-surface-alt: oklch(0.978 0.008 80);
+
+  /* ── Ink — warm near-black; never pure #000 ── */
+  --color-ink:        oklch(0.22 0.015 60);
+  --color-ink-muted:  oklch(0.48 0.012 60);
+  --color-ink-subtle: oklch(0.62 0.010 60);
+
+  /* ── Accent — single warm hue, muted terracotta (hue 45°, warm band 30°–80°) ── */
+  --color-accent:      oklch(0.52 0.12 45);
+  --color-accent-hover: oklch(0.44 0.13 45);
+  --color-accent-ring:  oklch(0.52 0.12 45 / 0.45);
+
+  /* ── Type scale — restrained 1.2 ratio, dense body ── */
+  --text-xs:   0.8125rem;
+  --text-sm:   0.9375rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --text-lg:   1.125rem;
+  --text-xl:   1.375rem;
+  --text-2xl:  1.625rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2rem;
+
+  --font-weight-normal:   400;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* ── Spacing step (Tailwind v4 spacing utility base) ── */
+  --spacing: 0.25rem;
+
+  /* ── Shadows — restrained, two tiers only (--shadow-lg/xl removed per MASTER.md) ── */
+  --shadow-sm: 0 1px 2px 0 oklch(0.22 0.015 60 / 0.04);
+  --shadow-md: 0 2px 8px 0 oklch(0.22 0.015 60 / 0.06);
+}
+
+/* ── Base styles ── */
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "calt", "tnum";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
