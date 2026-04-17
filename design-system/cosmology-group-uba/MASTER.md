@@ -7,8 +7,8 @@
 ---
 
 **Project:** Cosmology Group UBA
-**Generated:** 2026-04-17 17:34:53
-**Category:** Analytics Dashboard
+**Generated:** 2026-04-17 17:34:53 (raw); overrides applied 2026-04-17 by Plan 01-02
+**Category:** Warm-Academic Institutional
 
 ---
 
@@ -16,27 +16,42 @@
 
 ### Color Palette
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#2563EB` | `--color-primary` |
-| Secondary | `#3B82F6` | `--color-secondary` |
-| CTA/Accent | `#F97316` | `--color-cta` |
-| Background | `#F8FAFC` | `--color-background` |
-| Text | `#1E293B` | `--color-text` |
+| Role | OKLCH | CSS Variable |
+|------|-------|--------------|
+| CTA/Accent | `oklch(0.52 0.12 45)` | `--color-accent` |
+| Surface (primary) | `oklch(0.995 0.003 85)` | `--color-surface` |
+| Surface (alt) | `oklch(0.978 0.008 80)` | `--color-surface-alt` |
+| Ink (body) | `oklch(0.22 0.015 60)` | `--color-ink` |
+| Ink (muted) | `oklch(0.48 0.012 60)` | `--color-ink-muted` |
+| Ink (subtle) | `oklch(0.62 0.010 60)` | `--color-ink-subtle` |
 
-**Color Notes:** Editorial black + accent pink
+**Color Notes:** Warm-academic: ivory surfaces, warm near-black ink, muted terracotta accent. No cool blues, no neons, no gradients. Accent surfaces on links, focus ring, active-nav underline, and at most one additional chrome element. Not on body prose, not as background fills.
 
 ### Typography
 
-- **Heading Font:** Crimson Pro
-- **Body Font:** Atkinson Hyperlegible
-- **Mood:** academic, research, scholarly, accessible, readable, educational
-- **Google Fonts:** [Crimson Pro + Atkinson Hyperlegible](https://fonts.google.com/share?selection.family=Atkinson+Hyperlegible:wght@400;700|Crimson+Pro:wght@400;500;600;700)
+- **Heading Font:** Source Serif 4 (variable, SIL OFL; subsets: Latin, Latin-Extended, Greek)
+- **Body Font:** Source Sans 3 (variable, SIL OFL; subsets: Latin, Latin-Extended, Greek)
+- **Greek subset required** on BOTH families for inline cosmology notation (Λ, Ω, H₀, σ₈, χ²) so Greek letters do not switch visual style mid-sentence.
+- **Mood:** academic, research, scholarly, accessible, readable, educational, warm-minimal, serif-headings, whitespace-driven
 
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Crimson+Pro:wght@400;500;600;700&display=swap');
-```
+**Google Fonts:** [Source Serif 4 + Source Sans 3](https://fonts.google.com/share?selection.family=Source+Sans+3:ital,wght@0,200..900;1,200..900|Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900)
+
+> **Font delivery note:** Fonts are loaded via `next/font/google` in `src/app/fonts.ts` (Plan 01-04), with `subsets: ['latin', 'latin-ext', 'greek']`. No CSS `@import` is used — Next.js auto-self-hosts at build time, eliminating external font requests in production.
+
+### Type Scale (ratio 1.2)
+
+| Token | rem | px | Usage |
+|-------|-----|----|-------|
+| `--text-xs` | `0.8125rem` | ~13px | Captions, meta labels |
+| `--text-sm` | `0.9375rem` | 15px | Secondary body, UI labels |
+| `--text-base` | `1rem` | 16px | Primary body prose (`line-height: 1.5`) |
+| `--text-lg` | `1.125rem` | 18px | Lead paragraph, card summary |
+| `--text-xl` | `1.375rem` | ~22px | H4 (sans, semibold 600) |
+| `--text-2xl` | `1.625rem` | 26px | H3 (serif, semibold 600) |
+| `--text-3xl` | `1.875rem` | 30px | H2 (serif, semibold 600) |
+| `--text-4xl` | `2rem` | 32px | H1 (serif, semibold 600) |
+
+**Weights:** Serif display at `600` (semibold); Sans body at `400` (regular) / `600` (semibold) / `700` (bold).
 
 ### Spacing Variables
 
@@ -56,8 +71,8 @@
 |-------|-------|-------|
 | `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
 | `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
+
+> `--shadow-lg` and `--shadow-xl` removed — heavy halo shadows contradict the whitespace-hierarchy / Nature long-form aesthetic.
 
 ---
 
@@ -68,8 +83,8 @@
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #F97316;
-  color: white;
+  background: oklch(0.52 0.12 45);
+  color: oklch(0.995 0.003 85);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -85,8 +100,7 @@
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #2563EB;
-  border: 2px solid #2563EB;
+  color: oklch(0.52 0.12 45);
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -99,7 +113,7 @@
 
 ```css
 .card {
-  background: #F8FAFC;
+  background: oklch(0.978 0.008 80);
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -108,7 +122,7 @@
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 ```
@@ -118,16 +132,15 @@
 ```css
 .input {
   padding: 12px 16px;
-  border: 1px solid #E2E8F0;
   border-radius: 8px;
   font-size: 16px;
-  transition: border-color 200ms ease;
+  background: oklch(0.978 0.008 80);
+  transition: box-shadow 200ms ease;
 }
 
 .input:focus {
-  border-color: #2563EB;
   outline: none;
-  box-shadow: 0 0 0 3px #2563EB20;
+  box-shadow: 0 0 0 3px oklch(0.52 0.12 45 / 0.20);
 }
 ```
 
@@ -140,10 +153,10 @@
 }
 
 .modal {
-  background: white;
+  background: oklch(0.995 0.003 85);
   border-radius: 16px;
   padding: 32px;
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-md);
   max-width: 500px;
   width: 90%;
 }
@@ -153,37 +166,45 @@
 
 ## Style Guidelines
 
-**Style:** Data-Dense Dashboard
+**Style:** Warm-Academic Institutional
 
-**Keywords:** Multiple charts/widgets, data tables, KPI cards, minimal padding, grid layout, space-efficient, maximum data visibility
+**Keywords:** Serif display headings, sans body prose, ivory surfaces, warm near-black ink, whitespace-driven hierarchy, information-dense, editorial calm, no borders, no dividers
 
-**Best For:** Business intelligence dashboards, financial analytics, enterprise reporting, operational dashboards, data warehousing
+**Best For:** Academic research group portals, university department sites, scholarly institutional presences
 
-**Key Effects:** Hover tooltips, chart zoom on click, row highlighting on hover, smooth filter animations, data loading spinners
+**Visual references:** nature.com, Max Planck Institute portals, Perimeter Institute, IAS Princeton people pages
+
+**Key Effects:** Subtle lift on hover (translateY -1px or -2px), smooth focus ring via box-shadow (no border), restrained transitions 150–200ms
 
 ### Page Pattern
 
-**Pattern Name:** Minimal Single Column
+**Pattern Name:** Scholarly Editorial Column
 
-- **Conversion Strategy:** Single CTA focus. Large typography. Lots of whitespace. No nav clutter. Mobile-first.
-- **CTA Placement:** Center, large CTA button
-- **Section Order:** 1. Hero headline, 2. Short description, 3. Benefit bullets (3 max), 4. CTA, 5. Footer
+- **Hierarchy strategy:** Typography and whitespace alone carry visual hierarchy — no borders, no hairline rules, no section separators.
+- **Surface ladder:** Primary surface `oklch(0.995 0.003 85)` (warm ivory) for page backgrounds; alternate surface `oklch(0.978 0.008 80)` for cards and alternating sections. Maximum two tiers — no third surface colour.
+- **Section Order:** 1. Header / affiliation strip, 2. Prose hero, 3. Research highlights cards, 4. People preview, 5. Footer with logo strip
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Ornate design
-- ❌ No filtering
+- Ornate or decorative design elements
+- Gradient fills or coloured image overlays
+- Dark-mode-first palettes or cosmic/space aesthetics
+- Cool institutional blues or neon accents
+- Third surface colour tier (use only surface + surface-alt)
+- Border tokens or hairline card/section dividers
+- Shadow tiers above `--shadow-md`
 
 ### Additional Forbidden Patterns
 
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
+- **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
+- **Missing cursor:pointer** — All clickable elements must have cursor:pointer
+- **Layout-shifting hovers** — Avoid scale transforms that shift layout
+- **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
+- **Instant state changes** — Always use transitions (150-300ms)
+- **Invisible focus states** — Focus states must be visible for a11y
+- **Border declarations on interactive elements** — Use box-shadow for focus rings, not border-color
 
 ---
 
@@ -201,3 +222,5 @@ Before delivering any UI code, verify:
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
 - [ ] No horizontal scroll on mobile
+- [ ] Greek glyphs render in Source Serif 4 and Source Sans 3 (verify in DevTools Coverage)
+- [ ] No border declarations on interactive elements (box-shadow only for focus rings)
