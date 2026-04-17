@@ -7,10 +7,10 @@
 
 ### Foundation
 
-- [ ] **FOUND-01**: Project scaffolded with Next.js 16 App Router + TypeScript strict + Tailwind v4 — dev server runs, types compile with zero errors
-- [ ] **FOUND-02**: Design system generated via `ui-ux-pro-max` and persisted to `design-system/MASTER.md`
-- [ ] **FOUND-03**: OKLCH design tokens defined as CSS custom properties and mapped to the Tailwind v4 theme
-- [ ] **FOUND-04**: Self-hosted fonts via `next/font` with Latin + Latin-Extended subsets (no FOUT/FOIT)
+- [x] **FOUND-01**: Project scaffolded with Next.js 16 App Router + TypeScript strict + Tailwind v4 — dev server runs, types compile with zero errors
+- [x] **FOUND-02**: Design system generated via `ui-ux-pro-max` and persisted to `design-system/MASTER.md`
+- [x] **FOUND-03**: OKLCH design tokens defined as CSS custom properties and mapped to the Tailwind v4 theme
+- [x] **FOUND-04**: Self-hosted fonts via `next/font` with Latin + Latin-Extended subsets (no FOUT/FOIT)
 
 ### Navigation & Layout
 
@@ -93,9 +93,9 @@
 - [ ] **I18N-02**: All page-level copy (Home intro, Research descriptions, Outreach intro, etc.) is available in both languages
 - [ ] **I18N-03**: Per-entity content (person bios, research area descriptions, outreach descriptions) supports bilingual fields in the content files
 - [ ] **I18N-04**: Language toggle preserves the current route and deep links (`/en/people/[slug]` ↔ `/es/people/[slug]`)
-- [ ] **I18N-05**: `<html lang>` attribute matches the active locale on every page
-- [ ] **I18N-06**: Missing translation keys log a warning in development; in production the key falls back to a safe default and does not crash the page
-- [ ] **I18N-07**: CI fails if a key exists in one locale's messages but not the other (no silent untranslated UI)
+- [x] **I18N-05**: `<html lang>` attribute matches the active locale on every page
+- [x] **I18N-06**: Missing translation keys log a warning in development; in production the key falls back to a safe default and does not crash the page
+- [x] **I18N-07**: CI fails if a key exists in one locale's messages but not the other (no silent untranslated UI)
 
 ### SEO & Metadata
 
@@ -164,13 +164,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | Phase 1 — Foundation | Pending |
-| FOUND-02 | Phase 1 — Foundation | Pending |
-| FOUND-03 | Phase 1 — Foundation | Pending |
-| FOUND-04 | Phase 1 — Foundation | Pending |
-| I18N-05 | Phase 1 — Foundation | Pending |
-| I18N-06 | Phase 1 — Foundation | Pending |
-| I18N-07 | Phase 1 — Foundation | Pending |
+| FOUND-01 | Phase 1 — Foundation | Complete |
+| FOUND-02 | Phase 1 — Foundation | Complete |
+| FOUND-03 | Phase 1 — Foundation | Complete |
+| FOUND-04 | Phase 1 — Foundation | Complete |
+| I18N-05 | Phase 1 — Foundation | Complete |
+| I18N-06 | Phase 1 — Foundation | Complete |
+| I18N-07 | Phase 1 — Foundation | Complete |
 | DATA-01 | Phase 2 — Content Layer | Pending |
 | DATA-02 | Phase 2 — Content Layer | Pending |
 | DATA-03 | Phase 2 — Content Layer | Pending |
@@ -255,4 +255,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-04-17*
-*Last updated: 2026-04-17 after roadmap creation*
+*Last updated: 2026-04-17 — Phase 1 (Foundation) complete*

@@ -10,7 +10,7 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Foundation** — Next.js scaffold, OKLCH design tokens, i18n routing, fonts
+- [x] **Phase 1: Foundation** — Next.js scaffold, OKLCH design tokens, i18n routing, fonts
 - [ ] **Phase 2: Content Layer** — Zod-validated JSON content files and typed accessors
 - [ ] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
 - [ ] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
@@ -168,7 +168,7 @@ Phase 4 may fan out into parallel per-page plans once planned.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
 | 2. Content Layer | 0/TBD | Not started | - |
 | 3. Layout Shell | 0/TBD | Not started | - |
 | 4. Core Pages | 0/TBD | Not started | - |
