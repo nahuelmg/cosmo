@@ -7,14 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check-translations": "i18n-check --source es --locales messages --format next-intl"
   },
   "dependencies": {
     "next": "^16.2.4",
+    "next-intl": "^4.9.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@lingual/i18n-check": "^0.9.3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
