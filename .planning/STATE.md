@@ -10,24 +10,24 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 ## Current Position
 
 Phase: 1 of 6 (Foundation)
-Plan: 3 of TBD in current phase
-Status: In progress
-Last activity: 2026-04-17 — Completed 01-03-PLAN.md (next-intl i18n routing)
+Plan: 4 of 4 in current phase
+Status: All Phase 1 plans complete — ready for phase verification
+Last activity: 2026-04-17 — Phase 1 Foundation plans complete; awaiting phase verification
 
-Progress: [██░░░░░░░░] ~15%
+Progress: [████░░░░░░] ~20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: ~13 min
-- Total execution time: ~0.7 hours
+- Total plans completed: 4
+- Average duration: ~14 min
+- Total execution time: ~0.9 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 3/TBD | ~39 min | ~13 min |
+| 1. Foundation | 4/4 | ~57 min | ~14 min |
 | 2. Content Layer | 0/TBD | — | — |
 | 3. Layout Shell | 0/TBD | — | — |
 | 4. Core Pages | 0/TBD | — | — |
@@ -35,8 +35,8 @@ Progress: [██░░░░░░░░] ~15%
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (~30 min including checkpoint), 01-03 (4 min)
-- Trend: Pure execution plans running 4–5 min; 01-02 outlier due to user decision checkpoint
+- Last 5 plans: 01-01 (5 min), 01-02 (~30 min including checkpoint), 01-03 (4 min), 01-04 (~17 min code + checkpoint)
+- Trend: Pure execution plans running 4–5 min; checkpoint plans 17–30 min; 01-02 outlier due to user decision checkpoint
 
 *Updated after each plan completion*
 
@@ -67,6 +67,10 @@ Recent decisions affecting current work:
 | 01-03 | journal-club stays English in both locales | International domain lexicon; Spanish speakers recognise it |
 | 01-03 | localeDetection: false — / always → /es | Argentine-first, canonical-friendly, no Accept-Language sniffing |
 | 01-03 | dev-warn/prod-silent i18n error policy | I18N-06: dev visibility + production silence on missing keys |
+| 01-04 | @theme inline for font utilities | Without inline, Tailwind resolves font name literally and bypasses next/font subsetting pipeline |
+| 01-04 | locale-layout order locked: hasLocale → notFound → setRequestLocale → render | Required by next-intl for static rendering; deviation breaks SSG |
+| 01-04 | Greek probe retained in page.tsx until Phase 3 | Visual confirmation Greek subset stays wired across future changes |
+| 01-04 | Root layout.tsx + page.tsx deleted | Proxy from 01-03 guarantees locale-prefixed traffic; no root route needed |
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-17T21:13:00Z
-Stopped at: Completed 01-03-PLAN.md (next-intl i18n routing)
-Resume file: None — run `/gsd:execute-phase 01` to continue with next plan (01-04 locale layout shell + fonts + OKLCH tokens).
+Last session: 2026-04-17T21:35:00Z
+Stopped at: Phase 1 complete, verification pending
+Resume file: None — run `/gsd:complete-phase 01` to run phase verification and close Phase 1.
