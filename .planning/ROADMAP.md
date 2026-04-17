@@ -34,10 +34,13 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
   4. Self-hosted fonts load without FOUT/FOIT on first paint; Latin + Latin-Extended subsets verified in DevTools (FOUND-04).
   5. `pnpm check-translations` fails CI when a key exists in one locale's messages but is missing in the other; dev logs a warning and prod returns the key without crashing when a translation is missing (I18N-06, I18N-07).
 
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD (sized during `/gsd:plan-phase 1`)
+- [ ] 01-01-PLAN.md — Next.js 16 + TypeScript strict + Tailwind v4 scaffold with pnpm, scripts, .gitignore, README stub
+- [ ] 01-02-PLAN.md — Generate design system via ui-ux-pro-max; review and override against CONTEXT.md; lock MASTER.md + OVERRIDES.md
+- [ ] 01-03-PLAN.md — next-intl 4.9 routing, proxy.ts, navigation, request config, messages seeds, check-translations CI script
+- [ ] 01-04-PLAN.md — OKLCH tokens in globals.css, Source Serif 4 + Source Sans 3 with Greek subset, [locale]/layout.tsx, boot verification
 
 ---
 
@@ -165,7 +168,7 @@ Phase 4 may fan out into parallel per-page plans once planned.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 0/4 | Not started | - |
 | 2. Content Layer | 0/TBD | Not started | - |
 | 3. Layout Shell | 0/TBD | Not started | - |
 | 4. Core Pages | 0/TBD | Not started | - |
