@@ -41,6 +41,14 @@ export const siteConfig = {
    */
   groupName: "Grupo de Cosmología",
 
+  /**
+   * Canonical site URL used for metadata, sitemap, JSON-LD, canonical / hreflang
+   * link tags, and OG / Twitter URL fields. Single source of truth — change this
+   * (or the NEXT_PUBLIC_SITE_URL env var) and every downstream SEO surface updates.
+   * Fallback points at the Vercel preview domain until a group-owned domain lands.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://cosmo.vercel.app",
+
   tagline: {
     es: "Explorando el universo a gran escala desde Buenos Aires",
     en: "Exploring the large-scale universe from Buenos Aires",

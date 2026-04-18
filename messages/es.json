@@ -91,5 +91,35 @@
   "carousel": {
     "controls": "Controles del carrusel",
     "goToSlide": "Ir a la diapositiva {n}"
+  },
+  "seo": {
+    "home": {
+      "title": "Inicio",
+      "description": "Grupo de investigación en cosmología teórica y observacional — FCEN, Universidad de Buenos Aires. Materia oscura, energía oscura y estructura a gran escala."
+    },
+    "people": {
+      "title": "Personas",
+      "description": "Investigadores, postdoctorandos y estudiantes del Grupo de Cosmología en el Departamento de Física de la FCEN, UBA."
+    },
+    "research": {
+      "title": "Investigación",
+      "description": "Líneas de investigación activas: cosmología de perturbaciones, materia oscura, energía oscura y formación de estructura a gran escala en el universo."
+    },
+    "publications": {
+      "title": "Publicaciones",
+      "description": "Publicaciones científicas del Grupo de Cosmología. Artículos en revistas arbitradas con enlaces a arXiv y DOI."
+    },
+    "journalClub": {
+      "title": "Journal Club",
+      "description": "Reuniones semanales del Grupo de Cosmología para discutir artículos recientes en cosmología y astrofísica."
+    },
+    "outreach": {
+      "title": "Divulgación",
+      "description": "Actividades de comunicación pública de la ciencia del Grupo de Cosmología: charlas, talleres y publicaciones de divulgación."
+    },
+    "contact": {
+      "title": "Contacto",
+      "description": "Cómo contactar al Grupo de Cosmología de la FCEN, UBA. Dirección, oficina, correo y enlaces institucionales."
+    }
   }
 }

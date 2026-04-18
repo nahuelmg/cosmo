@@ -91,5 +91,35 @@
   "carousel": {
     "controls": "Carousel controls",
     "goToSlide": "Go to slide {n}"
+  },
+  "seo": {
+    "home": {
+      "title": "Home",
+      "description": "Theoretical and observational cosmology research group at FCEN, University of Buenos Aires. Dark matter, dark energy and large-scale structure."
+    },
+    "people": {
+      "title": "People",
+      "description": "Researchers, postdoctoral fellows and students of the Cosmology Group at the Physics Department, FCEN, University of Buenos Aires."
+    },
+    "research": {
+      "title": "Research",
+      "description": "Active research lines: perturbation cosmology, dark matter, dark energy, and large-scale structure formation in the universe."
+    },
+    "publications": {
+      "title": "Publications",
+      "description": "Scientific publications of the Cosmology Group. Peer-reviewed articles with arXiv and DOI links."
+    },
+    "journalClub": {
+      "title": "Journal Club",
+      "description": "Weekly meetings of the Cosmology Group to discuss recent papers in cosmology and astrophysics."
+    },
+    "outreach": {
+      "title": "Outreach",
+      "description": "Public-science communication activities of the Cosmology Group: talks, workshops, and outreach publications."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "How to reach the Cosmology Group at FCEN, UBA. Address, office, email, and institutional links."
+    }
   }
 }
