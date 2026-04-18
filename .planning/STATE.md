@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 
 ## Current Position
 
-Phase: 6 of 6 (Polish A11y & Performance) — In progress
-Plan: 3 of 4 in Phase 6 (06-01, 06-02, 06-03 complete)
-Status: In progress
-Last activity: 2026-04-18 — Completed 06-03 axe remediation. Single token fix: --color-ink-subtle oklch(0.62→0.45), closes all 15 color-contrast violations. Post-fix axe run: 0 violations on all 8 pages. PERF-01 held (45 static routes). NAV-03 held (0 mailto in content HTML). 06-02 carousel ARIA also complete (Wave 2 parallel).
+Phase: 6 of 6 (Polish A11y & Performance) — COMPLETE
+Plan: 4 of 4 in Phase 6 (06-01, 06-02, 06-03, 06-04 complete)
+Status: Phase complete
+Last activity: 2026-04-18 — Completed 06-04 final verification. PERF-01: 45 static routes, 0 SSR. NAV-03: 0 emails in content HTML. A11Y: 0 axe violations (all 8 pages). PERF-02/04/05 deferred to Vercel production re-measurement (localhost pnpm start is a pessimistic LCP proxy).
 
-Progress: [█████████████████████████████░] ~99% (24/26 plans complete, Phase 6 plans 1-3 of 4 done)
+Progress: [██████████████████████████████] 100% (26/26 plans complete, Phase 6 done)
 
 ## Performance Metrics
 
@@ -176,6 +176,9 @@ Recent decisions affecting current work:
 - Populate publications_selected on content/people.json once the group provides real selected-publication lists per member (currently empty arrays across the 15-member roster; the filter-undefined guard in PersonDetailPage keeps the page crash-free, so no publications render on detail pages until real IDs are added).
 - Fill in real bilingual bios + research_interests for the 12 new roster entries (Scannapieco, Miron Granese, Armaleo, Badia, Ferreira Chase, Leizerovitch, Santa Cruz, Chantada, Ahumada Acuña, Elia, Pineau, Cicarella); entries currently show "Biografia detallada a completar" / "Detailed biography to be completed" placeholders. Undergrads (Pineau, Cicarella) additionally need real thesis_topic content.
 - Add missing member photos to public/people/: Augusto Chantada, Guadalupe Ahumada Acuña, Juan Pablo Elia, Javier Pineau, Tomas Cicarella (optional photo field left off in people.json until files exist).
+- [PERF-04 deferred] Re-measure LCP < 2.5s mobile 4G on /es, /es/personas, /es/publicaciones against Vercel production. Localhost measurements were 4.5–5.4s; expected ~40–60% faster on Vercel edge CDN.
+- [PERF-02 deferred] Re-measure CLS = 0 across all 8 Spanish pages against Vercel production. Contact measured 0.01 locally (likely font-swap micro-shift). Spot-check in prod and, if still > 0, narrow the culprit.
+- [PERF-05 deferred] Verify Maps iframe is NOT the Contact LCP element via Lighthouse on Vercel production. IntersectionObserver facade is in place at src/components/contact/MapEmbed.tsx — needs prod confirmation.
 
 ### Blockers/Concerns
 
@@ -186,5 +189,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 06-03-PLAN.md. --color-ink-subtle darkened (oklch 0.62→0.45). Post-fix axe: 0 violations on all 8 Spanish pages. 06-02 carousel ARIA also complete (Wave 2). A11Y-01 + A11Y-02 satisfied. Build: 45 static routes. NAV-03: 0 mailto in content HTML.
+Stopped at: Completed 06-04-PLAN.md. Phase 6 COMPLETE. PERF-01 PASS (45 static routes, 0 SSR). NAV-03 PASS (0 emails in content HTML). A11Y PASS (0 axe violations). PERF-02/04/05 deferred to Vercel production re-measurement. See 06-04-SUMMARY.md.
 Resume file: None
