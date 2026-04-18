@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "authors": {
+        "minItems": 1,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "journal": {
+        "type": "string",
+        "minLength": 1
+      },
+      "year": {
+        "type": "integer",
+        "minimum": 1900,
+        "maximum": 2100
+      },
+      "arxiv": {
+        "type": "string",
+        "pattern": "^\\d{4}\\.\\d{4,5}(v\\d+)?$"
+      },
+      "doi": {
+        "type": "string",
+        "pattern": "^10\\.\\d{4,9}\\/[-._;()/:A-Z0-9]+$"
+      },
+      "topic_tags": {
+        "default": [],
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "abstract": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "authors",
+      "title",
+      "journal",
+      "year",
+      "topic_tags"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "date": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "upcoming",
+          "past"
+        ]
+      },
+      "speaker": {
+        "type": "string",
+        "minLength": 1
+      },
+      "affiliation": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "paper_link": {
+        "type": "string",
+        "format": "uri"
+      },
+      "notes": {
+        "type": "object",
+        "properties": {
+          "es": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "es",
+          "en"
+        ],
+        "additionalProperties": false
+      },
+      "academic_year": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{4}$"
+      }
+    },
+    "required": [
+      "id",
+      "date",
+      "status",
+      "speaker",
+      "affiliation",
+      "title"
+    ],
+    "additionalProperties": false
+  }
+}

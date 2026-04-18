@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "date": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "talk",
+          "workshop",
+          "school-visit",
+          "article",
+          "interview",
+          "video"
+        ]
+      },
+      "title": {
+        "type": "object",
+        "properties": {
+          "es": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "es",
+          "en"
+        ],
+        "additionalProperties": false
+      },
+      "description": {
+        "type": "object",
+        "properties": {
+          "es": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "es",
+          "en"
+        ],
+        "additionalProperties": false
+      },
+      "image": {
+        "type": "string"
+      },
+      "link": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "required": [
+      "id",
+      "date",
+      "type",
+      "title",
+      "description"
+    ],
+    "additionalProperties": false
+  }
+}
