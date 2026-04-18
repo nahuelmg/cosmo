@@ -90,7 +90,10 @@
   },
   "carousel": {
     "controls": "Controles del carrusel",
-    "goToSlide": "Ir a la diapositiva {n}"
+    "goToSlide": "Ir a la diapositiva {n}",
+    "label": "Galería de fotos del grupo",
+    "stopCarousel": "Detener diapositivas",
+    "startCarousel": "Iniciar diapositivas"
   },
   "seo": {
     "home": {
