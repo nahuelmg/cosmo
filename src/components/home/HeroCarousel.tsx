@@ -29,11 +29,9 @@ export default function HeroCarousel({
 }: HeroCarouselProps) {
   const t = useTranslations('carousel');
   const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // Clear any existing timer on each run
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -43,7 +41,7 @@ export default function HeroCarousel({
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (isPaused || reducedMotion) {
+    if (reducedMotion) {
       return;
     }
 
@@ -57,9 +55,8 @@ export default function HeroCarousel({
         timerRef.current = null;
       }
     };
-  }, [index, isPaused, slides.length]);
+  }, [index, slides.length]);
 
-  // Pause timer when tab is hidden, resume when visible
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -67,14 +64,7 @@ export default function HeroCarousel({
           clearTimeout(timerRef.current);
           timerRef.current = null;
         }
-      }
-      // When returning to visible the index/isPaused effect re-runs automatically
-      // because it subscribes to those state values. Force a re-trigger by
-      // temporarily toggling isPaused would be wrong — instead we rely on
-      // setIndex to trigger the effect. Use a no-op state update via setIndex(i => i)
-      // only if we need to restart. However, simply calling setIndex(i => i) after
-      // becoming visible is the safest approach:
-      else {
+      } else {
         setIndex((i) => i);
       }
     };
@@ -140,40 +130,6 @@ export default function HeroCarousel({
             ].join(' ')}
           />
         ))}
-
-        {/* Pause / Play button */}
-        <button
-          type="button"
-          aria-label={isPaused ? t('play') : t('pause')}
-          aria-pressed={isPaused}
-          onClick={() => setIsPaused((p) => !p)}
-          className="ml-1 p-1 text-surface/80 hover:text-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface/70 rounded active:scale-95 transition-[color,transform] duration-75"
-        >
-          {isPaused ? (
-            /* Play triangle */
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <polygon points="2,1 10,6 2,11" />
-            </svg>
-          ) : (
-            /* Pause — two rects */
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <rect x="2" y="1" width="3" height="10" />
-              <rect x="7" y="1" width="3" height="10" />
-            </svg>
-          )}
-        </button>
       </div>
     </div>
   );

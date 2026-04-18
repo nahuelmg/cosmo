@@ -24,7 +24,7 @@
 
 - [ ] **HOME-01**: Hero section displays a rotating cover-photo carousel with 3–5 landscape placeholder images (1920×800, labeled "Hero Image 1", "Hero Image 2", …)
 - [ ] **HOME-02**: Hero carousel auto-advances with fade transitions every 6–8 seconds
-- [ ] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set), pauses when the tab is backgrounded (`document.hidden`), and exposes a visible pause button. Hover and keyboard focus deliberately do NOT pause — the pause button is the single explicit affordance (locked in Phase 4 CONTEXT.md 2026-04-18).
+- [ ] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set) and pauses when the tab is backgrounded (`document.hidden`). Manual control is via dot indicators only — no pause button (user direction 2026-04-18 during Phase 4 human-verify; supersedes prior "visible pause button" requirement). Hover and keyboard focus deliberately do NOT pause.
 - [ ] **HOME-04**: Hero overlay displays the group name, short tagline, and affiliation with WCAG-AA contrast against every carousel image
 - [ ] **HOME-05**: Intro section below the hero shows 2–3 paragraphs about the group's mission and research focus
 - [ ] **HOME-06**: Highlights section shows 3 cards of recent publications, news, or featured research

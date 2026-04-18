@@ -19,12 +19,12 @@ SEO metadata (Phase 5), a11y audit (Phase 6), and content authoring (separate co
 
 ### Home hero carousel
 - **Timing:** 7s visible per slide, 1s crossfade. Calm pace suited to a research group — gives visitors time to read the overlay.
-- **Pause triggers (in addition to mandatory reduced-motion pref and explicit pause button):**
+- **Pause triggers (in addition to mandatory reduced-motion preference):**
   - `document.hidden === true` (tab backgrounded) → pause
   - Hover → does NOT pause (deliberate; carousel keeps rotating even when a visitor reads the overlay)
-  - Keyboard focus → does NOT pause (deliberate; pause button is the affordance)
+  - Keyboard focus → does NOT pause (deliberate)
 - **Overlay:** static across all slides — group name + tagline + affiliation. Same copy every slide (matches HOME-02 literally). Simpler, always on-brand, no per-slide caption writing needed per locale.
-- **Controls:** dot indicators + pause button clustered bottom-right of the carousel as a single focus group. Pause button is a visible icon button (not hover-revealed).
+- **Controls:** dot indicators only, clustered bottom-right. No pause button (user direction 2026-04-18 during Phase 4 human-verify — decided the pause button added UI weight for a behavior already covered by document.hidden + prefers-reduced-motion). Supersedes the initial "pause button + dots" decision.
 - **Images:** 3–5 landscape placeholders (HOME-01). WCAG-AA overlay contrast on every slide (HOME-02).
 
 ### People list — grouping & clickability

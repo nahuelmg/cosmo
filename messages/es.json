@@ -90,8 +90,6 @@
   },
   "carousel": {
     "controls": "Controles del carrusel",
-    "pause": "Pausar",
-    "play": "Reproducir",
     "goToSlide": "Ir a la diapositiva {n}"
   }
 }

@@ -90,8 +90,6 @@
   },
   "carousel": {
     "controls": "Carousel controls",
-    "pause": "Pause",
-    "play": "Play",
     "goToSlide": "Go to slide {n}"
   }
 }
