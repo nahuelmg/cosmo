@@ -99,12 +99,12 @@
 
 ### SEO & Metadata
 
-- [ ] **SEO-01**: Every page generates Open Graph and Twitter-card metadata (title, description, image)
-- [ ] **SEO-02**: Every page declares a canonical URL and `hreflang` alternates for both locales plus `x-default`
-- [ ] **SEO-03**: Organization Schema.org JSON-LD is present in the root layout with group name, affiliations, and URL
-- [ ] **SEO-04**: Person Schema.org JSON-LD is present on each `/people/[slug]` page
-- [ ] **SEO-05**: `sitemap.xml` includes all static routes with both-locale alternates and `x-default`
-- [ ] **SEO-06**: `robots.txt` is present at the root
+- [x] **SEO-01**: Every page generates Open Graph and Twitter-card metadata (title, description, image)
+- [x] **SEO-02**: Every page declares a canonical URL and `hreflang` alternates for both locales plus `x-default`
+- [x] **SEO-03**: Organization Schema.org JSON-LD is present in the root layout with group name, affiliations, and URL
+- [x] **SEO-04**: Person Schema.org JSON-LD is present on each `/people/[slug]` page
+- [x] **SEO-05**: `sitemap.xml` includes all static routes with both-locale alternates and `x-default`
+- [x] **SEO-06**: `robots.txt` is present at the root
 
 ### Accessibility
 
@@ -223,12 +223,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONT-04 | Phase 4 — Core Pages | Complete |
 | CONT-05 | Phase 4 — Core Pages | Complete |
 | I18N-02 | Phase 4 — Core Pages | Complete |
-| SEO-01 | Phase 5 — SEO & Discoverability | Pending |
-| SEO-02 | Phase 5 — SEO & Discoverability | Pending |
-| SEO-03 | Phase 5 — SEO & Discoverability | Pending |
-| SEO-04 | Phase 5 — SEO & Discoverability | Pending |
-| SEO-05 | Phase 5 — SEO & Discoverability | Pending |
-| SEO-06 | Phase 5 — SEO & Discoverability | Pending |
+| SEO-01 | Phase 5 — SEO & Discoverability | Complete |
+| SEO-02 | Phase 5 — SEO & Discoverability | Complete |
+| SEO-03 | Phase 5 — SEO & Discoverability | Complete |
+| SEO-04 | Phase 5 — SEO & Discoverability | Complete |
+| SEO-05 | Phase 5 — SEO & Discoverability | Complete |
+| SEO-06 | Phase 5 — SEO & Discoverability | Complete |
 | A11Y-01 | Phase 6 — Polish (A11y & Performance) | Pending |
 | A11Y-02 | Phase 6 — Polish (A11y & Performance) | Pending |
 | A11Y-03 | Phase 6 — Polish (A11y & Performance) | Pending |

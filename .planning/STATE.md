@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 5 SEO & Discoverability — wave-1 prerequisite 05-01 shipped; 05-02 site-wide metadataBase + title template + ResearchOrganization JSON-LD now live in the root locale layout. Wave-2 remainder (05-03, 05-04, 05-05) can run in parallel.
+**Current focus:** Phase 5 SEO & Discoverability — COMPLETE. Every page in both locales exposes canonical + hreflang + OG/Twitter + Schema.org JSON-LD (Org root, Person on /people/[slug], ScholarlyArticle per publication), plus sitemap.xml + robots.txt. NAV-03 + PERF-01 preserved. Next up: Phase 6 Polish (A11y & Performance).
 
 ## Current Position
 
-Phase: 5 of 6 (SEO & Discoverability)
-Plan: 2 of 5 in Phase 5 (05-01, 05-02 complete; 05-03, 05-04, 05-05 queued as wave 2 remainder)
-Status: In progress
-Last activity: 2026-04-18 — Completed 05-02-PLAN.md (static metadata export with metadataBase + title template + default OG/Twitter in [locale]/layout.tsx; ResearchOrganization JSON-LD rendered once per page via shared layout; NAV-03 + PERF-01 guards re-verified — zero email/mailto in curl, all 43 pages still static)
+Phase: 5 of 6 (SEO & Discoverability) — COMPLETE 2026-04-18
+Plan: 5 of 5 in Phase 5 (05-01, 05-02, 05-03, 05-04, 05-05 complete)
+Status: Complete
+Last activity: 2026-04-18 — Completed Phase 5 end-to-end. 05-03 per-page metadata + ScholarlyArticle JSON-LD per publication entry; 05-04 per-person metadata + Person JSON-LD (email-free per NAV-03); 05-05 sitemap (20 URLs with xhtml:link alternates) + VERCEL_ENV-gated robots.txt. gsd-verifier reported 9/9 truths + 17/17 artifacts + 8/8 key links + 6/6 requirements verified; all routes still static.
 
-Progress: [███████████████████████░] ~94% (17/18 plans complete across phases 1-4 + 05-01 + 05-02)
+Progress: [███████████████████████████] ~95% (21/22 plans complete across phases 1-5; Phase 6 remaining)
 
 ## Performance Metrics
 
@@ -31,10 +31,13 @@ Progress: [███████████████████████
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
 | 4. Core Pages | 8/8 COMPLETE (04-01..04-08) | ~69 min | ~9 min |
-| 5. SEO & Discoverability | 2/5 (05-01, 05-02 complete; 03..05 queued) | ~4 min | ~2 min |
+| 5. SEO & Discoverability | 5/5 COMPLETE (05-01..05-05) | ~13 min | ~2.5 min |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 05-05 ran ~2 min (pure-auto, 2 task commits — sitemap + robots; typecheck + build clean; sitemap emits 20 canonical URLs with three xhtml:link alternates each, all built via getPathname — no hardcoded localized path strings in source; robots gates allow/disallow on VERCEL_ENV === "production"; both files served as static assets — PERF-01 held)
+- 05-04 ran ~3 min (pure-auto, 1 task commit; per-person generateMetadata with ogType 'profile' + Person JSON-LD as first fragment child; 26 static person paths (13 clickable × 2 locales); PhD + PI sampled curl both locales show @type:Person with zero email/mailto hits; executor used beneficial object-form href for getPathname against routing.ts pathnames map instead of plan's string literal)
+- 05-03 ran ~4 min (pure-auto, 2 task commits — Task 1 6 static pages generateMetadata, Task 2 ScholarlyArticle JSON-LD; 13 ScholarlyArticle blocks per /publications page both locales; home uses absoluteTitle, others prepend via " — %s" template; NAV-03 zero-email confirmed via grep)
 - 05-02 ran ~1 min (pure-auto, 1 task commit, zero deviations; typecheck + build clean on first attempt; all 43 pages still static — PERF-01 held; curl /es and /en both confirmed ResearchOrganization JSON-LD rendered with locale-correct contactPoint.url (/es/contacto vs /en/contact); NAV-03 zero-mailto + zero-"email" grep guards passed)
 - 05-01 ran ~3 min (pure-auto, 2 task commits, zero deviations; check-translations + typecheck clean on first attempt; build prerendered all 43 pages as static; NAV-03 constraint verified via zero `"email"` hits in src/lib/schemas.ts; PERF-01 satisfied — no cookies/headers/connection calls added)
 - 04-08 ran ~8 min (pure-auto, 2 task commits, 2 auto-fixes — default-import correction + never[] cast; TypeScript clean after fixes; build prerendered 43 static pages; zero mailto/iframe in prerender confirmed via curl)
@@ -181,5 +184,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 05-02-PLAN.md (site-wide metadataBase + title template + default OG/Twitter + ResearchOrganization JSON-LD wired into [locale]/layout.tsx). Verified: all 43 pages still static; curl /es and /en both emit ResearchOrganization JSON-LD with locale-correct contactPoint.url; zero mailto/email hits site-wide. Wave-2 remainder (05-03 page metadata overrides, 05-04 per-page schemas, 05-05 sitemap/robots) unblocked.
+Stopped at: Phase 5 COMPLETE. All five plans landed (05-01 through 05-05); verifier reports 9/9 truths, 17/17 artifacts, 8/8 key links, 6/6 requirements verified at source + build-output level. Every page in both locales carries canonical + hreflang + OG/Twitter + Schema.org JSON-LD (ResearchOrganization on all, Person on /people/[slug], ScholarlyArticle per publication entry). Sitemap.xml exposes 20 canonical URLs with xhtml:link alternates. Robots.txt gates allow/disallow on VERCEL_ENV === "production". NAV-03 (zero email/mailto in prerendered HTML) and PERF-01 (all routes static) held throughout. Next up: Phase 6 Polish (A11y & Performance).
 Resume file: None

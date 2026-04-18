@@ -14,7 +14,7 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
 - [x] **Phase 2: Content Layer** — Zod-validated JSON content files and typed accessors
 - [x] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
 - [x] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
-- [ ] **Phase 5: SEO & Discoverability** — Metadata, Schema.org JSON-LD, sitemap, robots
+- [x] **Phase 5: SEO & Discoverability** — Metadata, Schema.org JSON-LD, sitemap, robots
 - [ ] **Phase 6: Polish (A11y & Performance)** — WCAG AA audit, Core Web Vitals, SSG verification
 
 ## Phase Details
@@ -152,9 +152,9 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Prereqs: siteConfig.url + .env.example + full seo messages namespace (es+en) + buildPageMetadata helper + schema builders + JsonLd component [wave 1]
 - [x] 05-02-PLAN.md — Root locale layout: metadataBase + title template + default OG + ResearchOrganization JSON-LD on every page (SEO-01, SEO-02 defaults, SEO-03) [wave 2]
-- [ ] 05-03-PLAN.md — generateMetadata on 7 static pages (home absolute-title; others template-suffix) + ScholarlyArticle JSON-LD per publication entry (SEO-01, SEO-02) [wave 2]
-- [ ] 05-04-PLAN.md — /people/[slug] generateMetadata + Person JSON-LD (no email, ORCID + Scholar + socials in sameAs) (SEO-01, SEO-02, SEO-04) [wave 2]
-- [ ] 05-05-PLAN.md — sitemap.ts (7 routes + 13 people × alternates) + robots.ts (VERCEL_ENV-gated) (SEO-05, SEO-06) [wave 2]
+- [x] 05-03-PLAN.md — generateMetadata on 7 static pages (home absolute-title; others template-suffix) + ScholarlyArticle JSON-LD per publication entry (SEO-01, SEO-02) [wave 2]
+- [x] 05-04-PLAN.md — /people/[slug] generateMetadata + Person JSON-LD (no email, ORCID + Scholar + socials in sameAs) (SEO-01, SEO-02, SEO-04) [wave 2]
+- [x] 05-05-PLAN.md — sitemap.ts (7 routes + 13 people × alternates) + robots.ts (VERCEL_ENV-gated) (SEO-05, SEO-06) [wave 2]
 
 ---
 
