@@ -78,7 +78,7 @@ export default function HeroCarousel({
   return (
     <div
       aria-roledescription="carousel"
-      className="relative w-full aspect-[21/9] overflow-hidden rounded-md"
+      className="relative w-full h-[min(85svh,720px)] md:h-auto md:aspect-[21/9] overflow-hidden rounded-md"
     >
       {slides.map((slide, i) => (
         <div
@@ -101,12 +101,12 @@ export default function HeroCarousel({
       ))}
 
       {/* Static overlay — same on every slide per CONTEXT decision */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/70 via-40% to-ink/10 flex flex-col justify-end p-8 md:p-12">
-        <h1 className="font-serif text-4xl md:text-5xl text-white [text-shadow:_0_2px_4px_rgb(0_0_0_/_0.9),_0_0_20px_rgb(0_0_0_/_0.75)]">
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/85 via-30% to-transparent to-65% flex flex-col justify-end p-8 md:p-12">
+        <h1 className="font-serif font-bold text-4xl md:text-5xl text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_0.95),_0_0_24px_rgb(0_0_0_/_0.85)]">
           {groupName}
         </h1>
-        <p className="text-white [text-shadow:_0_1px_8px_rgb(0_0_0_/_0.7)]">{tagline}</p>
-        <p className="text-white/85 text-sm [text-shadow:_0_1px_8px_rgb(0_0_0_/_0.7)]">{affiliation}</p>
+        <p className="text-white [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.9),_0_1px_10px_rgb(0_0_0_/_0.75)]">{tagline}</p>
+        <p className="text-white/90 text-sm [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.9),_0_1px_10px_rgb(0_0_0_/_0.75)]">{affiliation}</p>
       </div>
 
       {/* Controls cluster */}
