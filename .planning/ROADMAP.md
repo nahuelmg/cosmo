@@ -173,10 +173,13 @@ Plans:
   4. `pnpm build` produces a fully static output — no page falls back to SSR; every `generateStaticParams` returns the expected slug set (PERF-01).
   5. Lighthouse mobile (throttled 4G) reports LCP < 2.5s for Home, People, and Publications; CLS is 0 on every page; the Google Maps embed does not contribute to Contact's LCP (PERF-02, PERF-03, PERF-04, PERF-05).
 
-**Plans**: TBD
+**Plans**: 4 plans (wave 1: 1 plan; wave 2: 2 plans parallel; wave 3: 1 plan human-verify)
 
 Plans:
-- [ ] 06-01: TBD (sized during `/gsd:plan-phase 6`)
+- [ ] 06-01-PLAN.md — A11y audit: run @axe-core/cli@4 against 8 Spanish pages, produce partitioned violation inventory in SUMMARY.md [wave 1, pure-auto]
+- [ ] 06-02-PLAN.md — HeroCarousel a11y upgrade (pause button + aria-live toggle + slide attrs + focus-pause) + priority→Next.js 16 preload/fetchPriority migration (HeroCarousel, SiteHeader, PersonDetail) + manual DevTools contrast spot-check on 3 hero slides [wave 2, pure-auto]
+- [ ] 06-03-PLAN.md — Axe remediation sweep: fix every component-owned violation from 06-01 (contrast tokens, LocaleToggle, NavLink, etc.), re-run axe to confirm zero violations [wave 2, pure-auto]
+- [ ] 06-04-PLAN.md — Performance + final verification: Lighthouse mobile 4G LCP on Home/People/Publications, CLS × 8 pages, Maps-not-LCP on Contact, static-output machine check (prerender-manifest), NAV-03 non-regression grep [wave 3, human-verify]
 
 ---
 
