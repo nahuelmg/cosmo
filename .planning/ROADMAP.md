@@ -15,7 +15,7 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
 - [x] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
 - [x] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
 - [x] **Phase 5: SEO & Discoverability** — Metadata, Schema.org JSON-LD, sitemap, robots
-- [ ] **Phase 6: Polish (A11y & Performance)** — WCAG AA audit, Core Web Vitals, SSG verification
+- [x] **Phase 6: Polish (A11y & Performance)** — WCAG AA audit, Core Web Vitals, SSG verification
 
 ## Phase Details
 
@@ -176,10 +176,10 @@ Plans:
 **Plans**: 4 plans (wave 1: 1 plan; wave 2: 2 plans parallel; wave 3: 1 plan human-verify)
 
 Plans:
-- [ ] 06-01-PLAN.md — A11y audit: run @axe-core/cli@4 against 8 Spanish pages, produce partitioned violation inventory in SUMMARY.md [wave 1, pure-auto]
-- [ ] 06-02-PLAN.md — HeroCarousel a11y upgrade (pause button + aria-live toggle + slide attrs + focus-pause) + priority→Next.js 16 preload/fetchPriority migration (HeroCarousel, SiteHeader, PersonDetail) + manual DevTools contrast spot-check on 3 hero slides [wave 2, pure-auto]
-- [ ] 06-03-PLAN.md — Axe remediation sweep: fix every component-owned violation from 06-01 (contrast tokens, LocaleToggle, NavLink, etc.), re-run axe to confirm zero violations [wave 2, pure-auto]
-- [ ] 06-04-PLAN.md — Performance + final verification: Lighthouse mobile 4G LCP on Home/People/Publications, CLS × 8 pages, Maps-not-LCP on Contact, static-output machine check (prerender-manifest), NAV-03 non-regression grep [wave 3, human-verify]
+- [x] 06-01-PLAN.md — A11y audit: run @axe-core/cli@4 against 8 Spanish pages, produce partitioned violation inventory in SUMMARY.md [wave 1, pure-auto]
+- [x] 06-02-PLAN.md — HeroCarousel a11y upgrade (pause button + aria-live toggle + slide attrs + focus-pause) + priority→Next.js 16 preload/fetchPriority migration (HeroCarousel, SiteHeader, PersonDetail) + manual DevTools contrast spot-check on 3 hero slides [wave 2, pure-auto]
+- [x] 06-03-PLAN.md — Axe remediation sweep: fix every component-owned violation from 06-01 (contrast tokens, LocaleToggle, NavLink, etc.), re-run axe to confirm zero violations [wave 2, pure-auto]
+- [x] 06-04-PLAN.md — Performance + final verification: Lighthouse mobile 4G LCP on Home/People/Publications, CLS × 8 pages, Maps-not-LCP on Contact, static-output machine check (prerender-manifest), NAV-03 non-regression grep [wave 3, human-verify]
 
 ---
 
@@ -196,8 +196,8 @@ Phase 4 fans out into parallel per-page plans (7 plans in Wave 2 after 1 shared-
 | 2. Content Layer | 5/5 | Complete ✓ | 2026-04-17 |
 | 3. Layout Shell | 5/5 | Complete ✓ | 2026-04-17 |
 | 4. Core Pages | 8/8 | Complete ✓ | 2026-04-18 |
-| 5. SEO & Discoverability | 1/5 | In progress | - |
-| 6. Polish (A11y & Performance) | 0/TBD | Not started | - |
+| 5. SEO & Discoverability | 5/5 | Complete ✓ | 2026-04-18 |
+| 6. Polish (A11y & Performance) | 4/4 | Complete ✓ (PERF-02/04/05 deferred to prod re-measurement) | 2026-04-18 |
 
 ---
 
