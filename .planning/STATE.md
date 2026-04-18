@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 
 ## Current Position
 
-Phase: 3 of 6 (Layout Shell) — Complete ✓
-Plan: 5 of 5 in Phase 3 (03-05 layout integration + SiteFooter complete)
-Status: Phase 3 complete — ready for /gsd:plan-phase 4 (Core Pages)
-Last activity: 2026-04-17 — Completed 03-05-PLAN.md (layout shell integration + SiteFooter, 2 gap-closures)
+Phase: 4 of 6 (Core Pages) — In Progress
+Plan: 1 of 8 in Phase 4 (04-01 shared prerequisites complete)
+Status: In progress — Wave 1 shipped; Wave 2 (7 page plans) ready to execute
+Last activity: 2026-04-18 — Completed 04-01-PLAN.md (lucide-react, portada_3, siteConfig address/mapQuery, 8 i18n namespaces, HeroCarousel, MapEmbed)
 
-Progress: [█████████████░░░░░░░░░] ~56% (Phase 3 of 6 complete)
+Progress: [██████████████░░░░░░░░] ~60% (Phase 3 complete + Phase 4 Wave 1)
 
 ## Performance Metrics
 
@@ -30,7 +30,7 @@ Progress: [█████████████░░░░░░░░░] ~
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
-| 4. Core Pages | 0/TBD | — | — |
+| 4. Core Pages | 1/8 (Wave 1 complete) | ~12 min | ~12 min |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
@@ -114,6 +114,11 @@ Recent decisions affecting current work:
 | 03-05 | Layout owns the single <main> landmark | page.tsx's inner <main> replaced with <section>; Phase 4 pages return content only, MUST NOT add their own <main> wrapper (double-landmark is an a11y violation) |
 | 03-05 | Body is min-h-screen flex flex-col with main flex-1 + footer mt-auto | Standard sticky-footer pattern; footer pins to viewport bottom on short pages without JavaScript |
 | 03-05 | Footer affiliations render from translations, not siteConfig.affiliations | footer.affiliation* keys are already bilingual; siteConfig.affiliations remains available for Phase 5 Schema.org JSON-LD and future logo-linked references |
+| 04-01 | BilingualString interface inline in site.ts (not imported from content schemas) | Keeps compile-time-only file filesystem-free; consistent with existing SocialLink/Affiliation inline pattern (decision 02-01) |
+| 04-01 | portada_3.jpg is a deliberate copy of portada_1.jpg | Third carousel slot requires a valid image file; real image deferred per RESEARCH.md open-question #1 |
+| 04-01 | HeroCarousel uses setTimeout (not setInterval) per index/isPaused useEffect deps | Avoids interval drift; timer restarts cleanly on advance; prefers-reduced-motion checked inside effect (SSR-safe) |
+| 04-01 | MapEmbed fallback anchor is always-rendered (not gated on shouldLoad) | Ensures crawlability in prerendered HTML and functional with JS disabled; iframe overlays it once IntersectionObserver fires |
+| 04-01 | Pause/play glyphs are inline SVGs (not lucide) | 2 glyphs only; consistent with 03-04 hamburger/X decision; lucide-react installed for page-level icons |
 
 ### Pending Todos
 
@@ -131,6 +136,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-17
-Stopped at: Completed 03-05-PLAN.md (SiteFooter + layout shell integration — Phase 3 complete, ready for /gsd:plan-phase 4)
+Last session: 2026-04-18
+Stopped at: Completed 04-01-PLAN.md (Phase 4 Wave 1 shared prerequisites — lucide-react, portada_3, siteConfig address/mapQuery, 8 i18n namespaces, HeroCarousel, MapEmbed)
 Resume file: None
