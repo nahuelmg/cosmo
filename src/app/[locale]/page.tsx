@@ -21,7 +21,7 @@ function HomeContent() {
   const tMeta = useTranslations('meta');
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-24">
+    <section className="mx-auto max-w-2xl px-6 py-24">
       <h1 className="text-4xl font-semibold tracking-tight">
         {tMeta('siteName')}
       </h1>
@@ -44,6 +44,6 @@ function HomeContent() {
       <p className="mt-12 text-ink-subtle text-sm">
         Phase 1 placeholder — replaced in Phase 3 (layout shell) and Phase 4 (home page).
       </p>
-    </main>
+    </section>
   );
 }
