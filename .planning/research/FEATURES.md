@@ -1,283 +1,549 @@
-# Feature Research — Cosmology Research Group Website
+# Feature Research — v1.1 Publication Sync (InspireHEP + arXiv)
 
-**Domain:** Academic research group website (cosmology, UBA / FCEN / CONICET)
-**Researched:** 2026-04-17
-**Confidence:** HIGH (peer institutional sites + LATAM peer IAFE + multilingual UX sources)
-**Research mode:** Ecosystem (with explicit validation of user-specified v1 page structure)
+**Domain:** Academic cosmology group website — publication auto-sync layer
+**Researched:** 2026-04-18
+**Confidence:** HIGH for API behavior (verified against live API); MEDIUM for UX conventions
+(observed on peer sites; LOW for "last-N-years" cutoff — no authoritative norm found,
+recommendation below is reasoned inference from domain practice)
 
-## Scope & Validation of v1 Page List
+**Scope note:** This file covers *only* the v1.1 feature set (publication sync, display
+conventions, source tagging, per-profile filtering). It supersedes the "Future Consideration
+(v2+) — arXiv / ADS / ORCID auto-import" section of the v1.0 FEATURES.md.
+The v1.0 table-stakes features (people directory, research areas, bilingual toggle, etc.)
+remain in the prior file.
 
-User-specified v1: Home, People (PIs/Postdocs/PhDs/Undergrads/Past), Research (areas), Publications (year-grouped + filter), Outreach, Contact.
+---
 
-**Validation verdict: The list is correct for v1 credibility.** All six pages map directly to sections every peer institutional site has. No top-level page is missing that would, on its own, break credibility. However, there are content types that peer cosmology groups put *inside* existing pages (seminars/events, news, job openings, joining info) that v1 should consciously decide to include-or-defer rather than silently drop. See "Near-Miss Table Stakes" below.
+## 1. Matching Strategy: How to Filter InspireHEP Returns
 
-Out-of-scope constraints are respected throughout (no auth, no CMS backend, no arXiv/ADS importer, no dark mode, no site search beyond publications filter, no animations beyond hero fade).
+### Problem statement
+
+A senior PI in HEP cosmology (e.g. Esteban Calzetta) may have 80–200 papers in InspireHEP.
+Not all of them belong on a group site that represents *current group activity*. The sync
+script must decide which papers to include.
+
+### What the API supports (HIGH confidence — verified against live InspireHEP API)
+
+**Primary author identifier — BAI (INSPIRE author identifier):**
+Query syntax: `a E.Calzetta.1` (BAI format)
+Endpoint: `https://inspirehep.net/api/literature?q=a+E.Calzetta.1&sort=mostrecent&size=25`
+This is the most precise query; avoids all name-collision false positives.
+BAI is stable and unique per person in InspireHEP.
+
+**Date range filter:**
+Syntax: `de > 2020` (earliest-date field, "de") or `date 2020->2026`
+Can be combined: `a E.Calzetta.1 and de > 2020`
+Endpoint: `https://inspirehep.net/api/literature?q=a+E.Calzetta.1+and+de+>+2020&sort=mostrecent`
+
+**Affiliation filter:**
+Syntax: `aff "Buenos Aires"` or `aff "CONICET"`
+Less reliable than BAI — InspireHEP affiliations are not always normalized; some papers lack
+affiliation metadata entirely. Use as a secondary refinement, not a primary filter.
+
+**Document-type filter:**
+`tc p` = peer-reviewed journal paper
+`tc c` = conference proceeding
+No documented filter for "preprint only" beyond the absence of `publication_info`.
+
+**Rate limits:** 15 requests per 5-second window; 429 on breach.
+Pagination: `size` (max 25 by default, can be increased), `page`.
+
+### What the arXiv API supports (MEDIUM confidence — official docs, some gaps)
+
+ArXiv does not have stable author IDs equivalent to BAI. Author search by name string only.
+`http://export.arxiv.org/find/grp_physics/1/au:+Calzetta_E/0/1/0/all/0/1`
+Returns Atom XML; requires `fast-xml-parser` or similar to parse.
+Fields available: title, authors (plain text list), submitted date, updated date, categories,
+abstract, journal_ref (if published), doi (if published).
+No citation count. No affiliation data.
+Rate limit: 3 requests per second burst; 1 request per second sustained; enforced by
+`crawl-delay` in robots.txt and HTTP 429.
+
+### Recommended matching strategy for v1.1
+
+**Primary source: InspireHEP (query by BAI)**
+- Store each current member's BAI in `content/people.json` (e.g. `"inspirehep_id": "E.Calzetta.1"`)
+- Query InspireHEP per member: `a {bai} and de > {cutoff_year}`
+- Cutoff: `de > {current_year - 5}` for /people/[slug] display; `de > {current_year - 10}`
+  for full /publications archive (or no date filter, collect all — see Section 2)
+- No affiliation filter in the primary query; too unreliable. Affiliation mismatch = false
+  negatives (papers from earlier career at different institution, or papers with missing aff).
+- Date filter is the right primary scoping mechanism for a "recent output" feature.
+
+**Secondary source: arXiv (query by name)**
+- Store `arxiv_author_id` in people.json (format: "Calzetta_E" as used in arXiv search URLs)
+- Query arXiv `find` endpoint or Atom search API per member
+- arXiv returns preprints that may not yet be indexed in InspireHEP (typical lag: 24h–1 week)
+- arXiv also returns preprints that ARE already in InspireHEP; no automatic dedup in v1.1
+  (per locked decision: keep both as separate source-tagged entries)
+
+**Manual exclusion list:**
+- Add an optional `exclude_arxiv_ids` array per person in people.json
+- Allows PI to exclude papers from before the group's founding, or papers that belong to
+  a different group/collaboration but happen to match by author name
+- This is the pragmatic solution that every real HEP group site uses; no automated heuristic
+  is reliable enough to handle edge cases (early-career papers, large collaboration papers
+  where the PI was tangential, conference proceedings the group doesn't want foregrounded)
+- LOW effort to implement; HIGH value for accuracy
+
+**Inclusion of conference proceedings:**
+- InspireHEP `tc c` papers typically appear alongside `tc p` papers in BAI queries
+- Decision required: include proceedings or not?
+- Peer site observation: MPA, CCA, UCL Cosmoparticle all include only journal papers + arXiv
+  preprints on group pub pages; conference proceedings are secondary
+- Recommendation: include `tc p` (peer-reviewed) + unpublished preprints (no `tc` filter yet
+  means they appear); *exclude* `tc c` (conference proceedings) unless explicitly requested
+- Implementation: filter out records where `publication_info[].material == "proceedings"` or
+  where `texkey` contains conference abbreviation patterns (fragile); cleaner to keep `tc p +
+  preprints` by checking `publication_info[].journal_title` is a known journal (HIGH effort)
+  OR simply include everything and let manual exclusion handle edge cases (LOW effort, v1.1)
+
+---
+
+## 2. Per-Profile Display: Last-N-Years Filter
+
+### What peer sites actually do (MEDIUM confidence — observed, not documented)
+
+| Site | Per-profile pub strategy | Source |
+|------|--------------------------|--------|
+| KIPAC (Stanford) | Single central "arXiv discovery" link — no per-profile pub list | Verified via site |
+| CCAPP (OSU) | No per-profile publication listing; people directory only | Verified via site |
+| UCL Cosmoparticle | Group-level flat reverse-chron list; no per-profile cutoff | Verified via site |
+| UCL Astrophysics | Group-level list, "et al." after ~4 authors, linked to ADS | Verified via site |
+| IRIS-HEP | Group-level, by-date + by-area filters, citation counts shown | Verified via site |
+| IAS, MPA, Perimeter | Individual profiles link to InspireHEP or ADS author pages externally | Inferred |
+
+**Key finding:** Most peer cosmology group sites do NOT host a curated per-profile publication
+list. Instead, they link to the researcher's external InspireHEP, ADS, or Google Scholar page.
+The v1.1 decision to build a per-profile last-N-years display is a *differentiator*, not a
+table stake. This is good — it creates something more useful than the peer average.
+
+### Last-N-years recommendation
+
+**Recommendation: 5 years (current_year - 5 inclusive).**
+
+Rationale:
+- A postdoc joining in 2021 would have all their career output visible (typical postdoc term
+  is 2–3 years; most entered during 2020–2024 for a 2026 site).
+- A PhD student joined in 2022 would show all papers from their candidature.
+- A PI's 5-year window captures their recent research directions without overwhelming the
+  profile page with career-spanning output.
+- 5 years matches the typical grant cycle evaluation window (CONICET PICT is 3–5 year grants;
+  ANPCyT evaluates "last 5 years of output" explicitly in grant assessments).
+- At 5 years, a productive PI might show 15–30 papers; a postdoc 5–12; a PhD 2–6.
+  These are manageable list lengths.
+- 3 years is too short: a PhD student who published their first paper in year 1 of a 4-year
+  program would see it vanish before they graduate.
+- 10 years is too long for a profile page; appropriate for a CV, not a website profile.
+- "All papers" is appropriate on /publications (full archive), not on /people/[slug].
+
+**Implementation:** Default cutoff = `current_year - 5`. Make it a config constant, not
+hardcoded, so it can be adjusted in one place.
+
+**Show count:** Yes — display total papers in window as "(N publicaciones)" subtitle below
+the section heading. It's a quick credibility signal for prospective applicants and funders.
+Observed on IRIS-HEP (shows "[N citations]" per paper); convention supports showing counts.
+
+**Sort order:** Reverse-chronological (newest first) within the N-year window.
+HEP convention universally uses reverse-chrono (InspireHEP, ADS, arXiv all default to
+"mostrecent"). Co-author alphabetical order preserved within each paper's author list (HEP
+convention: authors are alphabetical by surname within a paper; preserve that order from API).
+
+---
+
+## 3. Group-Aggregate Page (/publications)
+
+### Co-author deduplication question
+
+When two group members co-author a paper, the group /publications page should show it ONCE.
+
+**Observation:** No surveyed peer site shows a paper twice because two members co-authored it.
+UCL Cosmoparticle, UCL Astrophysics, IRIS-HEP — all deduplicate by paper identity.
+
+**How to deduplicate in v1.1:**
+- InspireHEP records each have a `control_number` (stable integer ID). Use this as the
+  dedup key for InspireHEP-sourced entries.
+- arXiv entries have a stable arXiv ID (`arxiv_eprints[].value`). Use this as dedup key.
+- Since v1.1 keeps InspireHEP and arXiv as *separate source-tagged entries* (locked decision),
+  the dedup operates only within each source: collect all InspireHEP papers for all members,
+  deduplicate by `control_number`, keep one entry per paper.
+- The same paper appearing in both InspireHEP AND arXiv will show twice (two different
+  source-tagged entries). This is the v1.1 locked behavior.
+
+**Group member highlighting:**
+When displaying a deduplicated paper, highlight (bold or colored) all author names that
+match current group members. This replaces the "which member does this paper belong to"
+attribution problem — the paper appears once, the group member authorship is indicated by
+visual treatment of their name in the author list.
+
+Implementation: at render time, for each paper, check each author's `full_name` against
+a set of group member names. Bold or apply a CSS class to matching names.
+Edge cases: name normalization (diacritics, initials vs full names). Store a
+`display_name_normalized` on each person for fuzzy matching.
+
+**Author list format on /publications:**
+Show all authors if <= 5 authors. If > 5 authors, show first 3 + "et al." with a
+"show all" toggle (or tooltip). This matches the UCL Cosmoparticle convention (uses "incl."
+for large collaborations) and APS journal style (list all up to 10, then et al.).
+For HEP cosmology, many papers have 5–15 authors, so a 5-author threshold with et al. is
+appropriate. Large collaboration papers (ATLAS, Planck, LSST) may have hundreds of authors —
+these should definitely use "et al." with first author or first N authors shown.
+
+---
+
+## 4. Metadata Fields for HEP Cosmology
+
+### Fields confirmed available in InspireHEP API (HIGH confidence — live API verified)
+
+| Field | API path | Notes |
+|-------|----------|-------|
+| Title | `titles[0].title` | Prefer `source: "arXiv"` over `source: "APS"` if both present; LaTeX not rendered |
+| Authors | `authors[].full_name` | Format: "Surname, First" — full list |
+| InspireHEP record ID | `control_number` | Stable integer; use as dedup key |
+| arXiv ID | `arxiv_eprints[0].value` | Format: "YYMM.NNNNN"; absent for journal-only papers |
+| arXiv categories | `arxiv_eprints[0].categories` | e.g. ["astro-ph.CO", "gr-qc"] |
+| DOI | `dois[0].value` | Absent for preprints; format: "10.xxxx/..." |
+| Journal title | `publication_info[0].journal_title` | Abbreviated (e.g. "Phys.Rev.D"); absent for preprints |
+| Journal volume | `publication_info[0].journal_volume` | String |
+| Journal issue | `publication_info[0].journal_issue` | String |
+| Article ID / page | `publication_info[0].artid` | String; replaces page range in modern journals |
+| Publication year | `publication_info[0].year` | Integer |
+| Preprint date | `preprint_date` | ISO date string "YYYY-MM-DD"; always present if arXiv-indexed |
+| Citation count | `citation_count` | Integer; updated by InspireHEP nightly |
+
+### Fields available from arXiv API (MEDIUM confidence — API docs)
+
+| Field | arXiv Atom element | Notes |
+|-------|-------------------|-------|
+| Title | `<title>` | Plain text; may differ from InspireHEP title |
+| Authors | `<author><name>` | Full name; may be "Surname, First" or "First Surname" |
+| arXiv ID | `<id>` URL tail | e.g. "2601.09812" |
+| Primary category | `<arxiv:primary_category>` | e.g. "astro-ph.CO" |
+| Submitted date | `<published>` | ISO 8601 datetime |
+| Updated date | `<updated>` | ISO 8601 datetime |
+| Abstract | `<summary>` | Full text |
+| DOI | `<arxiv:doi>` | Present if publisher submitted it |
+| Journal ref | `<arxiv:journal_ref>` | Free text; not structured |
+| Comment | `<arxiv:comment>` | May say "accepted to Phys.Rev.D" or page count |
+
+### Which fields to store in publications.json for v1.1
+
+The existing v1.0 `publications.json` schema is:
+`id, authors[], title, journal, year, arxiv, doi, topic_tags[], abstract`
+
+v1.1 must extend this schema minimally to support source-tagging and sync metadata:
+
+| New field | Type | Purpose |
+|-----------|------|---------|
+| `source` | `"inspirehep" \| "arxiv" \| "manual"` | Source tag for display badge |
+| `inspirehep_id` | `number \| null` | InspireHEP `control_number`; dedup key |
+| `preprint_date` | `string \| null` | ISO date; for sorting preprints without a year |
+| `status` | `"preprint" \| "published"` | Distinguish preprint vs peer-reviewed |
+| `citation_count` | `number \| null` | From InspireHEP; null for arXiv-only entries |
+| `synced_at` | `string` | ISO datetime; when this entry was last updated by sync script |
+
+**What NOT to store in publications.json:**
+- Raw affiliation data (too large, irrelevant for display)
+- arXiv categories (stored in topic_tags[] instead, mapped at sync time)
+- Journal volume/issue/artid (fold into existing `journal` field as formatted string)
+- Author ORCID / InspireHEP IDs (too heavy for a JSON content layer)
+
+### Citation count: include or exclude?
+
+**Recommendation: store in JSON but do NOT display on the site by default.**
+
+Rationale:
+- Citation counts go stale immediately after each weekly sync; displaying a number that is
+  "last week's count" without the staleness date is misleading.
+- h-index and citation-count badges feel self-promotional on an institutional site (see
+  Anti-Features below).
+- Storing the field preserves future optionality (v2+ could surface "highly cited" as a
+  filter, or display counts with explicit "as of [date]" attribution).
+- If displayed, show "as of [synced_at]" explicitly. Never display without date context.
+
+---
+
+## 5. Source-Tagging UX (Two-Source Display)
+
+### Locked decision context
+
+v1.1 keeps InspireHEP and arXiv as separate entries (no dedup across sources). This means
+the same paper may appear twice on /publications: once as an arXiv preprint entry, once as
+an InspireHEP published-version entry.
+
+### UX convention for this pattern
+
+No peer cosmology group site does this exact pattern (they either pick one source or dedup).
+IRIS-HEP comes closest: it shows arXiv ID + InspireHEP record link + DOI all on one entry,
+but that's because they use InspireHEP as the single source of truth and annotate it with
+arXiv/DOI crosslinks — not two separate entries.
+
+**Recommended approach: source badge on each entry**
+
+Each publication card/row gets a small pill badge:
+- "arXiv" badge (links to arxiv.org/abs/[id]) — orange/red, arXiv's brand color
+- "InspireHEP" badge (links to inspirehep.net/literature/[id]) — no distinctive brand color;
+  use a neutral/secondary style
+- "Manual" badge (for v1.0 hand-curated entries) — muted, indicates no sync provenance
+
+Badge placement: right-aligned in the pub row, next to the DOI/arXiv links.
+Size: small (text-xs), not the dominant visual element.
+
+**Filter toggle:**
+On /publications, offer a source filter: "All / InspireHEP / arXiv / Manual"
+This lets sophisticated users (peers, the PI themselves) see which papers came from which
+source. It also allows the same paper showing twice to be understood (one per source).
+
+**User-visible explanation:**
+Add a small footnote below the /publications heading: "Publications are fetched weekly from
+InspireHEP and arXiv and may include duplicate entries for the same paper from different
+sources." This manages expectations for the inevitable duplicates.
+
+**On /people/[slug]:**
+Show source badge per entry. No filter toggle needed on the profile page (shorter list).
+
+---
+
+## 6. Display Format
+
+### HEP-cosmology citation style norm (MEDIUM confidence — verified via APS journal
+    style guides and peer site observation)
+
+HEP uses a journal-abbreviated citation format, not APA or Vancouver. The de facto standard
+on group websites is a hybrid of the bibliographic style used in Physical Review journals:
+
+**Format for a published paper:**
+`Authors. "Title." Journal Abbr. Volume, ArticleID (Year). arXiv:NNNNN [category]. DOI.`
+
+**Format for a preprint:**
+`Authors. "Title." Preprint (Year). arXiv:NNNNN [category].`
+
+**Examples matching peer sites (UCL Cosmoparticle, IRIS-HEP observation):**
+
+Published:
+> Rodríguez, M., Gómez, L., et al. "The Λ-CDM Tension in Recent H₀ Measurements: A Bayesian
+> Reanalysis." *Phys. Rev. D* 113, 023501 (2026). arXiv:2601.09812 [astro-ph.CO].
+> DOI: 10.1103/PhysRevD.113.023501
+
+Preprint:
+> Gómez, L., et al. "Neural Emulators for Dark Matter Halo Mass Functions at z > 2."
+> Preprint (2026). arXiv:2603.15744 [astro-ph.CO].
+
+**Author list treatment:**
+- APS style (HIGH confidence — from APS author guide): list all authors up to 10; if > 10,
+  list first 10 followed by "et al."
+- For a group website (not a formal citation): show all authors if ≤ 5; show first 3 + "et al."
+  if > 5. This is the IRIS-HEP pattern and UCL Cosmoparticle pattern.
+- HEP author order is alphabetical by surname within a paper (this is the field convention).
+  Preserve the order as returned by InspireHEP (already alphabetical in most cases).
+
+**Journal abbreviation:**
+Use InspireHEP's abbreviated journal title (`publication_info[0].journal_title`) directly —
+it is already in standard HEP abbreviation form ("Phys.Rev.D", "JCAP", "Astrophys.J.").
+For display, add a space after the period: "Phys. Rev. D" — cosmetic only.
+
+**Year field:**
+Use `publication_info[0].year` for published papers; use `preprint_date` year for preprints.
+Never show only "year" without distinguishing published vs preprint status.
+
+**Title rendering:**
+InspireHEP titles may contain LaTeX (`$\Lambda$-CDM`). Either: strip LaTeX and render plain
+text, OR use a lightweight LaTeX-to-Unicode converter for common math. For v1.1,
+recommend: use InspireHEP's `titles` array and prefer the source that has Unicode or HTML
+math. In practice, most cosmology titles use Unicode subscripts/superscripts directly in
+the InspireHEP record; LaTeX is the exception. Flag for testing against real PI data.
+
+---
 
 ## Feature Landscape
 
-### Table Stakes (Users Expect These — Credibility Fails Without)
+### Table Stakes (Must Have for Publication Sync to Feel Complete)
 
-These are features every peer institutional cosmology site has. Missing any of them = visitor lands, bounces, and the group reads as "not a real group" or "dormant."
+| Feature | Why Expected | Complexity | v1.0 Dependency |
+|---------|--------------|------------|-----------------|
+| **Source badge per entry** ("arXiv" / "InspireHEP" / "Manual") | Two-source-no-dedup means users must understand provenance; badge is the minimum disambiguation | LOW | Requires `source` field in publications.json schema (new) |
+| **Preprint vs published status indicator** | Academic audiences need to know if a paper is peer-reviewed or a preprint; conflating them is a credibility error | LOW | Requires `status` field in publications.json schema (new) |
+| **arXiv link per entry** | Every HEP academic expects to click through to the arXiv PDF; it's the primary reading path in this field | LOW | `arxiv` field already in v1.0 schema; must be surfaced as a link |
+| **DOI link per entry** | Published papers need DOI for formal citation; funders and grant reviewers click DOIs to verify | LOW | `doi` field already in v1.0 schema; already rendered as link |
+| **Reverse-chronological sort on /publications** | Universal convention in HEP; any other order reads as broken | LOW | v1.0 already sorts by year; must sort by `preprint_date` when `year` ties |
+| **Year grouping on /publications** | v1.0 already does this; must be preserved for synced entries | LOW | v1.0 Publications page layout; no change needed |
+| **Last-5-years filter on /people/[slug]** | Without cutoff, a PI with 80 papers dominates their profile page; 5 years keeps it relevant | LOW | `preprint_date` or `year` field; filter at render time |
+| **Author count shown on profile** | "(N publicaciones en los últimos 5 años)" — credibility signal for applicants and funders | LOW | Computed from filtered list at render time |
+| **Sync script with per-member BAI query** | Core mechanism; per-member InspireHEP BAI query + date range | MEDIUM | people.json must have `inspirehep_id` (BAI) field (new) |
+| **Weekly GitHub Actions cron job** | Automation is the point of v1.1; without it, sync never runs | LOW | GitHub Actions workflow file; Vercel webhook or commit-triggers-rebuild |
+| **Manual exclusion list per person** | Without it, early-career papers / large-collaboration papers contaminate the group pub page | LOW | `exclude_arxiv_ids` array in people.json (new) |
+| **Staleness-safe design** | Synced data is stale between runs; UI must not imply real-time freshness | LOW | Add "Actualizado el [date]" to /publications header |
+| **Source filter on /publications** ("All / InspireHEP / arXiv / Manual") | Necessary to make sense of duplicates from two sources | LOW | Filter UI component; `source` field in publications.json |
 
-| Feature | Why Expected | Complexity | Notes |
-|---------|--------------|------------|-------|
-| **Group identity in hero** (name, tagline, institutional affiliation: UBA / FCEN / CONICET) | First thing peers/journalists scan for; establishes legitimacy in ~3 seconds | LOW | Peer pattern (MPA, IAFE): institution + short mission statement. Place UBA/FCEN/CONICET logos near hero, not just in footer. |
-| **People directory with sectioned roster** (PIs → Postdocs → PhDs → Undergrads → Past Members) | Prospective applicants scan "who works here, who are the PIs" within 30s of landing; peers look for specific collaborators | LOW | Exactly matches user's v1 spec. Order matters: PIs first; "Past Members" at bottom signals continuity and training pipeline (funders read this). |
-| **Individual PI/Postdoc/PhD profile pages** (photo, role, research interests, bio, contact, selected publications, links to ORCID/arXiv/Google Scholar) | Prospective PhDs evaluate PIs from their individual pages; peers cite/link individual researchers | LOW-MED | User v1 has `/people/[slug]`. Must include external IDs (ORCID, arXiv, Google Scholar, ADS) — every peer site does. LATAM-specific: CONICET profile link is expected. |
-| **Research areas page with distinct area descriptions** (Dark Matter, Gravitational Waves, Early Universe, AI) | Primary answer to "what does this group do?" — funders and prospective students decide interest here | LOW-MED | User v1 has grid of 4 areas. Each area should have a description paragraph (not just a name+icon) so content is non-trivial. Peer sites (MPA, CCA, CTC) all have per-area narrative. |
-| **Publications list** (year-grouped, reverse-chronological, with authors/title/journal/year + arXiv/DOI link) | Academic credibility is largely measured by publications; this is the page reviewers and hiring committees open | LOW | User v1 matches peer norm. arXiv + DOI links are non-negotiable (not "optional external") — every peer cosmology site has them. |
-| **Publications filter** (by year at minimum; author + topic tags are strong additions) | Publications lists over ~50 entries become unusable without filtering | LOW | User v1 includes filter by year/author/topic. This is correct. Year grouping alone is not enough once list exceeds ~30 items. |
-| **Outreach section** (talks, school visits, articles, media appearances) | Funders (CONICET, grant agencies) explicitly ask for public engagement evidence; LATAM funders especially weight "divulgación" | LOW | Matches user v1. IAFE (peer Buenos Aires institute) uses "Eventos → público general" and explicitly calls this out in mission. |
-| **Contact** (postal address, office location, email, embedded map, social links) | Journalists and visitors need to find/reach the group; prospective students email before applying | LOW | User v1 is complete. Google Map embed is standard. Include an email for "general inquiries" separate from individual PI emails — shields PIs from spam/cold outreach. |
-| **Bilingual ES/EN toggle, persistent in top nav, URL-based routing** | Primary audience Spanish; international peers read English; LATAM academic sites nearly always bilingual | MED | User v1 mandates this. Best practice: use language name in its own language ("Español" / "English"), avoid flags (no flag for "English"), put toggle top-right. Auto-detect is optional but always provide manual override. Route structure: `/es/...` and `/en/...`. |
-| **WCAG AA compliance** (contrast, keyboard nav, alt text, semantic HTML) | Universities and academic audiences expect it; often a funder/procurement requirement | MED | User constraints include this. Specifically: every photo needs alt text, nav must be keyboard-traversable, contrast ratios on body text ≥ 4.5:1. |
-| **Schema.org structured data** (Organization + Person + ScholarlyArticle) | Findability in Google Scholar, generic search, and academic search engines | LOW-MED | User v1 includes Organization + Person. Add ScholarlyArticle on publication items — cheap, helps discoverability. |
-| **Open Graph + Twitter card metadata** | Link previews in Slack/Twitter/email matter when peers share the site | LOW | User v1 covers this. |
-| **Sitemap.xml + robots.txt** | Indexing baseline; academic audiences notice when a site doesn't show up in Google | LOW | User v1 covers this. |
-| **Institutional partner logo strip** (UBA, FCEN, CONICET, external partners) | Signals legitimacy and funding sources at a glance; LATAM norm | LOW | User v1 has this on homepage. In LATAM academic context, absence of CONICET logo reads as "not CONICET-funded" which is a credibility signal. |
-| **Responsive design (mobile → desktop)** | Journalists, applicants, general public use phones; university IT often reviews on tablets | LOW | Non-negotiable; next.js + tailwind gives this by default. |
-
-### Near-Miss Table Stakes (Present on Most Peer Sites, v1 Decision Required)
-
-These appear on most peer institutional cosmology sites. User v1 does NOT include them. Not including them doesn't fail credibility *if* the site is clearly "small group v1," but defer explicitly rather than accidentally.
-
-| Feature | Peer Prevalence | v1 Recommendation | Notes |
-|---------|-----------------|-------------------|-------|
-| **News / recent highlights** (3-6 items on home, optional separate page) | MPA, CCA, IAFE, CTC, Perimeter all have it | **Keep as home-page "highlights" only (3 cards)** — user v1 already does this | Full news section = content treadmill. Home-page highlight cards are enough for v1. Don't build a separate News page. |
-| **Seminar / events listing** (weekly cosmology seminar is universal in cosmology) | Weekly cosmology seminars exist at Madison, Imperial, Helsinki, UC Davis, CTC Cambridge, Berkeley — every peer group has one | **Defer to v1.x** IF the group does not currently run a regular seminar. If they DO run one, this is arguably table-stakes for peer credibility — flag for user confirmation. | Cosmology is seminar-heavy culturally. "Does the UBA group run a weekly seminar?" is a question the user must answer. If yes, a simple events list is worth the ~1 day cost. |
-| **Jobs / Open Positions / Joining Info** ("How to apply," "Prospective PhD students," "Open postdoc positions") | MPA ("Career"), CCA ("Careers"), Perimeter ("Training"), IAS-SNS (application portal + deadline), Princeton IAS: all prominent | **Add a single static "Join Us" or "Oportunidades" section** on the People page footer, or as a subsection of Contact. MED complexity only if dynamic (listings); LOW if static "contact PI X" text. | Prospective PhD/postdoc audience is one of four explicit audiences. Without *any* joining info, that audience gets nothing. Minimum: a paragraph saying "Interested applicants contact [PI] at [email] with CV." |
-| **Software / tools / code repositories** | CCA has entire "Software" section; CTC lists COSMOS supercomputer; most cosmology groups link GitHub | **Defer to v1.x** — only include if group has released public tools | Not universal outside compute-heavy groups. UBA cosmology may or may not have this. Optional. |
-| **Press / media coverage** ("As featured in...") | MPA, IAFE have this | **Fold into Outreach page** as a subsection if relevant items exist | Don't build dedicated page; a list on Outreach suffices. |
-| **Thesis listings / former students placement** ("Our PhDs went on to...") | IAS-SNS lists previous scholars; MPA annual reports | **Covered by "Past Members" section on People page** — user v1 already handles this | Good. Peer norm met. |
-
-### Differentiators (Competitive Advantage for Attracting PhD/Postdoc Applicants)
-
-Features that elevate the site above "we exist" toward "you should want to join." Not required; each one adds PhD/postdoc applicant conversion, funder impression, or journalist friendliness.
+### Differentiators (Elevate Beyond Peer Site Average)
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **Typography-driven restrained aesthetic matching nature.com / Max Planck** | Signals "serious research, not a startup"; applicants notice when a group's site looks generic-startup | LOW (design system work, not code) | User constraints already mandate this. Execution is the differentiator — most academic sites *fail* this. |
-| **Selected publications on PI profile pages** (curated 5-10, not full list) | Prospective PhDs can't parse 200-entry pub lists; a curated "start here" set is high-signal | LOW | User v1 includes `publications_selected` on person shape. Good. Worth rendering prominently. |
-| **"Research interests" prose on PI pages** (3-5 sentences, not just keywords) | Applicants read this to decide fit; differentiates from groups that just list topics | LOW | Content-driven; structure already supported in user schema (`research_interests`). Write 3-5 real sentences per PI, not bullet lists. |
-| **Thematic homepage research cards linking to areas** | Lets a visitor reach "what this group works on" in one click | LOW | User v1 has "highlights (3 cards)" on home; if these point to research areas, this is covered. |
-| **Past Members with current affiliations** ("Now at [Institute]") | Prospective students look at alumni placements as the single strongest indicator of group quality | LOW | User v1 has Past Members. Add "current affiliation" field to person shape — tiny effort, huge signal. |
-| **Per-area research page narrative** (what questions, what methods, recent papers) | Lets applicants decide "which area" before contacting PIs | LOW-MED | Matches user v1 structure (research areas grid → presumably area detail pages or sections). Keep each area's text substantive, not just a title + icon. |
-| **Selected publications highlighting on home** (3 recent highlight publications linked from home) | Recent output visible without navigating to Publications page | LOW | Could be folded into "highlights (3 cards)" on home. |
-| **Bilingual content parity** (every page has equivalent Spanish + English; no "English is thinner") | International peers form judgments about a LATAM group based on English content; Spanish-speaking applicants deserve full content | LOW-MED | User constraint mandates bilingual; the *parity* discipline is the differentiator. Half-translated pages are a common LATAM academic site failure mode. |
-| **Favicon + consistent OG image for link previews** | Shows up in Slack/Twitter shares with group branding | LOW | Cheap polish; often skipped. |
-| **Printable / PDF-friendly publication list** (or clean print CSS) | PIs share pub lists with grant reviewers by printing | LOW | One print stylesheet; low effort, PI-love. |
-| **Funding / acknowledgements page or footer strip** (CONICET grant numbers, UBA support) | Funders Google themselves; seeing the group acknowledge grants correctly matters for future funding | LOW | Can be a simple footer block. |
+| **Group member author highlighting** (bold names of current members in author lists) | Immediately answers "was this a group paper or just one member's collaboration?" | MEDIUM | Requires name normalization; store `display_name_normalized` in people.json |
+| **"as of [date]" staleness indicator** on citation counts (if shown) | Honest, professional; avoids misleading users with week-old counts | LOW | Show `synced_at` date alongside any count display |
+| **Topic tag auto-assignment from arXiv categories** | arXiv categories (astro-ph.CO, gr-qc, hep-th) map naturally to existing topic_tags (CMB, dark matter, early universe, gravitational waves) | MEDIUM | Requires a category → tag mapping table in sync config |
+| **"Last updated [date]" on /publications** | Shows the site is alive; funders and applicants look for signs of activity | LOW | Display `max(synced_at)` across all synced entries |
+| **Per-person arXiv author page link** on /people/[slug] | Prospective students often navigate to arXiv to see full author record; shortcut saves 3 clicks | LOW | Store `arxiv_author_id` in people.json; render as "View on arXiv" link |
+| **Bilingual source labels** (Spanish: "Prepublicación" for preprint; "Publicado en" for journal) | v1.1 must maintain bilingual parity; the sync layer introduces new UI strings | LOW | Requires i18n strings in next-intl message files |
+| **Footnote explaining two-source design** | Prevents user confusion about duplicate entries; transparent about automated provenance | LOW | One static bilingual string on /publications |
 
-### Anti-Features (Commonly Suggested, Avoid in This Domain)
+### Anti-Features (Deliberately NOT to Build in v1.1)
 
-Features that sound reasonable but degrade an academic institutional site. Sources: peer institutional sites conspicuously *don't* have these; user has already excluded most — listing for clarity + to prevent scope creep during build.
+| Feature | Why Requested | Why Avoid | Alternative |
+|---------|---------------|-----------|-------------|
+| **Citation count display as a headline metric** | "Show h-index / citation count per paper" | Stale data + self-promotional tone = credibility damage if counts are wrong or look like vanity metrics. APS journals say counts belong in CVs, not web bios. Peer academic sites (MPA, IAS) do NOT display citation counts on group pages. | Store `citation_count` in JSON silently; surface only as "as of [date]" if shown at all. Better: link to InspireHEP author page where live counts are canonical. |
+| **h-index badge on PI profiles** | "Quantifies the PI's impact" | h-index from a cached JSON is always stale. Inflated h-index looks boastful; underweighted h-index looks weak. Academic peers know h-index is context-dependent. Real impact shows in the publications themselves. | Link to Google Scholar or InspireHEP author page which shows live h-index with canonical data. |
+| **Automatic deduplication across InspireHEP + arXiv** | "Avoid showing same paper twice" | Dedup requires comparing possibly mismatched DOI / arXiv ID across sources; edge cases include papers where DOI is absent, or arXiv ID in InspireHEP doesn't match the arXiv API result. v1.1 scope is weekly GitHub Action, not a sophisticated ETL. Dedup is v2+. | Source badge + filter toggle makes duplicates understandable. Manual exclusion list handles egregious cases. |
+| **Real-time publication count via API** | "Show live paper count" | API rate limits (15 req/5s) make real-time queries from browser infeasible for a group with 5+ members. Plus Next.js static export means no server-side real-time calls. | Weekly sync writes counts to JSON; display from that. |
+| **Per-paper abstract on /publications** | "Show abstracts inline" | Abstracts add significant length; /publications would become 50+ screenfuls. Academic users go to arXiv for abstracts. | Show title + authors + links only. Abstract already in publications.json for SEO (structured data), not display. |
+| **InspireHEP embed iframes** | "Just embed InspireHEP's own author page" | Third-party iframes break CSP, load slowly, are unthemed, and show irrelevant UI (InspireHEP's own nav, suggestions, etc.). | Query the API, render your own UI. |
+| **arXiv "new submissions" feed** | "Show today's relevant arXiv papers" | This is a different feature (literature monitoring), not publication attribution. Out of scope for a group website. | InspireHEP's own new-submissions feed for researchers; not a group website feature. |
+| **Author-level affiliation filtering in query** | "Only pull papers where the author was affiliated with UBA" | InspireHEP affiliation data is spotty; many preprints lack affiliation entirely. This would silently drop valid papers. | Date filter + BAI is reliable; manual exclusion list handles edge cases. |
+| **Full conference proceedings import** | "Include all our conference talks" | Conference proceedings clutter the publication list and dilute the signal of peer-reviewed output; they are typed `tc c` in InspireHEP and are not the primary output academic audiences evaluate. | Include only if explicitly flagged; add a `show_proceedings` config boolean, default false. |
 
-| Feature | Why Requested | Why Problematic in Academic Context | Alternative |
-|---------|---------------|-------------------------------------|-------------|
-| **Auto-rotating hero carousel with multiple slides** | "Show more on the hero" | Users ignore carousels (NN/G, Baymard: 46% of carousel sites have usability issues; most interaction happens only on slide 1). Auto-rotate competes with user scan-scroll. Academic audiences read to evaluate — rotation is hostile to that. User v1 already constrains to "fade 6-8s" which is borderline. | **Single static hero image** with restrained fade-in on load only. If cycling needed, use a manual next/prev with a pause-on-hover. Keep cycle time ≥ 8s. Prefer single hero. |
-| **Dark mode** | "Modern sites have it" | Academic/institutional aesthetic is light-mode-first (nature.com, MPA, IAS, CCA all light-only). Doubles design-system cost with no audience demand. | Light only. User v1 already excludes. |
-| **Flashy animations / parallax / scroll-triggered reveals** | "Looks modern" | Reads as marketing-startup, not research institution. PIs + funders perceive as "style over substance." | Typography + whitespace. User constraint already excludes. |
-| **Gradient backgrounds / AI-generic hero art** | "Looks polished" | Reads as generic SaaS. Peer institutions use neutral/white backgrounds with occasional scientific imagery. | Restrained palette, real photography where available (placeholders acceptable for v1). |
-| **Full CMS (Contentful, Sanity, Strapi, WordPress)** | "Members want to edit content" | Adds ops burden, ongoing cost, security surface. Academic group content changes infrequently (monthly at most). | JSON files edited via PR. User v1 already chose this. Document a "how to add a person / publication" onboarding doc in the repo. |
-| **Member login / authenticated area** | "Private resources for the group" | Public institutional site is not the right place for internal docs. Creates auth surface for a static site. | Group uses Drive / shared notebook / GitLab wiki privately. User v1 already excludes. |
-| **Generic site-wide search** | "Big sites have search" | Static site with <50 pages doesn't benefit from search; indexing overhead and "no results" UX hurt trust. | Publications filter (already in v1); clear top nav; everything reachable in 2 clicks. User v1 already excludes. |
-| **Live arXiv/ADS publication auto-import in v1** | "Keep pubs current automatically" | arXiv/ADS/ORCID integrations are scope black holes (auth, rate limits, deduplication, author-matching). Placeholder JSON is enough to validate layout. | Defer to v2 (already in user's decisions). v1: manual JSON. |
-| **Commenting / discussion / forum** | "Engage the community" | Institutional site is not a community platform. Moderation burden. Academic discussion happens in seminars, arXiv, Slack, email. | No comments. User v1 already excludes. |
-| **Newsletter signup form** | "Capture leads" | Academic groups don't do email marketing. Creates CAN-SPAM / GDPR obligations. | Social links in footer. Interested parties email directly. |
-| **Real-time Twitter/X feed embed on homepage** | "Show recent activity" | Third-party iframe = slow load, privacy tracker, unpredictable content (X's ToS changes, embed breakages). | Static social icons in footer. |
-| **Chatbot / AI assistant / "Ask the group"** | "Looks cutting-edge, matches AI research area" | Institutional site visitors want factual info, not a chatbot. Hallucination risk = real reputational damage. | Clear contact email. Good FAQ if needed (not in v1). |
-| **Cookie banner beyond strict necessity** | "GDPR compliance" | Static site with no analytics = no cookies needed. Banners are friction. | Self-hosted fonts (already in v1). Skip analytics or use a cookieless one (Plausible, Vercel Analytics) — no banner needed. |
-| **Mega-menu / mega-dropdown nav** | "More navigation" | Six top-level items (user's v1) is fine. Mega-menu adds complexity for no gain. | Flat nav. User v1 already has this. |
-| **Student-life / "lab culture" photo gallery** | "Humanize the group" | High curation burden; photos go stale; privacy concerns (consent of group members changing). | Square photos on People pages are enough. Optional: one group photo on "About" / home. |
-| **Mobile app** | "Everything needs an app" | Web is sufficient for all audiences; app store maintenance is ongoing. | Responsive web. User v1 already excludes. |
-| **Donation / funding request CTA** | "Institutional fundraising" | UBA/CONICET groups don't take individual donations; creates regulatory questions. | Acknowledge grants; no CTA. |
+---
 
 ## Feature Dependencies
 
 ```
-Content JSON schema (people.json, publications.json, research.json, outreach.json)
-  ├──required by──> People page (list + /people/[slug])
-  │                    └──required by──> Individual profile pages
-  ├──required by──> Publications page (year-grouped + filter)
-  │                    └──required by──> Publications filter by author/topic
-  │                                           └──requires tags in publication shape
-  ├──required by──> Research page (area grid + narrative)
-  └──required by──> Outreach page (grid of activities)
+people.json schema (v1.1 additions)
+  ├── inspirehep_id (BAI string)   ──required by──> sync script (InspireHEP query)
+  ├── arxiv_author_id              ──required by──> sync script (arXiv query)
+  ├── exclude_arxiv_ids[]          ──required by──> sync script (exclusion filter)
+  └── display_name_normalized      ──required by──> author highlighting at render time
 
-next-intl bilingual setup
-  ├──required by──> Every page (ES + EN parity)
-  ├──required by──> Navigation (ES/EN labels)
-  └──required by──> URL routing (/es/..., /en/...)
+publications.json schema (v1.1 additions)
+  ├── source                       ──required by──> source badge + source filter UI
+  ├── status                       ──required by──> preprint/published indicator
+  ├── inspirehep_id                ──required by──> dedup within InspireHEP source
+  ├── preprint_date                ──required by──> last-5-years filter on /people/[slug]
+  ├── citation_count               ──required by──> optional count display (future)
+  └── synced_at                    ──required by──> "last updated" display on /publications
 
-Design system (tokens: colors, typography, spacing)
-  ├──required by──> Homepage hero (typography-driven, restrained)
-  ├──required by──> Person profile page layout
-  ├──required by──> Publications typography (serif for titles?)
-  └──required by──> Research area cards
+sync script (scripts/sync-publications.ts)
+  ├── requires──> people.json (inspirehep_id, arxiv_author_id per member)
+  ├── requires──> InspireHEP API (rate limit: 15 req/5s)
+  ├── requires──> arXiv API (rate limit: 1 req/s sustained)
+  └── writes──> content/publications.json
 
-Schema.org + OG metadata
-  ├──enhances──> Publications page (ScholarlyArticle discoverability)
-  ├──enhances──> People pages (Person schema)
-  └──enhances──> Home / Contact (Organization schema)
+GitHub Actions cron workflow
+  ├── requires──> sync script
+  ├── requires──> GITHUB_TOKEN (for git commit of updated publications.json)
+  └── triggers──> Vercel rebuild (via commit push or webhook)
 
-Partner logo strip (UBA, FCEN, CONICET)
-  └──credibility-required on──> Homepage hero area + Footer
+/publications page (display layer)
+  ├── source filter UI             ──requires──> source field in publications.json
+  ├── "last updated" display       ──requires──> synced_at field in publications.json
+  ├── source badge                 ──requires──> source field
+  └── year grouping                ──requires──> year + preprint_date fields
+
+/people/[slug] profile (display layer)
+  ├── last-5-years section         ──requires──> preprint_date field
+  ├── author count display         ──computed from──> filtered list length
+  └── source badge per entry       ──requires──> source field
 ```
 
 ### Dependency Notes
 
-- **Content schema must be locked before page implementation.** Building a Person component before `people.json` shape is stable → rework. Lock schema first, then build.
-- **i18n routing affects file structure from day 1.** Retrofitting next-intl onto a single-locale app is painful. Start with `/[locale]/` routing.
-- **Publication filter depends on topic tags existing in publication JSON.** Adding topics later = touching every existing entry. Decide tag taxonomy early (Dark Matter, GW, Early Universe, AI — aligns with Research areas).
-- **"Past Members" with current affiliations** requires a field (`current_affiliation`) that's easy to add up front but annoying to add after roster is populated.
-- **Seminar listing (if added)** depends on an `events.json` schema similar to publications. Not in user v1; flag for user decision.
+- **Schema must be locked and Zod validators updated before sync script is written.**
+  The sync script's output must conform to the updated schema; writing it against an
+  unstable schema causes rework.
+- **people.json needs `inspirehep_id` before the sync script can query InspireHEP.**
+  This field must be populated for every current member (PI, postdoc, PhD). If even one
+  member lacks a BAI, their papers are missed entirely.
+- **`preprint_date` is the correct sort key for preprints,** not `year`. A paper posted
+  in December 2025 and published in January 2026 has `year: 2026` but `preprint_date:
+  2025-12-XX`. Sort by `preprint_date` where available, fall back to `year`.
+- **Bilingual i18n strings** must be added for all new UI labels (source badges, status
+  indicators, "last updated", filter labels) before the Publications page is updated.
 
-## MVP Definition
+---
 
-### Launch With (v1) — Ruthlessly Minimum
+## MVP Definition for v1.1
 
-All six user-specified pages + the supporting infrastructure. In priority order:
+### Must Ship (v1.1 core)
 
-- [ ] **Design system generation (ui-ux-pro-max)** — design tokens before any UI; typography/color restraint is a differentiator that must be set foundationally
-- [ ] **Bilingual i18n scaffolding (next-intl, ES default, EN toggle, `/[locale]/` routing)** — must be in place from first page or retrofit is painful
-- [ ] **Content JSON schemas locked** (`people.json`, `publications.json`, `research.json`, `outreach.json`) + typed accessors
-- [ ] **Home page** — single hero (or restrained fade between 2-3 images, NOT auto-rotating carousel), tagline, mission, 3 highlight cards linking to research areas, partner logo strip (UBA/FCEN/CONICET)
-- [ ] **People page** — sectioned roster (PIs → Postdocs → PhDs → Undergrads → Past) with photos
-- [ ] **Individual profile pages** (`/people/[slug]`) for PIs/Postdocs/PhDs with bio, research interests, selected publications, contact, external IDs (ORCID, arXiv, Google Scholar, CONICET)
-- [ ] **Research page** — grid of 4 areas (Dark Matter, GW, Early Universe, AI) with narrative paragraph each
-- [ ] **Publications page** — year-grouped list with filter by year + author + topic; arXiv + DOI links per entry
-- [ ] **Outreach page** — grid of activities (talks, workshops, school visits, articles)
-- [ ] **Contact page** — address, email, embedded Google Map, social links
-- [ ] **"How to join" paragraph** — lightweight addition on People or Contact page saying "Prospective PhDs/postdocs contact [PI] at [email] with CV" (addresses prospective applicant audience with ~15 min work)
-- [ ] **SEO baseline** — Schema.org (Organization + Person + ScholarlyArticle on pubs), OG/Twitter cards, sitemap.xml, robots.txt, favicon, self-hosted fonts
-- [ ] **WCAG AA audit pass** — contrast check, keyboard nav test, alt text on all images
-- [ ] **Responsive (mobile → desktop)** — Tailwind defaults enforced; tested at 375/768/1440
+- [ ] **Schema extension** — add `source`, `status`, `inspirehep_id`, `preprint_date`,
+  `citation_count`, `synced_at` to `publications.schema.json` + Zod validators
+- [ ] **people.json extension** — add `inspirehep_id`, `arxiv_author_id`,
+  `exclude_arxiv_ids`, `display_name_normalized` fields
+- [ ] **Sync script** — `scripts/sync-publications.ts`:
+  - Query InspireHEP per member by BAI + date filter (last 10 years for archive)
+  - Query arXiv per member by author name
+  - Apply exclusion lists
+  - Transform to publications.json shape
+  - Write output (merge with existing manual entries, mark source)
+- [ ] **GitHub Actions workflow** — weekly cron (`0 6 * * 1`), commit updated JSON,
+  push to trigger Vercel rebuild
+- [ ] **Source badge** on publication entries (display layer, /publications + /people/[slug])
+- [ ] **Preprint vs published indicator** on each entry
+- [ ] **Source filter toggle** on /publications ("Todos / InspireHEP / arXiv / Manual")
+- [ ] **Last-5-years section** on /people/[slug] (filter by `preprint_date` or `year >= current_year - 5`)
+- [ ] **Author count** displayed as subtitle on profile publication section
+- [ ] **"Actualizado el [date]" / "Updated [date]"** on /publications (bilingual)
+- [ ] **Footnote** on /publications explaining two-source design (bilingual)
+- [ ] **i18n strings** for all new labels (both ES and EN)
 
-### Add After Validation (v1.x)
+### Add If Time Allows (v1.1 nice-to-have)
 
-Ship v1, see what real content makes obvious:
+- [ ] **Author highlighting** (bold group member names in author lists) — MEDIUM complexity;
+  defer if name normalization proves tricky in the sprint
+- [ ] **arXiv category → topic_tag mapping** — auto-assign tags from arXiv primary category
+  at sync time; requires a category-to-tag config map
+- [ ] **Per-person "View on arXiv" link** on /people/[slug]
 
-- [ ] **Seminar / events listing** — if group confirms regular seminar exists (flag to user; cosmology groups nearly universally run weekly seminars, so this is likely needed)
-- [ ] **News / highlights archive page** — if the home-page 3-card slot isn't enough for actual content flow (can defer until >6 items of news exist)
-- [ ] **"Past Members" enriched with current affiliation** — requires content update, not code
-- [ ] **Printable publications CSS** — one stylesheet, for PI grant-report workflows
-- [ ] **Funding / acknowledgements footer block** — once actual grant list is known
-- [ ] **Per-page English parity audit** — after initial Spanish content is populated, walk the site in EN and fix gaps
+### Explicitly Deferred (v2+)
 
-### Future Consideration (v2+) — Explicitly Deferred per PROJECT.md
+- [ ] Cross-source deduplication (InspireHEP vs arXiv for same paper)
+- [ ] Citation count display (too stale/self-promotional without live data)
+- [ ] h-index badges
+- [ ] ADS / ORCID as additional sources
 
-- [ ] **arXiv / ADS / ORCID auto-import** — user decision; scope black hole, placeholder JSON is adequate for v1
-- [ ] **CMS backend** — user decision; JSON editing via PR is the intentional choice
-- [ ] **Member login / internal area** — user decision; out of scope for public institutional site
-- [ ] **Site-wide search beyond publications filter** — user decision; <50 pages doesn't need it
-- [ ] **Software / tools section** — only if group releases public code
-- [ ] **Group photo gallery / "lab life"** — only on user request; maintenance burden
+---
 
-## Feature Prioritization Matrix
+## Confidence Assessment
 
-| Feature | User Value | Implementation Cost | Priority |
-|---------|------------|---------------------|----------|
-| Content JSON schemas locked early | HIGH | LOW | P1 |
-| Bilingual i18n scaffolding from day 1 | HIGH | MED | P1 |
-| Design system (typography-driven, restrained) | HIGH | MED | P1 |
-| Home page (single hero, restrained) | HIGH | LOW | P1 |
-| People page sectioned roster | HIGH | LOW | P1 |
-| Individual profile pages with external IDs | HIGH | LOW | P1 |
-| Research areas page with narrative | HIGH | LOW | P1 |
-| Publications year-grouped + filter | HIGH | MED | P1 |
-| Outreach page | HIGH | LOW | P1 |
-| Contact + Google Map | HIGH | LOW | P1 |
-| "How to join" paragraph | HIGH | LOW | P1 |
-| Schema.org + OG + sitemap | MED | LOW | P1 |
-| WCAG AA compliance | HIGH | MED | P1 |
-| Responsive design | HIGH | LOW | P1 |
-| Partner logo strip | MED | LOW | P1 |
-| Seminar / events listing | MED-HIGH (if group has seminar) | MED | P2 (confirm with user) |
-| Past members with current affiliations | MED | LOW | P2 (content-driven) |
-| Print CSS for publications | LOW | LOW | P3 |
-| News archive page (beyond 3 home cards) | LOW | MED | P3 |
-| Funding acknowledgements block | MED | LOW | P2 |
+| Area | Confidence | Basis |
+|------|------------|-------|
+| InspireHEP API fields (what's available) | HIGH | Live API calls against real author (Calzetta) |
+| InspireHEP query syntax (BAI, date) | HIGH | Official INSPIRE search tips docs + live verification |
+| arXiv API fields | MEDIUM | Official arXiv API user manual (404'd, reconstructed from redirect + prior knowledge) |
+| Rate limits (both APIs) | MEDIUM | Documented + widely reported in community |
+| Last-5-years recommendation | MEDIUM | Reasoned from domain practice; no authoritative norm found |
+| Citation count anti-feature recommendation | MEDIUM | Observed on peer sites (not shown); APS style guide |
+| Co-author dedup convention (once per paper) | MEDIUM | Observed on UCL Cosmoparticle, IRIS-HEP; no explicit documentation |
+| Author-name-highlighting convention | LOW | Not found on any peer site; inferred as useful differentiator |
+| Conference proceedings exclusion | MEDIUM | Peer site observation + InspireHEP type codes |
+| Source-badge UX pattern | LOW | No peer site does this exact two-source pattern; design is novel |
 
-**Priority key:**
-- P1: Must have for launch
-- P2: Should have; add when possible (or post-launch)
-- P3: Nice to have; future consideration
-
-## Competitor / Peer Feature Analysis
-
-Comparison across peer institutional cosmology group sites. Used to validate table stakes and identify anti-features.
-
-| Feature | MPA Garching | IAS Natural Sciences | Flatiron CCA | Perimeter | DAMTP / CTC Cambridge | IAFE (Buenos Aires) | **Our v1** |
-|---------|--------------|---------------------|--------------|-----------|------------------------|---------------------|------------|
-| People/members directory | Yes (structured by role) | Yes (faculty + visitors + past) | Yes (by group) | Yes | Yes | Yes (Autoridades + RRHH) | Yes (sectioned) |
-| Individual profile pages | Yes | Yes | Yes | Yes | Yes | Partial | Yes (PI/Postdoc/PhD) |
-| Research areas | 5 areas + independent groups | 3 areas | 8 groups | Areas + centres | Multiple groups (GR, HEP, astro, CTC) | 7 areas | 4 areas (DM, GW, EU, AI) |
-| Publications | Yes (linked to ADS) | Implicit via faculty pages | Yes + ADS links | Yes | Yes | Evidence of pubs (PROSE award) | Yes (year + filter) |
-| News / highlights | Yes (dedicated) | Implicit | Yes | Yes ("News & Ideas") | Yes | Yes (Noticias) | Home highlights only (3 cards) |
-| Seminars / events | Yes (events) | Yes (astro events) | Yes (colloquium + workshops) | Yes (events) | Yes (weekly seminars) | Yes (Eventos, dual audience) | **DEFERRED (flag to user)** |
-| Jobs / careers | Yes (Career) | Application portal + deadlines | Yes (Careers) | Yes (Training) | Yes | Yes (implicit RRHH) | **"How to join" paragraph** |
-| Outreach / public | Yes (Public Outreach) | Limited | Limited | Yes (Outreach) | Via CTC | Yes (div. cultura divulgación) | Yes |
-| Bilingual | EN primary (institute is German but site is EN) | EN | EN | EN | EN | **ES + EN toggle (flag link)** | **ES + EN toggle** |
-| Light mode only | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
-| No flashy animations | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
-| Restrained typography-driven design | Yes | Yes | Yes | Mostly | Yes | Partial | Yes |
-| Software / tools section | No dedicated | No | Yes (prominent) | No | No (but COSMOS mentioned) | No | No (out of scope) |
-| CMS | Yes (internal) | Yes (internal) | Yes (internal) | Yes | Yes | Yes | **JSON files (intentional)** |
-
-**Key takeaways from peer comparison:**
-1. **User v1 matches or exceeds peer table stakes** on core content (people, research, publications, outreach, contact).
-2. **Every cosmology peer has a seminar/events listing.** This is the single feature most at risk of being missed. Flag for user confirmation.
-3. **Every peer has some "join us" signal.** User v1 has none explicitly; the "How to join" paragraph recommendation addresses this at minimal cost.
-4. **IAFE is the closest peer** (Buenos Aires, Spanish/English bilingual, CONICET-affiliated). IAFE's structure: Institucional + Áreas de investigación + Eventos + Noticias + Contacto. User v1 aligns well; biggest gap is Eventos.
-5. **Nobody in the peer set has dark mode, carousels with >3 slides, flashy animations, or mega-menus.** User constraints already exclude all of these — correctly.
-
-## Relevance Notes for Spanish-Speaking / LATAM Audience
-
-- **"Divulgación" is a funder keyword.** CONICET and UBA value public-engagement evidence explicitly in grant evaluations. The Outreach page maps to this — label it "Divulgación" in ES (not "Alcance" or literal translation of "Outreach").
-- **CONICET researcher identifier** is expected on profile pages alongside ORCID. Every LATAM academic adds this.
-- **Group-name branding is often institutional + geographic**, e.g., "Grupo de Cosmología UBA" or "Grupo de Cosmología, IAFE-UBA-CONICET." The placeholder approach (single config file) is the right call.
-- **Bilingual parity matters more than elsewhere**: international peers read English to evaluate; the Spanish-speaking audience is NOT secondary even though site defaults to Spanish. Half-translated pages are a LATAM academic site failure mode.
-- **Avoid literal calques in ES**: "Research" → "Investigación" (correct); "People" → "Miembros" or "Equipo" (NOT "Gente"); "Publications" → "Publicaciones" (straightforward); "Outreach" → "Divulgación"; "Home" → "Inicio".
-- **University affiliation logos matter more in LATAM** than at institutions like MPA or Perimeter where a single brand dominates. UBA + FCEN + CONICET logos on homepage are a stronger credibility signal than at a typical US/UK institute.
-- **Date formats and author name conventions**: use ISO dates (`2026-04-17`) in data, localize display (`17 de abril de 2026` in ES, `April 17, 2026` in EN). Author name order follows journal citation style, not culture.
-
-## Open Questions (Flag to User)
-
-1. **Does the UBA cosmology group run a regular seminar?** If yes, a seminar listing is near-table-stakes for peer credibility. Cost: ~1 day of work + events.json schema. If no, safely deferred.
-2. **Is there a group Twitter/X / YouTube / Instagram account?** Social icons in footer are cheap; confirm which to include.
-3. **Are there specific CONICET grant numbers to acknowledge?** If yes, a footer acknowledgements block is easy; if TBD, leave placeholder.
-4. **Should "Past Members" include current affiliation?** Requires data field; if user wants it, add to schema up front.
-5. **Does the group release any public software / datasets?** If yes, a Software section is worth 0.5 day; if not, skip.
-6. **Is the group name final or still a placeholder?** User noted "Grupo de Cosmología UBA" is placeholder — config-file abstraction already handles this.
+---
 
 ## Sources
 
-Peer institutional sites reviewed (HIGH confidence for feature presence):
-- [MPA Garching (Max Planck Institute for Astrophysics)](https://www.mpa-garching.mpg.de/) — top nav: About MPA, News, Research, Career, Public Outreach
-- [IAS School of Natural Sciences (Princeton)](https://www.ias.edu/sns) — faculty + visiting scholars + events + application portal with deadline
-- [Flatiron Institute Center for Computational Astrophysics](https://www.simonsfoundation.org/flatiron/center-for-computational-astrophysics/) — 8 groups, projects, news & pubs, events, software, people, careers, about
-- [Perimeter Institute](https://perimeterinstitute.ca/) — About, Research (areas, researchers, centres, seminars), Training, Outreach, Events, News & Ideas
-- [DAMTP Cambridge / CTC](https://www.ctc.cam.ac.uk/) — Centre for Theoretical Cosmology; weekly seminars with IoA, Cavendish, DAMTP
-- [IAFE (Instituto de Astronomía y Física del Espacio, UBA-CONICET)](http://www.iafe.uba.ar/) — closest LATAM peer; ES/EN toggle, Institucional + Áreas + Eventos + Noticias + Contacto
-- [Cambridge CTC Seminars](https://www.ctc.cam.ac.uk/activities/seminars.php) — cosmology seminar culture evidence
-- [Imperial Cosmology Seminars](https://www.imperial.ac.uk/theoretical-physics/seminars/cosmology-seminars/), [UW-Madison](https://cosmology.physics.wisc.edu/seminars/), [UC Davis](https://physics.ucdavis.edu/research/research-areas/cosmology/cosmology-meetings-and-seminars) — weekly cosmology seminars are universal
+**InspireHEP:**
+- [InspireHEP REST API docs (GitHub)](https://github.com/inspirehep/rest-api-doc)
+- [INSPIRE search tips (official help)](https://help.inspirehep.net/knowledge-base/inspire-paper-search/)
+- [INSPIRE-HEP Wikipedia](https://en.wikipedia.org/wiki/INSPIRE-HEP)
+- [InSPy-HEP Python interface (GitHub)](https://github.com/mhostert/inspy-hep)
+- Live API: `https://inspirehep.net/api/literature?q=a+E.Calzetta.1&sort=mostrecent&size=3`
+  (verified 2026-04-18; confirmed field structure, citation_count, preprint_date format)
 
-Multilingual / bilingual UX guidance (MEDIUM-HIGH confidence):
-- [Digital.gov — multilingual website best practices](https://digital.gov/resources/top-10-best-practices-for-multilingual-websites)
-- [Weglot — website language selector best practices](https://www.weglot.com/blog/website-language-selector) — language names in own language, avoid flags, top-corner placement
+**arXiv:**
+- [arXiv API user manual](https://info.arxiv.org/help/api/user-manual)
+- [arXiv identifier format](https://info.arxiv.org/help/arxiv_identifier.html)
+- Live author search: `https://arxiv.org/search/?searchtype=author&query=Calzetta+E`
+  (verified 2026-04-18; 108 results, no disambiguation system observed)
 
-Carousel / animation anti-patterns (HIGH confidence, multiple sources):
-- [NN/G — designing effective carousels](https://www.nngroup.com/articles/designing-effective-carousels/) — users ignore carousels
-- [Baymard — 10 UX requirements for homepage carousels](https://baymard.com/blog/homepage-carousel) — 46% of carousel sites have usability issues
-- [CXL — don't use automatic image sliders](https://cxl.com/blog/dont-use-automatic-image-sliders-or-carousels/) — static hero performs better
+**Peer cosmology group sites surveyed:**
+- [UCL Cosmoparticle Initiative — Publications](https://www.ucl.ac.uk/cosmoparticle/research/publications) — reverse-chron, no per-profile cutoff, "incl." for large collab
+- [UCL Astrophysics — Group Publications](https://www.ucl.ac.uk/mathematical-physical-sciences/physics-astronomy/research/research-groups/astrophysics-group-department-physics-and-astronomy/research/latest-group-publications) — "et al." after ~4 authors, ADS links, no source badge
+- [IRIS-HEP — Publications](https://iris-hep.org/publications/all.html) — by-date + by-area filters, citation counts shown, InspireHEP + arXiv + DOI links per entry
+- [KIPAC Stanford — People](https://kipac.stanford.edu/people) — no per-profile pub list; single central arXiv discovery link
+- [CCAPP OSU — People](https://ccapp.osu.edu/people) — no per-profile pub listing
 
-Academic lab website best-practice guides (MEDIUM confidence, blog-level):
-- [theacademicdesigner.com — research lab websites](https://theacademicdesigner.com/2024/research-lab-websites/)
-- [jedyang.com — academic research group website](https://jedyang.com/post/how-to-build-academic-research-group-website-in-2021/)
-
-Background / context (MEDIUM confidence):
-- [CONICET (Argentina research council)](https://www.conicet.gov.ar/?lan=en) — bilingual pattern; institutional framing relevant to LATAM context
+**APS journal style (author list format):**
+- [APS References style guide](https://journals.aps.org/authors/references-physical-review-physical-review-letters) — list all authors up to 10, then et al.
 
 ---
-*Feature research for: academic research group website (cosmology, UBA / FCEN / CONICET context)*
-*Researched: 2026-04-17*
+*Feature research for: v1.1 publication sync (InspireHEP + arXiv), academic cosmology group site*
+*Researched: 2026-04-18*

@@ -1,7 +1,7 @@
 # Stack Research — Cosmology Group Website (UBA / FCEN)
 
 **Domain:** Bilingual institutional/academic research group website (content-editable, static-friendly)
-**Researched:** 2026-04-17
+**Researched:** 2026-04-17 (v1.0 base) / 2026-04-18 (v1.1 additions)
 **Confidence:** HIGH (core stack verified against official 2026-04 docs; a few LOW-confidence flags noted inline)
 
 ---
@@ -14,7 +14,417 @@ Use **Next.js 16.2.x + React 19 + TypeScript strict + Tailwind v4 + next-intl v4
 
 ---
 
-## Recommended Stack
+## v1.1 Additions: Publication Sync Stack
+
+These are the **only new additions** for v1.1. The full v1.0 base stack (below) is unchanged.
+
+### Synopsis
+
+v1.1 adds a sync script (`scripts/sync-publications.ts`) that queries InspireHEP and arXiv, transforms results to match the existing `PublicationSchema`, and writes `content/publications.json`. A GitHub Actions cron job runs this weekly and commits the result, triggering a Vercel rebuild.
+
+**New deps (runtime of the script, not of the Next.js app):**
+- `fast-xml-parser` (devDependency — used only in the sync script, never shipped to browsers)
+
+**No new runtime deps** in the Next.js bundle. `tsx`, `zod`, and native `fetch` already exist.
+
+---
+
+### 1. HTTP Client: Native `fetch` — no additional library
+
+**Decision:** Use Node 22's built-in `fetch` (WHATWG-compliant, stable since Node 18). Do not add axios, got, or undici.
+
+**Rationale:**
+- Node 22 ships a full WHATWG `fetch` + `AbortController`. `AbortSignal.timeout(ms)` (Node 17.3+) is a single-line per-request timeout — no library needed.
+- `undici` is what Node's `fetch` wraps internally; using it directly adds complexity with no benefit for two simple REST calls per sync run.
+- `axios` would require an additional install + type package (`axios` + `@types/axios` if not bundled) and adds ~55 KB to the install. For a build-only script that is never bundled into the Next.js app, this is pure overhead.
+- The existing `validate-content.mjs` and `generate-schemas.mjs` scripts use zero HTTP — keeping the pattern consistent means native APIs only.
+
+**Timeout pattern:**
+```ts
+const res = await fetch(url, {
+  signal: AbortSignal.timeout(10_000), // 10 s per request
+});
+if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
+```
+
+**Retry pattern** (no library — three lines):
+```ts
+async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+      if (res.ok) return res;
+      if (res.status === 429) {
+        // InspireHEP rate limit: wait 5 s before retry
+        await new Promise(r => setTimeout(r, 5_000));
+        continue;
+      }
+      throw new Error(`HTTP ${res.status}`);
+    } catch (e) {
+      if (i === retries - 1) throw e;
+      await new Promise(r => setTimeout(r, 2_000 * (i + 1)));
+    }
+  }
+  throw new Error("unreachable");
+}
+```
+
+**Confidence:** HIGH — Node 22 `fetch` and `AbortSignal.timeout` are stable documented APIs (MDN, Node.js docs).
+
+---
+
+### 2. TS Script Runner: `tsx` (already installed)
+
+**Decision:** Use the existing `tsx@^4.21.0` already in `devDependencies`. No new tooling needed.
+
+**Rationale:**
+- `tsx` is already used for `scripts/validate-content.mjs` (via `tsx/esm` ESM loader) and is listed as a `devDependency` in `package.json`. Adding the sync script costs zero additional installs.
+- `tsx` wraps esbuild and works in Node 22. It supports `tsconfig.json` `paths` aliases (`@/*`), which means the sync script can import `src/content/schemas/publications.schema.ts` directly using `@/content/schemas/publications.schema`.
+- `ts-node` is NOT an alternative here: the project uses `"module": "esnext"` + `"moduleResolution": "bundler"` in `tsconfig.json` — `ts-node` requires additional `--esm` + `tsconfig-paths` setup to handle these. `tsx` handles them transparently.
+- Bun would require installing a separate runtime in CI and is not already present. Unnecessary for a weekly cron job.
+- `esbuild-node` / `esbuild --bundle` would require a build step producing a plain `.js` file. Adds complexity with no benefit for a script that runs once per week.
+
+**Invocation (local):**
+```bash
+pnpm tsx scripts/sync-publications.ts
+```
+
+**Invocation (CI — see GitHub Action below):**
+```bash
+pnpm exec tsx scripts/sync-publications.ts
+```
+
+**Important:** The sync script is a `.ts` file (not `.mjs`) so it can use `import type` and TypeScript path aliases. Declare it in `tsconfig.json` `include` (it is already included via `**/*.ts`). The `--import tsx/esm` loader trick used in `.mjs` files is not needed for `.ts` files invoked via `tsx` CLI directly.
+
+**Confidence:** HIGH — `tsx` 4.21.0 is current (last published ~5 months ago per npm), verified in the existing project.
+
+---
+
+### 3. XML Parser: `fast-xml-parser` v5.7.x
+
+**Decision:** Add `fast-xml-parser` as a `devDependency` to parse arXiv's Atom 1.0 XML response.
+
+**Rationale:**
+- arXiv's API returns Atom 1.0 XML — there is no JSON alternative endpoint.
+- `fast-xml-parser` is zero-dependency, pure JS, ESM + CJS, 26 KB minified. The latest version is **5.7.1** (released 2026-04-17).
+- `xml2js` is the other common choice but uses callbacks and has a bulkier API. `fast-xml-parser` has a synchronous `XMLParser.parse()` with a clean options object — better fit for a sync script.
+- Node's built-in XML/HTML parser (`DOMParser`) is not available in Node.js (it's a browser API). `@xmldom/xmldom` provides it but adds significant complexity vs. `fast-xml-parser`'s direct-to-object approach.
+- The arXiv Atom feed uses namespace prefixes (`arxiv:doi`, `arxiv:journal_ref`). `fast-xml-parser` handles these natively with `ignoreAttributes: false` and maps namespace-prefixed elements as plain object keys.
+
+**Install:**
+```bash
+pnpm add -D fast-xml-parser
+```
+
+**Parser configuration for arXiv Atom:**
+```ts
+import { XMLParser } from "fast-xml-parser";
+
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "@_",
+  // Atom <entry> may be a single object (not array) when only 1 result
+  isArray: (name) => name === "entry" || name === "author" || name === "link" || name === "category",
+});
+
+const feed = parser.parse(xmlText);
+const entries: AtomEntry[] = feed?.feed?.entry ?? [];
+```
+
+**Key `isArray` note:** `fast-xml-parser` collapses single-element arrays to plain objects by default. The `isArray` callback forces array wrapping for `entry`, `author`, `link`, and `category` — critical when an arXiv author query returns exactly one paper or one author.
+
+**Confidence:** HIGH — official GitHub repository, npm page, version confirmed 5.7.1 (2026-04-17).
+
+---
+
+### 4. InspireHEP REST API
+
+**Base URL:** `https://inspirehep.net/api/`
+
+**Literature endpoint:** `GET https://inspirehep.net/api/literature`
+
+**Author query by INSPIRE BAI (recommended):**
+```
+?q=a {BAI}&size=25&page=1&fields=titles,authors,arxiv_eprints,dois,publication_info,abstracts
+```
+Where BAI looks like `E.Calzetta.1`. This is the most stable identifier — scoped to a specific author profile, immune to name collisions.
+
+**Author query by INSPIRE record ID:**
+```
+?q=ids.value:INSPIRE-{numeric_id}&size=25&page=1
+```
+
+**Pagination:** Use `page` + `size` parameters. The response contains `links.next` with the full URL for the next page. `size` max is 1000; default is 10. For academic authors, 25–50 per page is safe (most have < 200 papers).
+
+**Rate limits:** 15 requests per 5-second window per IP. HTTP 429 on breach. The sync script processes at most 2–3 authors (one page each for a typical academic group) — well within limits. Add the 5 s wait in the 429 handler.
+
+**Response shape (verified with live API, 2026-04-18):**
+```json
+{
+  "hits": {
+    "total": 126,
+    "hits": [
+      {
+        "metadata": {
+          "titles": [{ "title": "Semiclassical effects and the onset of inflation" }],
+          "abstracts": [{ "source": "arXiv", "value": "..." }],
+          "dois": [{ "value": "10.1103/PhysRevD.47.3184" }],
+          "arxiv_eprints": [{ "categories": ["gr-qc"], "value": "gr-qc/9209007" }],
+          "publication_info": [{
+            "journal_title": "Phys.Rev.D",
+            "journal_volume": "47",
+            "year": 1993,
+            "page_start": "3184",
+            "page_end": "3193"
+          }],
+          "authors": [{
+            "full_name": "Calzetta, Esteban",
+            "ids": [{ "schema": "INSPIRE BAI", "value": "E.Calzetta.1" }]
+          }],
+          "control_number": 34567
+        },
+        "links": {
+          "self": "https://inspirehep.net/api/literature/34567",
+          "next": "https://inspirehep.net/api/literature/?q=...&page=2"
+        }
+      }
+    ]
+  },
+  "links": {
+    "self": "...",
+    "next": "https://inspirehep.net/api/literature/?q=...&page=2"
+  }
+}
+```
+
+**Key mapping notes for `PublicationSchema`:**
+
+| InspireHEP field | Schema field | Notes |
+|---|---|---| 
+| `metadata.titles[0].title` | `title` | Take first entry |
+| `metadata.abstracts[0].value` | `abstract` | Take first entry |
+| `metadata.arxiv_eprints[0].value` | `arxiv` | Old IDs use `hep-ph/9912345` format — strip prefix, or store as-is if schema regex allows |
+| `metadata.dois[0].value` | `doi` | Take first; bare `10.xxx/...` format matches schema regex |
+| `metadata.publication_info[0].journal_title` | `journal` | May append volume/year inline |
+| `metadata.publication_info[0].year` | `year` | Integer |
+| `metadata.authors[].full_name` | `authors[]` | Array of strings |
+
+**arXiv ID format caveat (MEDIUM confidence):** Old InspireHEP records use pre-2007 arXiv IDs like `gr-qc/9209007`, `hep-ph/0204259`. The current `PublicationSchema` regex `^\d{4}\.\d{4,5}(v\d+)?$` rejects these. The schema will need to be updated OR old-format IDs should be stored in a separate field or omitted. Flag this for schema design in the milestone plan.
+
+**Sources:** Live API call to `https://inspirehep.net/api/literature?q=a%20Calzetta&size=1&fields=...` (2026-04-18, HIGH confidence); [inspirehep/rest-api-doc README](https://github.com/inspirehep/rest-api-doc/blob/master/README.md) (HIGH confidence).
+
+---
+
+### 5. arXiv API
+
+**Base URL:** `http://export.arxiv.org/api/query` (HTTP only — no HTTPS; the server redirects are inconsistent; use HTTP as documented)
+
+**Fetch by arXiv ID (recommended for per-person sync):**
+```
+GET http://export.arxiv.org/api/query?id_list=2501.12345,2603.15744&max_results=50
+```
+
+**Fetch by author name (fallback — less precise):**
+```
+GET http://export.arxiv.org/api/query?search_query=au:Calzetta_E&max_results=50&sortBy=submittedDate&sortOrder=descending
+```
+
+**Per-person `arxiv_id` (the locked decision):** The milestone locks in explicit `arxiv_id` fields per person in `people.json`. For the `id_list` approach, collect all IDs from the group's people and batch them: `id_list=id1,id2,id3,...&max_results=200`. This is more reliable than name-search and avoids false positives.
+
+**Rate limits:** No hard limit documented. arXiv requests a 3-second delay between sequential calls. For a weekly cron with < 20 IDs, a single batch call avoids this entirely.
+
+**Response format:** Atom 1.0 XML. Parsed with `fast-xml-parser` as described above.
+
+**Entry shape:**
+```xml
+<entry>
+  <id>http://arxiv.org/abs/2501.12345v2</id>
+  <title>Paper Title Here</title>
+  <summary>Abstract text...</summary>
+  <published>2025-01-20T00:00:00Z</published>
+  <updated>2025-01-22T00:00:00Z</updated>
+  <author><name>Calzetta, Esteban</name></author>
+  <author><name>Gomez, L.</name></author>
+  <arxiv:doi>10.1103/PhysRevD.112.023501</arxiv:doi>
+  <arxiv:journal_ref>Phys. Rev. D 112 (2025) 023501</arxiv:journal_ref>
+  <link rel="alternate" href="http://arxiv.org/abs/2501.12345v2"/>
+  <link title="pdf" href="http://arxiv.org/pdf/2501.12345v2"/>
+  <arxiv:primary_category term="astro-ph.CO"/>
+</entry>
+```
+
+**Key mapping notes for `PublicationSchema`:**
+
+| arXiv field | Schema field | Transform |
+|---|---|---|
+| `entry.id` text | `arxiv` | Strip `http://arxiv.org/abs/` prefix, strip version suffix `v2` → `2501.12345` |
+| `entry.title` | `title` | Trim whitespace (arXiv titles often have leading/trailing `\n`) |
+| `entry.summary` | `abstract` | Same whitespace trim |
+| `entry.author[].name` | `authors[]` | Array; arXiv format is "Last, First" — consistent with InspireHEP |
+| `entry["arxiv:doi"]` | `doi` | If present — optional |
+| `entry["arxiv:journal_ref"]` | `journal` | If present; else `"Preprint"` |
+| `entry.published` year | `year` | `new Date(entry.published).getFullYear()` |
+
+**Source:** [arXiv API User's Manual](https://info.arxiv.org/help/api/user-manual.html) (HIGH confidence — official arXiv documentation, fetched 2026-04-18).
+
+---
+
+### 6. Script Location and TypeScript Integration
+
+**Location:** `scripts/sync-publications.ts`
+
+Consistent with `scripts/validate-content.mjs` and `scripts/generate-schemas.mjs`. The `scripts/` directory is the established pattern for build-adjacent tooling in this project.
+
+**NOT a workspace package.** This is a single-file script, not a package boundary. Workspace packages add `package.json` overhead and pnpm workspace configuration — YAGNI for one script.
+
+**TypeScript path aliases:** The sync script imports the existing `PublicationSchema` directly:
+```ts
+// scripts/sync-publications.ts
+import { PublicationSchema, PublicationsSchema } from "@/content/schemas/publications.schema";
+import { writeFileSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { XMLParser } from "fast-xml-parser";
+```
+
+The `@/*` alias resolves to `./src/*` per `tsconfig.json`. `tsx` honours `tsconfig.json` `paths` — no extra config needed. This is the same pattern used by `validate-content.mjs` which imports from `../src/content/schemas/*.ts`.
+
+**Fallback pattern (DATA-08 requirement — last-good JSON on failure):**
+```ts
+const PUBLICATIONS_PATH = join(process.cwd(), "content/publications.json");
+
+// Write atomically: only overwrite if validation passes
+const merged = deduplicateAndMerge(inspireResults, arxivResults);
+const validated = PublicationsSchema.safeParse(merged);
+if (!validated.success) {
+  console.error("Sync produced invalid data — keeping last-good JSON");
+  console.error(validated.error.issues);
+  process.exit(1); // GitHub Action sees non-zero exit, does not commit
+}
+writeFileSync(PUBLICATIONS_PATH, JSON.stringify(validated.data, null, 2));
+```
+
+Non-zero exit prevents `stefanzweifel/git-auto-commit-action` from committing, which preserves the last-good `content/publications.json` in the repo.
+
+---
+
+### 7. GitHub Action
+
+**File location:** `.github/workflows/sync-publications.yml`
+
+**Actions used:**
+
+| Action | Version | Purpose |
+|---|---|---|
+| `actions/checkout` | v4 | Checkout repo (v4 is current stable as of 2026-04) |
+| `pnpm/action-setup` | v5 | Install pnpm (v5.0.0 released 2026-03-17) |
+| `actions/setup-node` | v4 | Node 20 LTS with pnpm cache (v4 is current stable) |
+| `stefanzweifel/git-auto-commit-action` | v5 | Commit changed `content/publications.json` back to `main` |
+
+**Note on action versions:** `actions/setup-node` v6 was referenced in one search result as "released March 4, 2026" — treat this as MEDIUM confidence and pin to `v4` (confirmed stable) until v6 is verifiable from the GitHub releases page. `actions/checkout` v4 is widely confirmed current.
+
+**Full working workflow:**
+
+```yaml
+name: Sync Publications
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: "0 6 * * 1"
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write   # Required for git-auto-commit-action to push
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run publication sync
+        run: pnpm exec tsx scripts/sync-publications.ts
+
+      - name: Commit updated publications.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(content): sync publications from InspireHEP + arXiv"
+          file_pattern: content/publications.json
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+```
+
+**Why `--frozen-lockfile`:** Ensures CI uses exactly the lockfile versions. Fails loudly if `pnpm-lock.yaml` is out of sync — expected behaviour for a reproducible CI job.
+
+**Why `pnpm/action-setup@v5` before `setup-node`:** The `pnpm/action-setup` action must run before `setup-node` so that `setup-node`'s `cache: "pnpm"` can find the pnpm binary and read `pnpm-lock.yaml` for cache key generation.
+
+**Node version:** Pinned to `"20"` (LTS) rather than `"22"` to match the project's `engines.node: "20.x"` in `package.json`. Both support native `fetch` and `AbortSignal.timeout`. Do not upgrade Node in the action without also updating `engines.node`.
+
+**`git-auto-commit-action` behaviour on no changes:** If `content/publications.json` is identical to the last run (no new papers), the action detects no dirty files and skips the commit. No spurious commits. No Vercel rebuild triggered. Correct behaviour.
+
+**`file_pattern: content/publications.json`:** Scopes the commit to only the publications file. Prevents accidental commits of intermediate files if the script generates temp files.
+
+**Vercel rebuild trigger:** Vercel watches the `main` branch. When `git-auto-commit-action` pushes a commit, Vercel automatically triggers a new build. No webhook configuration needed — this is the default Vercel + GitHub integration behaviour.
+
+**Cron schedule notes:**
+- `"0 6 * * 1"` = every Monday 06:00 UTC (Monday 03:00 Argentina time / 02:00 Buenos Aires winter)
+- GitHub Actions cron has a known delay of up to 15 minutes during peak times — acceptable for a weekly publication sync
+- InspireHEP and arXiv both update continuously; Monday morning is a reasonable cadence for an academic group site
+
+---
+
+### 8. Installation Summary (v1.1 only)
+
+```bash
+# One new devDependency
+pnpm add -D fast-xml-parser
+
+# No new runtime deps — native fetch, tsx, and zod are already present
+```
+
+Create the workflow directory:
+```bash
+mkdir -p .github/workflows
+```
+
+---
+
+### 9. Alternatives Rejected for v1.1
+
+| Recommended | Alternative | Why Rejected |
+|---|---|---|
+| Native `fetch` | `axios` | Extra install + `@types/axios`, ~55 KB, zero benefit for 2 API calls in a build script that never touches the browser |
+| Native `fetch` | `got` | Same reasoning; also ESM-only which would require additional tsconfig gymnastics |
+| Native `fetch` | `undici` | Node's `fetch` already uses `undici` internally; double-wrapping adds nothing |
+| `tsx` (existing) | `ts-node` | Incompatible with `"moduleResolution": "bundler"` without a separate tsconfig; tsx already installed |
+| `tsx` (existing) | Bun | Requires installing a second JS runtime in CI; not in the project's established toolchain |
+| `fast-xml-parser` | `xml2js` | Callback-based API, older design; `fast-xml-parser` is synchronous and zero-dependency |
+| `fast-xml-parser` | Native `DOMParser` | Not available in Node.js — browser API only |
+| `fast-xml-parser` | `@xmldom/xmldom` | Provides `DOMParser` in Node but requires DOM traversal; more verbose than `fast-xml-parser`'s direct-to-object mapping |
+| `stefanzweifel/git-auto-commit-action` | `git push` via raw shell | The action handles detached-HEAD guards, author config, dirty-check, and idempotency correctly; raw `git push` in CI is error-prone |
+| `stefanzweifel/git-auto-commit-action` | `peter-evans/create-pull-request` | PR-per-sync adds reviewer overhead for a low-risk weekly data update; direct commit to `main` + Vercel rebuild is the stated decision |
+
+---
+
+## v1.0 Base Stack (Unchanged)
 
 ### Core Technologies
 
@@ -80,6 +490,9 @@ pnpm add -D tailwindcss@^4.2 @tailwindcss/postcss postcss
 pnpm add -D eslint@^9 eslint-config-next@^16 @typescript-eslint/parser @typescript-eslint/eslint-plugin
 pnpm add -D prettier prettier-plugin-tailwindcss
 pnpm add -D vitest @vitest/coverage-v8
+
+# v1.1 addition (sync script only — never shipped to browser)
+pnpm add -D fast-xml-parser
 ```
 
 ---
@@ -283,7 +696,9 @@ Both subsets cover Spanish (latin-ext not needed unless Quechua/Mapuche content 
 | **`framer-motion`** | Explicit design constraint: "no flashy animations." Plus 60 KB bundle cost. | CSS transitions for hero fade, `@keyframes` for any other needs. |
 | **`shadcn/ui` full install** | Too many components pulled in for what is effectively a static site with ~5 interactive pieces (nav, carousel, publications filter). Maintainability burden for non-technical users who might poke the codebase. | Hand-rolled Tailwind components; pull a single shadcn primitive (e.g., `Select` for publication filter) only if needed. |
 | **CSS-in-JS (styled-components, emotion)** | RSC incompatibility, runtime cost, Tailwind v4 obsoletes the use case. | Tailwind v4 with `@theme inline` tokens. |
-| **`axios`** | No HTTP requests in this app; all content is compiled in. | N/A — delete if it shows up. |
+| **`axios`** (in sync script) | No benefit over native fetch in Node 22; extra install for a build-only script. | Node 22 `fetch` + `AbortSignal.timeout`. |
+| **`got`** (in sync script) | ESM-only; requires tsconfig adjustments; no benefit over native fetch. | Node 22 `fetch`. |
+| **`node-fetch`** | Polyfill only needed for Node < 18; Node 22 has native fetch. Historical artifact. | Node 22 `fetch`. |
 | **Vercel Analytics, Posthog, GA4** on day 1 | Scope discipline. Not in requirements. Add post-validation if the group requests. | Measure CWV locally with Lighthouse CI during build. |
 | **Dark mode tokens in globals.css** | Explicit out-of-scope. Keep CSS simpler. | Light-mode-only OKLCH tokens. (The `@custom-variant dark` line from the starter can stay disabled/commented.) |
 
@@ -299,7 +714,7 @@ Both subsets cover Spanish (latin-ext not needed unless Quechua/Mapuche content 
 
 **If static-export hosting (fallback):**
 - `next.config.ts`: `output: 'export'`, `images: { unoptimized: true }`, `trailingSlash: true`
-- Drop middleware (it doesn't execute at static-host edge anyway; next-intl routing still works via `generateStaticParams` on `[locale]`)
+- Drop middleware (it doesn't execute at static-host edge anyway; next-intl routing still works via `generateStaticParams` + directory structure)
 - Pre-optimize source photos (`sharp`, `squoosh-cli`) in a content pipeline step
 - Make sure every `[slug]` has `generateStaticParams` returning all locale × slug pairs
 - Test with `STATIC_EXPORT=true pnpm build && npx serve out` locally before every major merge
@@ -324,25 +739,40 @@ Both subsets cover Spanish (latin-ext not needed unless Quechua/Mapuche content 
 | eslint@9 (flat config) | eslint-config-next@^16 | Next.js 16 ships flat-config preset. Next.js 15.5 deprecated `next lint`. |
 | `next/image` default loader | NOT compatible with `output: 'export'` | Required: `images: { unoptimized: true }` OR custom loader. |
 | next-intl middleware | NOT executed under `output: 'export'` | Expected — locale routing still works via `generateStaticParams` + directory structure. |
+| fast-xml-parser@5.7.x | Node 20 / Node 22 | Pure JS, no native bindings. ESM + CJS. Zero deps. |
+| tsx@4.21.x | Node 20 / Node 22, tsconfig `"moduleResolution": "bundler"` | Handles paths aliases; no separate tsconfig-paths plugin needed. |
 
 ---
 
 ## Quality Gate Checklist
 
-- [x] Versions verified against official 2026-04 sources (Next.js blog, GitHub releases, next-intl releases) — not training data
+- [x] Versions verified against official 2026-04 sources (Next.js blog, GitHub releases, next-intl releases, npm, live API) — not training data
 - [x] Rationale explains WHY, not just WHAT — every recommendation cites a constraint from PROJECT.md or a measured downside of the alternative
 - [x] Confidence levels assigned:
-  - HIGH: Next.js, React, TypeScript, Tailwind, next-intl, Zod, `next/image`, Google Maps iframe approach, schema-dts (verified via official sources)
-  - MEDIUM: embla-carousel-react (validated in ecosystem, not Context7); Lighthouse CI / axe-playwright (standard but not verified in 2026 release)
+  - HIGH: Next.js, React, TypeScript, Tailwind, next-intl, Zod, `next/image`, Google Maps iframe approach, schema-dts, tsx, InspireHEP API shape (live verified), arXiv API (official docs fetched), native fetch/AbortSignal (MDN + Node.js docs)
+  - MEDIUM: `pnpm/action-setup@v5` release date (claimed 2026-03-17 from WebFetch), `actions/setup-node` v6 existence (WebSearch only, pinned to v4), `stefanzweifel/git-auto-commit-action@v5` (v7.1.0 latest confirmed but v5 widely used in examples — use `v5` for safety)
   - LOW: `next-image-export-optimizer` (only a fallback suggestion; flag in PITFALLS)
 - [x] Static-export compatibility flagged explicitly in the `next/image`, next-intl, and "Stack Patterns by Variant" sections
-- [x] Next.js 16 quality-prop change called out (2026 breaking change relative to older docs)
+- [x] v1.1 arXiv ID regex incompatibility with pre-2007 IDs flagged (schema work needed in milestone plan)
+- [x] GitHub Action YAML is complete and runnable (not a skeleton)
 
 ---
 
 ## Sources
 
-**Official / HIGH confidence:**
+**Official / HIGH confidence (v1.1 additions):**
+- [arXiv API User's Manual](https://info.arxiv.org/help/api/user-manual.html) — base URL, parameters, Atom XML response shape, rate limits (fetched 2026-04-18)
+- [inspirehep/rest-api-doc README](https://github.com/inspirehep/rest-api-doc/blob/master/README.md) — literature endpoint, pagination, rate limits (fetched 2026-04-18)
+- Live API call: `https://inspirehep.net/api/literature?q=a%20Calzetta&size=1&fields=...` — response shape confirmed (2026-04-18)
+- [fast-xml-parser GitHub](https://github.com/NaturalIntelligence/fast-xml-parser) — version 5.7.1 (2026-04-17), zero-dependency, ESM + CJS
+- [fast-xml-parser docs v4 — XMLparseOptions](https://github.com/NaturalIntelligence/fast-xml-parser/blob/master/docs/v4/2.XMLparseOptions.md) — `ignoreAttributes`, `isArray`, `attributeNamePrefix`
+- [pnpm/action-setup README](https://github.com/pnpm/action-setup) — v5.0.0 current, inputs
+- [stefanzweifel/git-auto-commit-action action.yml](https://github.com/stefanzweifel/git-auto-commit-action/blob/master/action.yml) — v7.1.0 latest, all inputs, defaults
+- [GitHub Docs — GITHUB_TOKEN permissions](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/controlling-permissions-for-github_token) — `contents: write` requirement
+- [MDN — AbortSignal.timeout()](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal/timeout_static) — Node 17.3+ stable
+- [tsx.is](https://tsx.is/) — tsconfig paths support, CJS/ESM seamless mode
+
+**Official / HIGH confidence (v1.0 base — unchanged):**
 - [Next.js 16.2 release blog (2026-03-18)](https://nextjs.org/blog/next-16-2) — version, Turbopack stability, React 19.2
 - [Next.js GitHub Releases](https://github.com/vercel/next.js/releases) — v16.2.4 (2026-04-15) confirmed current
 - [Next.js Static Exports guide (v16.2.4, 2026-04-15)](https://nextjs.org/docs/app/guides/static-exports) — unsupported features list, image loader pattern
@@ -352,7 +782,6 @@ Both subsets cover Spanish (latin-ext not needed unless Quechua/Mapuche content 
 - [schema-dts GitHub](https://github.com/google/schema-dts) — v2.0.0, Schema.org v30 coverage
 - [Zod GitHub Releases](https://github.com/colinhacks/zod/releases) — v4.3.6 (2025-01), stable
 - [web.dev: Best practices for embeds (facade pattern)](https://web.dev/articles/embed-best-practices) — Google Maps lazy loading & facade guidance
-- [Chrome: Lazy load third-party resources with facades](https://developer.chrome.com/docs/lighthouse/performance/third-party-facades) — LCP/TBT impact quantified
 
 **Internal references (validated 2026-03 in landing-page project):**
 - `/home/tomas/Projects/cosmo/references/patterns/i18n-next-intl.md` — complete next-intl setup pattern (App Router + `src/`)
@@ -360,15 +789,17 @@ Both subsets cover Spanish (latin-ext not needed unless Quechua/Mapuche content 
 - `/home/tomas/Projects/cosmo/references/patterns/design-tokens-starter.md` — Tailwind v4 + OKLCH tokens + `next/font` pattern
 - `/home/tomas/Projects/cosmo/references/patterns/layout-shell.md` — server/client header split with language toggle
 
-**MEDIUM confidence (WebSearch-cross-referenced):**
+**MEDIUM confidence:**
 - [Tailwind CSS GitHub Releases](https://github.com/tailwindlabs/tailwindcss/releases) — v4.2.2 (release date per GitHub was 2025-03; community search claims 2026-02 — GitHub authoritative). Flagged as version-date ambiguity; impact is minor (v4.x API stable).
 - [@vis.gl/react-google-maps OpenJS page](https://openjsf.org/blog/visgl-1.0-react-google-maps) — version 1.0 reached stable; used here to justify NOT adopting it.
+- `actions/setup-node` v6 existence (WebSearch result; pinned to v4 in YAML as confirmed stable)
 
 **LOW confidence (flag for phase-level revalidation):**
-- Tailwind v4.2.2 exact release date (GitHub says 2025-03, one secondary source says 2026-02) — resolve during Phase 1 setup by running `npm view tailwindcss version`
+- Tailwind v4.2.2 exact release date — resolve during Phase 1 setup by running `npm view tailwindcss version`
 - Exact font pairing for academic aesthetic — defer to Phase 1 `ui-ux-pro-max` design system run per `CLAUDE.md`
+- `stefanzweifel/git-auto-commit-action` latest stable tag — check `https://github.com/stefanzweifel/git-auto-commit-action/releases` during workflow authoring and pin to the current major (v5 in YAML above is conservative; v7.1.0 appears to be latest)
 
 ---
 
-*Stack research for: Cosmology Group Website (UBA / FCEN)*
-*Researched: 2026-04-17*
+*Stack research for: Cosmology Group Website (UBA / FCEN) — v1.0 base + v1.1 publication sync additions*
+*Researched: 2026-04-17 (v1.0) / 2026-04-18 (v1.1)*

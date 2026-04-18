@@ -1,507 +1,584 @@
-# Pitfalls Research
+# Pitfalls Research — v1.1 arXiv + InspireHEP Publication Sync
 
-**Domain:** Bilingual academic research group website (Next.js 15 App Router + next-intl + JSON-driven content)
-**Researched:** 2026-04-17
-**Confidence:** HIGH for framework/library traps (verified against official next-intl and Next.js 15 docs). MEDIUM for academic-site anti-patterns (verified against community and research sources).
+**Domain:** Adding API-driven content sync to an existing fully-static academic site (Next.js 16 + Zod v4 + GitHub Actions → Vercel)
+**Researched:** 2026-04-18
+**Confidence:** HIGH for API behavior (verified against InspireHEP live API + official docs), HIGH for GitHub Actions/Vercel mechanics (official docs), MEDIUM for schema migration pitfalls (Zod v4 changelog + code inspection of existing schemas).
 
-Scope note: Pitfalls below are specific to the intersection of (1) academic research group content, (2) Next.js 15 App Router, (3) next-intl Spanish-default bilingual setup, (4) JSON file content editable by non-technical maintainers, and (5) Vercel-first / static-export-compatible deployment. Generic web-dev advice (XSS, CSRF basics, etc.) is omitted.
+Scope note: These pitfalls are specific to *integrating* arXiv + InspireHEP sync into the *existing* v1.0 codebase — not greenfield API consumption. Generic "handle your errors" advice is omitted. Pitfalls from the v1.0 PITFALLS.md (i18n, carousel, email harvesting, etc.) carry forward unchanged and are not duplicated here.
 
 ---
 
 ## Critical Pitfalls
 
-### Pitfall 1: Missing translation key crashes the page in production
+### Pitfall 1: `z.strictObject` on `PublicationSchema` rejects `source` field on first build — silently nukes v1.0 data
 
 **What goes wrong:**
-A content editor adds a new section to `es.json` but forgets `en.json` (or vice versa). When a visitor toggles the missing locale, the page throws at render because `t('some.key')` returns `undefined` and downstream code (e.g., `.toUpperCase()`, JSX text) crashes. In Server Components this surfaces as a 500; in Client Components it can blank a section.
+`PublicationSchema` is declared with `z.strictObject(...)`. The v1.0 hand-curated `content/publications.json` does NOT contain a `source` field. The moment the sync script writes entries with `source: "inspirehep"` or `source: "arxiv"`, the new field is valid for fresh entries. But the deeper problem is the reverse: if `source` is added as a required field to the schema before the migration of the 20 v1.0 entries, `pnpm check-content` fails at build time with "Unrecognized key(s): none" for the fresh entries, OR "Required" for the old entries, depending on implementation order. Either way the build is broken.
+
+The existing `z.strictObject` also means any field the sync script adds that wasn't explicitly listed in the schema (e.g., `inspirehep_id`, `raw_authors`, debug fields left in by accident) causes a parse failure on the entire array.
 
 **Why it happens:**
-next-intl's default `onError` behavior is to log and render `${namespace}.${key}` as a fallback string — but only for simple text. Any logic that consumes the value (formatting, `.length`, interpolation into attributes) fails. Also, translation files diverge over time because they're edited independently by non-technical users.
+`z.strictObject` strips unknown keys at parse time, but also **throws** if the schema uses `parseStrict` (the Zod v4 default for strict objects). Developers add `source` to the Zod schema without migrating the existing 20 JSON records at the same time, creating a window where old data fails validation.
 
 **How to avoid:**
-- Configure `onError` and `getMessageFallback` in `i18n/request.ts` to report missing keys loudly in dev, quietly in prod (with `IntlErrorCode.MISSING_MESSAGE` handling).
-- Add a CI script that diffs key sets between `es.json` and `en.json` and fails the build on divergence. Options: next-intl's own validator script, or a ~20-line `scripts/check-translations.ts`.
-- For content-heavy JSON (`content/people.json` etc.), keep bilingual fields as objects `{ es, en }` inside a single file rather than two parallel files — structurally impossible to desync.
-- Use TypeScript augmentation (`declare module 'next-intl'`) with the message schema so missing keys are caught at type-check time.
+- Add `source` to the schema as `.optional()` with a `.default("manual")` fallback: `source: z.enum(["inspirehep", "arxiv", "manual"]).optional().default("manual")`. This is backward compatible — existing entries parse without a `source` field and get tagged `"manual"`.
+- Never add a required field to the schema before all existing data has been migrated. The migration must be atomic: schema change + JSON backfill in the same commit.
+- After the sync script is stable, do a one-time migration pass that adds `source: "manual"` to the 20 v1.0 entries and commits. After that commit, the `.default()` fallback becomes redundant but harmless.
+- Run `pnpm check-content` locally before committing schema changes, not just in CI — the feedback loop is tighter.
 
 **Warning signs:**
-- `npm run build` succeeds but Search Console reports "soft 404" or "page has error" on `/en/*` pages a week after a content update.
-- Console shows `MISSING_MESSAGE` errors only when toggling to the less-edited locale.
-- Preview deploys pass (editor only tested Spanish), prod breaks English.
+- `pnpm check-content` passes before the schema change but fails immediately after adding `source` without migrating the JSON.
+- VS Code shows red squigglies on v1.0 entries after regenerating `publications.schema.json` without backfilling.
+- Build log shows `ZodError: Required at [0].source` for the first entry (which is a v1.0 curated entry, not a sync-generated one).
 
 **Phase to address:**
-Phase 1 (Foundation / i18n setup) — wire `onError` and the CI diff check before any content pages are built.
+Schema migration phase (whichever plan extends `PublicationSchema`) — schema change and JSON backfill must ship in the same plan, not two separate plans.
 
 ---
 
-### Pitfall 2: Hero carousel destroys LCP and CLS scores
+### Pitfall 2: InspireHEP rate limit hits exactly at the 15-author parallel-fetch point
 
 **What goes wrong:**
-A hero carousel with 3 rotating 1920×800 images hurts both:
-- **LCP:** All 3 slides load eagerly, or only slide-1 is marked `priority` but a layout-shift-inducing loader replaces it. Total blocking time balloons.
-- **CLS:** Carousel library (Swiper default CSS, Embla without explicit height) doesn't reserve space before JS hydrates, causing shift when the first slide paints. Swiper specifically has a known CLS issue where the track collapses on SSR.
-- **Accessibility:** 6–8s auto-advance violates WCAG 2.2.2 ("Pause, Stop, Hide") unless a pause control is provided.
+InspireHEP enforces **15 requests per 5-second window per IP**. A sync script that fires one request per author for 15 group members in parallel (`Promise.all([...])`) exhausts the entire window in a single burst. Every request from person #1 to #15 fires simultaneously. CI's shared IP may already have partial quota burned by previous steps or by another job running concurrently in the same Actions runner pool. The result is a mix of 200s and 429s in the first run, with no retry logic.
+
+The compounding failure: when using `size=1000` (the InspireHEP max page size) to get all papers in one request per author, a senior PI with 100+ papers produces a large response body. If the sync script also queries both InspireHEP and arXiv per author, that is 30 parallel requests for 15 authors — double the rate limit.
 
 **Why it happens:**
-Carousels are the default "hero" pattern from marketing templates, but they were designed for on-device JS-heavy pages, not statically rendered institutional sites. The LCP element is the first slide's background image, which must be `priority`, correctly `sizes`'d, and pre-sized with explicit aspect ratio to avoid shift. Auto-rotation is added for "visual interest" without thinking about keyboard / screen-reader / reduced-motion users.
+Developers reach for `Promise.all()` as the idiomatic "fetch in parallel" pattern. The InspireHEP limit (15 req / 5s) is exactly the size of a typical HEP cosmology group, so there is no safety margin if all fire at once.
 
 **How to avoid:**
-- Only the first slide gets `<Image priority sizes="100vw" fetchPriority="high">`. Subsequent slides load lazily (or on carousel advance).
-- Set an explicit `aspect-ratio: 1920/800` on the carousel container so layout is stable before hydration.
-- Add `prefers-reduced-motion` check — if set, disable auto-advance entirely and render only the first slide (or a crossfade-less static hero).
-- Include visible pause/play button, keyboard arrow-key nav, `aria-live="polite"` only when focused, `aria-roledescription="carousel"` on the region, and `role="group"` with `aria-label="Slide N of M"` per slide.
-- Prefer Embla Carousel over Swiper for this project: smaller bundle, no default CSS surprises, better SSR story. If not using a library, a CSS-only fade crossfade is viable for 3 slides and avoids a dependency entirely.
-- Self-host the images (in `/public/hero/`) — do not hotlink.
+- Use a concurrency-limited queue: fetch at most 3–5 authors in parallel, not all 15. Libraries like `p-limit` (Node.js) implement this in ~5 lines.
+- Between batches, add a 2-second pause. arXiv's own manual suggests "a 3 second delay in your code" for sequential calls; apply the same discipline to InspireHEP.
+- Implement exponential backoff on 429: wait `Math.min(5000 * 2^attempt, 60000)` ms, retry up to 3 times. Count the retry as consuming the next slot in the queue.
+- Log per-author fetch timing to the Action summary so 429 storms are visible in the run log.
+- Query InspireHEP for all authors sequentially first, then arXiv sequentially — do not interleave the two APIs in the same queue, as they share the same egress IP.
 
 **Warning signs:**
-- Lighthouse LCP > 2.5s on mobile even on fast 3G simulation.
-- CLS > 0.1 on the home page.
-- Axe / Lighthouse accessibility score flags "auto-updating content" or missing pause button.
+- First Action run succeeds but subsequent runs fail with `FetchError: 429` for author #N onward.
+- Action logs show some authors with 0 publications when they have many (silent 429 drops).
+- Re-running the Action manually (same time, same IP) fails more frequently than the scheduled 3am run (when CI load is lower).
 
 **Phase to address:**
-Phase 3 (home page build) for initial implementation, Phase 5 (Polish) for LCP/CLS verification via Lighthouse CI or WebPageTest.
+Sync script implementation — the rate-limit strategy must be baked into the fetcher from the first iteration, not retrofitted after the first CI failure.
 
 ---
 
-### Pitfall 3: next/image silently breaks static export
+### Pitfall 3: InspireHEP author BAI vs. `INSPIRE-XXXXXXXX` ID confusion in query syntax
 
 **What goes wrong:**
-The team builds with `vercel` as the target, `next/image` uses the default loader, everything works. Later someone runs `next build` with `output: 'export'` for university hosting — images either 404, or the build fails with "Image Optimization using the default loader is not compatible with `{ output: 'export' }`." Either way, the "static export escape hatch" promised in PROJECT.md is not actually working.
+InspireHEP exposes two author identifier types: the **BAI** (Bibliographic Author Identifier, format `E.Calzetta.1`) and the **INSPIRE ID** (format `INSPIRE-00140145`). These require different query syntaxes:
+
+- Authors endpoint: `https://inspirehep.net/api/authors?q=ids.value:INSPIRE-00140145`
+- Literature search by BAI: `https://inspirehep.net/api/literature?q=a+E.Calzetta.1`
+- Literature search by INSPIRE ID: syntax varies, often requires the author recid from the authors endpoint first
+
+A maintainer who pastes their `INSPIRE-00140145` into `people.json` as `inspirehep_id` will produce a different query than one who pastes their BAI `E.Calzetta.1`. If the sync script treats both formats identically, one format returns correct results and the other returns 0 papers or wrong papers.
+
+Furthermore, the InspireHEP API live query returned BAI-format IDs (`E.Calzetta.1`, `G.Perna.2`) in author records, not the `INSPIRE-00XXXXXX` format — meaning a user who looks up their own INSPIRE profile sees one format in the URL bar and another in the API response.
 
 **Why it happens:**
-Next.js's default image optimization is an on-demand API requiring a Node.js server. Static export has no server, so it must either use raw images (no optimization) or a custom loader pointing at an external image service. Teams don't discover this until they actually try to static-export, at which point pipelines and URLs have hardened.
+The InspireHEP author profile URL uses the `recid` (a number like `1274671`). The API documentation describes `INSPIRE-00140145` as the "INSPIRE ID." The BAI (`E.Calzetta.1`) is what appears in literature `authors[].ids.value`. These three identifiers serve different purposes and are not interchangeable in query syntax.
 
 **How to avoid:**
-- Decide day 1 whether static export is actually required. If "maybe later," still pay the small cost now: configure a custom image loader that works both ways.
-- Use `next-image-export-optimizer` (generates multiple sizes at build time, static-export-friendly) **or** configure `images.unoptimized: true` and accept un-optimized images for the static-export build path, **or** use an external image CDN (Cloudinary, imgix) via `loader: 'custom'`.
-- Run `next build` with `output: 'export'` in CI on every PR — even if production deploys to Vercel. This catches static-export regressions the day they're introduced.
-- Document in README which features of next/image work in each build target.
+- Standardize on **BAI format** (`E.Calzetta.1`) as the value stored in `people.json` as `inspirehep_id`. BAI is the format found in literature records' `authors[].ids.value` and is the most direct key for `q=a+BAI` literature searches.
+- Document clearly in the maintainer guide: "The BAI looks like `E.Calzetta.1` — find it on your INSPIRE profile under 'Author IDs'." Add an example screenshot.
+- The sync script should validate `inspirehep_id` format at startup: if the value matches `/^INSPIRE-\d+$/` (i.e., a user accidentally pasted their INSPIRE-ID rather than their BAI), log a clear error and skip that person rather than producing empty results silently.
+- If supporting both formats: detect format by regex, then use the appropriate query path (INSPIRE-ID → fetch author record to get BAI → query literature by BAI).
 
 **Warning signs:**
-- Only Vercel previews are tested; no one has actually run `output: 'export'` since project start.
-- Images render on Vercel but 404 on a local `next build && npx serve out/`.
-- `npm run build:static` doesn't exist as a script.
+- A person is in `people.json` with an `inspirehep_id` but the sync produces 0 publications for them when their INSPIRE profile shows 50.
+- The value in `people.json` starts with `INSPIRE-` (all uppercase, numeric suffix) vs. the BAI form (Last.Initial.N).
+- No format validation in the sync script — any string passes through silently.
 
 **Phase to address:**
-Phase 1 (Foundation) — set up dual build scripts (`build:vercel`, `build:static`) and a CI matrix that runs both. Cheap to do now, expensive to retrofit.
+Sync script foundation — the ID format decision and validation must be made before any fetching logic is written. Document the accepted format in the person schema's JSDoc comment.
 
 ---
 
-### Pitfall 4: One malformed JSON file kills the entire build
+### Pitfall 4: The `z.strictObject` on `PersonSchema` will reject `arxiv_id` and `inspirehep_id` until schema is updated first
 
 **What goes wrong:**
-A non-technical group maintainer edits `content/people.json` via GitHub web UI to add a new postdoc. They paste a smart-quote from Word, forget a comma, or add a trailing comma — `JSON.parse` throws, the Vercel build fails, the site goes down (or at minimum, no new content ships). Worse: editor fixes their mistake but commits a subtle schema error (e.g., `role: "PhD student"` instead of `category: "phd"`), the build succeeds, and a page renders broken data or crashes at runtime.
+`PersonSchema` is `z.strictObject(...)`. If a maintainer adds `arxiv_id: "garcia_m_1"` to `people.json` before the schema is updated to include that field, `pnpm check-content` fails at CI with "Unrecognized key: arxiv_id" — blocking all builds, not just the sync-related ones. The maintainer sees a cryptic Zod error and panics.
+
+Conversely, if the schema is updated to add `arxiv_id` and `inspirehep_id` but both are `z.string().optional()`, the JSON Schema file (`content/people.schema.json`) used for VS Code IntelliSense is NOT automatically regenerated — old schema shows red squigglies on valid new fields (see Pitfall 14).
 
 **Why it happens:**
-JSON is unforgiving (no comments, no trailing commas, strict quotes) and has no schema validation by default. The "JSON is simpler than a CMS" decision (PROJECT.md) is only true if there's validation tooling around it. Without validation, JSON is just "a broken CMS with no UI."
+Schema-first development discipline breaks down at schema boundaries: the Zod schema, the JSON Schema file, and the JSON data file are three separate artifacts that must stay in sync. Updating one without the others creates a state where tooling lies to maintainers.
 
 **How to avoid:**
-- Define a Zod schema for every content file (`PersonSchema`, `PublicationSchema`, etc.). Parse with `.parse()` at build time in the data-loader module — failure crashes the build loudly with a precise path to the bad record (e.g., `people[3].contact.email: expected string, got undefined`).
-- Validate in a pre-commit hook **and** in CI. Pre-commit catches typos locally; CI catches edits via GitHub web UI.
-- Provide editors with JSON Schema files (`content/schemas/*.schema.json`) so VS Code's built-in JSON IntelliSense autocompletes fields and flags errors live. Reference via `$schema` key at the top of each content file.
-- Consider YAML with a `.yaml` extension instead of JSON for the editor-facing files (more forgiving syntax, allows comments). Then compile to validated JS at build. But: introduces a build step and another tool to learn. For this project's scale (one group, infrequent edits), JSON + Zod + JSON Schema is the pragmatic sweet spot.
-- Document editor workflow in `content/README.md` with an example edit and a "what to do if the build fails" troubleshooting section.
+- The plan that extends `PersonSchema` with `arxiv_id` and `inspirehep_id` must also regenerate `content/people.schema.json` in the same commit. Run `pnpm generate-schemas` (or equivalent) as part of that plan's acceptance criteria.
+- Add a CI check that `pnpm generate-schemas` produces no diff from the committed `.schema.json` files. Drift between Zod schema and JSON Schema becomes a CI failure.
+- Add JSDoc on both new fields explaining the format: `/** BAI format, e.g. "E.Calzetta.1". Find on your INSPIRE profile under Author IDs. */`
 
 **Warning signs:**
-- No schemas exist for content files.
-- Data loader uses `JSON.parse(readFileSync(...))` without validation.
-- No CI step that explicitly exercises the loader before `next build`.
+- `pnpm check-content` passes but VS Code shows red squigglies on `arxiv_id` fields.
+- `pnpm check-content` fails for a person who added `arxiv_id` before a developer updated the Zod schema.
+- `git diff` on `content/people.schema.json` after running the schema generator shows non-empty diff.
 
 **Phase to address:**
-Phase 2 (Data Layer / content architecture) — Zod schemas and loader are foundational and should land before any page consumes the data.
+First plan of v1.1 that touches schemas — the schema + JSON Schema file + JSDoc must be one atomic commit.
 
 ---
 
-### Pitfall 5: Photo references point to files that don't exist
+### Pitfall 5: GitHub Actions `GITHUB_TOKEN` cannot push to a protected main branch by default
 
 **What goes wrong:**
-`content/people.json` lists `"photo": "/people/jdoe.jpg"` but no one uploaded `jdoe.jpg`. Next.js Image throws at render (or shows broken alt text). Or the file exists but is the wrong dimensions, breaking the 400×400 square grid. Or the file is 8 MB because no one compressed it. Or all 13 people have photos, but the PI emeritus added last week doesn't, and that card breaks the layout.
+The weekly cron Action needs to commit the refreshed `content/publications.json` and push to `main`. The default `GITHUB_TOKEN` has `contents: read` by default (or `write` if the repo setting is permissive), but **even with `contents: write`, the default `GITHUB_TOKEN` cannot push to a branch protected by branch protection rules** (e.g., "Require status checks to pass", "Require pull request reviews"). If main has any protection rule, the push returns `403 Permission denied` or `remote: error: GH006: Protected branch update failed`.
+
+Furthermore, a commit made by the Action with `contents: write` GITHUB_TOKEN does NOT trigger other workflows (to prevent infinite loops) — so a push from the Action won't trigger the `pnpm check-content` CI run that would normally guard a push. This means a bug in the sync script could commit invalid JSON that bypasses all guards.
 
 **Why it happens:**
-JSON references are strings — the type system can't verify the referenced file exists. Non-technical editors add a new person entry days before uploading the photo, assuming it'll "work when I add the image."
+Developers assume the bot token is equivalent to a repo admin push. The distinction between `contents: write` (which the GITHUB_TOKEN can be granted) and bypass of branch protection rules (which only PATs or GitHub Apps can do) is easy to miss until the first 403 in CI.
 
 **How to avoid:**
-- Loader validates that every `photo` path resolves to a file in `public/`. Use `fs.existsSync` (build-time only) or a build-time glob check. Fail the build on missing references.
-- Always provide a deterministic placeholder when `photo` is absent: a styled avatar with the person's initials, using the same 400×400 square. Do not rely on a `photo` field being present.
-- Run `sharp` at build time over `public/people/*` to verify min dimensions and max file size. Warn (not fail) if over 500 KB; fail if dimensions don't satisfy the component's expected aspect ratio.
-- Schema makes `photo` optional with a fallback, **or** required with a known placeholder path — never "required string, trust it exists."
+- **Option A (simplest):** Keep main unprotected or add a bypass rule for `github-actions[bot]`. This is appropriate for a small private academic repo where all writers are trusted. Document this as a deliberate choice.
+- **Option B (belt-and-suspenders):** The Action creates a branch (`sync/publications-YYYY-MM-DD`), commits the updated JSON there, opens a PR, and auto-merges if CI passes. More CI minutes, but the guard works.
+- **Option C:** Use a fine-grained PAT with `contents: write` stored as a repository secret. Only necessary if branch protection is needed.
+- In the workflow, always set `permissions: { contents: write }` explicitly — relying on the repo default is fragile across repo settings changes.
+- The sync Action should also run `pnpm check-content` on the generated JSON before committing. This restores the guard that the GITHUB_TOKEN push would bypass.
 
 **Warning signs:**
-- `Error: Failed to load image /people/missing.jpg` in build logs or Vercel deploy logs.
-- Photos visibly vary in size or aspect ratio on the People page.
-- Page Weight audit shows photo files > 500 KB each.
+- First cron run fails with `remote: error: GH006` or `error: failed to push some refs`.
+- Action logs show `Successfully committed` but the commit never appears in `main` history.
+- Branch protection was added after the workflow was written and tested.
 
 **Phase to address:**
-Phase 2 (Data Layer) for validation logic; Phase 3 (People pages) for placeholder component.
+GitHub Action implementation — test the push step in a separate branch before relying on the cron.
 
 ---
 
-### Pitfall 6: Language switcher loses the current page (and breaks SEO)
+### Pitfall 6: Empty-diff push triggers unnecessary Vercel rebuild every week
 
 **What goes wrong:**
-User is on `/en/people/maria-rodriguez`, clicks the ES toggle, and lands on `/` (home) instead of `/people/maria-rodriguez`. Screen reader doesn't announce the language change. Or the switch works but on `localePrefix: 'as-needed'` the href includes `/es/` prefix briefly before a redirect, causing a flash.
+The weekly Action runs, fetches publications, and writes `content/publications.json`. If the upstream data is identical to what was committed last week (no new papers, no corrections), the file content is byte-for-byte the same. The Action still runs `git commit` — which creates a commit if there's no `--allow-empty` guard. If there IS a diff (even whitespace from JSON serialization order differences), Vercel rebuilds the entire site. Over a year this is 52 unnecessary builds.
+
+More subtly: if the JSON serializer outputs keys in a different order than last week (because `Object.keys()` iteration order changed across Node.js versions, or InspireHEP response ordering shifted), every weekly run produces a non-empty diff even with zero data changes, causing a rebuild every time.
 
 **Why it happens:**
-Default language switchers are often wired as a `<Link>` to `/` with the new locale. Preserving the current pathname requires reading `usePathname()` and stripping/re-adding the locale prefix. With next-intl's `as-needed` strategy, the `Link` component intentionally uses a prefixed href to set a cookie, then redirects — designers don't realize this is the expected behavior.
+JSON serialization is not deterministic across environments unless explicitly sorted. `JSON.stringify(obj)` outputs keys in V8's insertion-order, which varies based on how the object was constructed. InspireHEP pagination order may shift slightly between runs.
 
 **How to avoid:**
-- Use next-intl's `useRouter()` + `router.replace(pathname, { locale: 'en' })` from `@/i18n/navigation`, which handles locale swapping correctly.
-- For non-dynamic routes, the switcher should render two `<Link>` components (one per locale) with preloaded hrefs to the same path in each language. This works without JS and is accessible.
-- Add `aria-label` to the switcher ("Switch to English" / "Cambiar a inglés"), and use `<html lang="...">` set from the active locale — screen readers pick this up on page change.
-- Keep the switcher visible on every page (not hidden behind a menu), and show the **target** language label, not the current one. Label should be in the target language ("English" to switch to EN, "Español" to switch to ES) — widely understood convention.
-- Preserve dynamic params: for `/people/[slug]`, `router.replace` keeps the slug. If you ever translate slugs per-locale (e.g. `/gente/...` in ES), use next-intl's `pathnames` config rather than rolling your own mapping.
+- Before committing, check for an actual diff: `git diff --quiet content/publications.json || git commit -m "..."`. If no diff, skip the commit entirely and log "No changes — skipping commit" to the Action summary.
+- Sort the output JSON deterministically: sort the publications array by year descending, then by ID alphabetically. Serialize with `JSON.stringify(sorted, null, 2)` and a fixed 2-space indent. This makes the output byte-stable across runs for identical data.
+- Use Vercel's "Ignored Build Step" to skip builds when `content/publications.json` hasn't changed: `git diff HEAD^ HEAD --quiet -- ./content/publications.json` (exit 0 = skip, exit 1 = build). This is a safety net even if the Action commits a no-op.
+- In the Action summary, always log: "Changed: X entries added, Y removed, Z modified" — makes the delta human-readable for maintainers.
 
 **Warning signs:**
-- Toggling language on `/publications?year=2024` loses the query param.
-- `<html lang>` attribute doesn't change when locale changes.
-- Lighthouse flags "Document doesn't have a `lang` attribute" on subroutes.
+- Vercel deployment history shows a build every week at the same time, even during long academic breaks when no papers are published.
+- `git log --oneline content/publications.json` shows weekly commits with no substantive change to the content.
+- JSON diff shows only key-ordering changes between adjacent weeks.
 
 **Phase to address:**
-Phase 3 (Navigation component) — design and test the switcher once; all other pages depend on it working.
+GitHub Action implementation — the diff-check and sort must be in the initial implementation. Retrofitting later means weeks of spurious builds have already burned Vercel minutes.
 
 ---
 
-### Pitfall 7: Sitemap and hreflang don't list locale alternates
+### Pitfall 7: arXiv `<published>` vs. InspireHEP `preprint_date` — year-grouping produces wrong year for some papers
 
 **What goes wrong:**
-Google indexes only the Spanish or only the English version. International academic peers searching in English can't find the group. Search Console shows "Alternate page with proper canonical tag" warnings or "Conflicting hreflang" errors. The default Next.js `sitemap.ts` outputs one URL per page without `<xhtml:link rel="alternate" hreflang="...">` tags — Google doesn't discover the English variant.
+`<published>` in the arXiv Atom feed is "the date that version 1 was submitted." For a paper submitted in late December and published in January, this is December of the previous year. InspireHEP's `preprint_date` is the same date (arXiv submission). Neither is the "publication year" on the journal record — that may differ by 6–18 months (cosmology papers often appear on arXiv well before formal publication).
+
+The `/publications` page groups by `year`. If year is derived from `preprint_date`, a paper submitted 2024-12-28 but published in JCAP in 2025 appears under 2024 in the academic list — which reads as wrong to researchers who cite it as "Smith et al., JCAP 2025."
 
 **Why it happens:**
-Next.js's `MetadataRoute.Sitemap` type supports an `alternates.languages` object but it's not auto-populated — developers must build it explicitly. When `localePrefix: 'as-needed'`, next-intl disables automatic alternate-link headers because URLs without prefixes aren't unique (both ES and EN might map to `/`). Teams copy the default sitemap example from Next.js docs and ship mono-locale sitemaps.
+The sync script uses the most readily available date (the preprint date, which is always present) rather than the published date (which is in `publication_info[].year` in InspireHEP but may be absent for recent preprints).
 
 **How to avoid:**
-- Build `app/sitemap.ts` that iterates `locales × routes` and emits one entry per page with `alternates.languages = { es: '...', en: '...', 'x-default': '...' }`. `x-default` should point to the Spanish (default) version.
-- Use `generateMetadata` in every route to set `alternates.canonical` (the Spanish URL for default-locale pages) and `alternates.languages` — hreflang tags are then injected into `<head>` per page.
-- Verify every hreflang target returns HTTP 200 (no redirect chains). Use a sitemap validator tool in CI.
-- Also emit a `robots.txt` that references the sitemap.
-- Do NOT set the same canonical URL on both ES and EN variants — that tells Google to drop one from the index.
+- For InspireHEP records: use `publication_info[0].year` if present (this is the journal publication year); fall back to `parseInt(preprint_date.slice(0,4))` for preprints without a published year.
+- For arXiv records: parse year from `<published>` (version 1 submission date). Accept that preprint-only records will use submission year — this is the convention on arXiv author pages.
+- The `source` tag already differentiates the two — render arXiv-source entries with a "Preprint" label in the journal column, which makes the year ambiguity explicit to the reader.
+- Document this decision in a code comment in the sync script: "Year = published year if available, else submission year. Preprint-only records use submission year."
 
 **Warning signs:**
-- `view-source:` on any page shows no `<link rel="alternate" hreflang="...">` tags.
-- `sitemap.xml` has N entries (one per page) instead of N×2 or N with embedded alternates.
-- Search Console under `/en/*` shows "Duplicate without user-selected canonical" or "Alternate page with proper canonical tag."
+- A recent paper appears under the wrong year on the publications page.
+- `publication_info` is not being read from InspireHEP records — only `preprint_date` is used.
+- A paper with an InspireHEP record shows `journal: "Preprint"` when it was actually published in Phys. Rev. D.
 
 **Phase to address:**
-Phase 4 (SEO / metadata) — sitemap and metadata alternates land together. Blocks indexing of the second locale.
+Sync script implementation — year extraction logic must handle both sources consistently. Include a test case with a paper that spans a December submission / January publication.
 
 ---
 
-### Pitfall 8: Email addresses get harvested and scholars drown in spam
+### Pitfall 8: arXiv author-name collision — "M. Rodríguez" on 200 papers is not all the same person
 
 **What goes wrong:**
-`mailto:juan.perez@df.uba.ar` appears in raw HTML across 13 people pages and one contact page. Harvesters scrape it within weeks. The PI's inbox fills with spam (conferences, predatory journals, paper solicitations). They blame the website.
+The v1.1 design uses explicit `arxiv_id` (an arXiv author identifier like `garcia_m_1`) to fetch papers via the arXiv API's author search. However, arXiv author IDs require the author to have **opted in** to the arXiv author claiming system. For group members who have NOT claimed their papers on arXiv, the sync script falls back to name-based search (`au:Rodriguez_M`), which matches all 347 papers by anyone named "M. Rodriguez" on arXiv — including other researchers at other institutions.
+
+The result: the publications list for María Rodríguez includes papers by a Meteorología professor in Mexico City and a condensed matter physicist in Spain. All have `au:Rodriguez_M` matching.
 
 **Why it happens:**
-The academic instinct is to publish contact info openly ("of course my email is on my page"). Mailto links in raw HTML are the #1 vector for email harvesters — plain-text `@` and `.` are trivially scraped. Most institutional sites don't bother obfuscating.
+arXiv's legacy API search uses last name + first initial with no institutional disambiguation. The author claiming system is opt-in and has low adoption. Name-based fallback sounds safe but is systematically over-inclusive for common Spanish surnames.
 
 **How to avoid:**
-- Store emails in JSON split form: `{ "local": "juan.perez", "domain": "df.uba.ar" }`. Never render the full address as a string during SSR.
-- Client-side-only reveal: render a button "Show email" that JavaScript assembles on click. Harvesters that don't execute JS (most) see nothing. For users without JS (rare), a `<noscript>` with a less-obvious form like "juan.perez [at] df.uba.ar" is acceptable.
-- Alternative: render the email as an inline SVG `<text>` element. Text is visually identical, copy-paste works on modern browsers, harvesters that only parse HTML text nodes miss it.
-- Do not use a pure JavaScript obfuscator that builds the mailto link on page load — the assembled href ends up in the rendered DOM, which advanced harvesters read.
-- For a contact form, implement rate limiting + honeypot field + (if on Vercel) built-in DDoS protection. Do not expose a contact email for the contact form — use a form + mailer.
-- Document the reveal pattern in a reusable `<EmailLink>` component so every appearance of an email across the site is protected consistently.
+- Make `arxiv_id` (the claimed author ID like `garcia_m_1`) the *required* path for arXiv queries. If a member has no claimed arXiv ID, skip arXiv for that member — do not fall back to name-based search. Log a clear warning: "No arXiv ID for [person] — skipping arXiv fetch. Add arxiv_id to people.json."
+- For the initial rollout, add arXiv IDs only for members who have them. The list will be incomplete, but correct. An incomplete list is better than a polluted one.
+- For members where only InspireHEP is available (because they haven't claimed arXiv), their papers still appear via InspireHEP — InspireHEP's author profile deduplication is more rigorous and curator-assisted.
+- Document in the maintainer guide: "How to find your arXiv author ID" — it's at `https://arxiv.org/a/[surname]_[initial]_[N]`.
 
 **Warning signs:**
-- `curl https://the-site.com/people/... | grep '@'` returns any real email address.
-- No component called `<EmailLink>` or equivalent exists.
-- Person bios contain raw `mailto:` strings.
+- The publications list for any person contains papers from obvious wrong institutions or wrong subfields.
+- The sync script uses `au:` search without checking whether `arxiv_id` is present.
+- Author counts on the publications page are implausibly high (>50 papers/year for a PhD student).
 
 **Phase to address:**
-Phase 3 (People detail pages and Contact page) — one reusable component, but must be enforced everywhere. Add a Grep-based lint check in CI to forbid `mailto:` strings in JSX.
+Sync script foundation — the no-fallback policy must be enforced from the start, not discovered after the first erroneous sync contaminates the JSON.
+
+---
+
+### Pitfall 9: InspireHEP pagination truncation — senior PI with 120+ papers gets silently capped
+
+**What goes wrong:**
+InspireHEP defaults to 10 results per page. A naive script that requests without `size=` or with `size=25` will silently truncate a senior PI's publication list. Esteban Calzetta has 80+ papers; a request with `size=25&page=1` returns 25; the script stores 25. The publications page shows "25 publications" for the PI — which looks wrong and is professionally embarrassing.
+
+Conversely: requesting `size=1000` (the max) for every author and paginating through all results regardless of age pulls 30 years of papers for a senior PI. For a group of 15, that's 15 × potentially 500–1000 papers. The Action takes 5 minutes and the resulting JSON is enormous — which slows the Next.js build.
+
+**Why it happens:**
+Developers set a page size that feels "big enough" and don't verify completeness against the author's actual profile count. The total is in the response (`hits.total` in InspireHEP), but it's easy to miss.
+
+**How to avoid:**
+- Always read `hits.total` from the first InspireHEP response and compare to the number of results received. If `total > size`, page until all results are fetched or the configured cap is reached.
+- Set a **configurable cap** in the sync script (e.g., `MAX_PAPERS_PER_AUTHOR = 200`). For a cosmology group website, papers older than 20 years rarely need to appear. Fetch only papers from the current year minus N years (e.g., `q=... AND date:2000--2026`).
+- For the `/publications` page, the intent is a group archive — a sane limit is the last 10–15 years, not the PI's full career. Make this the default and document it.
+- Log the per-author totals to the Action summary: "Calzetta: fetched 87 of 87 papers." An unexpected "fetched 25 of 87" surfaces the truncation problem.
+
+**Warning signs:**
+- A PI's publications count on the site is lower than their InspireHEP profile count by a factor of 2 or more.
+- The sync script has a fixed `size=25` or similar without pagination logic.
+- `hits.total` is not read or logged anywhere in the script.
+
+**Phase to address:**
+Sync script implementation — pagination + cap + logging must be in the initial version.
+
+---
+
+### Pitfall 10: "Planck Collaboration" paper appears in every PI's publication list
+
+**What goes wrong:**
+Several cosmology researchers have papers authored as "Planck Collaboration: Smith, A.; García, M.; ..." where hundreds of authors are listed. ArXiv and InspireHEP include the individual author in the author list, so any query by `au:Garcia_M` returns the Planck Collaboration paper as a genuine match.
+
+When synced, this paper appears in the publications list for EVERY group member who was a Planck collaborator — three or four people — and appears three or four times in the combined list. Even with source-tagging (no DOI dedup in v1.1), the same paper with the same title appears multiple times with the same year. The `/publications` page lists "Planck 2018 Results: Cosmological Parameters" three times.
+
+This is not an arXiv/InspireHEP error — the paper genuinely belongs to each person's publication record. But the UX reads as a bug.
+
+**Why it happens:**
+Multi-hundred-author collaboration papers are standard in experimental HEP/cosmology but unusual in software development. Publication sync scripts designed for individual researchers don't account for papers that are legitimately on multiple group-member records.
+
+**How to avoid:**
+- Even without DOI dedup (v1.1 constraint), implement **title-and-year dedup** as a post-processing step before writing the JSON. A paper with an identical title and year that appears multiple times (from different author queries) is merged into a single entry. The `source` field becomes an array: `["inspirehep", "arxiv"]` if needed, or remains the first source encountered.
+- The simplest signal: if `arxiv_eprints[].value` (the arXiv ID) is identical across two entries, they are the same paper regardless of which author query returned them.
+- Alternatively: accept the duplication but collapse it in the UI — the `/publications` page de-duplicates by arXiv ID or DOI when rendering, so the JSON may have duplicates but the page doesn't show them.
+- Log a warning in the Action summary when duplicates are detected: "Detected 3 duplicate entries by arXiv ID — merged into 1."
+
+**Warning signs:**
+- The publications list shows the same paper title 2–4 times in the same year.
+- Large collaboration papers (Planck, Euclid, LSST) are repeated.
+- `publications.json` has two entries with identical `arxiv` field values.
+
+**Phase to address:**
+Sync script implementation — dedup by arXiv ID is a cheap O(n) pass and should be in the first version. This is distinct from the deferred "cross-source DOI dedup" — it's within-run dedup, not cross-source semantic dedup.
 
 ---
 
 ## Moderate Pitfalls
 
-### Pitfall 9: Placeholder-to-real content breaks layout
+### Pitfall 11: tsx path aliases work inside Next.js but break in the standalone sync CLI
 
 **What goes wrong:**
-Placeholder data uses names of uniform length ("Dr. Placeholder One", "Dr. Placeholder Two"), 2-line bios, and 400×400 photos. Real data arrives with names like "Dra. María Guadalupe Fernández-Rodríguez de la Vega", 6-line bios with line breaks, and photos that are 600×800 portrait crops. Card grid breaks, bio text overflows, images get distorted.
+The sync script imports from `@/content/schemas/publications.schema` (using the `@/` path alias defined in `tsconfig.json`). Running the script with `tsx scripts/sync-publications.ts` works locally because `tsx` reads `tsconfig.json` paths. Running it in a bare `node` invocation (e.g., if the Action calls `node dist/sync.js` after compiling) fails with `Cannot find module '@/content/schemas/publications.schema'`.
+
+More subtly: the Action's Node.js version may differ from the local dev version. If the sync script uses Node.js 20 features (e.g., native `fetch`) but the Action runner defaults to Node.js 18, the script crashes with no clear error.
+
+**Why it happens:**
+`tsx` handles path aliases at runtime by reading `tsconfig.json`. Compiled output does not — `tsc` does not rewrite alias paths in output files by default. This works invisibly in the Next.js build (handled by webpack) but breaks for standalone Node.js scripts.
 
 **How to avoid:**
-- Placeholder data must stress-test the layout: include one name that is unreasonably long, one bio that is the maximum expected length, one photo that is portrait-orientation cropped to the square container with `object-fit: cover`.
-- CSS: use `text-wrap: balance` on names, `line-clamp` on bios with a "read more" link to the detail page, and fixed aspect ratios on photo containers.
-- Type the photo field to enforce consistency: during build, pipe all photos through `sharp` to produce standardized 400×400 and 800×800 variants. Editors upload anything; the build normalizes.
-- Test in both ES and EN — Spanish runs ~25% longer than English for the same content, so copy that fits in EN may wrap awkwardly in ES.
+- Use `tsx` directly in the Action: `npx tsx scripts/sync-publications.ts`. This is the simplest approach and avoids the compiled-output path problem.
+- Set `node-version: '20'` explicitly in the Action's `setup-node` step. Do not rely on the runner default.
+- Keep the sync script's imports of project schemas minimal: import only the Zod schema type and the schema object — not Next.js-specific modules, client components, or anything that requires the full webpack build graph.
+- Validate in CI (not just locally): the Action should fail with a clear error if the import fails, not a silent `undefined`.
+
+**Warning signs:**
+- Script works with `pnpm tsx scripts/sync.ts` locally but the Action shows `Cannot find module '@/...'`.
+- Action uses `node scripts/sync.js` instead of `tsx scripts/sync.ts`.
+- The Action's Node.js version is not pinned.
+
+**Phase to address:**
+GitHub Action implementation — the `run:` step invocation command and Node.js version must be tested in CI from the first commit.
 
 ---
 
-### Pitfall 10: Publications list becomes unmaintainable
+### Pitfall 12: v1.0's `publications_selected` references break when `publications.json` is rewritten
 
 **What goes wrong:**
-PROJECT.md says publications are placeholder-only, real importer deferred to v2. But even placeholder publications lists grow: once real data lands, 150+ publications across 10+ years in one JSON file is painful to edit. Filters (by year, author, topic) were designed for 30 entries and slow down at 300. "Group by year" collapses become scroll-hell.
+`content/people.json` has `publications_selected: []` on every person (currently empty arrays in the v1.0 data, but the field exists). The v1.0 schema treats this as `z.array(z.string()).optional().default([])` — IDs referencing `content/publications.json`. If the sync script completely replaces `publications.json` with auto-generated entries, the IDs in `publications_selected` (if any maintainer has populated them before the sync) become stale references to entries that no longer exist.
 
-**How to avoke:**
-- Design the schema now to match what an arXiv/ADS importer will produce later (BibTeX-compatible fields: `authors[]`, `title`, `journal`, `year`, `arxiv_id`, `doi`). Placeholder data should use the exact shape. Prevents a schema migration when v2 lands.
-- Split publications into year-indexed files (`content/publications/2024.json`, `2023.json`, ...) rather than a single monolith. Editors touch only the current year's file most of the time; git diffs stay readable.
-- Default the publications page to "latest 20 + year filter" rather than rendering all publications at once. Each year filter loads its own JSON chunk.
-- Filter client-side with a lightweight index, not by re-rendering 300 DOM nodes.
+The locked decision says v1.1 profile pages use author-match filtering, not a `publications_selected` list. But the field remains in the schema and JSON. If a future maintainer adds an entry to `publications_selected` (e.g., before fully reading the docs), the prebuild validator may silently pass a reference to a non-existent ID.
+
+**Why it happens:**
+The field is vestigial but not removed. The cross-file ID validation in the prebuild script (`scripts/validate-content.ts`) does not currently validate `publications_selected` references against the publication ID list (this was deferred in Plan 02-05). The v1.1 sync replaces the ID space, breaking any existing references without warning.
+
+**How to avoid:**
+- At v1.1 launch, remove or deprecate `publications_selected` from `PersonSchema` — or rename it to `publications_pinned` with a clear JSDoc saying "IDs from the auto-synced publications.json — use the INSPIRE BAI search to find the correct ID."
+- If keeping the field, activate the cross-file ID validation in the prebuild script at v1.1 launch. A stale reference should be a build failure, not a silent miss.
+- Update the maintainer guide to say: "Do not manually populate `publications_selected` until you know the auto-generated ID for your paper."
+
+**Warning signs:**
+- `publications_selected` contains non-empty arrays in `people.json` before the sync migration is complete.
+- The prebuild script skips cross-file ID validation (the deferred `// TODO:` comment from Plan 02-05).
+- A person's profile page renders an empty publications section despite `publications_selected` being populated.
+
+**Phase to address:**
+Migration plan — remove or deprecate `publications_selected` OR activate the cross-file validator in the same plan that rewrites `publications.json`.
 
 ---
 
-### Pitfall 11: Broken external links (link rot) accumulate silently
+### Pitfall 13: JSON Schema for VS Code goes stale after Zod schema changes
 
 **What goes wrong:**
-A PI links to their ORCID page, Google Scholar, personal homepage, a paper's arXiv URL. Over 2–5 years, ~30% of external links rot (reports vary from 25% at 2 years to 66% at 9 years). The group site looks stale and unreliable.
+`content/publications.schema.json` and `content/people.schema.json` are generated from the Zod schemas via `pnpm generate-schemas`. After adding `source`, `arxiv_id`, and `inspirehep_id` to the Zod schemas, the JSON Schema files are not regenerated. VS Code IntelliSense:
+- Shows red squigglies on valid `source: "inspirehep"` fields (not in old JSON Schema).
+- Autocompletes the old field list — no suggestions for the new fields.
+- Maintainers conclude the data format is wrong and revert their edits.
+
+This is a developer experience failure, not a build failure — the build passes fine (Zod is the authoritative validator). But it breaks the "editors get CMS-level IntelliSense" guarantee from v1.0.
+
+**Why it happens:**
+The JSON Schema files are generated artifacts that require a manual regeneration step. Developers making schema changes focus on the TypeScript/Zod side and forget to regenerate.
 
 **How to avoid:**
-- Prefer stable identifiers: DOIs for papers (`https://doi.org/...`), ORCID IDs for people, arXiv IDs (`arxiv.org/abs/...`). Avoid linking to author-hosted PDFs or personal homepages when a DOI exists.
-- Add a weekly scheduled link-check: run `lychee` (Rust link checker) via GitHub Actions over `content/**/*.json` and open an issue listing broken links. Editors see a curated list, not a silent rot.
-- For each external link in the schema, add a `checked_at: ISODate` field the link-checker updates. Oldest links surface first for review.
-- For past-member pages, archive at `web.archive.org` proactively and link to the archive if the original dies.
+- Add `pnpm generate-schemas` as a required step in the plan checklist for every schema change. Make it the first step, before writing any test data.
+- Add CI check: `pnpm generate-schemas && git diff --exit-code content/*.schema.json`. If the JSON Schema files differ from what the generator produces, fail the build. This catches stale schemas on every PR.
+- Commit the regenerated JSON Schema files in the same commit as the Zod schema change — never in a separate "fix schema" follow-up commit.
+
+**Warning signs:**
+- VS Code shows red squigglies on `source: "inspirehep"` entries in `publications.json`.
+- `git diff content/publications.schema.json` shows no change after a Zod schema modification.
+- A maintainer reports "the file says my data is wrong but it looks right."
+
+**Phase to address:**
+Same plan as the schema changes — not a follow-up.
 
 ---
 
-### Pitfall 12: Fonts cause FOUT / CLS even with next/font
+### Pitfall 14: Sync failure goes unnoticed for weeks — site serves stale data silently
 
 **What goes wrong:**
-Designer picks a Google Font with 6 weights and both italics. Next.js downloads all 12 font files at build, `<head>` becomes heavy, or CLS appears because the fallback font and custom font have very different metrics.
+The weekly cron Action fails (API downtime, rate limit cascade, Node.js error). The fallback behavior is correct: `content/publications.json` is not updated, the site deploys with last-good data. But if the Action continues failing for 4 weeks in a row, the site is serving January data in April with no visible indicator to maintainers or end users.
+
+GitHub sends cron failure emails to the repo owner only if the `on.schedule` workflow fails — but the default notification setting for many repos is "off" or routed to a generic email the PI rarely checks.
+
+**Why it happens:**
+"Fail gracefully" is implemented (last-good JSON), but "fail visibly" is not. Academic maintainers are not monitoring CI dashboards.
 
 **How to avoid:**
-- Pick one variable font (e.g., Inter, Source Serif) that covers all needed weights in a single file. Avoid loading 4+ static weight files.
-- Use `next/font/local` to self-host (required for static export compatibility — `next/font/google` also self-hosts the files at build, but confirm with the version in use).
-- Specify only the `subsets` actually used (`['latin', 'latin-ext']` for Spanish; English fits in `latin`). Do not default to loading Cyrillic, Greek, Vietnamese, etc.
-- Let Next.js auto-calculate `adjustFontFallback` metrics — it matches system font metrics to the custom font to eliminate the layout shift when the custom font finally paints.
-- Test with DevTools network throttling on "Fast 3G" and verify no FOUT/CLS.
+- In the Action workflow, after a failure, write a `SYNC_FAILED` marker file or GitHub Actions summary with a clear timestamp. On the next run, if the marker is older than 14 days, escalate to an issue: use `gh issue create` with the label `sync-failure` and tag the repo maintainer.
+- Add a "last synced" timestamp to the JSON (as a top-level comment or a `_meta` field): `{ "_meta": { "synced_at": "2026-04-14T03:00:00Z", "status": "ok" }, "publications": [...] }`. The build step can read this and log a warning if `synced_at` is more than 21 days old.
+- Configure GitHub Actions notification settings: Settings → Notifications → "Notify me via email when a workflow run fails for workflows I have access to."
+- Document in the maintainer guide: "If you haven't seen a new publication in 4+ weeks and you know one was submitted, check Actions → weekly-sync for recent failures."
+
+**Warning signs:**
+- The Actions tab shows red for multiple consecutive weeks.
+- The `_meta.synced_at` timestamp in `publications.json` is more than 3 weeks old.
+- A group member asks "why isn't my new paper showing up?" more than 2 weeks after submission.
+
+**Phase to address:**
+GitHub Action implementation — failure visibility must be designed in from the start, not added as a post-launch patch.
 
 ---
 
-### Pitfall 13: Google Maps iframe tanks performance
+### Pitfall 15: Author display doesn't link group members to their `/people/[slug]` profiles
 
 **What goes wrong:**
-The contact page embeds `<iframe src="https://www.google.com/maps/embed?...">`. Even with `loading="lazy"`, Chrome prefetches iframes near the viewport on scroll, and the Maps embed pulls ~2 MB of JS and blocks the main thread ~300 ms. Lighthouse flags "Reduce the impact of third-party code."
+The publications list renders author strings like "Rodríguez, M." and "Gómez, L." as plain text. A visitor to the publications page cannot tell which of these are group members vs. external collaborators. Clicking "Rodríguez, M." does nothing. The `/people/[slug]` pages exist and are linked from the People nav, but there is no cross-link from Publications to People.
+
+The subtler failure: the v1.0 people data uses placeholder names that don't match the exact author strings returned by InspireHEP/arXiv (e.g., `people.json` has "Esteban Calzetta" but InspireHEP returns "E. Calzetta" or "Calzetta, E."). The author-linking logic needs a fuzzy match between the normalized name in `people.json` and the format returned by the API.
+
+**Why it happens:**
+The initial UI design renders authors as a flat string. Adding hyperlinking requires cross-referencing the author list against `people.json` at render time, which was not in scope for v1.0 publications rendering.
 
 **How to avoid:**
-- Don't embed the live map by default. Render a static map image (Google Static Maps API, or a screenshot) with a button "Open in Google Maps" that links to `https://www.google.com/maps/place/...`. Keeps TTI fast and respects privacy.
-- If an interactive map is required, use `IntersectionObserver` to inject the iframe only when the user scrolls within 200px of it — i.e., on intent, not on page load.
-- Alternative: an `<iframe>` inside a `<details>` element that users expand ("Show map"). Map loads only on open.
-- Account for cookie consent: Google Maps sets cookies. If GDPR/consent banner is in scope, the map must be gated behind consent.
+- On the person record in `people.json`, add a field `author_names: string[]` — the canonical forms of the author's name as they appear in publication records (e.g., `["E. Calzetta", "Calzetta, E.", "Esteban Calzetta"]`). This is maintainer-controlled and avoids fuzzy matching.
+- At build time (not runtime), generate a lookup table `{ "E. Calzetta": "esteban-calzetta", "Calzetta, E.": "esteban-calzetta" }` from `people.json`. The publications page uses this to wrap known author names in `<Link href="/people/esteban-calzetta">`.
+- Alternatively, accept the simpler MVP: bold group member names (the maintainer controls `author_names`) without hyperlinking. Hyperlinking is a later enhancement.
+- The `author_names` field should be optional in the schema — people without it just don't get their name linked.
+
+**Warning signs:**
+- Publications page renders all author names as plain text with no visual distinction between group members and external collaborators.
+- The `/people/[slug]` page exists but is reachable only via the People nav, not from publication author lists.
+- No cross-reference between `people.json` name variants and `publications.json` author strings exists in the codebase.
+
+**Phase to address:**
+Integration phase (connecting sync output to the existing publications page component) — design the cross-reference before the publications page is updated to consume the new data.
 
 ---
 
-### Pitfall 14: Carousel is the only way to see multiple hero items
+### Pitfall 16: v1.0's 20 curated entries disappear on first sync without an archive decision
 
 **What goes wrong:**
-Important content (research highlights, news, upcoming events) is hidden behind carousel slides 2 and 3. Studies consistently show carousel slide-2 click-through is <2% and slide-3 is <1%. A visitor who doesn't wait the 6 seconds never sees slides 2–3.
+The v1.0 `content/publications.json` contains 20 carefully chosen placeholder publications that shaped the page layout and design. The sync script overwrites this file entirely on first successful run. The 20 entries are:
+- Gone from the live site immediately.
+- Still in git history (recoverable, but requires a developer).
+- No longer "curated" — the sync pulls everything the APIs return.
+
+If a maintainer had manually edited any of these entries (adjusted topic tags, corrected an abstract, added a non-arXiv paper), those edits are lost.
+
+**Why it happens:**
+"Replace publications.json with the API output" is the natural implementation of a sync script. The question of what happens to the existing data is not answered until the first run destroys it.
 
 **How to avoid:**
-- Use the hero carousel only for visual branding (rotating imagery, not distinct "messages"). Each slide should be an equally valid representation of the group, not an important call-to-action.
-- Put genuinely important content (highlights, calls for PhD applicants, recent paper announcements) in a dedicated section below the fold with its own grid — no rotation.
-- If a rotating announcements module is truly wanted, make it non-auto-advancing, or auto-advance only after user interaction.
+- Decide the migration strategy before writing the sync script:
+  - **Option A (recommended for this group):** Archive `content/publications.json` as `content/publications-v10-archive.json` before the first sync. The sync script writes a fresh `content/publications.json`. The old file is preserved in git for reference but not used by the build.
+  - **Option B:** The sync script merges API-fetched entries with a `source: "manual"` allow-list in `content/publications-manual.json`. Both files are read at build time. Manual entries are never overwritten.
+  - **Option C:** Accept the loss — the 20 v1.0 entries were placeholder data anyway, and the sync replaces them with real data. This is correct only if NO v1.0 entries have been manually edited with real content.
+- For this project's context (all v1.0 entries are placeholder data), Option C (clean replacement) is acceptable. Document the decision explicitly in a comment in the sync script.
+- In the Action commit message, include "Replaces v1.0 placeholder data on first run" so the git history documents the migration.
+
+**Warning signs:**
+- The sync script is written before the migration strategy is decided.
+- No backup of `content/publications.json` exists before the first Action run.
+- A maintainer asks "where did the old publications go?" after the first successful sync.
+
+**Phase to address:**
+Pre-migration planning — the migration decision must be documented in the sync plan before any code is written.
 
 ---
 
-## Minor Pitfalls
-
-### Pitfall 15: Slug collisions and non-ASCII URLs
+### Pitfall 17: Character encoding and Unicode math symbols corrupt in the JSON output
 
 **What goes wrong:**
-Two group members named "Juan García" (Sr. and Jr.) get the same slug. Or a slug is generated as `martín-gómez` with diacritics — some older crawlers and referrers encode the URL inconsistently, producing `/people/mart%C3%ADn-g%C3%B3mez` in shares.
+InspireHEP and arXiv return titles containing Unicode math: "Constraints on σ₈ from CMB-lensing", "The H₀ tension", "f_NL parameter". Some of these use Unicode subscripts (`₈` = U+2088, `₀` = U+2080) which are correctly encoded in the API response. However:
+- If the sync script passes through a BibTeX-formatted title that uses `{$\sigma_8$}` instead of `σ₈`, the JSON will contain the LaTeX markup literally.
+- If the script serializes with `JSON.stringify` without an explicit `ensureAscii=false` equivalent (Node.js `JSON.stringify` is Unicode-safe by default, but intermediate processing with string slicing/regex on byte buffers can corrupt multi-byte sequences).
+- Author names with diacritics (`García`, `López`, `Martínez`) from arXiv's Atom XML may arrive as either pre-composed NFC (`é` = U+00E9) or decomposed NFD (`e` + combining acute). If the existing `people.json` uses NFC and the author-name matching uses string equality, `García` (NFC) ≠ `García` (NFD) — author links break.
+
+**Why it happens:**
+The existing v1.0 codebase was written with carefully hand-crafted JSON where encoding is controlled by the editor. API-sourced data introduces external encoding decisions that the sync script may not normalize.
 
 **How to avoid:**
-- Slugs are explicit in the JSON (`"slug": "martin-gomez"`), not auto-generated from the name. Editors have full control and can disambiguate (`"juan-garcia-sr"` vs `"juan-garcia-jr"`).
-- Normalize diacritics in a validation step: `.normalize('NFD').replace(/[\u0300-\u036f]/g, '')` — schema rejects slugs containing any non-ASCII character.
-- Zod schema uniqueness check across `people[].slug` at build time. Duplicate slug → build fails with "Duplicate slug `juan-garcia` at people[3] and people[11]".
+- Always normalize author name strings to NFC before storing: `name.normalize('NFC')`.
+- Strip BibTeX markup from titles: a simple regex `title.replace(/\{([^}]+)\}/g, '$1').replace(/\\/g, '')` handles the most common cases. Log titles containing `{` or `\` for manual review.
+- Use `JSON.stringify(data, null, 2)` — Node.js serializes Unicode correctly. Avoid any intermediate `Buffer.toString('ascii')` or similar that would corrupt non-ASCII bytes.
+- After writing the JSON, run it through `JSON.parse` to verify it round-trips cleanly. A malformed JSON file from encoding corruption will fail the next `pnpm check-content` run — at least the guard catches it.
 
----
+**Warning signs:**
+- A paper title appears as "Constraints on {$\sigma_8$}" in the published site.
+- An author name appears as "Garc\u00eda" or with replacement character `?` in the JSON file.
+- Two entries for the same person appear with different Unicode normalization forms.
 
-### Pitfall 16: ARIA labels in only one language
-
-**What goes wrong:**
-Navbar has `aria-label="Main navigation"` hardcoded in English. Screen readers in Spanish locale still announce "Main navigation" — jarring for a Spanish-primary site.
-
-**How to avoid:**
-- Every `aria-label`, `alt`, and visually hidden label goes through `t()` translation calls, not hardcoded English.
-- Document this rule in a code review checklist: "Does this PR add any `aria-` or `alt` attributes? If so, are they translated?"
-
----
-
-### Pitfall 17: Mixed-language content on a single page
-
-**What goes wrong:**
-On the EN version, the publications page shows paper titles that are always in English (because papers ARE in English). Fine. But on the ES version, the PhD bio says "Maria trabaja en..." and then quotes the title of their paper in English, with no `lang` switch. Screen readers pronounce English words with Spanish phonemes.
-
-**How to avoid:**
-- Any inline content in a different language from the page locale should be wrapped in `<span lang="en">English phrase</span>`. Applies especially to paper titles, technical terms, institutional names that are always in English.
-- For publications specifically, accept that titles stay in their original language and mark them explicitly with `<span lang="en">`.
-
----
-
-### Pitfall 18: Contact info drifts between pages
-
-**What goes wrong:**
-The postal address appears on Contact page, in the footer, in the Schema.org JSON-LD, and in the "How to reach us" section. Address changes (department moves floors) → four edits needed → one gets missed → structured data now says "Pabellón 1" while the footer says "Pabellón 2".
-
-**How to avoid:**
-- Single source of truth: `content/site.json` with `address`, `email`, `phone`, `coordinates`. Every page reads from this; no copy-paste.
-- Schema.org `PostalAddress` + `Organization` JSON-LD generated from the same source, not hand-written.
+**Phase to address:**
+Sync script implementation — encoding normalization must be in the output-writing step, not an afterthought.
 
 ---
 
 ## Technical Debt Patterns
 
-Shortcuts that seem reasonable but create long-term problems.
-
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
 |----------|-------------------|----------------|-----------------|
-| Hardcode strings in JSX instead of routing through `t()` | Ship a component 10 minutes faster | Every new string scattered across files; adding a third locale later is a week of grep-replace | Never — use `t()` from day 1 |
-| Skip Zod schemas, trust JSON structure | Saves ~1 hour in Phase 2 | First editor typo breaks prod; debugging a runtime `undefined` in a nested field is painful | Never for files editable by non-devs |
-| `output: 'export'` untested, assume it "probably works" | Avoids setting up dual-build CI | Discovers on deployment day that next/image, dynamic OG, or middleware silently doesn't work | Acceptable if static export is explicitly "post-v1 maybe" |
-| Single `content/publications.json` for all publications | One file to remember | Becomes 5000-line merge-conflict magnet at 200+ publications | Acceptable for MVP (<50 publications) |
-| Use `<img>` instead of `<Image>` to dodge static-export complexity | Ships images immediately without loader config | Loses LCP optimization, no automatic `srcset`, worse Core Web Vitals | Acceptable for one-off decorative images (e.g., partner logos) if accompanied by explicit `width`/`height` |
-| Copy-paste ES strings as EN placeholder ("fix later") | Unblocks English-page QA | Site ships with "Inicio" showing on `/en/` if forgotten; search engines index mixed content | Never — use `en.json` with English placeholders from day 1, even if just "[EN: Home]" |
+| Name-based arXiv fallback (no arXiv author ID) | Sync works for all members from day 1 | Contaminates publications list with wrong papers; UX embarrassment | Never — require explicit author IDs |
+| Skip InspireHEP pagination (cap at first page) | Simpler script | Senior PI shows 25 of 120 papers; reads as incomplete | Never for PIs; acceptable for students |
+| No deterministic JSON sort before committing | Simpler code | Weekly spurious diffs → weekly Vercel rebuilds | Never — 5 lines to sort |
+| Leave `publications_selected` field in `PersonSchema` | No migration needed | Vestigial field confuses maintainers; stale references if populated | Acceptable short-term if clearly documented as deprecated |
+| Use GITHUB_TOKEN without checking branch protection | Works if no protection exists | Silent 403 on first cron run if protection is added later | Acceptable for private repos with no branch protection |
+| Omit `_meta.synced_at` timestamp | Simpler JSON schema | No signal when sync is silently stale for weeks | Never — one extra field |
 
 ## Integration Gotchas
 
 | Integration | Common Mistake | Correct Approach |
 |-------------|----------------|------------------|
-| Google Maps embed | Dropping `<iframe>` raw into JSX; blocks main thread on page load | Static map image + "Open in Maps" link, or IntersectionObserver-deferred iframe behind user intent |
-| Google Fonts / next/font | Loading 6 weights × 2 styles; neglecting `subsets` | One variable font, subsets: `['latin', 'latin-ext']`, preload true for the primary weight |
-| next-intl middleware | Forgetting to add it, or adding it without a matcher that excludes `_next`, `api`, static assets | Use the matcher pattern from next-intl docs exactly; test that `/robots.txt` and `/sitemap.xml` bypass locale redirection |
-| arXiv/ORCID/Scholar external links | Linking to ad-hoc paths like `scholar.google.com/citations?user=xyz` that may change | Store IDs (ORCID ID, arXiv ID, DOI) in JSON; render via helper that constructs the URL; swap the helper later if the URL pattern changes |
-| Vercel OG image (next/og) | Assuming it works with `output: 'export'` — it does not without extra config | If static export matters, generate OG images at build via `generateStaticParams` on the `opengraph-image.tsx` route, or skip dynamic OG and use a single static PNG |
-| Schema.org Organization JSON-LD | Putting the same `Organization` block on every page | Put it once in the root `layout.tsx` (homepage) + `Person` per `/people/[slug]` page. Avoid duplicating organization markup across every page |
+| InspireHEP author query | Using `INSPIRE-00XXXXX` format in literature search query | Use BAI format (`E.Calzetta.1`) for `q=a+BAI` literature search |
+| InspireHEP pagination | Reading only first page (`hits.hits` without checking `hits.total`) | Read `hits.total`, paginate until all fetched or cap reached |
+| arXiv author search | Falling back to `au:LastName_F` when no claimed arXiv ID | Skip arXiv for members without a claimed arXiv ID — do not name-search |
+| arXiv date field | Using `<updated>` (latest version date) for year grouping | Use `<published>` (version 1 submission date) for arXiv records |
+| InspireHEP date field | Using `preprint_date` for journal publications | Prefer `publication_info[0].year` for published papers; fall back to `preprint_date` |
+| GitHub Action push | Forgetting `permissions: contents: write` in workflow YAML | Explicit `permissions:` block on the job |
+| Vercel unnecessary builds | Pushing even when JSON is byte-identical | `git diff --quiet` check before commit; Vercel Ignored Build Step as backup |
+| JSON encoding | Mixing NFC/NFD Unicode in author names | `name.normalize('NFC')` before storing; `JSON.stringify` is Unicode-safe |
 
 ## Performance Traps
 
 | Trap | Symptoms | Prevention | When It Breaks |
 |------|----------|------------|----------------|
-| Hero carousel loads all slide images eagerly | LCP > 2.5s on mobile, cumulative page weight > 3 MB | First slide `priority` + `fetchPriority="high"`, others lazy; explicit `aspect-ratio` on container | Visible on first page-load audit; gets worse as slides are added |
-| Google Maps iframe on contact page | TBT > 300ms, Lighthouse "Reduce third-party" warning | Static map or lazy-inject on scroll | Any mobile visit |
-| Publications page renders all 200+ entries | Slow TTI, large DOM, scroll jank on low-end Android | Default to latest 20 + year filter; chunk JSON by year | At ~100+ publications |
-| Font files: 6 weights × 2 styles × 2 subsets | 400 KB+ of font CSS/WOFF2 on page load | Single variable font, minimal subsets | First real content audit |
-| Client-side hydration of the full publications list for filtering | Large JSON ships to client, hydration takes 500ms+ | Filter server-side via URL params (static-export-friendly: pre-render `/publications/year/2024`); or ship a compact index (id, year, title, authors) for client filter, not the full records | At ~50+ publications |
-
-## Security Mistakes
-
-Domain-specific security issues beyond generic web security.
-
-| Mistake | Risk | Prevention |
-|---------|------|------------|
-| Raw `mailto:` links in rendered HTML | Email harvesters flood PI inboxes with spam / predatory-journal solicitations | JS-based reveal, split-form storage, SVG text, or contact form (see Pitfall 8) |
-| Embedding Google Maps without user consent | GDPR/privacy risk (Google sets cookies before user interaction) | Click-to-load pattern; or document in privacy policy that consent is implied |
-| Uploading internal/unreleased research to `/content` for "draft" pages | Unpublished research leaks via git history / sitemap | Draft content stays outside the repo entirely; content files are considered "public the moment they land in main" |
-| Exposing private photos in `/public/` before publication | Student / postdoc photos may be uploaded before consent received | Photo consent tracked in content schema (`photo_consent: true`); loader refuses to render photo if missing |
-| Committing real email addresses to a public repo even with obfuscation | Repo is fully indexable by GitHub code search; scrapers hit repos, not just rendered sites | Keep repo private (per CLAUDE.md) until explicitly opted public; if going public, emails must still be in obfuscated form in JSON |
-| No CSP headers | Allows injection of external scripts (unlikely for static site but still) | Set `Content-Security-Policy` in `next.config.js` headers or via Vercel config. Minimum: `default-src 'self'` + explicit allows for Google Fonts / Maps if used |
+| `Promise.all` over 15 authors × 2 APIs | 429 errors in CI; partial sync (some authors succeed, some fail) | Concurrency-limited queue (3–5 parallel), 2s inter-batch pause | First Action run |
+| `size=1000` for every author | 15 × 500KB responses; slow Action; large `publications.json` | Date-bounded query (last N years) + cap; paginate only if needed | Groups with senior PIs (80+ papers) |
+| Loading all 200+ publications for client-side filtering | Slow hydration on `/publications` | Keep publications page server-rendered and grouped by year (already the v1.0 pattern) | At ~100+ publications |
 
 ## UX Pitfalls
 
 | Pitfall | User Impact | Better Approach |
 |---------|-------------|-----------------|
-| Language toggle labeled with current language | Users click "ES" expecting Spanish, get English (because ES was the *current* label) | Label with the *target* language: show "English" when current is ES, "Español" when current is EN |
-| Carousel auto-advance with no pause control | WCAG violation; distracts readers; screen reader announces slide changes repeatedly | Visible pause button, `prefers-reduced-motion` disables auto-advance, slides don't advance while carousel has focus |
-| Long single-page publications list with no grouping | User gets lost scrolling, can't find a specific year | Default view: latest 20. Year filter chips at top. Deep-link to `/publications?year=2024` |
-| "Past Members" section buried at the bottom of People page | Visitors hunting for alumni (e.g., a recommender) give up | Dedicated `/people/past` page with its own nav entry, or a prominent "See alumni" link atop People |
-| People detail page requires knowing the slug | No obvious way to get back to full roster from a member page | Breadcrumb: `Inicio > Gente > María Rodríguez`. Sticky "Back to People" link. |
-| Outreach page undifferentiated grid of mixed content types | Talks, workshops, school visits, articles all mashed together | Filter/tab by type: "Charlas | Talleres | Prensa | Visitas" |
-| ORCID / Scholar / Personal site icons without labels | Unfamiliar icons confuse less-academic visitors | Icons + text labels on hover AND for screen readers (`aria-label`) |
-| Loading spinner for content that's already in the static bundle | Feels slow even though data is instantly available | No spinners on static pages — only on year-filter interactions or similar |
+| Same Planck paper listed 3× | Publications page looks buggy; peer reviewers notice | Title+arXiv-ID dedup in sync script post-processing |
+| All author names are plain text | No way to distinguish group members from external authors | Bold (or link) names that match `author_names[]` from `people.json` |
+| ArXiv preprint and InspireHEP published record for same paper both shown | Visitor sees "Preprint" and "Phys. Rev. D" as two separate entries for the identical work | Label clearly; implement arXiv-ID dedup even before full DOI dedup |
+| Stale data silently for 4+ weeks | Trust in the website erodes; members assume it's broken | `_meta.synced_at` logged to Action summary; automated issue on multi-week failure |
+| 200+ publications dumped without year grouping | Page is an unreadable wall | Year-grouped rendering (already in v1.0 accessor) + "last N years" default |
 
 ## "Looks Done But Isn't" Checklist
 
-Things that appear complete in a demo but are missing critical pieces.
-
-- [ ] **Home page:** Hero looks great on desktop — have you tested mobile LCP? Does it respect `prefers-reduced-motion`? Is slide 2/3 preloaded or lazy?
-- [ ] **People page:** All cards render — have you tested with a 40-character name? A portrait (not square) photo? A person missing `photo`?
-- [ ] **Person detail page:** Bio looks good — does it render when `full_bio` is empty? Are the external links (ORCID, Scholar) real URLs?
-- [ ] **Publications page:** Filter works — does it work with 0 results? With 100+ publications? With a query param like `?year=1999` that has no matches?
-- [ ] **Contact page:** Map embed shown — does it lazy-load? Is the email obfuscated? Does the form (if any) have rate limiting?
-- [ ] **Language toggle:** Switches locale — does it preserve the current path? Query params? Dynamic slugs? Does `<html lang>` update?
-- [ ] **Navigation:** Main nav works — does it collapse correctly on mobile? Is the active page indicated? Is it keyboard-navigable?
-- [ ] **SEO:** `<title>` and `<meta description>` set — are they localized? Do all pages have unique titles? Do hreflang tags appear in view-source for every page?
-- [ ] **Schema.org:** JSON-LD added — does Google's Rich Results Test parse it? Is Organization on the home page only, not every page?
-- [ ] **Sitemap:** `/sitemap.xml` returns content — does it include all locale variants via alternates? Does every URL return HTTP 200?
-- [ ] **Static export:** `npm run build` works — does `output: 'export'` also work, producing a usable `/out` directory? Have you served it locally?
-- [ ] **Content validation:** JSON files load — does the build fail on a malformed file with a clear error? Does a malformed PR fail CI?
-- [ ] **Translations:** Both locales render — is there a CI check that both files have the same keys? Is there one for `aria-label` translations?
-- [ ] **Photos:** All photos render — are they all ≤500KB? Do missing photos fall back to a placeholder? Are photo paths validated at build?
-- [ ] **Accessibility:** Lighthouse score >90 — has a real screen reader (NVDA/VoiceOver) been used on the home page, people page, and language switch? Do all interactive elements have visible focus states?
-- [ ] **External links:** ORCID / Scholar / arXiv links render — have they all been clicked once to confirm they go where expected?
-- [ ] **Email protection:** No `mailto:` string appears in rendered HTML — `curl` + grep to verify, not visual inspection.
-- [ ] **Reduced motion:** `prefers-reduced-motion: reduce` — does the carousel still work (static first slide)? Do any other animations honor the preference?
+- [ ] **Sync script rate limit:** Does the script pause between requests? What happens when a 429 is returned — silent drop or retry?
+- [ ] **Pagination completeness:** Does the sync log "fetched X of Y total" per author? Does it page correctly for a PI with 100+ papers?
+- [ ] **Author ID format validation:** Does the script reject `INSPIRE-00XXXXX` format at startup rather than silently returning wrong results?
+- [ ] **arXiv no-fallback policy:** Does the script skip `au:` name search for members without a claimed arXiv ID, or does it use name-based fallback?
+- [ ] **Dedup by arXiv ID:** Does a paper fetched for two different group members appear once or twice in the output JSON?
+- [ ] **Empty-diff skip:** Does the Action skip the commit when JSON content is byte-identical? Check the diff-check step in the workflow YAML.
+- [ ] **Year extraction:** Is `publication_info[0].year` used for InspireHEP journal records, not just `preprint_date`?
+- [ ] **Schema backfill:** Do all 20 v1.0 curated entries survive `pnpm check-content` after adding the `source` field?
+- [ ] **JSON Schema regenerated:** Does VS Code show no squigglies on `source: "inspirehep"` entries after schema update?
+- [ ] **Branch protection / GITHUB_TOKEN:** Did the first manual Action run actually push to main? Check git log.
+- [ ] **Encoding:** Does any entry in `publications.json` contain `{$\sigma` or `\\` — BibTeX leakage?
+- [ ] **Failure visibility:** If the Action fails, does it create a GitHub issue or send a notification within 2 weeks?
+- [ ] **Vercel Ignored Build Step:** Is `git diff HEAD^ HEAD --quiet -- ./content/publications.json` configured in Vercel project settings?
+- [ ] **`publications_selected` fate documented:** Is the field deprecated or still referenced from any component?
 
 ## Recovery Strategies
 
-When pitfalls occur despite prevention, how to recover.
-
 | Pitfall | Recovery Cost | Recovery Steps |
 |---------|---------------|----------------|
-| Translation keys diverged, prod page crashes | LOW | Configure `onError`/`getMessageFallback` to render key as string in prod; fix missing keys in follow-up; add CI diff check |
-| Build broken by malformed JSON commit | LOW | Revert the commit on main; add Zod validation to prevent recurrence; add pre-commit hook |
-| Static export broken by feature creep (e.g., Server Actions added) | MEDIUM | Audit feature usage; gate server-only features behind `process.env.NEXT_BUILD_TARGET`; add CI for static build |
-| LCP regressed to >4s after adding a carousel | MEDIUM | Revert carousel or switch to CSS-only fade; add Lighthouse CI with LCP budget |
-| Email harvested, PI getting spam | MEDIUM | Rotate the email (painful — change signature, notify collaborators); retrofit obfuscation for all future emails |
-| Search Console reports duplicate content / missing hreflang | MEDIUM | Fix hreflang tags and canonical URLs; resubmit sitemap; monitor Search Console for 2–4 weeks for reindex |
-| Photos 3x expected size, page weight 10MB | LOW | Add `sharp` build-time resize pipeline; replace raw files in `/public`; re-deploy |
-| Publications JSON at 300 entries and unmaintainable | MEDIUM | Split into per-year files; update loader to glob-import; no URL changes needed |
-| External links rotted | LOW-MEDIUM (recurring) | Run `lychee` over content; update or archive broken links; automate the check weekly |
-| Layout broken by real content (long names, portrait photos) | LOW | Update stress-test placeholders to cover edge cases; fix CSS; prevents recurrence |
-| `<html lang>` wrong on locale switch | LOW | Ensure `layout.tsx` reads locale from params and sets `lang` on `<html>`; test with axe |
+| Bad JSON committed to main (encoding corruption) | LOW | `git revert` the sync commit; fix encoding normalization in script; re-run |
+| Publications list contaminated with wrong-author papers | MEDIUM | `git revert` sync commit; add author ID validation; require all group members to claim arXiv ID before re-enabling |
+| Stale publications.json (sync failing silently for weeks) | LOW | Manually trigger Action via `workflow_dispatch`; if API is down, no action needed; if script is broken, fix and re-trigger |
+| Schema + JSON Schema drift (squigglies in VS Code) | LOW | Run `pnpm generate-schemas`; commit regenerated `.schema.json` files |
+| Rate limit cascade broke first sync | LOW | Add concurrency limit + retry; re-trigger Action manually |
+| GITHUB_TOKEN push blocked by branch protection | LOW | Grant bypass for `github-actions[bot]` in branch protection settings; or switch to PAT secret |
+| Senior PI showing 25 of 120 papers | LOW | Add `hits.total` check + pagination loop; re-trigger sync |
 
 ## Pitfall-to-Phase Mapping
 
-How roadmap phases should address these pitfalls.
-
 | Pitfall | Prevention Phase | Verification |
 |---------|------------------|--------------|
-| #1 Missing translation keys | Phase 1 (Foundation / i18n setup) | `onError` configured; CI diffs `es.json` vs `en.json` |
-| #2 Hero carousel LCP/CLS/a11y | Phase 3 (Home page), Phase 5 (Polish) | Lighthouse LCP <2.5s mobile, CLS <0.1; axe passes; `prefers-reduced-motion` tested |
-| #3 next/image breaks static export | Phase 1 (Foundation / build config) | CI runs both `build:vercel` and `build:static` on every PR |
-| #4 JSON files crash build | Phase 2 (Data layer) | Zod schemas for all content; pre-commit + CI validation; bad-PR test |
-| #5 Photo references missing | Phase 2 (Data layer) + Phase 3 (People) | Build fails on missing file; placeholder component renders for optional photos |
-| #6 Language switcher loses page | Phase 3 (Navigation component) | Manual test: toggle from every page type; verify `<html lang>` updates |
-| #7 Sitemap/hreflang incomplete | Phase 4 (SEO/metadata) | `view-source` check on sample pages; Google Rich Results Test; sitemap validator |
-| #8 Email harvesting | Phase 3 (People + Contact pages) | `curl | grep '@'` returns no real addresses; CI lint forbids `mailto:` literals |
-| #9 Placeholder-to-real breaks layout | Phase 2 (Placeholders) + Phase 5 (Polish) | Stress-test placeholder data; visual regression test if available |
-| #10 Publications unmaintainable | Phase 2 (Schema design) + Phase 4 (Publications page) | Schema matches arXiv/ADS shape; chunked by year; filter perf tested at 200 entries |
-| #11 External link rot | Phase 6 (Post-launch ops) | Weekly GitHub Action with `lychee`; issue auto-created for broken links |
-| #12 Font FOUT/CLS | Phase 1 (Foundation / fonts) | Lighthouse CLS <0.1; network throttling test |
-| #13 Google Maps performance | Phase 3 (Contact page) | Lighthouse TBT <200ms on contact page; map loads on intent only |
-| #14 Carousel as critical content vector | Phase 3 (Home page) — design-level | No CTAs hidden in slides 2+; dedicated highlight section below |
-| #15 Slug collisions / non-ASCII | Phase 2 (Data layer) | Zod uniqueness + ASCII-only regex |
-| #16 ARIA in one language only | Phase 3 (each page) + code review | Lint/grep for hardcoded English `aria-label`; translate all |
-| #17 Mixed-language content | Phase 4 (Publications, bios) | Inline `<span lang>` for off-locale text |
-| #18 Contact info drift | Phase 2 (content/site.json) | Single source; all pages reference same variable |
+| #1 `z.strictObject` rejects `source` on old entries | Schema extension plan | `pnpm check-content` passes on old + new entries |
+| #2 Rate limit 429 cascade | Sync script foundation | Action CI run with all 15 authors completes with 0 errors |
+| #3 BAI vs INSPIRE-ID format confusion | Sync script foundation (ID validation) | Invalid format logged and skipped, not passed to API |
+| #4 `PersonSchema` rejects new fields | Schema extension plan | `pnpm check-content` passes after adding `arxiv_id` + `inspirehep_id` |
+| #5 GITHUB_TOKEN push blocked | GitHub Action implementation | Manual Action run pushes commit to main |
+| #6 Empty-diff spurious Vercel rebuild | GitHub Action implementation | Two consecutive Action runs with no API change produce no Vercel build |
+| #7 Wrong year from preprint_date | Sync script implementation | Published journal paper shows journal year, not arXiv submission year |
+| #8 Name-based arXiv returns wrong-author papers | Sync script foundation | Members without `arxiv_id` produce 0 arXiv entries (not polluted list) |
+| #9 Pagination truncation | Sync script implementation | Senior PI shows correct full count; Action summary logs "X of Y" |
+| #10 Collaboration paper duplicated per-author | Sync script implementation | Planck paper appears once in output JSON |
+| #11 tsx path aliases break in Action | GitHub Action implementation | Action `run:` step succeeds with `npx tsx` |
+| #12 `publications_selected` stale references | Migration plan | Field deprecated or validator active |
+| #13 JSON Schema stale after Zod change | Schema extension plan (CI check) | `pnpm generate-schemas && git diff --exit-code` passes in CI |
+| #14 Sync failure unnoticed | GitHub Action implementation | Failure creates issue or Action summary after 14-day silence |
+| #15 Author names not linked to profiles | Integration plan (publications page update) | Group member names visually distinct on `/publications` |
+| #16 v1.0 entries deleted without archive decision | Pre-migration plan | Migration strategy documented and committed before first sync |
+| #17 Unicode encoding corruption | Sync script implementation | No `{$\` patterns in output JSON; round-trip JSON.parse succeeds |
 
 ## Sources
 
-**High-confidence (official docs & GitHub issues):**
-- [next-intl: Request configuration / error handling](https://next-intl.dev/docs/usage/configuration)
-- [next-intl: Validating messages](https://next-intl.dev/docs/workflows/messages)
-- [next-intl: Routing configuration (localePrefix)](https://next-intl.dev/docs/routing/configuration)
-- [Issue: `redirect` ignores locale when `localePrefix` is set to "as-needed"](https://github.com/amannn/next-intl/issues/1845)
-- [Issue: Locale prefix should be removed from Link href with 'as-needed'](https://github.com/amannn/next-intl/issues/647)
-- [Next.js: Static Exports guide (limitations)](https://nextjs.org/docs/app/guides/static-exports)
-- [Next.js: Export with Image Optimization API error](https://nextjs.org/docs/messages/export-image-api)
-- [Next.js: next.config.js images reference](https://nextjs.org/docs/app/api-reference/config/next-config-js/images)
-- [Next.js: opengraph-image metadata file convention](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)
-- [Next.js: Font Optimization](https://nextjs.org/docs/app/getting-started/fonts)
-- [Server Actions in Static Exports discussion](https://github.com/vercel/next.js/discussions/67503)
-- [W3C WAI: Carousels Tutorial](https://www.w3.org/WAI/tutorials/carousels/)
-- [WebAIM: Animation and Carousels](https://webaim.org/techniques/carousels/)
-- [Schema.org: Organization](https://schema.org/Organization) / [Person](https://schema.org/Person) / [ResearchProject](https://schema.org/ResearchProject)
-- [Zod: Schema definition and errors](https://zod.dev/)
+**HIGH confidence (live API verification + official docs):**
+- [InspireHEP REST API documentation](https://github.com/inspirehep/rest-api-doc/blob/master/README.md) — rate limits (15 req/5s window), max size 1000, 10,000 total result cap
+- [InspireHEP live API query](https://inspirehep.net/api/literature?sort=mostrecent&size=3&q=a+E.Calzetta.1) — verified BAI format, `preprint_date` and `earliest_date` field names, `publication_info`, pagination `links.next` structure
+- [arXiv API User's Manual](https://info.arxiv.org/help/api/user-manual.html) — `<published>` = v1 submission date, `<updated>` = latest version date, max 30,000 results, "3 second delay" recommendation
+- [arXiv Author Identifiers](https://info.arxiv.org/help/author_identifiers.html) — accents stripped to ASCII in IDs; opt-in claiming system; `garcía` → `garcia`
+- [arXiv blog: Search v0.2 and names](https://blog.arxiv.org/2018/05/04/release-search-v0-2-some-notes-on-names/) — name disambiguation limitations, false positive risk with initial-only search
+- [Vercel Ignored Build Step](https://vercel.com/kb/guide/how-do-i-use-the-ignored-build-step-field-on-vercel) — `git diff HEAD^ HEAD --quiet` syntax, shallow clone depth 10
+- [GitHub GITHUB_TOKEN documentation](https://docs.github.com/en/actions/concepts/security/github_token) — `contents: write` vs branch protection bypass distinction
+- [GitHub Actions branch protection discussion](https://github.com/orgs/community/discussions/25305) — GITHUB_TOKEN cannot push to protected branches
 
-**Medium-confidence (verified community):**
-- [Swiper CLS issue on PageSpeed Insights](https://github.com/nolimits4web/swiper/issues/4076)
-- [next-intl guide for Next.js 15](https://www.buildwithmatija.com/blog/nextjs-internationalization-guide-next-intl-2025)
-- [Implementing multilingual sitemap with next-intl](https://dev.to/oikon/implementing-multilingual-sitemap-with-nextjs-app-router-1354)
-- [SEO + i18n guide for App Router](https://dev.to/oikon/seo-and-i18n-implementation-guide-for-nextjs-app-router-dynamic-metadata-and-internationalization-3eol)
-- [Email Obfuscation — What works in 2026](https://spencermortensen.com/articles/email-obfuscation/)
-- [Cloudflare Email Address Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/)
-- [Lazy-loading Google Maps with IntersectionObserver](https://walterebert.com/blog/lazy-loading-google-maps-with-the-intersection-observer-api/)
-- [Google Maps 100% PageSpeed guide](https://www.corewebvitals.io/pagespeed/google-maps-100-percent-pagespeed)
-- [Accessible Carousel guide (Smashing Magazine)](https://www.smashingmagazine.com/2023/02/guide-building-accessible-carousels/)
-- [Carousel Accessibility Complete Guide (TestParty)](https://testparty.ai/blog/carousel-slider-accessibility)
-- [Next.js Core Web Vitals 2026 (LCP beyond images)](https://shubhamjha.com/blog/core-web-vitals-nextjs-optimization)
-
-**Link-rot evidence:**
-- [Ahrefs study on link rot (66.5% dead in 9 years)](https://ahrefs.com/blog/link-rot-study/)
-- [Broken links in SE research (Leitner)](https://philippleitner.medium.com/how-much-of-a-problem-are-broken-links-in-se-research-cedfdce3d030)
-- [Link rot - Wikipedia](https://en.wikipedia.org/wiki/Link_rot)
+**MEDIUM confidence (community + official adjacent):**
+- [Zod v4 changelog](https://zod.dev/v4/changelog) — `z.strictObject` behavior, optional field migration
+- [InspireHEP INSPIRE ID vs BAI format](https://help.inspirehep.net/knowledge-base/inspire-paper-search/) — BAI format `M.Smith.1` for literature search; INSPIRE-00XXXXXX for author endpoint
 
 ---
-*Pitfalls research for: Bilingual academic research group website (Next.js 15 + next-intl + JSON content, Vercel-first / static-export-compatible)*
-*Researched: 2026-04-17*
+*Pitfalls research for: v1.1 arXiv + InspireHEP publication sync added to existing Next.js 16 bilingual academic site*
+*Researched: 2026-04-18*

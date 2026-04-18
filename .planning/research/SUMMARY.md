@@ -1,227 +1,357 @@
-# Project Research Summary
+# Research Summary — v1.1 Publication Sync (InspireHEP + arXiv)
 
-**Project:** Cosmology Group Website (UBA / FCEN)
-**Domain:** Bilingual institutional/academic research group website (content-driven, statically generated)
-**Researched:** 2026-04-17
-**Confidence:** HIGH
+**Project:** Cosmo Group Website (UBA / FCEN)
+**Milestone:** v1.1 — arXiv + InspireHEP auto-sync
+**Researched:** 2026-04-18
+**Confidence:** HIGH (stack and architecture verified against live codebase; APIs verified against live InspireHEP endpoint and official arXiv docs)
+
+---
 
 ## Executive Summary
 
-This is a bilingual (Spanish-default, English-toggle) institutional website for an academic cosmology research group affiliated with UBA / FCEN / CONICET. Peer institutions (MPA, CCA, Perimeter, IAS, DAMTP/CTC, and LATAM-adjacent IAFE) converge on a remarkably consistent pattern: restrained typography-driven design, sectioned people roster (PIs -> Postdocs -> PhDs -> Undergrads -> Past), year-grouped publications with external identifiers (arXiv/DOI/ORCID), research-area narratives, outreach evidence, and a contact page with a map. The user-specified v1 page list (Home, People, Research, Publications, Outreach, Contact) matches this pattern directly — no top-level page is missing, though two peer-universal items (a seminar/events listing and a lightweight "how to join" signal) should be explicitly decided rather than silently dropped.
+v1.1 adds automated publication sync to an already-shipped v1.0 static Next.js 16 site. The fundamental architecture is a weekly GitHub Actions cron job that runs `scripts/sync-publications.ts`, queries InspireHEP (per-author by BAI identifier) and arXiv (per-author by claimed arXiv ID), validates the merged result against the existing Zod schema, and commits `content/publications.json` back to `main`. Vercel rebuilds on the push. The Next.js SSG build is unchanged — it reads the committed JSON file at build time as it always has. The sync script and the Next.js build share one artifact and zero runtime coupling.
 
-The recommended stack is **Next.js 16.2 + React 19.2 + TypeScript strict + Tailwind v4 + next-intl v4 + Zod v4 + schema-dts**, with **plain JSON content validated by Zod at build time**, **next/image** on Vercel with a **`images.unoptimized`-guarded static-export escape hatch**, and a **lazy-loaded Google Maps iframe** (no React library, no API key). The architecture is a thin RSC shell around a typed content layer: `content/*.json` is the source of truth, `src/content/*.ts` parses it through Zod schemas and exports typed accessors, pages render server-side, and the only client components are the language toggle, hero crossfade, and publications filter (URL-state via nuqs). A single `src/config/site.ts` owns group-wide identity so the placeholder name is a one-line swap.
+The recommended approach is deliberately minimal: one new devDependency (`fast-xml-parser@5.7.x` for arXiv's Atom XML), no new runtime deps in the browser bundle, and two new files (`scripts/sync-publications.ts` and `.github/workflows/sync-publications.yml`). All other tooling — `tsx`, `zod`, native `fetch`, `AbortSignal.timeout` — is already present. Schema changes are additive: `source: z.enum(["manual","inspirehep","arxiv"]).default("manual")` on `PublicationSchema` and two optional fields on `PersonSchema`. The `.default("manual")` on `z.strictObject` is load-bearing — without it, all 20 v1.0 curated entries fail validation the moment the schema is deployed.
 
-The key risks are structural, not technical: (1) **i18n routing decisions ripple everywhere** — middleware works on Vercel but not under `output: 'export'`, so the dual-build contract must be enforced in CI on day 1; (2) **JSON content edited by non-technical users is a build-breaker without Zod validation + pre-commit hooks**; (3) **a hero carousel is the largest LCP/CLS/a11y risk** and should default to a restrained single or 2-3-slide crossfade honoring `prefers-reduced-motion`; (4) **translation-key divergence between `es.json` and `en.json` crashes production** unless `onError` + a CI diff check are wired during Phase 1; (5) **`mailto:` scraping is a real academic pain point** — emails must be obfuscated via a shared `<EmailLink>` component, enforced by a CI lint. All of these are prevented cheaply up front and expensive to retrofit.
+The key risks are: (1) the schema migration must be atomic — Zod change + JSON Schema regeneration in a single commit, before any sync code is written; (2) `people.json` must be populated with BAI identifiers for all current members before the sync script is useful, which is a human dependency that blocks the automation; (3) arXiv name-based search must never be used as a fallback — it contaminates the publication list with wrong-author papers for anyone with a common Spanish surname. Pitfalls that seem like implementation details (rate-limit handling, deterministic JSON serialization to prevent spurious Vercel rebuilds, year-field selection for published vs. preprint records) are architectural commitments that must be in the first version of the script, not retrofitted.
+
+---
+
+## Five Decisions That Shape the Roadmap
+
+These are the cross-cutting choices the roadmap must enforce:
+
+1. **Schema extension is Phase A and must be atomic.** `publications.schema.ts` + `people.schema.ts` + `pnpm generate-schemas` + `pnpm check-content` all pass in a single commit. No other v1.1 work begins until this is green. Splitting schema and JSON Schema regeneration across two plans creates a window where the VS Code tooling lies to maintainers.
+
+2. **`people.json` data population is a human dependency that blocks sync.** The BAI identifier (`inspirehep_id: "E.Calzetta.1"`) and optional arXiv author ID (`arxiv_id: "calzetta_e_1"`) must be filled in for every current member before the sync script produces real output. This is not a code task — it requires the PI or group admin to look up each member's IDs on InspireHEP. The roadmap must schedule this as an explicit human-action item, not assume it happens automatically.
+
+3. **arXiv queries require claimed author IDs — no name-based fallback.** Members without a claimed arXiv author ID are skipped for arXiv queries. The correct fallback is InspireHEP (which has curator-assisted deduplication). Name-based `au:Rodriguez_M` searches return papers from other institutions and contaminate the list permanently until noticed.
+
+4. **The sync script must validate in-memory before writing** (Strategy B). If any fetch fails — including a partial failure where InspireHEP succeeds but arXiv fails — the script exits 1 without writing. The last-good JSON is preserved. This is not just error handling; it is the correctness contract that makes the GitHub Action safe to run unattended.
+
+5. **Deterministic JSON serialization is required from day one.** Sort publications by year descending, then by `arxiv` ID alphabetically, before calling `JSON.stringify(sorted, null, 2)`. Without this, every weekly run produces a non-empty diff even with identical data (V8 insertion-order variance), triggering spurious Vercel rebuilds every Monday morning.
+
+---
 
 ## Key Findings
 
-### Recommended Stack
+### Stack (v1.1 additions only)
 
-The stack is the validated landing-page pattern with 2026 version bumps (Next.js 16 is current stable; React 19 is required by Next.js 16) plus academic-site-specific additions (`schema-dts`, `embla-carousel-react`). There is no CMS, no auth, no arXiv importer, no dark mode, no framer-motion, no shadcn bulk install — scope discipline is part of the recommendation. Vercel is the primary deploy target with a static-export path kept viable as an escape hatch for university hosting.
+No new runtime dependencies in the Next.js browser bundle. One new devDependency:
 
-**Core technologies:**
-- **Next.js 16.2.4** (App Router, RSC, SSG) — statically pre-renders bilingual pages; `generateStaticParams` on every `[locale]/[slug]` route; compatible with both Vercel and static export
-- **React 19.2** — required by Next.js 16; server components keep client JS to a minimum
-- **TypeScript 5.x strict** — non-negotiable for content schemas and i18n type inference
-- **Tailwind v4.2.x** with OKLCH design tokens — CSS-first `@theme inline` matches the validated `design-tokens-starter.md` pattern
-- **next-intl v4.9** with `localePrefix: 'as-needed'`, default `'es'` — standard App Router i18n; bilingual via `messages/{es,en}.json` for UI strings and `{ es, en }` objects for structured content
-- **Zod v4** — parses `content/*.json` at build time; auto-derives TS types; crashes the build loudly on malformed content
-- **schema-dts 2.0** — typed Schema.org for Organization/Person/ScholarlyArticle JSON-LD
-- **embla-carousel-react** (only if hero uses more than 1 image) — ~10 KB, accessible, respects `prefers-reduced-motion`
-- **next/font/google** — self-hosted Source Serif 4 / Inter (or equivalent academic pairing, decided in Phase 1 via ui-ux-pro-max)
-- **Google Maps iframe (no library)** — zero bundle, no API key, `loading="lazy"` for CWV
+| Package | Version | Purpose |
+|---------|---------|---------|
+| `fast-xml-parser` | 5.7.1 | Parse arXiv Atom 1.0 XML response — zero deps, synchronous, ESM + CJS |
 
-### Expected Features
+Existing tooling already covers everything else:
+- **Native `fetch` + `AbortSignal.timeout(10_000)`** — Node 22 built-in; no axios, got, or undici
+- **`tsx@^4.21.0`** — already a devDependency; runs the sync script via `pnpm exec tsx scripts/sync-publications.ts`
+- **Zod v4** — already validates schemas; sync script validates in-memory before writing
 
-The v1 page list is correct for institutional credibility. Peer comparison confirms every page maps to what prospective PhDs, international peers, funders, and journalists expect.
+Critical `fast-xml-parser` config for arXiv Atom feeds — `isArray` is non-negotiable, without it single-result queries collapse `entry` from an array to a plain object and the script crashes silently:
 
-**Must have (table stakes):**
-- Home with group identity, tagline, institutional affiliation (UBA/FCEN/CONICET), partner logo strip
-- People directory sectioned by role (PIs -> Postdocs -> PhDs -> Undergrads -> Past)
-- Individual profile pages with photo, role, research interests, selected publications, external IDs (ORCID, arXiv, Google Scholar, CONICET)
-- Research areas page with narrative paragraphs (not just names+icons) for Dark Matter, GW, Early Universe, AI
-- Publications list year-grouped with filter (year + author + topic) and arXiv/DOI links per entry
-- Outreach page ("Divulgación" in ES) — talks, workshops, school visits, articles
-- Contact with postal address, email, embedded Google Map, social links
-- Bilingual ES<->EN toggle with URL-based routing, language names in own language ("Español"/"English"), no flags
-- WCAG AA compliance (contrast, keyboard nav, alt text, semantic HTML)
-- SEO baseline: Schema.org (Organization + Person + ScholarlyArticle), OG/Twitter cards, sitemap.xml with hreflang alternates, robots.txt, favicon
+```ts
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "@_",
+  isArray: (name) => ["entry", "author", "link", "category"].includes(name),
+});
+```
 
-**Should have (competitive differentiators):**
-- Restrained typography-driven aesthetic (most academic sites fail this execution — it's a differentiator)
-- Curated "selected publications" on PI pages (not full list)
-- Research-interest prose (3-5 sentences, not keyword lists) on PI pages
-- Past members with current affiliation (single field; strongest alumni-placement signal)
-- Bilingual content *parity* (every page fully translated — common LATAM failure mode to skip)
-- Lightweight "How to join" paragraph on People or Contact page (addresses prospective applicant audience at minimal cost)
-- Funding/acknowledgements footer block (CONICET grant numbers)
+**Script location:** `scripts/sync-publications.ts` (consistent with `validate-content.mjs` and `generate-schemas.mjs`). Uses relative imports (`../src/content/schemas/publications.schema.ts`), NOT the `@/` alias — `tsx` under Node.js does not resolve webpack-style path aliases. This is the same pattern the two existing scripts already use.
 
-**Defer (v1.x / v2+):**
-- **Seminar/events listing** — confirm with user whether group runs a regular seminar; if yes, this is near-table-stakes
-- News archive beyond 3 home-page highlight cards
-- arXiv/ADS/ORCID auto-importer (scope black hole; placeholder JSON is adequate for v1)
-- CMS backend (JSON-via-PR is the intentional choice)
-- Member login / internal area, site-wide search, mobile app, dark mode, flashy animations, newsletter — all explicitly excluded
+**GitHub Action:** `.github/workflows/sync-publications.yml`. Requires `permissions: contents: write` in the workflow YAML — without it, the push to `main` returns 403. The commit message must include `[skip ci]` to prevent the push from triggering a second sync run (infinite loop). Uses a `git diff --quiet` check before committing so byte-identical runs produce no commit and no Vercel rebuild.
 
-### Architecture Approach
+**arXiv API:** Base URL is `http://export.arxiv.org/api/query` (HTTP, not HTTPS — documented; HTTPS redirects are inconsistent). Use a single batch `id_list` call for the whole group rather than per-author sequential queries to stay well within the 3 req/s rate limit.
 
-A RSC-first App Router shell (`src/app/[locale]/...`) wraps a typed content layer. All content lives in `content/*.json` at the repo root (signals to non-technical editors "this is what you edit"), is parsed through Zod schemas in `src/content/schemas.ts`, and exposed via typed accessors (`src/content/people.ts`, etc.). Group-wide identity lives in `src/config/site.ts` (one-line placeholder swap). UI strings live in `messages/{es,en}.json`; structured bilingual content uses `{ en: string; es: string }` objects embedded in the records. Pages are server components; the only client components are the header menu + language toggle (`HeaderClient`), hero crossfade, and the publications filter (nuqs for URL state). Every dynamic segment declares `generateStaticParams` for static-export compatibility.
+**InspireHEP API:** Rate limit is 15 requests per 5-second window. For a group of 5–15 members, do NOT use `Promise.all()` over all authors — use a concurrency-limited queue (3–5 parallel max) with 2s inter-batch pauses and exponential backoff on 429.
 
-**Major components:**
-1. **Content layer** (`content/*.json` + `src/content/*.ts` with Zod) — single source of truth; build-time validation boundary
-2. **i18n layer** (`src/i18n/routing.ts` + `request.ts` + `navigation.ts` + `middleware.ts`) — locale detection on Vercel; `generateStaticParams` fallback for static export
-3. **Layout shell** (`SiteHeader` + `HeaderClient` + `SiteFooter`) — language toggle, nav, affiliations strip; server/client split following `references/patterns/layout-shell.md`
-4. **Page tree** (`app/[locale]/{home,people,research,publications,outreach,contact}`) — server-rendered from typed accessors; per-page `generateMetadata` + JSON-LD
-5. **Site config** (`src/config/site.ts`) — group name, tagline, URL, affiliations, contact; consumed by metadata, layout, Schema.org
-6. **Metadata/SEO layer** — shared `lib/metadata.ts` helper, `sitemap.ts` iterating locales x routes with `hreflang` alternates, `OrganizationJsonLd` on home, `PersonJsonLd` on each person page
+### Features
+
+**Table stakes (must ship for v1.1 to feel complete):**
+- Source badge per entry ("arXiv" / "InspireHEP" / "Manual") — required because two sources with no cross-source dedup means users must understand provenance
+- Preprint vs. published status indicator — academic audiences require this distinction; conflating them is a credibility error
+- Last-5-years filter on `/people/[slug]` — prevents a PI with 120 papers from overwhelming their profile; 5 years aligns with CONICET grant evaluation windows (explicitly a "last 5 years of output" assessment)
+- Author publication count subtitle on profile ("N publicaciones en los últimos 5 años") — credibility signal for applicants and funders
+- Source filter toggle on `/publications` ("Todos / InspireHEP / arXiv / Manual") — necessary to explain why the same paper may appear twice
+- "Actualizado el [date]" on `/publications` — makes staleness honest
+- Weekly GitHub Actions cron (`0 6 * * 1`) + commit + Vercel rebuild — the automation is the entire point of v1.1
+- Manual exclusion list per person (`exclude_arxiv_ids: []` in `people.json`) — the pragmatic guard against early-career papers and large-collaboration papers the group does not want foregrounded
+
+**Differentiators (build if time allows):**
+- Group member author highlighting (bold names matching current members in author lists) — MEDIUM complexity; requires `display_name_normalized` on person records and a render-time name lookup
+- arXiv category → topic_tag auto-mapping at sync time
+- Per-person "View on arXiv" link on profile pages (LOW complexity once `arxiv_id` is stored)
+
+**Explicitly deferred to v2+:**
+- Cross-source DOI dedup (InspireHEP vs. arXiv for the same paper)
+- Citation count display (stale data + self-promotional tone; store in JSON silently for future optionality)
+- h-index badges
+- ADS / ORCID as additional sources
+
+**Anti-features (do not build):**
+- Name-based arXiv fallback — silently pollutes the list with wrong-author papers
+- Citation count as a headline metric — stale data; not shown on any peer group site (MPA, IAS, UCL Cosmoparticle); link to InspireHEP author page for live counts instead
+- Full conference proceedings import by default — dilutes peer-reviewed signal; add `show_proceedings: false` config boolean if explicitly requested
+
+**UX conventions from peer site survey (KIPAC, CCAPP, UCL Cosmoparticle, IRIS-HEP):**
+- No peer cosmology group site hosts a curated per-profile publication list — v1.1's last-5-years section is a genuine differentiator
+- Author list format: show all if ≤5 authors; first 3 + "et al." if >5
+- HEP citation style: `Authors. "Title." Journal Abbr. Volume, ArticleID (Year). arXiv:NNNNN [cat].`
+- Sort: reverse-chronological; co-author order: alphabetical by surname (HEP field convention)
+- Citation counts: NOT displayed on any peer group site
+
+### Architecture
+
+The v1.1 architecture introduces a strict two-environment separation:
+
+```
+SYNC ENVIRONMENT (GitHub Actions, weekly)
+  scripts/sync-publications.ts
+    ├── fetch InspireHEP + arXiv
+    ├── merge, validate with PublicationsSchema.safeParse()
+    └── write content/publications.json on success only
+
+BUILD ENVIRONMENT (Next.js SSG, triggered by push)
+  src/content/accessors/publications.ts
+    └── import rawPublications from "content/publications.json"
+    └── PublicationsSchema.parse() at module load — throws at build if invalid
+```
+
+The handoff artifact is `content/publications.json`. The sync script never imports Next.js internals. The build never calls external APIs. The sync script must NOT be added to the `prebuild` hook — that would make local development require network access.
+
+**Modified files (additive only — no structural rewrite):**
+
+| File | Change |
+|------|--------|
+| `src/content/schemas/publications.schema.ts` | Add `source: z.enum(["manual","inspirehep","arxiv"]).default("manual")` |
+| `src/content/schemas/people.schema.ts` | Add `arxiv_id?: string` and `inspirehep_id?: string` as top-level optionals |
+| `src/content/accessors/publications.ts` | Add `getPublicationsByAuthor(nameVariants, { lastNYears? })` |
+| `src/content/index.ts` | Re-export `getPublicationsByAuthor` |
+| `src/app/[locale]/people/[slug]/page.tsx` | Call `getPublicationsByAuthor` with person's name variants |
+
+**New files:**
+
+| File | Type |
+|------|------|
+| `scripts/sync-publications.ts` | CLI sync script |
+| `.github/workflows/sync-publications.yml` | CI/cron workflow |
+
+**Key accessor signature:**
+```ts
+export function getPublicationsByAuthor(
+  nameVariants: string[],
+  options: { lastNYears?: number } = {},
+): Publication[]
+```
+Accepts plain strings (not a `Person` object) to avoid circular imports between `publications.ts` and `people.ts`. The page component builds the name variants.
+
+**Validation pipeline (three gates):**
+1. Sync script: `safeParse()` in memory before `writeFileSync` — fail fast, no partial write
+2. CI Action: `pnpm validate-content` after write, before commit — belt-and-suspenders
+3. Vercel build: `PublicationsSchema.parse()` at module load — final guard
+
+**Year extraction rule:**
+- InspireHEP records: `publication_info[0].year` if present (journal year); fall back to `parseInt(preprint_date.slice(0,4))`
+- arXiv records: year from `<published>` (version 1 submission date, not `<updated>`)
 
 ### Critical Pitfalls
 
-1. **Translation-key divergence crashes production** — missing `en.json` key for a new `es.json` addition throws when visitor toggles locale. Prevent via `onError`/`getMessageFallback` in `i18n/request.ts` + CI diff of key sets + TypeScript augmentation of the message schema. Phase 1.
-2. **Malformed JSON kills the build** — one smart-quote or trailing comma from a non-technical editor via GitHub web UI breaks Vercel deploys. Prevent via Zod `.parse()` in every content loader + pre-commit hook + JSON Schema `$schema` reference for VS Code IntelliSense + `content/README.md` editor docs. Phase 2.
-3. **`next/image` silently breaks static export** — default loader requires a Node server. Prevent via `images: { unoptimized: process.env.STATIC_EXPORT === 'true' }` + dual CI build (`build:vercel` and `build:static`) on every PR. Phase 1.
-4. **Hero carousel destroys LCP/CLS/a11y** — auto-advance violates WCAG 2.2.2; all slides loading eagerly blows LCP; unset aspect-ratio shifts layout. Prevent via `priority` + `fetchPriority="high"` on slide 1 only, explicit `aspect-ratio` container, visible pause control, `prefers-reduced-motion` disables auto-advance (or use CSS-only fade for 3 slides, no library). Phase 3 build + Phase 6 polish verify.
-5. **Language switcher loses current page + Schema.org `hreflang` missing** — default `<Link>` to `/` breaks `<html lang>` updates and query-param preservation; `sitemap.ts` without `alternates.languages` makes Google index only one locale. Prevent via next-intl's `useRouter().replace(pathname, { locale })` + `sitemap.ts` iterating `locales x routes` with `alternates.languages` + `x-default` pointing to ES. Phase 3 (switcher) + Phase 5 (sitemap/metadata).
-6. **Email harvesting** — raw `mailto:` in rendered HTML floods PIs with predatory-journal spam. Prevent via shared `<EmailLink>` component with JS reveal + split-form JSON storage (`{ local, domain }`) + CI grep forbidding `mailto:` literals in JSX. Phase 3.
+**Pitfall 1 (CRITICAL): `z.strictObject` nukes v1.0 entries without `.default("manual")`**
+`PublicationSchema` is `z.strictObject`. Adding `source` as a required field without `.default("manual")` breaks all 20 existing entries on the first build after the schema change. Use `z.enum(["manual","inspirehep","arxiv"]).default("manual")`. Schema change and JSON Schema regeneration (`pnpm generate-schemas`) must ship in the same commit — never separately.
+
+**Pitfall 2 (CRITICAL): Rate limit cascade from `Promise.all()` over all authors**
+InspireHEP allows 15 req/5s. Firing all 15 group members in parallel saturates the window. Use a concurrency-limited queue (3–5 parallel max), 2s inter-batch delay, exponential backoff on 429. This must be in the initial script — the first CI run is the worst time to discover rate limiting.
+
+**Pitfall 3 (CRITICAL): arXiv name-based fallback contaminates the publication list**
+Members without a claimed arXiv author ID must be skipped for arXiv queries — do not fall back to `au:Rodriguez_M` name search. For common Spanish surnames, name-based search returns papers from unrelated researchers. An incomplete arXiv list is correct; a contaminated one requires a data recovery operation and a `git revert`.
+
+**Pitfall 4 (CRITICAL): BAI vs. INSPIRE-ID format confusion causes silent zero-results**
+`inspirehep_id` in `people.json` must store the BAI format (`E.Calzetta.1`), not the INSPIRE numeric ID (`INSPIRE-00140145`). The sync script must validate the format at startup and log a clear error if the wrong format is detected rather than passing it silently to the API and returning 0 papers.
+
+**Pitfall 5 (CRITICAL): Non-deterministic JSON serialization causes weekly spurious Vercel rebuilds**
+`JSON.stringify` output order varies across Node.js versions and across InspireHEP pagination shifts. Sort publications deterministically before serializing. Add `git diff --quiet content/publications.json` before committing — skip commit entirely if byte-identical. Configure Vercel's "Ignored Build Step" as a backstop.
+
+**Pitfall 6 (MODERATE): Same collaboration paper appears N times (once per co-authoring group member)**
+Planck, Euclid, LSST papers appear in every co-author's InspireHEP query result. Post-processing dedup by arXiv ID (O(n) pass) prevents the same paper from appearing 3× on `/publications`. This is intra-run dedup, distinct from the deferred cross-source DOI dedup.
+
+**Pitfall 7 (MODERATE): `PersonSchema` rejects `arxiv_id`/`inspirehep_id` until schema updated AND JSON Schema regenerated**
+`PersonSchema` is `z.strictObject`. Any maintainer who adds `arxiv_id` to `people.json` before the schema extension is committed breaks all CI builds with a cryptic Zod error. Schema + JSON Schema regeneration must ship as one atomic commit before any `people.json` changes.
+
+**Pitfall 8 (MODERATE): `publications_selected` becomes a stale-reference trap**
+The v1.0 `PersonSchema` has `publications_selected: []`. The sync rewrites the ID space in `publications.json`. Any populated `publications_selected` entry becomes a dangling reference with no build-time guard (the cross-file validator was deferred in Plan 02-05). Either deprecate the field with JSDoc or activate the validator — decide explicitly in Phase A.
+
+**Pitfall 9 (MODERATE): Senior PI's papers silently truncated without pagination**
+InspireHEP defaults to 10 results. `size=25` silently caps a PI with 120 papers at 25. Always read `hits.total` from the first response and paginate until complete or the configured cap is reached. Log "fetched X of Y total" per author to the Action summary.
+
+**Pitfall 10 (MODERATE): Sync failure goes unnoticed for weeks**
+GitHub cron failure emails may not reach the PI. Add `_meta: { synced_at, status }` to the JSON output. Log per-run delta ("X entries added, Y removed") to the Action summary. Document in the maintainer guide: if no new paper shows up after 2+ weeks, check Actions → sync-publications.
+
+---
 
 ## Implications for Roadmap
 
-Based on combined research, the architecture's phase-order dependency graph (Phase 1 foundation -> 2 content -> 3 shell -> 4 pages -> 5 SEO -> 6 polish) is the correct frame. Seven phases are recommended — the architecture's 6 phases plus a Phase 0 for design-system generation that must precede any UI work per `CLAUDE.md`.
+### Phase A: Schema Extension (Atomic First Step)
 
-### Phase 0: Design System & Project Bootstrap
-**Rationale:** Typography-driven restrained aesthetic is a differentiator (most academic sites fail execution). The ui-ux-pro-max design-system run must happen before any UI tokens are written, per `CLAUDE.md`. Also installs the monorepo baseline (Next.js 16, TS strict, Tailwind v4, pnpm, ESLint 9 flat config, Prettier).
-**Delivers:** `design-system/MASTER.md`, `globals.css` with OKLCH tokens, font pairing chosen (Source Serif 4 + Inter or equivalent), scaffolded `src/app/` with root layout, dual build scripts (`build:vercel`, `build:static`) wired in CI.
-**Addresses features:** Restrained typography-driven aesthetic (differentiator); WCAG-AA-compatible contrast tokens.
-**Avoids pitfalls:** #3 (next/image vs static export — configure dual-build now), #12 (font FOUT/CLS — variable font + subsets from day 1).
+**Rationale:** Every other v1.1 task imports updated schema types. The `z.strictObject` pitfalls (Pitfalls 1, 7) materialize if this is split across commits. Must be the first and atomic.
 
-### Phase 1: i18n Foundation
-**Rationale:** Retrofitting next-intl onto a single-locale app is painful; routing decisions (locale prefix, default locale, middleware vs static-export) ripple across every URL, link, sitemap entry, and JSON-LD record. Lock these before any page is built.
-**Delivers:** `src/i18n/{routing,request,navigation}.ts`, `middleware.ts`, `messages/{es,en}.json` skeleton with `Navigation` + `Metadata` namespaces, `src/app/[locale]/layout.tsx`, `src/config/site.ts` with placeholder values, `onError`/`getMessageFallback` configured, CI diff script (`scripts/check-translations.ts`) that fails on key-set divergence, TS module augmentation for `next-intl`.
-**Uses stack:** next-intl v4.9, TS strict, Zod (for eventual schemas).
-**Avoids pitfalls:** #1 (translation-key divergence — `onError` + CI diff in place before any content lands), #16 (ARIA in one language — pattern enforced via `t()` from day 1).
-
-### Phase 2: Content Layer
-**Rationale:** Schemas must be locked before pages consume them — building a `PersonCard` before `people.json` shape is stable guarantees rework. Zod validation at import time is the build-time contract that lets non-technical editors edit JSON safely.
-**Delivers:** `src/content/schemas.ts` (Person, Publication, ResearchArea, Outreach with `BilingualText` helper, slug uniqueness + ASCII-only regex, `photo` existence check, `current_affiliation` on past members); `src/content/*.ts` typed accessors with derived fields (e.g., `peopleByCategory`); placeholder `content/*.json` files that *stress-test* the schema (long names, portrait photos, optional fields exercised); `content/README.md` with editor workflow; pre-commit hook + CI that parses all content before `next build`.
-**Implements architecture:** Pattern 1 (Content-as-Code with Zod validation boundary).
-**Avoids pitfalls:** #4 (malformed JSON kills build — Zod + pre-commit + CI), #5 (missing photo references — build fails on missing files; placeholder avatar component), #9 (placeholder-to-real breaks layout — stress-test placeholders now), #15 (slug collisions / non-ASCII — Zod uniqueness + regex), #18 (contact-info drift — `site.config.ts` is single source).
-
-### Phase 3: Layout Shell & Navigation
-**Rationale:** Every page depends on the header/footer and language switcher. Getting the server/client split right once (per validated `layout-shell.md` pattern) avoids `useTranslations`-in-client-bundle creep later.
-**Delivers:** `SiteHeader` (RSC) + `HeaderClient` (client) with language toggle using `router.replace(pathname, { locale })`, mobile menu, active-link indicator; `SiteFooter` with affiliations strip (UBA/FCEN/CONICET) and socials; `<html lang>` set from params; reusable `<EmailLink>` obfuscation component; CI lint forbidding raw `mailto:` in JSX.
-**Implements architecture:** Pattern 2 (Server-Fetch-Data, Client-Interact); Pattern 4 (metadata driven by `site.config.ts`).
-**Avoids pitfalls:** #6 (language switcher loses current page — use `router.replace`), #8 (email harvesting — `<EmailLink>` + CI grep), #16 (ARIA translated via `t()`).
-
-### Phase 4: Core Pages (parallelizable across pages)
-**Rationale:** Once schemas + shell exist, the six pages are independent component trees — home, people (list + `[slug]`), research, publications, outreach, contact. Can be parallelized across developers/agents. Each page ships with its own `generateMetadata` + tests.
 **Delivers:**
-- **Home** — restrained hero (single image or 2-3-slide CSS crossfade honoring `prefers-reduced-motion`; no auto-advance library unless pause control added), tagline, 3 highlight cards linking to research areas, partner logo strip
-- **People list + `[slug]` detail** — sectioned roster (PIs -> Postdocs -> PhDs -> Undergrads -> Past); detail pages for PIs/Postdocs/PhDs only, with external IDs (ORCID, arXiv, Google Scholar, CONICET), selected publications, bio, `<EmailLink>`
-- **Research** — grid of 4 areas with substantive narrative per area
-- **Publications** — server shell + `PublicationsFilter` client component with nuqs for URL-state filtering by year/author/topic; arXiv + DOI links per entry
-- **Outreach** ("Divulgación") — grid of activities
-- **Contact** — address, lazy-loaded Google Maps iframe (`aspect-ratio` container, `loading="lazy"`, or facade pattern if CWV suffers), `<EmailLink>`, socials
-- **"How to join" paragraph** on People or Contact page
-**Uses stack:** next-intl `getTranslations`, `next/image`, embla or CSS crossfade, nuqs.
-**Addresses features:** All table-stakes + "curated selected pubs" + "research-interest prose" + bilingual parity.
-**Avoids pitfalls:** #2 (hero LCP/CLS/a11y — explicit aspect-ratio, `priority` on slide 1 only, reduced-motion respected), #10 (publications unmaintainable — schema matches arXiv/ADS shape now; filter perf tested at 200 entries), #13 (Maps perf — lazy + facade), #14 (carousel as critical content — highlights live in a grid, not slides), #17 (mixed-language content — `<span lang="en">` for paper titles on ES pages).
+- `source: z.enum(["manual","inspirehep","arxiv"]).default("manual")` on `PublicationSchema`
+- `arxiv_id?: string` and `inspirehep_id?: string` on `PersonSchema`
+- Regenerated `content/publications.schema.json` and `content/people.schema.json`
+- `pnpm check-content` passes on the existing 20 v1.0 entries without any JSON changes
+- Decide fate of `publications_selected` (deprecate JSDoc or activate cross-file validator)
+- Flag and decide the pre-2007 arXiv ID format question (`gr-qc/9209007` vs. schema regex)
 
-### Phase 5: SEO, Schema.org & Sitemap
-**Rationale:** Sitemap + hreflang are blockers for Google indexing of the second locale. Must land after all pages exist so URL-set is known. Academic audience literally Googles groups — SEO credibility is feature-parity with content credibility.
-**Delivers:** `src/app/sitemap.ts` iterating `locales x routes` with `alternates.languages` + `x-default` -> ES; `src/app/robots.ts`; shared `lib/metadata.ts` with per-page `generateMetadata` (title, canonical, hreflang alts, OG, Twitter card); `OrganizationJsonLd` / `ResearchOrganization` on home only; `PersonJsonLd` on each `/people/[slug]`; `ScholarlyArticle` JSON-LD on publication items; static OG PNG (dynamic next/og deferred — incompatible with static export unless fully pre-rendered).
-**Uses stack:** `schema-dts` typed JSON-LD, Next.js `MetadataRoute`.
-**Avoids pitfalls:** #7 (hreflang missing from sitemap), duplicate Organization on every page.
+**Avoids:** Pitfalls 1, 4 (schema migration), 7 (JSON Schema staleness), 8 (`publications_selected`)
 
-### Phase 6: Polish, A11y & Performance
-**Rationale:** WCAG AA, CWV, and static-export smoke test can only be verified once all pages exist. This is also where the reduced-motion and stress-tested-placeholder work converges.
-**Delivers:** Axe/Lighthouse passes per page (LCP < 2.5s mobile, CLS < 0.1, TBT < 200ms on contact page); keyboard nav test; screen-reader spot check on home, people, contact; 404 pages at root + `[locale]` scopes; static-export smoke test via `STATIC_EXPORT=true pnpm build && npx serve out`; printable publications CSS (cheap PI win); funding acknowledgements footer block (content permitting).
-**Addresses features:** WCAG AA compliance; printable publications.
-**Avoids pitfalls:** All remaining — verifies prevention from prior phases actually held.
+**Research flag:** None — exact Zod syntax and file locations are fully specified in ARCHITECTURE.md.
 
-### Phase 7 (post-launch / ops): Link-rot & Content Ops
-**Rationale:** Link rot accumulates at ~25%/2yr -> 66%/9yr; weekly `lychee` check + auto-issue prevents silent decay. Only needed after v1 ships.
-**Delivers:** GitHub Action running `lychee` weekly over `content/**/*.json`; auto-issue with broken links; `checked_at` field in external-link schemas.
-**Avoids pitfalls:** #11 (link rot).
+---
+
+### Phase B: Accessor Extension
+
+**Rationale:** The `/people/[slug]` page needs `getPublicationsByAuthor` before it can render per-person publications. Clean additive export — no risk of breaking existing behavior.
+
+**Delivers:**
+- `getPublicationsByAuthor(nameVariants: string[], { lastNYears?: number })` in `src/content/accessors/publications.ts`
+- Re-export from `src/content/index.ts`
+- Unit tests: last-5-years cutoff, name-variant matching, no circular import
+
+**Avoids:** Circular dependency between `publications.ts` and `people.ts` (plain string `nameVariants` avoids importing `Person`)
+
+**Research flag:** None — signature and placement fully specified.
+
+---
+
+### Phase C: Sync Script (Core Logic)
+
+**Rationale:** The largest phase. Must be validated locally (`pnpm exec tsx scripts/sync-publications.ts` with dry-run / small sample output) before wiring into CI. Building the Action before the script is stable wastes CI minutes and makes debugging harder.
+
+**Delivers:**
+- `scripts/sync-publications.ts` — production-quality from the first commit:
+  - InspireHEP per-author BAI query with concurrency-limited queue (max 3–5 parallel), 2s pause, exponential backoff on 429
+  - arXiv per-author query by claimed `arxiv_id` only — no name fallback; skip and log warning for members without `arxiv_id`
+  - `fast-xml-parser` with `isArray` callback for Atom entries
+  - Year extraction: `publication_info[0].year` for InspireHEP; `<published>` year for arXiv
+  - Unicode normalization: `name.normalize('NFC')` on all author strings; BibTeX markup strip on titles
+  - Intra-run dedup by arXiv ID (prevents Planck paper appearing 3×)
+  - Deterministic sort before serialization (year desc, then arxiv ID alpha)
+  - `PublicationsSchema.safeParse()` → write on success; `process.exit(1)` on failure; no partial writes
+  - `_meta: { synced_at, status }` in output JSON
+  - BAI format validation at startup — rejects `INSPIRE-00XXXXXX` with clear error message
+  - Logging: per-author "fetched X of Y total" (surfaces pagination truncation)
+  - Pagination: read `hits.total`, paginate until complete or configurable cap
+- `pnpm add -D fast-xml-parser`
+- `package.json` script: `"sync-publications": "tsx scripts/sync-publications.ts"`
+- Migration decision documented in script comment: v1.0 placeholder data replaced on first run (Option C — clean replacement acceptable because all v1.0 entries are placeholder data)
+
+**Human dependency (must be scheduled explicitly):** BAI identifiers and arXiv IDs populated in `people.json` for all current members before this phase can be tested end-to-end.
+
+**Avoids:** Pitfalls 2 (rate limit), 3 (arXiv fallback), 4 (BAI format), 5 (deterministic sort), 6 (Planck dedup), 7 (wrong year field), 9 (pagination truncation), 17 (encoding corruption)
+
+**Research flag:** None — all API behavior and implementation patterns are fully specified.
+
+---
+
+### Phase D: GitHub Action + CI Wiring
+
+**Rationale:** Wire into CI only after the sync script is locally validated. Covers branch-protection gotcha, spurious-rebuild prevention, and failure visibility.
+
+**Delivers:**
+- `.github/workflows/sync-publications.yml`:
+  - Schedule: `0 6 * * 1` (Monday 06:00 UTC)
+  - `workflow_dispatch` for manual testing
+  - `permissions: contents: write` (required)
+  - Node 20 pinned; pnpm via `pnpm/action-setup@v5`
+  - `pnpm install --frozen-lockfile`
+  - `pnpm exec tsx scripts/sync-publications.ts`
+  - `pnpm validate-content` (second validation gate)
+  - `git diff --quiet content/publications.json || (git add ... && git commit -m "chore: sync publications [skip ci]" && git push)` — diff-check before commit; `[skip ci]` prevents loop
+- Vercel "Ignored Build Step" configured: `git diff HEAD^ HEAD --quiet -- ./content/publications.json`
+- First manual `workflow_dispatch` run to verify push to `main` actually lands (tests branch protection)
+- Action summary logs "Changed: X added, Y removed" or "No changes — skipping commit"
+
+**Research flag:** Verify whether `main` has branch protection rules before this phase. If yes, grant `github-actions[bot]` bypass in Settings → Branches, or use a fine-grained PAT stored as a repository secret.
+
+**Avoids:** Pitfalls 5 (GITHUB_TOKEN permissions), 5/6 (spurious rebuild), 10 (failure visibility), 11 (tsx path aliases in CI)
+
+---
+
+### Phase E: Display Layer Integration
+
+**Rationale:** With schema, accessor, and sync script in place, display changes are additive and isolated. Can be developed in parallel with Phase D once Phases A and B are committed.
+
+**Delivers:**
+- `/people/[slug]/page.tsx`: last-5-years section using `getPublicationsByAuthor(nameVariants, { lastNYears: 5 })`; author count subtitle; source badge per entry
+- `/publications/page.tsx` + `publications-filter.tsx`: source filter toggle ("Todos / InspireHEP / arXiv / Manual"); "Actualizado el [date]" staleness indicator from `_meta.synced_at`
+- `publication-row.tsx`: source badge component (small pill, text-xs); preprint vs. published status indicator
+- Bilingual i18n strings in `messages/{es,en}.json` for all new UI labels: source badges, status indicators, filter labels, "last updated" string, footnote
+- Footnote on `/publications` (bilingual): explains two-source design and why duplicates may appear
+- `display_name_normalized` added to `people.json` schema for author highlighting (optional; activate only if time allows)
+
+**Avoids:** Pitfall 15 (author names indistinguishable from external collaborators)
+
+**Research flag:** None for core display. Author highlighting (bold group member names) is a nice-to-have differentiator — implement only after Phases C and D are green.
+
+---
 
 ### Phase Ordering Rationale
 
-- **Dependencies:** Design tokens precede UI (CLAUDE.md); i18n routing precedes pages (retrofit is painful); schemas precede content (prevents rework); content + shell precede pages (pages consume both); pages precede sitemap (URL-set must be known); all above precede CWV audit (can't measure what doesn't exist).
-- **Parallelization:** Phase 4's six pages are independent and should be parallelized across agents/developers; Phase 5's JSON-LD blocks can run per-page-parallel; Phase 6's a11y audits are per-page-parallel.
-- **Pitfall prevention is front-loaded:** Phase 1 wires `onError` + CI translation diff before any content lands; Phase 1 wires dual-build CI before any `next/image` usage hardens; Phase 2 wires Zod before any page imports JSON. Every critical pitfall has a prevention hook in a phase that precedes where the pitfall would manifest.
-- **Scope discipline:** All v2 deferrals (arXiv importer, CMS, dark mode, member login, seminar-listing-if-no-seminar) stay out of phase scope. The "how to join" paragraph and the seminar confirmation question stay surfaced to the user without auto-expanding scope.
+The A → B → C → D → E sequence is driven by concrete dependencies:
+- Schema (A) must be committed before any code that imports updated schema types
+- Accessor (B) must exist before the page component that calls it (E)
+- Sync script (C) must be locally validated before CI wiring (D) — CI debugging is slower
+- Phases C and E can run in parallel once A and B are committed (if two developers are available)
+- The human dependency (populating `people.json` with BAI/arXiv IDs) is not a code task but must be scheduled at the start of Phase C — without it, Phase C cannot be tested against real data
 
-### Research Flags
-
-**Phases likely needing deeper research during planning (`/gsd:research-phase`):**
-- **Phase 3 (Layout Shell)** — the server/client split with next-intl-aware language toggle has multiple subtle edge cases (locale preservation on dynamic `[slug]` routes, `<html lang>` update, query-param preservation, `as-needed` vs `always` prefix behavior). Worth a focused research pass even though `references/patterns/layout-shell.md` covers most of it.
-- **Phase 5 (SEO / Schema.org)** — hreflang + `x-default` + `alternates.canonical` under `localePrefix: 'as-needed'` has known edge cases (see next-intl issues #647, #1845). Verify before shipping.
-- **Phase 6 (Static export smoke test)** — only Phase that exercises a second deploy target; if the group's actual hosting is decided here, research into `next-image-export-optimizer` or custom loader becomes live.
-
-**Phases with standard patterns (skip phase-level research):**
-- **Phase 0 (Design System & Bootstrap)** — ui-ux-pro-max + `design-tokens-starter.md` are already validated.
-- **Phase 1 (i18n Foundation)** — `references/patterns/i18n-next-intl.md` covers this end-to-end, validated 2026-03.
-- **Phase 2 (Content Layer)** — Zod + JSON is a plain pattern; schemas are a design exercise, not a research one.
-- **Phase 4 (Core Pages)** — per-page implementation uses already-researched patterns (next/image, embla, nuqs). Page-specific questions, if any, are small enough to resolve inline.
-- **Phase 7 (Link-rot ops)** — `lychee` + GitHub Actions is boilerplate.
+---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Versions verified against official 2026-04 sources (Next.js blog, GitHub releases, next-intl releases); `embla-carousel-react` and `schema-dts` MEDIUM but well-established; one LOW flag on `next-image-export-optimizer` (only a contingent fallback). |
-| Features | HIGH | Peer institutional sites reviewed directly (MPA, IAS, CCA, Perimeter, DAMTP/CTC, IAFE); multilingual UX and carousel anti-pattern guidance triangulated across multiple sources; user v1 list validated without material gaps. |
-| Architecture | HIGH | Next.js 15/16 + next-intl patterns validated in prior landing-page project; static-export constraints verified against current Next.js docs; reference-pattern files already exist for i18n, SEO, layout-shell, design-tokens. |
-| Pitfalls | HIGH (framework traps) / MEDIUM (academic-site anti-patterns) | Framework pitfalls cited directly from next-intl and Next.js official docs and GitHub issues; academic anti-patterns verified against multiple community sources and standards (W3C WAI, WebAIM). Link-rot statistics from Ahrefs + academic studies. |
+| Stack | HIGH | `fast-xml-parser` 5.7.x confirmed at npm; `tsx` and native fetch already in project; GitHub Action actions verified against official docs; arXiv HTTP base URL confirmed from official manual |
+| Features | HIGH (API fields) / MEDIUM (UX conventions) | InspireHEP fields verified against live API call; last-5-years cutoff and source badge design are reasoned inference from domain practice, not documented norms from authoritative sources |
+| Architecture | HIGH | Derived from direct inspection of v1.0 codebase; relative import pattern confirmed in existing scripts; two-environment separation and `z.strictObject` + `.default()` interaction verified |
+| Pitfalls | HIGH | Rate limits from official docs + live verification; Zod strictObject behavior from v4 changelog + code inspection; GITHUB_TOKEN branch-protection limit from GitHub community discussions and official docs |
 
-**Overall confidence:** HIGH
+**Overall confidence:** HIGH for implementation decisions. MEDIUM for UX display conventions (last-5-years cutoff, source badge visual design, author highlighting).
 
 ### Gaps to Address
 
-- **Seminar/events listing decision:** Cosmology peer groups universally run weekly seminars; if the UBA group does, a seminar page is near-table-stakes. *Handling:* flag to user at roadmap-approval time; add Phase 4b (events.json + listing) only if confirmed.
-- **Deploy target is ambiguous in PROJECT.md** ("Vercel-first with static-export escape hatch"). *Handling:* build both paths from Phase 1 and test both in CI on every PR; defer the "which wins" decision to post-v1 ops.
-- **Group name and email are placeholders.** *Handling:* `src/config/site.ts` abstraction already handles this; real values land in a single one-line edit at user-confirmation time.
-- **Font pairing is TBD.** *Handling:* Phase 0 runs ui-ux-pro-max with project-specific keywords per CLAUDE.md; design-system output locks pairing.
-- **Tailwind v4.2.2 exact release date has a source discrepancy.** *Handling:* resolve at Phase 0 setup via `npm view tailwindcss version`; low impact (v4.x API stable).
-- **Whether the group releases public software/datasets.** *Handling:* not in v1 scope; if confirmed later, additive (separate Software page).
-- **Whether "Past Members" need `current_affiliation`.** *Handling:* schema in Phase 2 adds the optional field preemptively — cheaper to have and not use than to retrofit.
+- **`people.json` BAI population** — Not a code gap. A human action that must be scheduled explicitly as a prerequisite milestone item for Phase C testing. The roadmap should surface this as a named human-action item.
+- **Pre-2007 arXiv ID format** — InspireHEP records for older papers use `gr-qc/9209007` format, which fails the current `PublicationSchema` regex `^\d{4}\.\d{4,5}(v\d+)?$`. Decide in Phase A: either extend the regex to accept both formats (`^(\d{4}\.\d{4,5}|[a-z-]+/\d{7})(v\d+)?$`) or omit old-format IDs from the `arxiv` field. Both are valid; the choice must be explicit.
+- **`actions/setup-node` v6** — One search result claimed v6 released 2026-03-04. Recommendations pin to v4 (confirmed stable). Verify from the GitHub releases page during Phase D and upgrade if confirmed.
+- **`stefanzweifel/git-auto-commit-action` pinned version** — STACK.md uses v5 in the YAML example but notes v7.1.0 may be the latest. Verify and pin to the current stable major during Phase D.
+- **`publications_selected` fate** — Decide in Phase A: deprecated (JSDoc warning), removed from schema, or cross-file validator activated. Any of the three is acceptable; the decision must be explicit and documented.
+
+---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-
-**Stack / architecture:**
-- Next.js 16.2 release blog (2026-03-18), Static Exports guide (v16.2.4), Image component API, `generateStaticParams` reference
-- next-intl v4.9.1 release notes, Routing configuration, Middleware & Static Export constraints
-- Zod v4.3.6 docs, schema-dts 2.0.0 (Google Open Source)
-- Tailwind CSS v4.2.x GitHub releases
-- Internal validated references: `references/patterns/i18n-next-intl.md`, `references/patterns/seo-metadata.md`, `references/patterns/layout-shell.md`, `references/patterns/design-tokens-starter.md`
-
-**Features (peer institutional sites):**
-- MPA Garching, IAS Natural Sciences (Princeton), Flatiron CCA, Perimeter Institute, DAMTP/CTC Cambridge, IAFE (Buenos Aires, LATAM peer)
-- Cambridge/Imperial/UW-Madison/UC Davis cosmology seminar pages (evidence of seminar universality)
-
-**Pitfalls (framework traps):**
-- next-intl docs + issues #647, #1845 (localePrefix edge cases)
-- Next.js static-exports guide, image-API-error doc, font optimization doc
-- W3C WAI Carousels Tutorial, WebAIM Animation and Carousels
-- Schema.org Organization/Person/ResearchProject specs
+- Live InspireHEP API: `https://inspirehep.net/api/literature?q=a%20E.Calzetta.1&size=1` — response shape, BAI format, field names confirmed (2026-04-18)
+- [inspirehep/rest-api-doc README](https://github.com/inspirehep/rest-api-doc) — rate limits, BAI query syntax, pagination
+- [arXiv API User's Manual](https://info.arxiv.org/help/api/user-manual.html) — Atom XML shape, `<published>` semantics, HTTP base URL, rate limits
+- [arXiv Author Identifiers](https://info.arxiv.org/help/author_identifiers.html) — opt-in claiming, no fallback disambiguation
+- [fast-xml-parser GitHub](https://github.com/NaturalIntelligence/fast-xml-parser) — v5.7.1, `isArray` callback, `ignoreAttributes`
+- Direct codebase inspection: `scripts/validate-content.mjs`, `scripts/generate-schemas.mjs`, `src/content/schemas/publications.schema.ts`, `src/content/schemas/people.schema.ts`, `tsconfig.json`, `package.json` (2026-04-18)
+- [GitHub GITHUB_TOKEN documentation](https://docs.github.com/en/actions/concepts/security/github_token) — `contents: write` vs. branch protection bypass
+- [Vercel Ignored Build Step](https://vercel.com/kb/guide/how-do-i-use-the-ignored-build-step-field-on-vercel) — `git diff HEAD^ HEAD --quiet` syntax
 
 ### Secondary (MEDIUM confidence)
-
-- Digital.gov multilingual best practices, Weglot language-selector guide (flags-vs-names, top-corner placement)
-- NN/G, Baymard, CXL carousel-anti-pattern studies
-- azu/next-intl-example repo (working `output: 'export'` pattern)
-- Spencer Mortensen email-obfuscation study (2026), Cloudflare Email Address Obfuscation
-- web.dev embed-best-practices, Chrome lazy-loading-third-parties (Maps facade guidance)
-- Ahrefs link-rot study (66.5% dead at 9 years), Leitner SE-research broken-links study
-- Academic lab website best-practice guides (theacademicdesigner.com, jedyang.com)
+- Peer cosmology group sites: UCL Cosmoparticle, IRIS-HEP, KIPAC, CCAPP — publication display conventions (survey 2026-04-18)
+- [Zod v4 changelog](https://zod.dev/v4/changelog) — `z.strictObject` and `.default()` on optional fields
+- [InspireHEP search tips](https://help.inspirehep.net/knowledge-base/inspire-paper-search/) — BAI vs. INSPIRE-ID format
+- [GitHub Actions branch protection community discussion](https://github.com/orgs/community/discussions/25305) — GITHUB_TOKEN cannot push to protected branches
 
 ### Tertiary (LOW confidence)
-
-- Tailwind v4.2.2 exact release date (GitHub vs one secondary source disagree) — resolve at Phase 0 via `npm view`
-- Font pairing for academic aesthetic — defer to Phase 0 ui-ux-pro-max run
-- `next-image-export-optimizer` (suggested only as fallback if static hosting becomes primary)
+- `actions/setup-node` v6 existence — one search result; recommendations pin to v4
+- `next-image-export-optimizer` — static-export fallback suggestion only; not needed for primary Vercel deployment
 
 ---
-*Research completed: 2026-04-17*
+
+*Research completed: 2026-04-18*
+*Milestone: v1.1 — arXiv + InspireHEP publication sync*
 *Ready for roadmap: yes*
