@@ -125,7 +125,7 @@ Plans:
 - [ ] 04-02-PLAN.md — Home page: hero carousel + intro + 3 highlight cards + partner strip (HOME-01..07) [wave 2]
 - [ ] 04-03-PLAN.md — People list page + /people/[slug] detail page with generateStaticParams + 5 supporting components (PEOP-01..12) [wave 2]
 - [ ] 04-04-PLAN.md — Research page with 4-area grid + Lucide icons (RSCH-01..02) [wave 2]
-- [ ] 04-05-PLAN.md — Publications page: year-grouped bibliography, no filters (PUBS-01..03; PUBS-04 deferred) [wave 2]
+- [ ] 04-05-PLAN.md — Publications page: year-grouped bibliography, no filters (PUBS-01..02; PUBS-03 and PUBS-04 both deferred) [wave 2]
 - [ ] 04-06-PLAN.md — Journal Club page: upcoming sessions + past-sessions archive by academic year (CLUB-01..02) [wave 2]
 - [ ] 04-07-PLAN.md — Outreach page: intro + activity grid, optional links hide when absent (OTRCH-01..03) [wave 2]
 - [ ] 04-08-PLAN.md — Contact page: address + office + obfuscated email + social block + lazy Google Maps embed (CONT-01..05) [wave 2]
