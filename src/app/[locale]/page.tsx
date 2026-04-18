@@ -1,49 +1,69 @@
-import {useTranslations} from 'next-intl';
-import {setRequestLocale} from 'next-intl/server';
-import {routing} from '@/i18n/routing';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
+import { localize, siteConfig } from '@/content';
+import { HeroCarousel } from '@/components/home/HeroCarousel';
+import { Highlights } from '@/components/home/Highlights';
+import { PartnerStrip } from '@/components/home/PartnerStrip';
 
 type Locale = (typeof routing.locales)[number];
+type Props = { params: Promise<{ locale: Locale }> };
 
-type Props = {
-  params: Promise<{locale: Locale}>;
-};
-
-export default async function HomePage({params}: Props) {
-  // Next.js 16: params is a Promise — await before use
-  const {locale} = await params;
-  // setRequestLocale required in each RSC that reads translations (stays on static path)
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
   setRequestLocale(locale);
 
-  return <HomeContent />;
-}
+  const t = await getTranslations('home');
 
-function HomeContent() {
-  const tMeta = useTranslations('meta');
+  const slides = [
+    { src: '/Portadas/portada_1.jpg', alt: '', width: 1920, height: 820 },
+    { src: '/Portadas/portada_2.png', alt: '', width: 1920, height: 820 },
+    { src: '/Portadas/portada_3.jpg', alt: '', width: 1920, height: 820 },
+  ];
+
+  const tagline = localize(siteConfig.tagline, locale);
+  const affiliation = siteConfig.affiliations
+    .map(a => localize(a.name, locale))
+    .join(' · ');
+
+  const partners = siteConfig.affiliations.map(a => ({
+    name: localize(a.name, locale),
+    url: a.url,
+  }));
+
+  // HOME-05: split on `\n\n` so each paragraph renders as a real <p> element.
+  // Do NOT use whitespace-pre-line — semantic paragraphs required (2–3 per spec).
+  const introParagraphs = t('intro').split('\n\n').filter(p => p.trim().length > 0);
 
   return (
-    <section className="mx-auto max-w-2xl px-6 py-24">
-      <h1 className="text-4xl font-semibold tracking-tight">
-        {tMeta('siteName')}
-      </h1>
-      <p className="mt-4 text-ink-muted">
-        {tMeta('institution')}
-      </p>
+    <>
+      <HeroCarousel
+        slides={slides}
+        groupName={siteConfig.groupName}
+        tagline={tagline}
+        affiliation={affiliation}
+      />
 
-      {/*
-        Greek-subset probe — if these render in a system fallback (Times / sans-serif)
-        instead of the chosen serif / sans, the Greek subset is not wired correctly.
-        Verified in Task 3 checkpoint. Remove in Phase 3 when the real Home page lands.
-      */}
-      <p className="mt-12 font-serif text-lg">
-        Greek (serif): Λ Ω H₀ σ₈ χ² μ ρ θ
-      </p>
-      <p className="mt-2 font-sans text-base">
-        Greek (sans): Λ Ω H₀ σ₈ χ² μ ρ θ
-      </p>
+      <section className="mx-auto max-w-3xl space-y-4 px-6 py-16">
+        {introParagraphs.map((para, i) => (
+          <p key={i} className="font-serif text-lg leading-relaxed text-ink-muted">
+            {para}
+          </p>
+        ))}
+      </section>
 
-      <p className="mt-12 text-ink-subtle text-sm">
-        Phase 1 placeholder — replaced in Phase 3 (layout shell) and Phase 4 (home page).
-      </p>
-    </section>
+      <Highlights
+        sectionTitle={t('highlightsTitle')}
+        cards={[
+          { title: t('highlight1Title'), body: t('highlight1Body') },
+          { title: t('highlight2Title'), body: t('highlight2Body') },
+          { title: t('highlight3Title'), body: t('highlight3Body') },
+        ]}
+      />
+
+      <PartnerStrip
+        title={t('partnersTitle')}
+        partners={partners}
+      />
+    </>
   );
 }

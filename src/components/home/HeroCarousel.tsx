@@ -179,5 +179,6 @@ export default function HeroCarousel({
   );
 }
 
+export { HeroCarousel };
 export type { Slide, HeroCarouselProps };
 export { VISIBLE_MS, TRANSITION_MS };
