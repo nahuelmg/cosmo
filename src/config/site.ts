@@ -9,6 +9,11 @@
  * RESEARCH.md "Why not Zod for site.ts"
  */
 
+interface BilingualString {
+  es: string;
+  en: string;
+}
+
 type SocialPlatform =
   | "twitter"
   | "instagram"
@@ -66,6 +71,18 @@ export const siteConfig = {
   ] satisfies Affiliation[],
 
   contactEmail: "cosmologia@df.uba.ar",
+
+  address: {
+    es: "Departamento de Física, Pabellón I, Ciudad Universitaria, C1428EGA Ciudad Autónoma de Buenos Aires, Argentina",
+    en: "Department of Physics, Pabellón I, Ciudad Universitaria, C1428EGA Buenos Aires, Argentina",
+  } satisfies BilingualString,
+
+  office: {
+    es: "Oficina 6, Pabellón I, DF-FCEN, UBA",
+    en: "Office 6, Pabellón I, DF-FCEN, UBA",
+  } satisfies BilingualString,
+
+  mapQuery: "Departamento de Física, Pabellón I, Ciudad Universitaria, Buenos Aires",
 
   /** Populate as real social accounts become known. */
   socialLinks: [] satisfies SocialLink[],
