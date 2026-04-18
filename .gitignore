@@ -45,3 +45,6 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+
+# dev tooling — design reference, not deployed
+ui-ux-pro-max/
