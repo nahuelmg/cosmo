@@ -8,7 +8,7 @@
 
 All seven top-level pages (Home, People list + detail, Research, Publications, Journal Club, Outreach, Contact) render real placeholder content end-to-end in both locales (es/en), consuming the content layer from Phase 2 and wearing the layout shell from Phase 3.
 
-**Scope adjustment from roadmap:** Publications filter UI (PUBS-04) is deferred beyond Phase 4. The page renders a plain year-grouped list only — no filter controls, no URL-synced state. PUBS-04 moves to a future phase.
+**Scope adjustment from roadmap:** Publications filter UI (PUBS-03) *and* URL-synced filter state (PUBS-04) are both deferred beyond Phase 4. The page renders a plain year-grouped list only — no filter controls of any kind, no URL query params. Both PUBS-03 and PUBS-04 move to a future phase.
 
 SEO metadata (Phase 5), a11y audit (Phase 6), and content authoring (separate content-edit phase) are all out of scope.
 
@@ -67,7 +67,7 @@ SEO metadata (Phase 5), a11y audit (Phase 6), and content authoring (separate co
 <deferred>
 ## Deferred Ideas
 
-- **Publications filter UI + URL-synced state (PUBS-04)** — moved to a future phase. Phase 4 ships list-only; PUBS-04 is explicitly deferred, not dropped.
+- **Publications filter controls (PUBS-03) + URL-synced filter state (PUBS-04)** — both moved to a future phase. Phase 4 ships list-only; PUBS-03 and PUBS-04 are explicitly deferred, not dropped.
 - **"Where are they now?" alumni current-affiliation field** — deliberate user choice to avoid stale-data maintenance on Past Members.
 - **Per-slide hero captions** — considered, rejected in favor of static overlay.
 - **Hover/focus pause on carousel** — considered, rejected in favor of explicit-button-only control.

@@ -24,7 +24,7 @@
 
 - [ ] **HOME-01**: Hero section displays a rotating cover-photo carousel with 3–5 landscape placeholder images (1920×800, labeled "Hero Image 1", "Hero Image 2", …)
 - [ ] **HOME-02**: Hero carousel auto-advances with fade transitions every 6–8 seconds
-- [ ] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set) and pauses on hover/focus; a visible pause button is available
+- [ ] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set), pauses when the tab is backgrounded (`document.hidden`), and exposes a visible pause button. Hover and keyboard focus deliberately do NOT pause — the pause button is the single explicit affordance (locked in Phase 4 CONTEXT.md 2026-04-18).
 - [ ] **HOME-04**: Hero overlay displays the group name, short tagline, and affiliation with WCAG-AA contrast against every carousel image
 - [ ] **HOME-05**: Intro section below the hero shows 2–3 paragraphs about the group's mission and research focus
 - [ ] **HOME-06**: Highlights section shows 3 cards of recent publications, news, or featured research
@@ -54,8 +54,8 @@
 
 - [ ] **PUBS-01**: Publications page lists entries grouped by year, most recent first
 - [ ] **PUBS-02**: Each publication entry shows authors, title, journal, year, arXiv link, and DOI link
-- [ ] **PUBS-03**: Publications page provides filter controls for year, author, and topic
-- [ ] **PUBS-04**: Filter state is reflected in URL query params so a filtered view is shareable and the browser back button works
+- [ ] **PUBS-03**: Publications page provides filter controls for year, author, and topic *(deferred beyond Phase 4 — Phase 4 ships a plain year-grouped bibliography only; scope-adjusted 2026-04-18)*
+- [ ] **PUBS-04**: Filter state is reflected in URL query params so a filtered view is shareable and the browser back button works *(deferred beyond Phase 4; depends on PUBS-03)*
 
 ### Journal Club
 
@@ -210,8 +210,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RSCH-02 | Phase 4 — Core Pages | Pending |
 | PUBS-01 | Phase 4 — Core Pages | Pending |
 | PUBS-02 | Phase 4 — Core Pages | Pending |
-| PUBS-03 | Phase 4 — Core Pages | Pending |
-| PUBS-04 | Phase 4 — Core Pages | Pending |
+| PUBS-03 | Deferred — post-Phase 4 | Pending |
+| PUBS-04 | Deferred — post-Phase 4 | Pending |
 | CLUB-01 | Phase 4 — Core Pages | Pending |
 | CLUB-02 | Phase 4 — Core Pages | Pending |
 | OTRCH-01 | Phase 4 — Core Pages | Pending |
@@ -249,9 +249,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 - Phase 1 — Foundation: 7
 - Phase 2 — Content Layer: 9
 - Phase 3 — Layout Shell: 7
-- Phase 4 — Core Pages: 36
+- Phase 4 — Core Pages: 34 (PUBS-03 and PUBS-04 deferred 2026-04-18)
 - Phase 5 — SEO & Discoverability: 6
 - Phase 6 — Polish (A11y & Performance): 10
+- Deferred (post-Phase 4): 2 (PUBS-03, PUBS-04)
 
 ---
 *Requirements defined: 2026-04-17*
