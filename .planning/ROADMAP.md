@@ -103,23 +103,32 @@ Plans:
 
 **Depends on**: Phase 2, Phase 3
 
-**Requirements**: HOME-01, HOME-02, HOME-03, HOME-04, HOME-05, HOME-06, HOME-07, PEOP-01, PEOP-02, PEOP-03, PEOP-04, PEOP-05, PEOP-06, PEOP-07, PEOP-08, PEOP-09, PEOP-10, PEOP-11, PEOP-12, RSCH-01, RSCH-02, PUBS-01, PUBS-02, PUBS-03, PUBS-04, CLUB-01, CLUB-02, OTRCH-01, OTRCH-02, OTRCH-03, CONT-01, CONT-02, CONT-03, CONT-04, CONT-05, I18N-02
+**Requirements**: HOME-01, HOME-02, HOME-03, HOME-04, HOME-05, HOME-06, HOME-07, PEOP-01, PEOP-02, PEOP-03, PEOP-04, PEOP-05, PEOP-06, PEOP-07, PEOP-08, PEOP-09, PEOP-10, PEOP-11, PEOP-12, RSCH-01, RSCH-02, PUBS-01, PUBS-02, PUBS-03, CLUB-01, CLUB-02, OTRCH-01, OTRCH-02, OTRCH-03, CONT-01, CONT-02, CONT-03, CONT-04, CONT-05, I18N-02
+
+**Scope adjustment (from CONTEXT.md):** PUBS-04 (filter UI + URL-synced state) is explicitly **deferred** beyond Phase 4. Phase 4 ships a plain year-grouped Publications list; no filter controls, no URL-synced state. PUBS-04 moves to a future phase, not dropped.
 
 **Success Criteria** (what must be TRUE):
   1. The Home page shows a rotating hero carousel (3–5 landscape placeholders, 6–8s fade), an overlay with group name / tagline / affiliation that passes WCAG-AA contrast on every slide, an intro block, 3 highlight cards, and a partner logo strip; the carousel pauses on hover/focus, exposes a visible pause button, and does not auto-advance when `prefers-reduced-motion` is set (HOME-01..07).
   2. The People page lists PIs (5), Postdocs (2), PhDs (6), Undergrads, and Past Members in the correct card formats; clicking a PI / Postdoc / PhD card navigates to `/people/[slug]`; Undergrads and Past Members are not clickable (PEOP-01..06).
   3. Each `/people/[slug]` page shows a large photo, name, title, affiliation, 2–4 paragraph bio, research-interests bullets, selected-publications list, obfuscated email, office, ORCID, Google Scholar, and optional links that hide cleanly when absent (PEOP-07..12).
   4. The Research page shows an intro and a grid of four research areas (Dark Matter, Gravitational Waves, Early Universe, Artificial Intelligence) with icon/image, title, and short description (RSCH-01..02).
-  5. The Publications page lists entries grouped by year (most recent first) with authors / title / journal / year / arXiv / DOI per entry; filter controls for year, author, and topic update the list and write state to URL query params such that a filtered view is shareable and the browser back button restores prior state (PUBS-01..04).
+  5. The Publications page lists entries grouped by year (most recent first) with authors / title / journal / year / arXiv / DOI per entry (PUBS-01..03). PUBS-04 (filter UI + URL-synced state) deferred.
   6. The Journal Club page shows upcoming sessions (date, speaker, affiliation, title, paper link) and a past-sessions archive grouped by academic year (CLUB-01..02).
   7. The Outreach page shows an intro and a grid of activities (image, title, date, description) with optional links to videos / slides / articles that hide when not provided (OTRCH-01..03).
   8. The Contact page shows the FCEN postal address, office location in Pabellón I/II, obfuscated general contact email, a lazy-loaded Google Map embed below the fold (no LCP impact), and social-media links (CONT-01..05).
   9. Every page's own copy (intros, headings, body prose) renders translated when the locale toggles; nothing falls back to Spanish on English pages or vice versa (I18N-02).
 
-**Plans**: TBD — likely split per page (home, people, research, publications, journal-club, outreach, contact) to allow parallel execution.
+**Plans**: 8 plans (wave 1: 1 plan; wave 2: 7 plans parallel)
 
 Plans:
-- [ ] 04-01: TBD (sized during `/gsd:plan-phase 4`)
+- [ ] 04-01-PLAN.md — Shared prereqs: lucide-react install, third carousel placeholder, siteConfig address/office/mapQuery, seed Phase-4 message keys (es+en), build HeroCarousel + MapEmbed 'use client' leaves [wave 1]
+- [ ] 04-02-PLAN.md — Home page: hero carousel + intro + 3 highlight cards + partner strip (HOME-01..07) [wave 2]
+- [ ] 04-03-PLAN.md — People list page + /people/[slug] detail page with generateStaticParams + 5 supporting components (PEOP-01..12) [wave 2]
+- [ ] 04-04-PLAN.md — Research page with 4-area grid + Lucide icons (RSCH-01..02) [wave 2]
+- [ ] 04-05-PLAN.md — Publications page: year-grouped bibliography, no filters (PUBS-01..03; PUBS-04 deferred) [wave 2]
+- [ ] 04-06-PLAN.md — Journal Club page: upcoming sessions + past-sessions archive by academic year (CLUB-01..02) [wave 2]
+- [ ] 04-07-PLAN.md — Outreach page: intro + activity grid, optional links hide when absent (OTRCH-01..03) [wave 2]
+- [ ] 04-08-PLAN.md — Contact page: address + office + obfuscated email + social block + lazy Google Maps embed (CONT-01..05) [wave 2]
 
 ---
 
@@ -172,14 +181,14 @@ Plans:
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
-Phase 4 may fan out into parallel per-page plans once planned.
+Phase 4 fans out into parallel per-page plans (7 plans in Wave 2 after 1 shared-prereq plan in Wave 1).
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
 | 2. Content Layer | 5/5 | Complete ✓ | 2026-04-17 |
 | 3. Layout Shell | 5/5 | Complete ✓ | 2026-04-17 |
-| 4. Core Pages | 0/TBD | Not started | - |
+| 4. Core Pages | 0/8 | Not started | - |
 | 5. SEO & Discoverability | 0/TBD | Not started | - |
 | 6. Polish (A11y & Performance) | 0/TBD | Not started | - |
 
@@ -187,4 +196,5 @@ Phase 4 may fan out into parallel per-page plans once planned.
 
 *Roadmap created: 2026-04-17*
 *Depth: standard (6 phases)*
-*Coverage: 75/75 v1 requirements mapped*
+*Coverage: 75/75 v1 requirements mapped (PUBS-04 deferred beyond Phase 4 but still counted)*
+*Phase 4 planned: 2026-04-18*
