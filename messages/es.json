@@ -26,5 +26,72 @@
     "skipToContent": "Saltar al contenido principal",
     "openMenu": "Abrir menú de navegación",
     "closeMenu": "Cerrar menú de navegación"
+  },
+  "home": {
+    "intro": "Somos un grupo de investigación en cosmología teórica y observacional radicado en el Departamento de Física de la FCEN, UBA.\n\nNuestro trabajo conecta modelos del universo temprano con datos de relevamientos de gran escala, explorando la naturaleza de la materia oscura, la energía oscura y la estructura a gran escala del cosmos.",
+    "highlightsTitle": "Destacados",
+    "highlight1Title": "Cosmología de perturbaciones",
+    "highlight1Body": "Estudiamos las fluctuaciones primordiales y su evolución hasta las estructuras que observamos hoy.",
+    "highlight2Title": "Publicación reciente",
+    "highlight2Body": "Nuestro último trabajo analiza restricciones cosmológicas a partir de datos de lentes gravitacionales débiles.",
+    "highlight3Title": "Divulgación científica",
+    "highlight3Body": "Participamos activamente en actividades de comunicación pública de la ciencia a nivel nacional.",
+    "partnersTitle": "Instituciones asociadas"
+  },
+  "people": {
+    "title": "Personas",
+    "pi": "Investigadores Principales",
+    "postdoc": "Investigadores Postdoctorales",
+    "phd": "Estudiantes de Doctorado",
+    "undergrad": "Estudiantes de Grado",
+    "past": "Miembros Anteriores",
+    "researchInterests": "Líneas de investigación",
+    "selectedPublications": "Publicaciones seleccionadas",
+    "email": "Correo",
+    "office": "Oficina",
+    "orcid": "ORCID",
+    "scholar": "Google Scholar",
+    "links": "Enlaces",
+    "thesis": "Tema de tesis",
+    "backToPeople": "Volver a Personas"
+  },
+  "research": {
+    "title": "Investigación",
+    "intro": "Abordamos preguntas fundamentales sobre la estructura y evolución del universo mediante herramientas teóricas y el análisis de datos observacionales. Nuestras líneas activas abarcan la cosmología de perturbaciones, la materia oscura, la energía oscura y la formación de estructura a gran escala."
+  },
+  "publications": {
+    "title": "Publicaciones",
+    "arxiv": "arXiv",
+    "doi": "DOI",
+    "preprint": "Preprint"
+  },
+  "journalClub": {
+    "title": "Journal Club",
+    "intro": "Encuentros semanales para discutir artículos recientes en cosmología.",
+    "upcoming": "Próximas sesiones",
+    "past": "Archivo",
+    "paperLink": "Artículo",
+    "noUpcoming": "No hay sesiones próximas programadas."
+  },
+  "outreach": {
+    "title": "Divulgación",
+    "intro": "Creemos en la importancia de acercar la ciencia a la sociedad. Participamos en charlas, talleres y publicaciones de divulgación orientadas a públicos amplios y a la comunidad educativa.",
+    "learnMore": "Más información"
+  },
+  "contact": {
+    "title": "Contacto",
+    "addressLabel": "Dirección",
+    "officeLabel": "Oficina",
+    "emailLabel": "Correo electrónico",
+    "mapTitle": "Ubicación en el mapa",
+    "viewOnMaps": "Ver en Google Maps",
+    "social": "Redes sociales",
+    "noSocial": "Pronto se publicarán cuentas oficiales."
+  },
+  "carousel": {
+    "controls": "Controles del carrusel",
+    "pause": "Pausar",
+    "play": "Reproducir",
+    "goToSlide": "Ir a la diapositiva {n}"
   }
 }

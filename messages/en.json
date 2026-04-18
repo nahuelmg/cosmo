@@ -26,5 +26,72 @@
     "skipToContent": "Skip to main content",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu"
+  },
+  "home": {
+    "intro": "We are a theoretical and observational cosmology research group based in the Department of Physics at FCEN, UBA.\n\nOur work connects models of the early universe with data from large-scale surveys, exploring the nature of dark matter, dark energy, and the large-scale structure of the cosmos.",
+    "highlightsTitle": "Highlights",
+    "highlight1Title": "Perturbation cosmology",
+    "highlight1Body": "We study primordial fluctuations and their evolution into the structures we observe today.",
+    "highlight2Title": "Recent publication",
+    "highlight2Body": "Our latest work analyses cosmological constraints from weak gravitational lensing data.",
+    "highlight3Title": "Science outreach",
+    "highlight3Body": "We actively participate in public science communication activities at the national level.",
+    "partnersTitle": "Partner institutions"
+  },
+  "people": {
+    "title": "People",
+    "pi": "Principal Investigators",
+    "postdoc": "Postdoctoral Researchers",
+    "phd": "PhD Students",
+    "undergrad": "Undergraduate Students",
+    "past": "Past Members",
+    "researchInterests": "Research Interests",
+    "selectedPublications": "Selected Publications",
+    "email": "Email",
+    "office": "Office",
+    "orcid": "ORCID",
+    "scholar": "Google Scholar",
+    "links": "Links",
+    "thesis": "Thesis topic",
+    "backToPeople": "Back to People"
+  },
+  "research": {
+    "title": "Research",
+    "intro": "We address fundamental questions about the structure and evolution of the universe using theoretical tools and observational data analysis. Our active research lines span perturbation cosmology, dark matter, dark energy, and large-scale structure formation."
+  },
+  "publications": {
+    "title": "Publications",
+    "arxiv": "arXiv",
+    "doi": "DOI",
+    "preprint": "Preprint"
+  },
+  "journalClub": {
+    "title": "Journal Club",
+    "intro": "Weekly meetings to discuss recent papers in cosmology.",
+    "upcoming": "Upcoming Sessions",
+    "past": "Archive",
+    "paperLink": "Paper",
+    "noUpcoming": "No upcoming sessions scheduled."
+  },
+  "outreach": {
+    "title": "Outreach",
+    "intro": "We believe in the importance of bringing science closer to society. We participate in talks, workshops, and outreach publications aimed at broad audiences and the educational community.",
+    "learnMore": "Learn more"
+  },
+  "contact": {
+    "title": "Contact",
+    "addressLabel": "Address",
+    "officeLabel": "Office",
+    "emailLabel": "Email",
+    "mapTitle": "Map location",
+    "viewOnMaps": "View on Google Maps",
+    "social": "Social media",
+    "noSocial": "Official accounts will be announced soon."
+  },
+  "carousel": {
+    "controls": "Carousel controls",
+    "pause": "Pause",
+    "play": "Play",
+    "goToSlide": "Go to slide {n}"
   }
 }
