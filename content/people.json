@@ -1,0 +1,801 @@
+[
+  {
+    "slug": "esteban-calzetta",
+    "name": "Esteban Calzetta",
+    "role": {
+      "es": "Investigador Principal",
+      "en": "Principal Investigator"
+    },
+    "category": "pi",
+    "photo": "people/Esteban_C.png",
+    "short_bio": {
+      "es": "Esteban Calzetta es Doctor en Fisica por la Universidad de Buenos Aires y miembro de la Carrera del Investigador Cientifico del CONICET. Su trabajo abarca temas de cosmologia cuantica, termodinamica de agujeros negros y el problema de las condiciones iniciales del universo.",
+      "en": "Esteban Calzetta holds a PhD in Physics from the Universidad de Buenos Aires and is a CONICET Principal Researcher. His work spans quantum cosmology, black hole thermodynamics, and the problem of initial conditions in the early universe."
+    },
+    "full_bio": {
+      "es": "Esteban Calzetta obtuvo su doctorado en Fisica en la Facultad de Ciencias Exactas y Naturales (FCEN) de la Universidad de Buenos Aires bajo la supervision del Prof. Juan Pablo Paz. Realizo estadias postdoctorales en la Universidad de Maryland y en el Institut d'Astrophysique de Paris antes de incorporarse al plantel permanente del IFIBA (Instituto de Fisica de Buenos Aires), unidad ejecutora de doble dependencia UBA-CONICET.\n\nSu linea principal de investigacion se centra en la cosmologia cuantica de campo abierto: como los grados de libertad de alta frecuencia del universo primordial generan efectos de decoherencia sobre los modos infrarojos que se observan hoy en el fondo de microondas. Ha publicado mas de 80 articulos en revistas internacionales referenciadas, con mas de 3000 citas acumuladas (Google Scholar).\n\nEn la actualidad lidera el grupo de Cosmologia Teorica del Departamento de Fisica de la FCEN y coordina el proyecto PICT 2022-00741 financiado por la Agencia Nacional de Promocion Cientifica y Tecnologica (ANPCyT). Dirige estudiantes de doctorado e integra el comite editorial de la revista Journal of Cosmology and Astroparticle Physics (JCAP).",
+      "en": "Esteban Calzetta received his doctorate in Physics from the Facultad de Ciencias Exactas y Naturales (FCEN) of the Universidad de Buenos Aires, under the supervision of Prof. Juan Pablo Paz. He held postdoctoral fellowships at the University of Maryland and at the Institut d'Astrophysique de Paris before joining the permanent staff of IFIBA (Instituto de Fisica de Buenos Aires), a joint UBA-CONICET research unit.\n\nHis main research line is open quantum-field cosmology: how high-frequency degrees of freedom in the primordial universe generate decoherence effects on the infrared modes observed today in the cosmic microwave background. He has published more than 80 papers in refereed international journals, accumulating over 3,000 citations (Google Scholar).\n\nHe currently leads the Theoretical Cosmology Group in the Department of Physics at FCEN and coordinates project PICT 2022-00741 funded by the Argentine National Agency for Scientific and Technological Promotion (ANPCyT). He supervises doctoral students and serves on the editorial board of the Journal of Cosmology and Astroparticle Physics (JCAP)."
+    },
+    "research_interests": [
+      {
+        "es": "Cosmologia cuantica y decoherencia en el universo primordial",
+        "en": "Quantum cosmology and decoherence in the primordial universe"
+      },
+      {
+        "es": "Termodinamica de agujeros negros y radiacion de Hawking",
+        "en": "Black hole thermodynamics and Hawking radiation"
+      },
+      {
+        "es": "Fondo cosmico de microondas: perturbaciones primordiales y no-gaussianidades",
+        "en": "Cosmic microwave background: primordial perturbations and non-Gaussianities"
+      },
+      {
+        "es": "Teoria cuantica de campos en espacios curvos",
+        "en": "Quantum field theory in curved spacetime"
+      }
+    ],
+    "publications_selected": ["pub-2024-qc-decoherence", "pub-2023-cmb-ng"],
+    "contact": {
+      "email": "calzetta@df.uba.ar",
+      "orcid": "0000-0001-7842-3105",
+      "office": "Pabellon 1, Oficina 319, Ciudad Universitaria",
+      "scholar": "https://scholar.google.com/citations?user=calzetta_placeholder"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0001-7842-3105"
+      }
+    ]
+  },
+  {
+    "slug": "susana-landau",
+    "name": "Susana Landau",
+    "role": {
+      "es": "Investigadora Principal",
+      "en": "Principal Investigator"
+    },
+    "category": "pi",
+    "photo": "people/Susana_L.png",
+    "short_bio": {
+      "es": "Susana Landau es Investigadora Independiente del CONICET y Profesora Adjunta de la FCEN-UBA. Especialista en variacion de constantes fundamentales y pruebas de precision del modelo estandar de la cosmologia.",
+      "en": "Susana Landau is an Independent Researcher at CONICET and Adjunct Professor at FCEN-UBA. She specialises in variations of fundamental constants and precision tests of the standard model of cosmology."
+    },
+    "full_bio": {
+      "es": "Susana Landau obtuvo su licenciatura y doctorado en Fisica en la UBA. Tras un postdoctorado en el Instituto de Astrofisica de Canarias (IAC, Espana), regreso a Buenos Aires donde se incorporo al grupo de cosmologia del IFIBA.\n\nSu investigacion examina si las constantes fisicas fundamentales, como la constante de estructura fina alpha y la razon de masas electron-proton, pudieron haber variado a lo largo de la historia cosmica. Usa datos del fondo de microondas, espectroscopia de quasares y fisica nuclear para imponer limites observacionales muy precisos sobre estas variaciones.\n\nEs Profesora Adjunta del Departamento de Fisica y ha dirigido seis tesis de doctorado. Integra la Comision Asesora de Ciencias Exactas y Naturales del CONICET y es revisora habitual de Physical Review D y Monthly Notices of the Royal Astronomical Society.",
+      "en": "Susana Landau received her undergraduate and doctoral degrees in Physics from UBA. After a postdoctoral fellowship at the Instituto de Astrofisica de Canarias (IAC, Spain), she returned to Buenos Aires and joined the IFIBA cosmology group.\n\nHer research examines whether fundamental physical constants, such as the fine-structure constant alpha and the electron-to-proton mass ratio, may have varied over cosmic history. She uses CMB data, quasar spectroscopy, and nuclear physics to place precise observational limits on such variations.\n\nShe is Adjunct Professor in the Department of Physics and has supervised six doctoral theses. She serves on the Advisory Committee for Exact and Natural Sciences at CONICET and is a regular referee for Physical Review D and Monthly Notices of the Royal Astronomical Society."
+    },
+    "research_interests": [
+      {
+        "es": "Variacion de constantes fundamentales a lo largo de la historia cosmica",
+        "en": "Variation of fundamental constants across cosmic history"
+      },
+      {
+        "es": "Pruebas de precision del modelo estandar cosmoloLogico (sigma_8, H_0)",
+        "en": "Precision tests of the standard cosmological model (sigma_8, H_0)"
+      },
+      {
+        "es": "Espectroscopia de quasares como laboratorio cosmologico",
+        "en": "Quasar spectroscopy as a cosmological laboratory"
+      }
+    ],
+    "publications_selected": ["pub-2023-alpha-variation", "pub-2022-cmb-constants"],
+    "contact": {
+      "email": "susana.landau@df.uba.ar",
+      "orcid": "0000-0002-4411-8732",
+      "office": "Pabellon 1, Oficina 324, Ciudad Universitaria"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0002-4411-8732"
+      }
+    ]
+  },
+  {
+    "slug": "maria-guadalupe-gonzalez-rios",
+    "name": "Maria Guadalupe Gonzalez Rios-Molina",
+    "role": {
+      "es": "Investigadora Principal",
+      "en": "Principal Investigator"
+    },
+    "category": "pi",
+    "short_bio": {
+      "es": "Maria Guadalupe Gonzalez-Rios es Investigadora Adjunta del CONICET y se especializa en estructura a gran escala del universo y simulaciones N-cuerpos de materia oscura.",
+      "en": "Maria Guadalupe Gonzalez-Rios is a CONICET Junior Researcher specialising in large-scale structure of the universe and N-body dark matter simulations."
+    },
+    "full_bio": {
+      "es": "Maria Guadalupe Gonzalez-Rios realizo su doctorado en Fisica en la FCEN-UBA bajo la supervision de la Dra. Landau, defendiendo su tesis sobre halos de materia oscura y la funcion de correlacion en dos puntos en 2017. A continuacion realizo un postdoctorado de tres anos en el Institut d'Astrophysique de Paris, donde participo en el analisis de datos del survey VIPERS.\n\nAl regresar a Argentina en 2020, ingreso a la Carrera del Investigador Cientifico del CONICET en la categoria Adjunto. Hoy co-dirige el grupo de Estructura a Gran Escala del departamento, con enfasis en simulaciones de N-cuerpos que modelan la distribucion de halos de materia oscura bajo distintos modelos de energia oscura.\n\nSus resultados recientes incluyen nuevas mediciones de la funcion de correlacion de galaxias a z~0.7 que desafian predicciones del modelo Lambda-CDM estandar en escalas de 10-50 Mpc/h, generando un programa de investigacion que combina observaciones del SDSS con simulaciones IllustrisTNG.",
+      "en": "Maria Guadalupe Gonzalez-Rios completed her doctoral studies in Physics at FCEN-UBA under the supervision of Dr. Landau, defending her thesis on dark matter halos and the two-point correlation function in 2017. She then carried out a three-year postdoctoral fellowship at the Institut d'Astrophysique de Paris, where she contributed to the analysis of the VIPERS survey data.\n\nUpon returning to Argentina in 2020, she joined the CONICET Researcher Career at the Junior (Adjunto) level. She now co-leads the Large-Scale Structure group in the department, with a focus on N-body simulations modelling the dark matter halo distribution under different dark energy models.\n\nHer recent results include new measurements of the galaxy correlation function at z~0.7 that challenge predictions of the standard Lambda-CDM model on 10-50 Mpc/h scales, motivating a research programme combining SDSS observations with IllustrisTNG simulations."
+    },
+    "research_interests": [
+      {
+        "es": "Estructura a gran escala del universo y funcion de correlacion de galaxias",
+        "en": "Large-scale structure and galaxy correlation function"
+      },
+      {
+        "es": "Simulaciones N-cuerpos de halos de materia oscura bajo distintos modelos de Lambda-CDM",
+        "en": "N-body simulations of dark matter halos under different Lambda-CDM models"
+      },
+      {
+        "es": "Energia oscura y expansion acelerada del universo",
+        "en": "Dark energy and the accelerated expansion of the universe"
+      },
+      {
+        "es": "Aprendizaje automatico aplicado a catalogos de galaxias",
+        "en": "Machine learning applied to galaxy catalogues"
+      }
+    ],
+    "publications_selected": ["pub-2024-lss-correlation", "pub-2023-nbody-halo"],
+    "contact": {
+      "email": "mgonzalez@df.uba.ar",
+      "orcid": "0000-0003-9912-5547",
+      "office": "Pabellon 1, Oficina 321, Ciudad Universitaria",
+      "scholar": "https://scholar.google.com/citations?user=mgr_placeholder"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0003-9912-5547"
+      },
+      {
+        "platform": "github",
+        "url": "https://github.com/mgonzalez-rios"
+      }
+    ]
+  },
+  {
+    "slug": "diana-lopez-nacir",
+    "name": "Diana Lopez Nacir",
+    "role": {
+      "es": "Investigadora Independiente",
+      "en": "Independent Researcher"
+    },
+    "category": "pi",
+    "photo": "people/Diana_LN.png",
+    "short_bio": {
+      "es": "Diana Lopez Nacir es Investigadora Independiente del CONICET en el IFIBA. Sus trabajos sobre inflacion y no-gaussianidades primordiales han sido ampliamente citados en la comunidad de cosmologia teorica.",
+      "en": "Diana Lopez Nacir is an Independent Researcher at CONICET/IFIBA. Her work on inflation and primordial non-Gaussianities is widely cited in the theoretical cosmology community."
+    },
+    "full_bio": {
+      "es": "Diana Lopez Nacir se doctoro en Fisica en la UBA en 2010, con una tesis sobre efectos de un campo escalar no gaussiano en la inflacion chatica. Realizo postdoctorados en el Centro Atomico Bariloche (CAB) y en la Universidad de California, Santa Barbara (KITP), antes de regresar a Buenos Aires como investigadora del CONICET.\n\nSu investigacion se enmarca en la teoria de la inflacion cosmologica: el periodo de expansion exponencial en el universo muy temprano que siembra las perturbaciones que posteriormente dan lugar a galaxias y estructura. En particular, estudia la generacion de no-gaussianidades primordiales (parametro f_NL) y como estas imprimen senales en el espectro de potencias del CMB y en el bispectro de galaxias.\n\nHa publicado trabajos en Physical Review D, Journal of High Energy Physics y JCAP, y recibio el Premio L'Oreal-UNESCO para Mujeres en la Ciencia en 2018. Dicta el curso de posgrado 'Cosmologia Cuantica' en la FCEN.",
+      "en": "Diana Lopez Nacir completed her PhD in Physics at UBA in 2010, with a thesis on non-Gaussian scalar field effects in chaotic inflation. She held postdoctoral positions at the Centro Atomico Bariloche (CAB) and at the University of California, Santa Barbara (KITP), before returning to Buenos Aires as a CONICET researcher.\n\nHer research sits at the heart of inflationary cosmology: the period of exponential expansion in the very early universe that seeds the perturbations later responsible for galaxies and cosmic structure. She specifically studies the generation of primordial non-Gaussianities (the parameter f_NL) and how these imprint signatures in the CMB power spectrum and the galaxy bispectrum.\n\nShe has published in Physical Review D, Journal of High Energy Physics, and JCAP, and received the L'Oreal-UNESCO Award for Women in Science in 2018. She teaches the postgraduate course 'Quantum Cosmology' at FCEN."
+    },
+    "research_interests": [
+      {
+        "es": "Inflacion cosmologica y fluctuaciones cuanticas primordiales",
+        "en": "Cosmological inflation and primordial quantum fluctuations"
+      },
+      {
+        "es": "No-gaussianidades primordiales y el parametro f_NL",
+        "en": "Primordial non-Gaussianities and the f_NL parameter"
+      },
+      {
+        "es": "Espectro de potencias y bispectro del CMB",
+        "en": "CMB power spectrum and bispectrum"
+      }
+    ],
+    "publications_selected": ["pub-2024-fnl-cmb", "pub-2022-inflation-ng"],
+    "contact": {
+      "email": "diana.lopezn@df.uba.ar",
+      "orcid": "0000-0001-5533-9821",
+      "office": "Pabellon 1, Oficina 325, Ciudad Universitaria"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0001-5533-9821"
+      },
+      {
+        "platform": "twitter",
+        "url": "https://twitter.com/dlopezn_cosmo"
+      }
+    ]
+  },
+  {
+    "slug": "gonzalo-sanchez-contreras",
+    "name": "Gonzalo Sanchez Contreras",
+    "role": {
+      "es": "Investigador Asistente",
+      "en": "Assistant Researcher"
+    },
+    "category": "pi",
+    "photo": "people/Gonzalo_SC.png",
+    "short_bio": {
+      "es": "Gonzalo Sanchez Contreras es Investigador Asistente del CONICET y Jefe de Trabajos Practicos en la FCEN-UBA. Su investigacion combina datos de ondas gravitacionales con modelos cosmologicos de energia oscura.",
+      "en": "Gonzalo Sanchez Contreras is an Assistant Researcher at CONICET and Teaching Assistant at FCEN-UBA. His research combines gravitational wave data with cosmological dark-energy models."
+    },
+    "full_bio": {
+      "es": "Gonzalo Sanchez Contreras obtuvo su doctorado en Fisica en la FCEN-UBA en 2019 con una tesis sobre sirenas estandar gravitacionales como trazadores independientes de la constante de Hubble. Realizo un postdoctorado en el Max-Planck-Institut fur Gravitationsphysik (Instituto Albert Einstein, Potsdam-Golm) antes de ingresar al CONICET en 2022.\n\nSu trabajo actual explota los eventos de ondas gravitacionales detectados por LIGO/Virgo/KAGRA para medir la constante de Hubble H_0 de forma independiente de la escala de distancias estandar, con el fin de arrojar luz sobre la tension H_0 entre los valores del CMB y los de la escalera de distancias locales. Colabora activamente con la red internacional LVK (LIGO-Virgo-KAGRA).\n\nEs co-autor de la guia de analisis de datos de LIGO publicada por la Collaboration y ha co-organizado el workshop 'Gravitational Waves and Cosmology' en el ICTP-SAIFR de Sao Paulo.",
+      "en": "Gonzalo Sanchez Contreras completed his PhD in Physics at FCEN-UBA in 2019 with a thesis on gravitational standard sirens as independent tracers of the Hubble constant. He held a postdoctoral position at the Max-Planck-Institut fur Gravitationsphysik (Albert Einstein Institute, Potsdam-Golm) before joining CONICET in 2022.\n\nHis current work exploits gravitational wave events detected by LIGO/Virgo/KAGRA to measure the Hubble constant H_0 independently of the standard distance ladder, with the aim of shedding light on the H_0 tension between CMB-based and local-distance-ladder values. He actively collaborates with the international LVK (LIGO-Virgo-KAGRA) network.\n\nHe is a co-author of the LIGO data analysis guide published by the Collaboration and has co-organised the workshop 'Gravitational Waves and Cosmology' at ICTP-SAIFR in Sao Paulo."
+    },
+    "research_interests": [
+      {
+        "es": "Ondas gravitacionales como sirenas estandar y medicion de H_0",
+        "en": "Gravitational waves as standard sirens and H_0 measurement"
+      },
+      {
+        "es": "Tension de Hubble entre el CMB y la escalera de distancias locales",
+        "en": "Hubble tension between CMB and local distance ladder measurements"
+      },
+      {
+        "es": "Energia oscura y ecuacion de estado w(z)",
+        "en": "Dark energy and equation of state w(z)"
+      }
+    ],
+    "publications_selected": ["pub-2024-gw-h0", "pub-2023-sirenas-estandar"],
+    "contact": {
+      "email": "gsanchez@df.uba.ar",
+      "orcid": "0000-0002-7781-4430",
+      "office": "Pabellon 1, Oficina 318, Ciudad Universitaria"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0002-7781-4430"
+      },
+      {
+        "platform": "github",
+        "url": "https://github.com/gsanchez-cosmo"
+      }
+    ]
+  },
+  {
+    "slug": "matias-luna",
+    "name": "Matias Luna",
+    "role": {
+      "es": "Investigador Postdoctoral",
+      "en": "Postdoctoral Researcher"
+    },
+    "category": "postdoc",
+    "photo": "people/Matias_L.png",
+    "short_bio": {
+      "es": "Matias Luna es investigador postdoctoral financiado por el CONICET. Trabaja en la interfaz entre redes neuronales de grafos y la inferencia de parametros cosmologicos a partir de surveys de galaxias.",
+      "en": "Matias Luna is a CONICET-funded postdoctoral researcher working at the interface between graph neural networks and cosmological parameter inference from galaxy surveys."
+    },
+    "full_bio": {
+      "es": "Matias Luna se doctoro en la Universidad Nacional de Cordoba (UNC) en 2022 con una tesis sobre metodos de aprendizaje automatico para la clasificacion morfologica de galaxias en el survey DES (Dark Energy Survey). Su postdoctorado, iniciado en marzo de 2023 en el IFIBA bajo la supervision del Dr. Sanchez Contreras y la Dra. Gonzalez-Rios, extiende esas tecnicas al problema de la inferencia de parametros cosmologicos.\n\nActualmente desarrolla una arquitectura de red neuronal de grafos (GNN) que toma como entrada los catalogos de galaxias del DESI Bright Galaxy Survey y produce estimaciones directas de los parametros (Omega_m, sigma_8, w_0) junto con sus incertidumbres bayesianas. Este enfoque elimina la necesidad de estadisticos de resumen intermedios y es mas sensible a correlaciones de orden superior que los estimadores clasicos de dos puntos.",
+      "en": "Matias Luna completed his PhD at the Universidad Nacional de Cordoba (UNC) in 2022, with a thesis on machine learning methods for morphological galaxy classification in the DES (Dark Energy Survey). His postdoctoral project, begun in March 2023 at IFIBA under the supervision of Dr. Sanchez Contreras and Dr. Gonzalez-Rios, extends those techniques to the problem of cosmological parameter inference.\n\nHe is currently developing a graph neural network (GNN) architecture that takes galaxy catalogues from the DESI Bright Galaxy Survey as input and produces direct estimates of the parameters (Omega_m, sigma_8, w_0) together with Bayesian uncertainties. This approach eliminates the need for intermediate summary statistics and is more sensitive to higher-order correlations than classical two-point estimators."
+    },
+    "research_interests": [
+      {
+        "es": "Redes neuronales de grafos para inferencia cosmologica",
+        "en": "Graph neural networks for cosmological inference"
+      },
+      {
+        "es": "Aprendizaje profundo aplicado a surveys de galaxias (DES, DESI)",
+        "en": "Deep learning applied to galaxy surveys (DES, DESI)"
+      },
+      {
+        "es": "Estadisticas de resumen y estimacion de parametros (Omega_m, sigma_8)",
+        "en": "Summary statistics and parameter estimation (Omega_m, sigma_8)"
+      }
+    ],
+    "publications_selected": ["pub-2024-gnn-cosmo"],
+    "contact": {
+      "email": "matias.luna@df.uba.ar",
+      "orcid": "0000-0003-1122-8874",
+      "office": "Pabellon 1, Oficina 312, Ciudad Universitaria"
+    },
+    "social_links": [
+      {
+        "platform": "github",
+        "url": "https://github.com/mluna-cosmo"
+      },
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0003-1122-8874"
+      }
+    ]
+  },
+  {
+    "slug": "juanma-arias",
+    "name": "Juan Manuel Arias",
+    "role": {
+      "es": "Investigador Postdoctoral",
+      "en": "Postdoctoral Researcher"
+    },
+    "category": "postdoc",
+    "photo": "people/juanma_A.png",
+    "short_bio": {
+      "es": "Juan Manuel Arias es investigador postdoctoral en el grupo de cosmologia del IFIBA. Su trabajo se enfoca en lentes gravitacionales debiles y el efecto Sunyaev-Zel'dovich como trazadores de la estructura cosmica.",
+      "en": "Juan Manuel Arias is a postdoctoral researcher in the IFIBA cosmology group. His work focuses on weak gravitational lensing and the Sunyaev-Zel'dovich effect as tracers of cosmic structure."
+    },
+    "full_bio": {
+      "es": "Juan Manuel Arias obtuvo su doctorado en Astrofisica en la Universidad de La Plata (UNLP) en 2021. Su tesis, dirigida por la Dra. Cecilia Scannapieco, estudio el efecto del ambiente cosmico sobre la formacion estelar en galaxias satelite usando simulaciones EAGLE.\n\nDesde 2022 trabaja como postdoc en el IFIBA, donde cambio su foco hacia la cosmologia observacional. Particularmente, explota datos del satelite Planck y del experimento Atacama Cosmology Telescope (ACT) para medir el efecto SZ termico en masas de halos y restringir los parametros de la funcion de masa de halos. Colabora con el grupo de surveys de la colaboracion DES-Argentina.",
+      "en": "Juan Manuel Arias received his PhD in Astrophysics from the Universidad de La Plata (UNLP) in 2021. His thesis, supervised by Dr. Cecilia Scannapieco, studied the effect of the cosmic environment on star formation in satellite galaxies using EAGLE simulations.\n\nSince 2022 he has worked as a postdoc at IFIBA, where he shifted focus to observational cosmology. In particular, he exploits data from the Planck satellite and the Atacama Cosmology Telescope (ACT) to measure the thermal SZ effect in halo masses and constrain halo mass function parameters. He collaborates with the DES-Argentina survey group."
+    },
+    "research_interests": [
+      {
+        "es": "Lentes gravitacionales debiles y cizallamiento cosmico",
+        "en": "Weak gravitational lensing and cosmic shear"
+      },
+      {
+        "es": "Efecto Sunyaev-Zel'dovich termico en cumulos de galaxias",
+        "en": "Thermal Sunyaev-Zel'dovich effect in galaxy clusters"
+      },
+      {
+        "es": "Funcion de masa de halos y conteos de cumulos",
+        "en": "Halo mass function and cluster counts"
+      }
+    ],
+    "publications_selected": ["pub-2024-sz-clusters"],
+    "contact": {
+      "email": "jm.arias@df.uba.ar",
+      "orcid": "0000-0001-9934-2204",
+      "office": "Pabellon 1, Oficina 313, Ciudad Universitaria"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0001-9934-2204"
+      }
+    ]
+  },
+  {
+    "slug": "nahuel-mendez-garzon",
+    "name": "Nahuel Mendez Garzon",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "photo": "people/Nahuel_MG.png",
+    "short_bio": {
+      "es": "Nahuel Mendez Garzon es estudiante de doctorado bajo la direccion del Dr. Calzetta. Estudia la transicion de fase cosmologica electrodebil y su relacion con la bariogenesis.",
+      "en": "Nahuel Mendez Garzon is a doctoral student supervised by Dr. Calzetta. He studies the electroweak cosmological phase transition and its connection to baryogenesis."
+    },
+    "full_bio": {
+      "es": "Nahuel Mendez Garzon realizo su licenciatura en Fisica en la UBA, graduandose en 2021 con un promedio de 9.4. En 2022 ingreso al doctorado del Departamento de Fisica de la FCEN con una beca doctoral del CONICET, bajo la supervision del Dr. Esteban Calzetta.\n\nSu tesis doctoral investiga la transicion de fase de primer orden del sector electrodebil del Modelo Estandar a temperaturas del orden de 100 GeV, en particular la eficiencia de la produccion de ondas gravitacionales durante esa transicion y la posibilidad de detectarlas con el futuro detector LISA. Usa tecnicas de teoria cuantica de campos a temperatura finita y simulaciones de lattice gauge.",
+      "en": "Nahuel Mendez Garzon obtained his undergraduate degree in Physics from UBA, graduating in 2021 with an average of 9.4. In 2022 he entered the doctoral programme at the Department of Physics of FCEN with a CONICET doctoral fellowship, under the supervision of Dr. Esteban Calzetta.\n\nHis doctoral thesis investigates the first-order phase transition of the electroweak sector of the Standard Model at temperatures around 100 GeV, specifically the efficiency of gravitational wave production during that transition and the prospect of detecting them with the future LISA detector. He uses finite-temperature quantum field theory techniques and lattice gauge simulations."
+    },
+    "research_interests": [
+      {
+        "es": "Transicion de fase electrodebil y bariogenesis",
+        "en": "Electroweak phase transition and baryogenesis"
+      },
+      {
+        "es": "Produccion de ondas gravitacionales en el universo primitivo",
+        "en": "Gravitational wave production in the early universe"
+      },
+      {
+        "es": "Teoria cuantica de campos a temperatura finita",
+        "en": "Finite-temperature quantum field theory"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "nahuel.mendez@uba.ar",
+      "orcid": "0000-0002-6614-3871"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "tomas-carranza",
+    "name": "Tomas Carranza",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "photo": "people/Tomas_C.png",
+    "short_bio": {
+      "es": "Tomas Carranza es estudiante de doctorado trabajando en modelos de energia oscura interactuante y sus huellas en el espectro de potencias de materia.",
+      "en": "Tomas Carranza is a doctoral student working on interacting dark energy models and their imprints on the matter power spectrum."
+    },
+    "full_bio": {
+      "es": "Tomas Carranza se licencio en Fisica en la UBA en 2020 y comenzo el doctorado en 2021 bajo la co-direccion de la Dra. Gonzalez-Rios y el Dr. Sanchez Contreras. Su beca es financiada por la Agencia Nacional de Promocion Cientifica y Tecnologica (ANPCyT) en el marco del proyecto PICT 2022.\n\nSu investigacion explora modelos en los que la energia oscura no es una constante cosmologica sino un campo escalar que interactua con la materia oscura a traves de un potencial de acoplamiento. Usando datos de la funcion de correlacion de galaxias del SDSS-III BOSS y simulaciones N-cuerpos con el codigo GADGET-4, busca detectar o descartar senales de esta interaccion en el espectro de potencias de materia a escalas intermedias.",
+      "en": "Tomas Carranza obtained his undergraduate degree in Physics from UBA in 2020 and began his doctoral studies in 2021 under the co-supervision of Dr. Gonzalez-Rios and Dr. Sanchez Contreras. His fellowship is funded by the Argentine National Agency for Scientific and Technological Promotion (ANPCyT) under project PICT 2022.\n\nHis research explores models in which dark energy is not a cosmological constant but a scalar field interacting with dark matter through a coupling potential. Using galaxy correlation function data from SDSS-III BOSS and N-body simulations with the GADGET-4 code, he searches for or rules out signatures of this interaction in the matter power spectrum at intermediate scales."
+    },
+    "research_interests": [
+      {
+        "es": "Energia oscura interactuante y modelos de campo escalar",
+        "en": "Interacting dark energy and scalar field models"
+      },
+      {
+        "es": "Espectro de potencias de materia y datos BOSS",
+        "en": "Matter power spectrum and BOSS data"
+      },
+      {
+        "es": "Simulaciones N-cuerpos con GADGET-4",
+        "en": "N-body simulations with GADGET-4"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "tomas.carranza@uba.ar",
+      "orcid": "0000-0003-4422-1109"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "valentina-rios-pedraza",
+    "name": "Valentina Rios Pedraza",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "short_bio": {
+      "es": "Valentina Rios Pedraza trabaja en modelos de inflacion multiscalar y sus predicciones observacionales para el indice espectral n_s y la relacion tensor-escalar r.",
+      "en": "Valentina Rios Pedraza works on multi-field inflation models and their observational predictions for the spectral index n_s and the tensor-to-scalar ratio r."
+    },
+    "full_bio": {
+      "es": "Valentina Rios Pedraza ingreso al doctorado en 2022 bajo la supervision de la Dra. Lopez Nacir. Previamente habia completado su licenciatura en Fisica Teorica en la Universidad de Rosario (UNR), con una tesis sobre simetrias globales en teoria cuantica de campos.\n\nSu proyecto doctoral estudia inflacion con multiples campos escalares, en particular modelos donde la trayectoria inflaconaria recorre una curva en el espacio de campos y genera perturbaciones entropia acopladas a los modos adiabaticos. Estas perturbaciones adicionales modifican las predicciones para n_s y r de manera que pueden distinguirse con los datos futuros del experimento LiteBIRD.",
+      "en": "Valentina Rios Pedraza entered the doctoral programme in 2022 under the supervision of Dr. Lopez Nacir. She had previously completed her undergraduate degree in Theoretical Physics at the Universidad de Rosario (UNR), with a thesis on global symmetries in quantum field theory.\n\nHer doctoral project studies multi-field inflation, in particular models where the inflationary trajectory traces a curve in field space and generates entropy perturbations coupled to adiabatic modes. These additional perturbations modify predictions for n_s and r in ways distinguishable with future data from the LiteBIRD experiment."
+    },
+    "research_interests": [
+      {
+        "es": "Inflacion multiscalar y perturbaciones de entropia",
+        "en": "Multi-field inflation and entropy perturbations"
+      },
+      {
+        "es": "Predicciones observacionales: indice espectral n_s y relacion tensor-escalar r",
+        "en": "Observational predictions: spectral index n_s and tensor-to-scalar ratio r"
+      },
+      {
+        "es": "Espectroscopia del CMB con LiteBIRD y CMB-S4",
+        "en": "CMB spectroscopy with LiteBIRD and CMB-S4"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "v.rios@uba.ar",
+      "orcid": "0000-0002-3311-7754"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "lucas-bernal-figueroa",
+    "name": "Lucas Bernal Figueroa",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "short_bio": {
+      "es": "Lucas Bernal Figueroa investiga la senial de 21 cm del hidrogeno neutro como trazador de la reionizacion cosmica y la estructura a gran escala a alto redshift.",
+      "en": "Lucas Bernal Figueroa investigates the 21-cm signal from neutral hydrogen as a tracer of cosmic reionisation and large-scale structure at high redshift."
+    },
+    "full_bio": {
+      "es": "Lucas Bernal Figueroa comenzo el doctorado en 2021 co-dirigido por el Dr. Calzetta y la Dra. Gonzalez-Rios. Se graduo de la Universidad Nacional de Cordoba (UNC) con una tesis de licenciatura sobre el poder de la linea de emision Lyman-alpha para rastrear la reionizacion.\n\nSu tesis doctoral se enfoca en la linea de 21 cm del hidrogeno neutro (H I) como complemento al CMB para estudiar el periodo de reionizacion cosmica (z ~ 6-12). Utiliza simulaciones de radiative transfer y modelos semi-analiticos para predecir el espectro de potencias 3D de la emision de 21 cm y evalua la capacidad del radiotelescopo SKA para detectarla.",
+      "en": "Lucas Bernal Figueroa began his doctoral programme in 2021, co-supervised by Dr. Calzetta and Dr. Gonzalez-Rios. He graduated from the Universidad Nacional de Cordoba (UNC) with an undergraduate thesis on the power of the Lyman-alpha emission line to trace reionisation.\n\nHis doctoral thesis focuses on the 21-cm line of neutral hydrogen (H I) as a complement to the CMB for studying the epoch of cosmic reionisation (z ~ 6-12). He uses radiative transfer simulations and semi-analytical models to predict the 3D power spectrum of the 21-cm emission and evaluates the capacity of the SKA radio telescope to detect it."
+    },
+    "research_interests": [
+      {
+        "es": "Linea de 21 cm y la epoca de reionizacion cosmica",
+        "en": "21-cm line and the epoch of cosmic reionisation"
+      },
+      {
+        "es": "Estructura a gran escala a alto redshift (z > 5)",
+        "en": "Large-scale structure at high redshift (z > 5)"
+      },
+      {
+        "es": "Simulaciones de transferencia radiativa para el IGM",
+        "en": "Radiative transfer simulations of the IGM"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "lucas.bernal@uba.ar",
+      "orcid": "0000-0001-8821-5543"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "florencia-aguirre",
+    "name": "Florencia Aguirre",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "short_bio": {
+      "es": "Florencia Aguirre estudia lentes gravitacionales fuertes en sistemas de galaxias dobles como herramienta para medir la tension de Hubble de forma independiente.",
+      "en": "Florencia Aguirre studies strong gravitational lensing in double-galaxy systems as a tool for measuring the Hubble tension independently."
+    },
+    "full_bio": {
+      "es": "Florencia Aguirre ingreso al doctorado en 2023 bajo la supervision del Dr. Sanchez Contreras. Obtuvo su licenciatura en Astronomia en la Facultad de Ciencias Astronomicas y Geofisicas de la Universidad Nacional de La Plata (FCAG-UNLP).\n\nSu proyecto doctoral explora lentes gravitacionales fuertes en sistemas de doble cuasar, donde la diferencia de tiempo de llegada entre imagenes del mismo quasar sirve como reloj para medir la constante de Hubble (metodo de time-delay cosmography). Trabaja con datos del Hubble Space Telescope y del Very Large Telescope para modelar la distribucion de masa del lente.",
+      "en": "Florencia Aguirre entered the doctoral programme in 2023 under the supervision of Dr. Sanchez Contreras. She obtained her undergraduate degree in Astronomy from the Faculty of Astronomical and Geophysical Sciences at the Universidad Nacional de La Plata (FCAG-UNLP).\n\nHer doctoral project explores strong gravitational lensing in double-quasar systems, where the time delay between images of the same quasar serves as a clock to measure the Hubble constant (time-delay cosmography). She works with Hubble Space Telescope and Very Large Telescope data to model the mass distribution of the gravitational lens."
+    },
+    "research_interests": [
+      {
+        "es": "Lentes gravitacionales fuertes y time-delay cosmography",
+        "en": "Strong gravitational lensing and time-delay cosmography"
+      },
+      {
+        "es": "Medicion independiente de H_0 con sistemas de cuasar lentiado",
+        "en": "Independent H_0 measurement with lensed quasar systems"
+      },
+      {
+        "es": "Modelado de la distribucion de masa en galaxias early-type",
+        "en": "Mass distribution modelling in early-type galaxies"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "florencia.aguirre@uba.ar"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "camila-vargas",
+    "name": "Camila Vargas",
+    "role": {
+      "es": "Estudiante de Grado",
+      "en": "Undergraduate Student"
+    },
+    "category": "undergrad",
+    "short_bio": {
+      "es": "Camila Vargas esta realizando su tesis de licenciatura en el grupo, estudiando metodos de estimacion de la densidad espectral de potencias a partir de mapas del CMB ruidosos.",
+      "en": "Camila Vargas is completing her undergraduate thesis in the group, studying power spectral density estimation methods from noisy CMB maps."
+    },
+    "full_bio": {
+      "es": "Camila Vargas es estudiante de cuarto ano de la Licenciatura en Fisica en la FCEN-UBA. Ingreso al grupo en 2024 como alumna de investigacion, atraida por la linea de procesamiento estadistico de datos del CMB. Su tesis es co-dirigida por la Dra. Lopez Nacir y el Dr. Calzetta.",
+      "en": "Camila Vargas is a fourth-year undergraduate student in the Physics programme at FCEN-UBA. She joined the group in 2024 as a research student, drawn by the line of statistical processing of CMB data. Her thesis is co-supervised by Dr. Lopez Nacir and Dr. Calzetta."
+    },
+    "research_interests": [
+      {
+        "es": "Estimacion espectral de mapas del CMB con metodos de maxima verosimilitud",
+        "en": "Spectral estimation of CMB maps with maximum likelihood methods"
+      }
+    ],
+    "thesis_topic": {
+      "es": "Estimacion de la densidad espectral de potencias del CMB en presencia de ruido instrumental y contaminacion de primer plano",
+      "en": "Power spectral density estimation of the CMB in the presence of instrumental noise and foreground contamination"
+    },
+    "contact": {
+      "email": "camila.vargas@uba.ar"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "rodrigo-pena-salinas",
+    "name": "Rodrigo Pena Salinas",
+    "role": {
+      "es": "Estudiante de Grado",
+      "en": "Undergraduate Student"
+    },
+    "category": "undergrad",
+    "short_bio": {
+      "es": "Rodrigo Pena Salinas esta trabajando en su tesis de licenciatura sobre clasificacion automatica de galaxias en surveys fotometricos mediante redes neuronales convolucionales.",
+      "en": "Rodrigo Pena Salinas is working on his undergraduate thesis on automatic galaxy classification in photometric surveys using convolutional neural networks."
+    },
+    "full_bio": {
+      "es": "Rodrigo Pena Salinas cursa el quinto ano de la Licenciatura en Computacion Cientifica en la FCEN-UBA. Trabaja en el grupo desde 2024 bajo la supervision del Dr. Matias Luna, aplicando redes neuronales convolucionales pre-entrenadas (ResNet50 fine-tuned) al catalogo DECaLS para clasificar morfologias de galaxias de forma automatizada.",
+      "en": "Rodrigo Pena Salinas is a fifth-year student in the Scientific Computing undergraduate programme at FCEN-UBA. He has been working in the group since 2024 under the supervision of Dr. Matias Luna, applying pre-trained convolutional neural networks (fine-tuned ResNet50) to the DECaLS catalogue for automated galaxy morphology classification."
+    },
+    "research_interests": [
+      {
+        "es": "Redes neuronales convolucionales para clasificacion morfologica de galaxias",
+        "en": "Convolutional neural networks for galaxy morphology classification"
+      }
+    ],
+    "thesis_topic": {
+      "es": "Clasificacion automatica de morfologias de galaxias en el catalogo DECaLS con redes neuronales convolucionales pre-entrenadas",
+      "en": "Automated galaxy morphology classification in the DECaLS catalogue using pre-trained convolutional neural networks"
+    },
+    "contact": {
+      "email": "r.pena@uba.ar"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "agustina-morales",
+    "name": "Agustina Morales",
+    "role": {
+      "es": "Estudiante de Grado",
+      "en": "Undergraduate Student"
+    },
+    "category": "undergrad",
+    "short_bio": {
+      "es": "Agustina Morales esta desarrollando su tesis de licenciatura sobre la busqueda de candidatos a lentes gravitacionales en datos del Legacy Survey of Space and Time (LSST) del Rubin Observatory.",
+      "en": "Agustina Morales is developing her undergraduate thesis on the search for gravitational lens candidates in data from the Legacy Survey of Space and Time (LSST) of the Rubin Observatory."
+    },
+    "full_bio": {
+      "es": "Agustina Morales es estudiante de cuarto ano de Fisica en la FCEN-UBA. Ingreso al grupo de cosmologia en 2024 bajo la supervision de la Dra. Gonzalez-Rios. Su tesis estudia algoritmos de busqueda de anillos de Einstein y arcos de lentes en imagenes del LSST, comparando metodos clasicos de template matching con clasificadores de redes neuronales.",
+      "en": "Agustina Morales is a fourth-year Physics student at FCEN-UBA. She joined the cosmology group in 2024 under the supervision of Dr. Gonzalez-Rios. Her thesis studies algorithms for finding Einstein rings and lensing arcs in LSST images, comparing classical template-matching methods with neural-network classifiers."
+    },
+    "research_interests": [
+      {
+        "es": "Busqueda automatica de anillos de Einstein y arcos de lentes en imagenes del LSST",
+        "en": "Automated search for Einstein rings and lensing arcs in LSST images"
+      }
+    ],
+    "thesis_topic": {
+      "es": "Algoritmos de busqueda de lentes gravitacionales fuertes en el Legacy Survey of Space and Time: comparacion de template matching y redes neuronales",
+      "en": "Algorithms for strong gravitational lens searches in the Legacy Survey of Space and Time: comparison of template matching and neural networks"
+    },
+    "contact": {
+      "email": "agustina.morales@uba.ar"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "joaquin-alvarez-reyes",
+    "name": "Joaquin Alvarez Reyes",
+    "role": {
+      "es": "Estudiante de Doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "short_bio": {
+      "es": "Joaquin Alvarez Reyes trabaja en el calculo de la funcion de masa de halos con metodos de campo medio y la comparacion con simulaciones de alta resolucion para modelos de materia oscura tibia.",
+      "en": "Joaquin Alvarez Reyes works on computing the halo mass function using mean-field methods and comparing them with high-resolution simulations for warm dark matter models."
+    },
+    "full_bio": {
+      "es": "Joaquin Alvarez Reyes ingreso al doctorado en 2023 bajo la supervision de la Dra. Gonzalez-Rios. Obtuvo su licenciatura en Fisica con orientacion en Astrofisica en la FCEN-UBA, donde realizo su trabajo final sobre formacion de estructura en modelos de materia oscura fuzzy.\n\nSu proyecto doctoral combina tecnicas analiticas de teoria de perturbaciones a un lazo con simulaciones N-cuerpos de alta resolucion (corte de escala en la funcion de potencias inicial) para determinar la funcion de masa de halos en modelos de materia oscura tibia (WDM), y compara las predicciones con observaciones de galaxias enanas satelite de la Via Lactea.",
+      "en": "Joaquin Alvarez Reyes entered the doctoral programme in 2023 under the supervision of Dr. Gonzalez-Rios. He obtained his undergraduate degree in Physics with an Astrophysics specialisation from FCEN-UBA, where his final project studied structure formation in fuzzy dark matter models.\n\nHis doctoral project combines analytical one-loop perturbation theory techniques with high-resolution N-body simulations (with a small-scale power spectrum cut-off) to determine the halo mass function in warm dark matter (WDM) models, and compares predictions with observations of Milky Way satellite dwarf galaxies."
+    },
+    "research_interests": [
+      {
+        "es": "Materia oscura tibia y funcion de masa de halos",
+        "en": "Warm dark matter and halo mass function"
+      },
+      {
+        "es": "Galaxias enanas satelite de la Via Lactea como test de materia oscura",
+        "en": "Milky Way satellite dwarfs as a dark matter test"
+      },
+      {
+        "es": "Teoria de perturbaciones a un lazo para la estructura cosmica",
+        "en": "One-loop perturbation theory for cosmic structure"
+      }
+    ],
+    "publications_selected": [],
+    "contact": {
+      "email": "j.alvarez@uba.ar",
+      "orcid": "0000-0002-1144-6690"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "ana-maria-torres",
+    "name": "Ana Maria Torres",
+    "role": {
+      "es": "Ex-Investigadora Postdoctoral",
+      "en": "Former Postdoctoral Researcher"
+    },
+    "category": "past",
+    "short_bio": {
+      "es": "Ana Maria Torres fue investigadora postdoctoral en el grupo entre 2019 y 2022. Actualmente es investigadora en el CERN, Ginebra.",
+      "en": "Ana Maria Torres was a postdoctoral researcher in the group from 2019 to 2022. She is now a researcher at CERN, Geneva."
+    },
+    "full_bio": {
+      "es": "Ana Maria Torres se doctoro en la Universidad de Granada (Espana) en 2018 con una tesis sobre cosmologia cuantica de lazo. Tras unirse al grupo de Buenos Aires en 2019, colaboro con el Dr. Calzetta en el estudio de efectos de decoherencia en inflacion estocastica. Publico cuatro articulos durante su postdoctorado en el grupo.",
+      "en": "Ana Maria Torres completed her PhD at the Universidad de Granada (Spain) in 2018, with a thesis on loop quantum cosmology. After joining the Buenos Aires group in 2019, she collaborated with Dr. Calzetta on decoherence effects in stochastic inflation. She published four papers during her postdoctoral stay in the group."
+    },
+    "research_interests": [
+      {
+        "es": "Cosmologia cuantica de lazo y gravedad cuantizada",
+        "en": "Loop quantum cosmology and quantised gravity"
+      },
+      {
+        "es": "Inflacion estocastica y efectos de decoherencia",
+        "en": "Stochastic inflation and decoherence effects"
+      }
+    ],
+    "years": {
+      "start": 2019,
+      "end": 2022
+    },
+    "current_position": {
+      "es": "Investigadora en el Departamento de Fisica Teorica, CERN, Ginebra",
+      "en": "Researcher in the Theoretical Physics Department, CERN, Geneva"
+    },
+    "contact": {
+      "email": "atorres@cern.ch"
+    },
+    "social_links": []
+  },
+  {
+    "slug": "pablo-ibarra-navarro",
+    "name": "Pablo Ibarra Navarro",
+    "role": {
+      "es": "Ex-Estudiante de Doctorado",
+      "en": "Former PhD Student"
+    },
+    "category": "past",
+    "short_bio": {
+      "es": "Pablo Ibarra Navarro realizo su doctorado en el grupo entre 2017 y 2022, estudiando modelos de quintaesencia. Actualmente es postdoc en el Institut d'Astrophysique de Paris.",
+      "en": "Pablo Ibarra Navarro completed his PhD in the group between 2017 and 2022, studying quintessence models. He is currently a postdoc at the Institut d'Astrophysique de Paris."
+    },
+    "full_bio": {
+      "es": "Pablo Ibarra Navarro ingreso al doctorado en 2017 bajo la supervision de la Dra. Gonzalez-Rios. Su tesis doctoral estudio modelos de quintaesencia tracker y sus restricciones a partir de datos combinados de supernovas tipo Ia, oscilaciones acusticas de bariones y el CMB. Definio su tesis en diciembre de 2022 con calificacion sobresaliente.",
+      "en": "Pablo Ibarra Navarro entered the doctoral programme in 2017 under the supervision of Dr. Gonzalez-Rios. His doctoral thesis studied tracker quintessence models and their constraints from combined supernovae type Ia, baryon acoustic oscillation, and CMB data. He defended his thesis in December 2022 with the highest distinction."
+    },
+    "research_interests": [
+      {
+        "es": "Modelos de quintaesencia tracker y restricciones observacionales",
+        "en": "Tracker quintessence models and observational constraints"
+      },
+      {
+        "es": "Combinacion de datos: SNe Ia, BAO y CMB",
+        "en": "Data combination: SNe Ia, BAO, and CMB"
+      }
+    ],
+    "years": {
+      "start": 2017,
+      "end": 2022
+    },
+    "current_position": {
+      "es": "Investigador postdoctoral en el Institut d'Astrophysique de Paris (IAP), Paris",
+      "en": "Postdoctoral researcher at the Institut d'Astrophysique de Paris (IAP), Paris"
+    },
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "carolina-soto-vega",
+    "name": "Carolina Soto Vega",
+    "role": {
+      "es": "Ex-Investigadora Postdoctoral",
+      "en": "Former Postdoctoral Researcher"
+    },
+    "category": "past",
+    "short_bio": {
+      "es": "Carolina Soto Vega fue postdoc en el grupo con una posicion abierta en el tiempo, trabajando en constraints de materia oscura caliente a partir de datos de estructura a gran escala. Actualmente es Investigadora Adjunta del CONICET en el IAFE.",
+      "en": "Carolina Soto Vega was a postdoc in the group on an open-ended stay, working on hot dark matter constraints from large-scale structure data. She is now a CONICET Junior Researcher at IAFE."
+    },
+    "full_bio": {
+      "es": "Carolina Soto Vega se doctoro en la Universidad de Chile en 2018. Realizo su postdoctorado en el grupo de Buenos Aires entre 2019 y 2023, periodo durante el cual publico seis articulos sobre neutrinos cosmologicos y restricciones a la masa de neutrinos a partir del espectro de potencias de galaxias SDSS. En 2023 ingreso a la Carrera del Investigador del CONICET en el IAFE.",
+      "en": "Carolina Soto Vega completed her PhD at the Universidad de Chile in 2018. She carried out her postdoctoral fellowship in the Buenos Aires group from 2019 to 2023, during which she published six papers on cosmological neutrinos and neutrino mass constraints from the SDSS galaxy power spectrum. In 2023 she joined the CONICET Researcher Career at IAFE."
+    },
+    "research_interests": [
+      {
+        "es": "Masa de neutrinos cosmologicos y estructura a gran escala",
+        "en": "Cosmological neutrino masses and large-scale structure"
+      },
+      {
+        "es": "Materia oscura caliente y restricciones del espectro de potencias de galaxias",
+        "en": "Hot dark matter and galaxy power spectrum constraints"
+      }
+    ],
+    "years": {
+      "start": 2019,
+      "end": 2023
+    },
+    "current_position": {
+      "es": "Investigadora Adjunta del CONICET en el Instituto de Astronomia y Fisica del Espacio (IAFE), Buenos Aires",
+      "en": "CONICET Junior Researcher at the Instituto de Astronomia y Fisica del Espacio (IAFE), Buenos Aires"
+    },
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "sebastian-quiroga-montoya",
+    "name": "Sebastian Quiroga Montoya",
+    "role": {
+      "es": "Ex-Estudiante de Doctorado",
+      "en": "Former PhD Student"
+    },
+    "category": "past",
+    "short_bio": {
+      "es": "Sebastian Quiroga Montoya realizo su doctorado en el grupo entre 2018 y 2023, enfocado en la busqueda de efectos de violacion de paridad en el fondo de ondas gravitacionales. Es actualmente postdoc en el AEI Hannover.",
+      "en": "Sebastian Quiroga Montoya completed his PhD in the group between 2018 and 2023, focusing on parity-violation effects in the stochastic gravitational-wave background. He is currently a postdoc at AEI Hannover."
+    },
+    "full_bio": {
+      "es": "Sebastian Quiroga Montoya comenzo su doctorado en 2018 co-dirigido por el Dr. Calzetta y el Dr. Sanchez Contreras. Su tesis estudio como la violacion de paridad en el sector gravitacional, predicha por algunas extensiones del Modelo Estandar, deja una huella caracteristica en el espectro de potencias del fondo estocastico de ondas gravitacionales. Defendio en noviembre de 2023.",
+      "en": "Sebastian Quiroga Montoya began his doctoral programme in 2018, co-supervised by Dr. Calzetta and Dr. Sanchez Contreras. His thesis studied how parity violation in the gravitational sector, predicted by some extensions of the Standard Model, leaves a characteristic imprint on the power spectrum of the stochastic gravitational-wave background. He defended in November 2023."
+    },
+    "research_interests": [
+      {
+        "es": "Fondo estocastico de ondas gravitacionales y violacion de paridad",
+        "en": "Stochastic gravitational-wave background and parity violation"
+      },
+      {
+        "es": "Extensiones del Modelo Estandar en el sector gravitacional",
+        "en": "Standard Model extensions in the gravitational sector"
+      }
+    ],
+    "years": {
+      "start": 2018,
+      "end": 2023
+    },
+    "current_position": {
+      "es": "Investigador postdoctoral en el Instituto Max Planck de Fisica Gravitacional (AEI), Hannover, Alemania",
+      "en": "Postdoctoral researcher at the Max Planck Institute for Gravitational Physics (AEI), Hannover, Germany"
+    },
+    "contact": {},
+    "social_links": []
+  }
+]
