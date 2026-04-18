@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "check-translations": "i18n-check --source es --locales messages --format next-intl"
+    "check-translations": "i18n-check --source es --locales messages --format next-intl",
+    "prebuild": "node --import tsx scripts/validate-content.mjs",
+    "validate-content": "node --import tsx scripts/validate-content.mjs",
+    "generate-schemas": "node --import tsx scripts/generate-schemas.mjs"
   },
   "dependencies": {
     "next": "^16.2.4",
