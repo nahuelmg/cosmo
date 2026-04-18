@@ -77,7 +77,9 @@ export function PersonDetail({ person, labels, selectedPubs }: PersonDetailProps
               fill
               sizes="(min-width: 768px) 240px, 100vw"
               className="object-cover"
-              priority
+              preload={true}
+              loading="eager"
+              fetchPriority="high"
             />
           ) : (
             <div

@@ -33,8 +33,11 @@ import {MobileNav} from './MobileNav';
  *     sensible visual weight for a compact-density bar.
  *   - `width={40} height={40}` match the PNG's intrinsic ~1:1 aspect;
  *     next/image downscales for the rendered 32px box.
- *   - `priority` because the logo is in the initial viewport on every route
- *     (LCP candidate).
+ *   - `loading="eager" fetchPriority="high"` because the logo is in the
+ *     initial viewport on every route; no `preload` because the logo is NOT
+ *     the LCP element on any page — preloading it would delay the true LCP
+ *     asset on content pages (migrated from deprecated `priority` per
+ *     Next.js 16.2.4, RESEARCH.md Pattern 3 image-role matrix).
  *   - `alt={siteConfig.groupName}` — the logo's accessible name is the
  *     institutional group name (Spanish, canonical per 02-01). Screen-reader
  *     users on /en also hear "Grupo de Cosmología"; that is the correct
@@ -77,7 +80,8 @@ export function SiteHeader() {
             alt={siteConfig.groupName}
             width={40}
             height={40}
-            priority
+            loading="eager"
+            fetchPriority="high"
             className="h-8 w-auto"
           />
         </Link>
