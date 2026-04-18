@@ -1,0 +1,57 @@
+[
+  {
+    "id": "otrch-planetario-2025",
+    "date": "2025-08-14",
+    "type": "talk",
+    "title": {
+      "es": "Ondas gravitacionales: escuchando el universo oscuro",
+      "en": "Gravitational Waves: Listening to the Dark Universe"
+    },
+    "description": {
+      "es": "Conferencia de divulgacion en el Planetario Galileo Galilei de Buenos Aires sobre la deteccion de ondas gravitacionales y lo que nos revelan acerca de agujeros negros y estrellas de neutrones. El evento convoco a mas de 300 asistentes y fue transmitido en vivo por el canal de YouTube del planetario.",
+      "en": "Popular-science lecture at the Galileo Galilei Planetarium in Buenos Aires on the detection of gravitational waves and what they reveal about black holes and neutron stars. The event drew over 300 attendees and was streamed live on the planetarium's YouTube channel."
+    },
+    "link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": "otrch-escuela-2025",
+    "date": "2025-06-05",
+    "type": "school-visit",
+    "title": {
+      "es": "Que es la materia oscura? Una visita al colegio",
+      "en": "What Is Dark Matter? A School Visit"
+    },
+    "description": {
+      "es": "Visita al Colegio Nacional Buenos Aires para charlar con alumnos de quinto y sexto ano sobre la materia oscura, las simulaciones computacionales y las carreras en astrofisica. La actividad incluyeron un taller de visualizacion de simulaciones N-cuerpo con software libre.",
+      "en": "Visit to Colegio Nacional Buenos Aires to talk with fifth and sixth year students about dark matter, computational simulations, and careers in astrophysics. The activity included a workshop on visualising N-body simulations using free software."
+    }
+  },
+  {
+    "id": "otrch-articulo-2024",
+    "date": "2024-11-20",
+    "type": "article",
+    "title": {
+      "es": "El universo temprano bajo la lupa: inflacion y el fondo cosmico de microondas",
+      "en": "The Early Universe under the Magnifying Glass: Inflation and the Cosmic Microwave Background"
+    },
+    "description": {
+      "es": "Articulo de opinion publicado en la seccion Ciencia de La Nacion, explicando al publico general que es la inflacion cosmica, como el fondo cosmico de microondas actua como fotografia del universo bebe y que podemos aprender de sus pequenas fluctuaciones de temperatura.",
+      "en": "Opinion article published in the Science section of La Nacion, explaining to the general public what cosmic inflation is, how the cosmic microwave background acts as a photograph of the baby universe, and what we can learn from its small temperature fluctuations."
+    },
+    "link": "https://www.lanacion.com.ar/ciencia/el-universo-temprano-bajo-la-lupa-nid2024112001"
+  },
+  {
+    "id": "otrch-podcast-2024",
+    "date": "2024-04-03",
+    "type": "interview",
+    "title": {
+      "es": "Entrevista en el podcast Ciencia Argentina",
+      "en": "Interview on the Ciencia Argentina Podcast"
+    },
+    "description": {
+      "es": "Entrevista de 45 minutos en el podcast Ciencia Argentina sobre el trabajo del grupo en cosmologia computacional, la tension de Hubble y el futuro de la astronomia multimensajero. El episodio fue descargado mas de 8000 veces en su primera semana.",
+      "en": "45-minute interview on the Ciencia Argentina podcast about the group's work in computational cosmology, the Hubble tension, and the future of multi-messenger astronomy. The episode was downloaded more than 8,000 times in its first week."
+    },
+    "link": "https://www.cienciaargentina.com.ar/episodios/cosmologia-grupo-uba"
+  }
+]
