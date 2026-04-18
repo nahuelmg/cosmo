@@ -101,12 +101,12 @@ export default function HeroCarousel({
       ))}
 
       {/* Static overlay — same on every slide per CONTEXT decision */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-ink/10 flex flex-col justify-end p-8 md:p-12">
-        <h1 className="font-serif text-4xl md:text-5xl text-surface">
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/45 to-transparent flex flex-col justify-end p-8 md:p-12">
+        <h1 className="font-serif text-4xl md:text-5xl text-surface [text-shadow:_0_2px_16px_rgb(0_0_0_/_0.65)]">
           {groupName}
         </h1>
-        <p className="text-surface/90">{tagline}</p>
-        <p className="text-surface/70 text-sm">{affiliation}</p>
+        <p className="text-surface/95 [text-shadow:_0_1px_8px_rgb(0_0_0_/_0.55)]">{tagline}</p>
+        <p className="text-surface/80 text-sm [text-shadow:_0_1px_8px_rgb(0_0_0_/_0.55)]">{affiliation}</p>
       </div>
 
       {/* Controls cluster */}
