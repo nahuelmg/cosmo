@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 ## Current Position
 
 Phase: 3 of 6 (Layout Shell)
-Plan: 03-02 complete (EmailLink component shipped)
+Plan: 03-01 + 03-02 complete (foundation + EmailLink)
 Status: In progress — wave-1 parallel plans executing
-Last activity: 2026-04-17 — Completed 03-02-PLAN.md
+Last activity: 2026-04-17 — Completed 03-01-PLAN.md (layout shell foundation)
 
-Progress: [█████░░░░░] ~43%
+Progress: [█████░░░░░] ~46%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: ~12 min
+- Total plans completed: 11
+- Average duration: ~11 min
 - Total execution time: ~2 hours
 
 **By Phase:**
@@ -29,12 +29,13 @@ Progress: [█████░░░░░] ~43%
 |-------|-------|-------|----------|
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
-| 3. Layout Shell | 1/TBD | ~2 min | ~2 min |
+| 3. Layout Shell | 2/TBD | ~6 min | ~3 min |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 03-01 ran ~4 min (pure-auto, 3 atomic task commits; 1 blocking-type deviation fixed inline)
 - 03-02 ran ~2 min (pure-auto, two-file component, no checkpoints)
 - Phase 2 plans ran 3–30 min (01: 3 min pure-auto; 05: ~30 min with human-verify checkpoint)
 
@@ -85,6 +86,11 @@ Recent decisions affecting current work:
 | 03-02 | Two-file EmailLink (server wrapper + 'use client' inner) via next/dynamic ssr:false | Only way to guarantee zero message-scheme literal in prerendered HTML source (Success Criterion 3 / NAV-03) |
 | 03-02 | No loading-state fallback on dynamic import | next/dynamic loading is zero-arg; prop-aware plaintext requires duplicating UI — accepted flash-of-nothing for simplicity |
 | 03-02 | URI scheme assembled via ['mai','lto'].join('') not string literal | Literal token must not appear as contiguous five characters in source or compiled bundle |
+| 03-01 | --header-height: 56px (matches Tailwind h-14) | Token is single source of truth for sticky-header height + #main-content scroll offset; header plan uses h-14 utility without drift |
+| 03-01 | #main-content uses outline:none | tabIndex={-1} focus target uses content (page heading) as visual confirmation; full-page outline is noisy |
+| 03-01 | SkipLink focus ring via focus:ring-2 focus:ring-accent-ring | Box-shadow focus indicator, honours 01-02 no-border policy |
+| 03-01 | SkipLink focus:z-[100] | Sits above Phase 3 z-index ladder (header z-30, overlay z-40, drawer z-50) |
+| 03-01 | Locale prop narrowed to ('es' \| 'en') via (typeof routing.locales)[number] | Plain string rejected getTranslations namespace overload; matches existing pattern in page.tsx |
 
 ### Pending Todos
 
@@ -99,5 +105,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Completed 03-02-PLAN.md (EmailLink component)
+Stopped at: Completed 03-01-PLAN.md (layout shell foundation: Radix Dialog, layout namespace, --header-height token, SkipLink, <main id="main-content"> landmark)
 Resume file: None
