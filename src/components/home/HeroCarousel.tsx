@@ -1,0 +1,183 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+
+interface Slide {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface HeroCarouselProps {
+  slides: Slide[];
+  groupName: string;
+  tagline: string;
+  affiliation: string;
+}
+
+const VISIBLE_MS = 7000;
+const TRANSITION_MS = 1000;
+
+export default function HeroCarousel({
+  slides,
+  groupName,
+  tagline,
+  affiliation,
+}: HeroCarouselProps) {
+  const t = useTranslations('carousel');
+  const [index, setIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    // Clear any existing timer on each run
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    const reducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isPaused || reducedMotion) {
+      return;
+    }
+
+    timerRef.current = setTimeout(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, VISIBLE_MS);
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [index, isPaused, slides.length]);
+
+  // Pause timer when tab is hidden, resume when visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+          timerRef.current = null;
+        }
+      }
+      // When returning to visible the index/isPaused effect re-runs automatically
+      // because it subscribes to those state values. Force a re-trigger by
+      // temporarily toggling isPaused would be wrong — instead we rely on
+      // setIndex to trigger the effect. Use a no-op state update via setIndex(i => i)
+      // only if we need to restart. However, simply calling setIndex(i => i) after
+      // becoming visible is the safest approach:
+      else {
+        setIndex((i) => i);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  return (
+    <div
+      aria-roledescription="carousel"
+      className="relative w-full aspect-[21/9] overflow-hidden rounded-md"
+    >
+      {slides.map((slide, i) => (
+        <div
+          key={slide.src}
+          aria-hidden={i !== index}
+          className={[
+            'absolute inset-0 transition-opacity duration-1000',
+            i === index ? 'opacity-100' : 'opacity-0',
+          ].join(' ')}
+        >
+          <Image
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            priority={i === 0}
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+      ))}
+
+      {/* Static overlay — same on every slide per CONTEXT decision */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-ink/10 flex flex-col justify-end p-8 md:p-12">
+        <h1 className="font-serif text-4xl md:text-5xl text-surface">
+          {groupName}
+        </h1>
+        <p className="text-surface/90">{tagline}</p>
+        <p className="text-surface/70 text-sm">{affiliation}</p>
+      </div>
+
+      {/* Controls cluster */}
+      <div
+        role="group"
+        aria-label={t('controls')}
+        className="absolute bottom-4 right-4 flex items-center gap-2"
+      >
+        {slides.map((slide, i) => (
+          <button
+            key={slide.src}
+            type="button"
+            aria-label={t('goToSlide', { n: i + 1 })}
+            aria-pressed={i === index}
+            onClick={() => setIndex(i)}
+            className={[
+              'w-2.5 h-2.5 rounded-full',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface/70',
+              'active:scale-95 transition-[background-color,transform] duration-75',
+              i === index ? 'bg-surface' : 'bg-surface/50',
+            ].join(' ')}
+          />
+        ))}
+
+        {/* Pause / Play button */}
+        <button
+          type="button"
+          aria-label={isPaused ? t('play') : t('pause')}
+          aria-pressed={isPaused}
+          onClick={() => setIsPaused((p) => !p)}
+          className="ml-1 p-1 text-surface/80 hover:text-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface/70 rounded active:scale-95 transition-[color,transform] duration-75"
+        >
+          {isPaused ? (
+            /* Play triangle */
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <polygon points="2,1 10,6 2,11" />
+            </svg>
+          ) : (
+            /* Pause — two rects */
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <rect x="2" y="1" width="3" height="10" />
+              <rect x="7" y="1" width="3" height="10" />
+            </svg>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export type { Slide, HeroCarouselProps };
+export { VISIBLE_MS, TRANSITION_MS };
