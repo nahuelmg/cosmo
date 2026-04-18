@@ -1,10 +1,27 @@
+import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getLocalizedResearchAreas } from '@/content';
+import { buildPageMetadata } from '@/lib/metadata';
 import { ResearchGrid } from '@/components/research/ResearchGrid';
 
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'seo' });
+  return buildPageMetadata({
+    locale,
+    href: '/research',
+    title: t('research.title'),
+    description: t('research.description'),
+  });
+}
 
 export default async function ResearchPage({ params }: Props) {
   const { locale } = await params;

@@ -1,6 +1,8 @@
+import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getLocalizedPeople } from '@/content';
+import { buildPageMetadata } from '@/lib/metadata';
 import { PeopleSection } from '@/components/people/PeopleSection';
 import { PeoplePlainSection } from '@/components/people/PeoplePlainSection';
 
@@ -10,6 +12,21 @@ type Props = { params: Promise<{ locale: Locale }> };
 const CATEGORIES = ['pi', 'postdoc', 'phd', 'undergrad', 'past'] as const;
 type Category = (typeof CATEGORIES)[number];
 const CLICKABLE: readonly Category[] = ['pi', 'postdoc', 'phd'] as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'seo' });
+  return buildPageMetadata({
+    locale,
+    href: '/people',
+    title: t('people.title'),
+    description: t('people.description'),
+  });
+}
 
 export default async function PeoplePage({ params }: Props) {
   const { locale } = await params;

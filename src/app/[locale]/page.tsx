@@ -1,12 +1,30 @@
+import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { localize, siteConfig } from '@/content';
+import { buildPageMetadata } from '@/lib/metadata';
 import { HeroCarousel } from '@/components/home/HeroCarousel';
 import { Highlights } from '@/components/home/Highlights';
 import { PartnerStrip } from '@/components/home/PartnerStrip';
 
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'seo' });
+  return buildPageMetadata({
+    locale,
+    href: '/',
+    title: siteConfig.groupName,
+    description: t('home.description'),
+    absoluteTitle: true,
+  });
+}
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;

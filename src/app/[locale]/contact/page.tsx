@@ -1,11 +1,28 @@
+import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { localize, siteConfig } from '@/content';
+import { buildPageMetadata } from '@/lib/metadata';
 import { ContactDetails } from '@/components/contact/ContactDetails';
 import MapEmbed from '@/components/contact/MapEmbed';
 
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'seo' });
+  return buildPageMetadata({
+    locale,
+    href: '/contact',
+    title: t('contact.title'),
+    description: t('contact.description'),
+  });
+}
 
 export default async function ContactPage({ params }: Props) {
   const { locale } = await params;
