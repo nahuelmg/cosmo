@@ -13,7 +13,7 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
 - [x] **Phase 1: Foundation** — Next.js scaffold, OKLCH design tokens, i18n routing, fonts
 - [x] **Phase 2: Content Layer** — Zod-validated JSON content files and typed accessors
 - [x] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
-- [ ] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
+- [x] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
 - [ ] **Phase 5: SEO & Discoverability** — Metadata, Schema.org JSON-LD, sitemap, robots
 - [ ] **Phase 6: Polish (A11y & Performance)** — WCAG AA audit, Core Web Vitals, SSG verification
 
@@ -121,14 +121,14 @@ Plans:
 **Plans**: 8 plans (wave 1: 1 plan; wave 2: 7 plans parallel)
 
 Plans:
-- [ ] 04-01-PLAN.md — Shared prereqs: lucide-react install, third carousel placeholder, siteConfig address/office/mapQuery, seed Phase-4 message keys (es+en), build HeroCarousel + MapEmbed 'use client' leaves [wave 1]
-- [ ] 04-02-PLAN.md — Home page: hero carousel + intro + 3 highlight cards + partner strip (HOME-01..07) [wave 2]
-- [ ] 04-03-PLAN.md — People list page + /people/[slug] detail page with generateStaticParams + 5 supporting components (PEOP-01..12) [wave 2]
-- [ ] 04-04-PLAN.md — Research page with 4-area grid + Lucide icons (RSCH-01..02) [wave 2]
-- [ ] 04-05-PLAN.md — Publications page: year-grouped bibliography, no filters (PUBS-01..02; PUBS-03 and PUBS-04 both deferred) [wave 2]
-- [ ] 04-06-PLAN.md — Journal Club page: upcoming sessions + past-sessions archive by academic year (CLUB-01..02) [wave 2]
-- [ ] 04-07-PLAN.md — Outreach page: intro + activity grid, optional links hide when absent (OTRCH-01..03) [wave 2]
-- [ ] 04-08-PLAN.md — Contact page: address + office + obfuscated email + social block + lazy Google Maps embed (CONT-01..05) [wave 2]
+- [x] 04-01-PLAN.md — Shared prereqs: lucide-react install, third carousel placeholder, siteConfig address/office/mapQuery, seed Phase-4 message keys (es+en), build HeroCarousel + MapEmbed 'use client' leaves [wave 1]
+- [x] 04-02-PLAN.md — Home page: hero carousel + intro + 3 highlight cards + partner strip (HOME-01..07) [wave 2]
+- [x] 04-03-PLAN.md — People list page + /people/[slug] detail page with generateStaticParams + 5 supporting components (PEOP-01..12) [wave 2]
+- [x] 04-04-PLAN.md — Research page with 4-area grid + Lucide icons (RSCH-01..02) [wave 2]
+- [x] 04-05-PLAN.md — Publications page: year-grouped bibliography, no filters (PUBS-01..02; PUBS-03 and PUBS-04 both deferred) [wave 2]
+- [x] 04-06-PLAN.md — Journal Club page: upcoming sessions + past-sessions archive by academic year (CLUB-01..02) [wave 2]
+- [x] 04-07-PLAN.md — Outreach page: intro + activity grid, optional links hide when absent (OTRCH-01..03) [wave 2]
+- [x] 04-08-PLAN.md — Contact page: address + office + obfuscated email + social block + lazy Google Maps embed (CONT-01..05) [wave 2]
 
 ---
 

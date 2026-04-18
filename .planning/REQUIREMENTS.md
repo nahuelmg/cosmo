@@ -22,59 +22,59 @@
 
 ### Home
 
-- [ ] **HOME-01**: Hero section displays a rotating cover-photo carousel with 3–5 landscape placeholder images (1920×800, labeled "Hero Image 1", "Hero Image 2", …)
-- [ ] **HOME-02**: Hero carousel auto-advances with fade transitions every 6–8 seconds
-- [ ] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set) and pauses when the tab is backgrounded (`document.hidden`). Manual control is via dot indicators only — no pause button (user direction 2026-04-18 during Phase 4 human-verify; supersedes prior "visible pause button" requirement). Hover and keyboard focus deliberately do NOT pause.
-- [ ] **HOME-04**: Hero overlay displays the group name, short tagline, and affiliation with WCAG-AA contrast against every carousel image
-- [ ] **HOME-05**: Intro section below the hero shows 2–3 paragraphs about the group's mission and research focus
-- [ ] **HOME-06**: Highlights section shows 3 cards of recent publications, news, or featured research
-- [ ] **HOME-07**: Logo strip displays institutional affiliations (UBA, FCEN, CONICET, and any partner institutions)
+- [x] **HOME-01**: Hero section displays a rotating cover-photo carousel with 3–5 landscape placeholder images (1920×800, labeled "Hero Image 1", "Hero Image 2", …)
+- [x] **HOME-02**: Hero carousel auto-advances with fade transitions every 6–8 seconds
+- [x] **HOME-03**: Hero carousel respects `prefers-reduced-motion` (no auto-rotation when set) and pauses when the tab is backgrounded (`document.hidden`). Manual control is via dot indicators only — no pause button (user direction 2026-04-18 during Phase 4 human-verify; supersedes prior "visible pause button" requirement). Hover and keyboard focus deliberately do NOT pause.
+- [x] **HOME-04**: Hero overlay displays the group name, short tagline, and affiliation with WCAG-AA contrast against every carousel image
+- [x] **HOME-05**: Intro section below the hero shows 2–3 paragraphs about the group's mission and research focus
+- [x] **HOME-06**: Highlights section shows 3 cards of recent publications, news, or featured research
+- [x] **HOME-07**: Logo strip displays institutional affiliations (UBA, FCEN, CONICET, and any partner institutions)
 
 ### People
 
-- [ ] **PEOP-01**: People page shows a Principal Investigators section as a grid of 5 square cards (photo, name, title/role, 2–3 line research-interest summary)
-- [ ] **PEOP-02**: People page shows a Postdocs section (2 cards) using the same card format
-- [ ] **PEOP-03**: People page shows a PhD Students section (6 cards) using the same card format
-- [ ] **PEOP-04**: People page shows an Undergraduates section with simpler cards (photo, name, thesis topic) — not clickable
-- [ ] **PEOP-05**: People page shows Past Members as a simple list (name, role, years, current position) — no photos, optionally grouped by role
-- [ ] **PEOP-06**: PI, Postdoc, and PhD cards are fully clickable and link to individual pages at `/people/[slug]`
-- [ ] **PEOP-07**: Individual person page shows a large photo, full name, title, and affiliation
-- [ ] **PEOP-08**: Individual person page shows a 2–4 paragraph biography
-- [ ] **PEOP-09**: Individual person page shows research interests as a bullet list
-- [ ] **PEOP-10**: Individual person page shows a selected-publications list
-- [ ] **PEOP-11**: Individual person page shows contact info: email (obfuscated), office, ORCID, Google Scholar
-- [ ] **PEOP-12**: Individual person page shows optional links (personal website, CV, social) when provided; sections hide cleanly when empty
+- [x] **PEOP-01**: People page shows a Principal Investigators section as a grid of 5 square cards (photo, name, title/role, 2–3 line research-interest summary)
+- [x] **PEOP-02**: People page shows a Postdocs section (2 cards) using the same card format
+- [x] **PEOP-03**: People page shows a PhD Students section (6 cards) using the same card format
+- [x] **PEOP-04**: People page shows an Undergraduates section with simpler cards (photo, name, thesis topic) — not clickable
+- [x] **PEOP-05**: People page shows Past Members as a simple list (name, role, years, current position) — no photos, optionally grouped by role
+- [x] **PEOP-06**: PI, Postdoc, and PhD cards are fully clickable and link to individual pages at `/people/[slug]`
+- [x] **PEOP-07**: Individual person page shows a large photo, full name, title, and affiliation
+- [x] **PEOP-08**: Individual person page shows a 2–4 paragraph biography
+- [x] **PEOP-09**: Individual person page shows research interests as a bullet list
+- [x] **PEOP-10**: Individual person page shows a selected-publications list
+- [x] **PEOP-11**: Individual person page shows contact info: email (obfuscated), office, ORCID, Google Scholar
+- [x] **PEOP-12**: Individual person page shows optional links (personal website, CV, social) when provided; sections hide cleanly when empty
 
 ### Research
 
-- [ ] **RSCH-01**: Research page shows an intro paragraph about the group's research scope
-- [ ] **RSCH-02**: Research page shows a grid of research areas — Dark Matter, Gravitational Waves, Early Universe, Artificial Intelligence — each with an icon or image, title, and short description
+- [x] **RSCH-01**: Research page shows an intro paragraph about the group's research scope
+- [x] **RSCH-02**: Research page shows a grid of research areas — Dark Matter, Gravitational Waves, Early Universe, Artificial Intelligence — each with an icon or image, title, and short description
 
 ### Publications
 
-- [ ] **PUBS-01**: Publications page lists entries grouped by year, most recent first
-- [ ] **PUBS-02**: Each publication entry shows authors, title, journal, year, arXiv link, and DOI link
+- [x] **PUBS-01**: Publications page lists entries grouped by year, most recent first
+- [x] **PUBS-02**: Each publication entry shows authors, title, journal, year, arXiv link, and DOI link
 - [ ] **PUBS-03**: Publications page provides filter controls for year, author, and topic *(deferred beyond Phase 4 — Phase 4 ships a plain year-grouped bibliography only; scope-adjusted 2026-04-18)*
 - [ ] **PUBS-04**: Filter state is reflected in URL query params so a filtered view is shareable and the browser back button works *(deferred beyond Phase 4; depends on PUBS-03)*
 
 ### Journal Club
 
-- [ ] **CLUB-01**: Journal Club page shows upcoming sessions with date, speaker, affiliation, title, and paper link
-- [ ] **CLUB-02**: Journal Club page shows a past-sessions archive grouped by academic year
+- [x] **CLUB-01**: Journal Club page shows upcoming sessions with date, speaker, affiliation, title, and paper link
+- [x] **CLUB-02**: Journal Club page shows a past-sessions archive grouped by academic year
 
 ### Outreach
 
-- [ ] **OTRCH-01**: Outreach page shows an intro paragraph about the group's science-communication commitment
-- [ ] **OTRCH-02**: Outreach page shows a grid of activities (talks, workshops, school visits, popular articles) with image, title, date, and brief description
-- [ ] **OTRCH-03**: Outreach entries optionally link to videos, slides, or articles; links hide cleanly when not provided
+- [x] **OTRCH-01**: Outreach page shows an intro paragraph about the group's science-communication commitment
+- [x] **OTRCH-02**: Outreach page shows a grid of activities (talks, workshops, school visits, popular articles) with image, title, date, and brief description
+- [x] **OTRCH-03**: Outreach entries optionally link to videos, slides, or articles; links hide cleanly when not provided
 
 ### Contact
 
-- [ ] **CONT-01**: Contact page shows the group's postal address at FCEN
-- [ ] **CONT-02**: Contact page shows the office location within Pabellón I/II
-- [ ] **CONT-03**: Contact page shows a general contact email, obfuscated against basic scrapers
-- [ ] **CONT-04**: Contact page shows an embedded Google Map of the location, lazy-loaded below the fold with no LCP impact
-- [ ] **CONT-05**: Contact page shows social-media links (Twitter/X, YouTube, and any provided in config)
+- [x] **CONT-01**: Contact page shows the group's postal address at FCEN
+- [x] **CONT-02**: Contact page shows the office location within Pabellón I/II
+- [x] **CONT-03**: Contact page shows a general contact email, obfuscated against basic scrapers
+- [x] **CONT-04**: Contact page shows an embedded Google Map of the location, lazy-loaded below the fold with no LCP impact
+- [x] **CONT-05**: Contact page shows social-media links (Twitter/X, YouTube, and any provided in config)
 
 ### Content Architecture
 
@@ -90,7 +90,7 @@
 ### Bilingual
 
 - [x] **I18N-01**: All UI chrome (navigation, buttons, labels, form placeholders) is translated to Spanish (default) and English via `next-intl`
-- [ ] **I18N-02**: All page-level copy (Home intro, Research descriptions, Outreach intro, etc.) is available in both languages
+- [x] **I18N-02**: All page-level copy (Home intro, Research descriptions, Outreach intro, etc.) is available in both languages
 - [x] **I18N-03**: Per-entity content (person bios, research area descriptions, outreach descriptions) supports bilingual fields in the content files
 - [x] **I18N-04**: Language toggle preserves the current route and deep links (`/en/people/[slug]` ↔ `/es/people/[slug]`) — shell-level verified (pathname + query preserved); deep-slug paths re-verify in Phase 4 when routes exist
 - [x] **I18N-05**: `<html lang>` attribute matches the active locale on every page
@@ -187,42 +187,42 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NAV-05 | Phase 3 — Layout Shell | Pending |
 | I18N-01 | Phase 3 — Layout Shell | Pending |
 | I18N-04 | Phase 3 — Layout Shell | Pending |
-| HOME-01 | Phase 4 — Core Pages | Pending |
-| HOME-02 | Phase 4 — Core Pages | Pending |
-| HOME-03 | Phase 4 — Core Pages | Pending |
-| HOME-04 | Phase 4 — Core Pages | Pending |
-| HOME-05 | Phase 4 — Core Pages | Pending |
-| HOME-06 | Phase 4 — Core Pages | Pending |
-| HOME-07 | Phase 4 — Core Pages | Pending |
-| PEOP-01 | Phase 4 — Core Pages | Pending |
-| PEOP-02 | Phase 4 — Core Pages | Pending |
-| PEOP-03 | Phase 4 — Core Pages | Pending |
-| PEOP-04 | Phase 4 — Core Pages | Pending |
-| PEOP-05 | Phase 4 — Core Pages | Pending |
-| PEOP-06 | Phase 4 — Core Pages | Pending |
-| PEOP-07 | Phase 4 — Core Pages | Pending |
-| PEOP-08 | Phase 4 — Core Pages | Pending |
-| PEOP-09 | Phase 4 — Core Pages | Pending |
-| PEOP-10 | Phase 4 — Core Pages | Pending |
-| PEOP-11 | Phase 4 — Core Pages | Pending |
-| PEOP-12 | Phase 4 — Core Pages | Pending |
-| RSCH-01 | Phase 4 — Core Pages | Pending |
-| RSCH-02 | Phase 4 — Core Pages | Pending |
-| PUBS-01 | Phase 4 — Core Pages | Pending |
-| PUBS-02 | Phase 4 — Core Pages | Pending |
+| HOME-01 | Phase 4 — Core Pages | Complete |
+| HOME-02 | Phase 4 — Core Pages | Complete |
+| HOME-03 | Phase 4 — Core Pages | Complete |
+| HOME-04 | Phase 4 — Core Pages | Complete |
+| HOME-05 | Phase 4 — Core Pages | Complete |
+| HOME-06 | Phase 4 — Core Pages | Complete |
+| HOME-07 | Phase 4 — Core Pages | Complete |
+| PEOP-01 | Phase 4 — Core Pages | Complete |
+| PEOP-02 | Phase 4 — Core Pages | Complete |
+| PEOP-03 | Phase 4 — Core Pages | Complete |
+| PEOP-04 | Phase 4 — Core Pages | Complete |
+| PEOP-05 | Phase 4 — Core Pages | Complete |
+| PEOP-06 | Phase 4 — Core Pages | Complete |
+| PEOP-07 | Phase 4 — Core Pages | Complete |
+| PEOP-08 | Phase 4 — Core Pages | Complete |
+| PEOP-09 | Phase 4 — Core Pages | Complete |
+| PEOP-10 | Phase 4 — Core Pages | Complete |
+| PEOP-11 | Phase 4 — Core Pages | Complete |
+| PEOP-12 | Phase 4 — Core Pages | Complete |
+| RSCH-01 | Phase 4 — Core Pages | Complete |
+| RSCH-02 | Phase 4 — Core Pages | Complete |
+| PUBS-01 | Phase 4 — Core Pages | Complete |
+| PUBS-02 | Phase 4 — Core Pages | Complete |
 | PUBS-03 | Deferred — post-Phase 4 | Pending |
 | PUBS-04 | Deferred — post-Phase 4 | Pending |
-| CLUB-01 | Phase 4 — Core Pages | Pending |
-| CLUB-02 | Phase 4 — Core Pages | Pending |
-| OTRCH-01 | Phase 4 — Core Pages | Pending |
-| OTRCH-02 | Phase 4 — Core Pages | Pending |
-| OTRCH-03 | Phase 4 — Core Pages | Pending |
-| CONT-01 | Phase 4 — Core Pages | Pending |
-| CONT-02 | Phase 4 — Core Pages | Pending |
-| CONT-03 | Phase 4 — Core Pages | Pending |
-| CONT-04 | Phase 4 — Core Pages | Pending |
-| CONT-05 | Phase 4 — Core Pages | Pending |
-| I18N-02 | Phase 4 — Core Pages | Pending |
+| CLUB-01 | Phase 4 — Core Pages | Complete |
+| CLUB-02 | Phase 4 — Core Pages | Complete |
+| OTRCH-01 | Phase 4 — Core Pages | Complete |
+| OTRCH-02 | Phase 4 — Core Pages | Complete |
+| OTRCH-03 | Phase 4 — Core Pages | Complete |
+| CONT-01 | Phase 4 — Core Pages | Complete |
+| CONT-02 | Phase 4 — Core Pages | Complete |
+| CONT-03 | Phase 4 — Core Pages | Complete |
+| CONT-04 | Phase 4 — Core Pages | Complete |
+| CONT-05 | Phase 4 — Core Pages | Complete |
+| I18N-02 | Phase 4 — Core Pages | Complete |
 | SEO-01 | Phase 5 — SEO & Discoverability | Pending |
 | SEO-02 | Phase 5 — SEO & Discoverability | Pending |
 | SEO-03 | Phase 5 — SEO & Discoverability | Pending |

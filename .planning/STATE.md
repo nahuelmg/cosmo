@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 Phase: 4 of 6 (Core Pages) — COMPLETE
 Plan: 8 of 8 in Phase 4 (04-01..04-08 all complete)
 Status: Phase 4 complete — Contact page shipped (bilingual address/office/email/map, CONT-01..05 + I18N-02 satisfied); Phase 5 (SEO) is next
-Last activity: 2026-04-18 — Completed 04-08-PLAN.md (Contact page: ContactDetails dl-semantic block, EmailLink obfuscation, IntersectionObserver lazy MapEmbed, noSocial fallback; SSG 43 static pages)
+Last activity: 2026-04-18 — Phase 4 verified (35/35 must-haves); post-verify user direction: removed hero carousel pause button (HOME-03 rewritten), replaced people roster with 15 real group members (publications_selected cleared to resolve stale pub-YYYY-* filtering). Phase 5 (SEO) is next.
 
 Progress: [██████████████████████░] ~85% (Phase 3 complete + Phase 4: all 8 plans complete)
 
@@ -155,7 +155,9 @@ Recent decisions affecting current work:
 - Revisit `react-hooks/set-state-in-effect` lint on `MobileNav.tsx:38` (predates 03-05; not blocking) when doing mobile-drawer verification against the live Vercel deployment.
 - Mobile drawer verification (focus trap, Escape, return-focus, 375px no-overflow) against the deployed Vercel site — deferred from 03-05 per user direction; fold into Phase 6 a11y audit or the deploy phase.
 - Press-feedback tuning (spring curve, exact duration) across the shell — baseline landed in 03-05; user flagged further iteration as a later polish concern.
-- Update publications_selected IDs in content/people.json to match actual IDs in content/publications.json (current IDs use stale pub-YYYY-* format; actual IDs use YYYY-* format). Affects all 7 PI/postdoc entries. Silently handled by .filter(p => p !== undefined) in PersonDetailPage — no crash, but no publications render on detail pages until fixed.
+- Populate publications_selected on content/people.json once the group provides real selected-publication lists per member (currently empty arrays across the 15-member roster; the filter-undefined guard in PersonDetailPage keeps the page crash-free, so no publications render on detail pages until real IDs are added).
+- Fill in real bilingual bios + research_interests for the 12 new roster entries (Scannapieco, Miron Granese, Armaleo, Badia, Ferreira Chase, Leizerovitch, Santa Cruz, Chantada, Ahumada Acuña, Elia, Pineau, Cicarella); entries currently show "Biografia detallada a completar" / "Detailed biography to be completed" placeholders. Undergrads (Pineau, Cicarella) additionally need real thesis_topic content.
+- Add missing member photos to public/people/: Augusto Chantada, Guadalupe Ahumada Acuña, Juan Pablo Elia, Javier Pineau, Tomas Cicarella (optional photo field left off in people.json until files exist).
 
 ### Blockers/Concerns
 
@@ -165,5 +167,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 04-08-PLAN.md (Contact page — ContactDetails dl-block, EmailLink obfuscation, IntersectionObserver lazy MapEmbed, noSocial fallback; Phase 4 complete)
+Stopped at: Phase 4 complete and verified (35/35 must-haves). Post-verify edits: pause-button removed per user direction; real 15-member roster replacing 20 placeholder people.json entries. Ready for Phase 5 (SEO & Discoverability).
 Resume file: None
