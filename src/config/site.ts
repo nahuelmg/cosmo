@@ -17,7 +17,7 @@ type SocialPlatform =
   | "linkedin"
   | "bluesky";
 
-interface SocialLink {
+export interface SocialLink {
   platform: SocialPlatform;
   url: string;
   label: string; // e.g. "@CosmoGroupUBA"
