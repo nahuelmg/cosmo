@@ -5,22 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 2 complete — ready for Phase 3 (Layout Shell)
+**Current focus:** Phase 3 Layout Shell — parallel wave (03-01, 03-02, 03-03)
 
 ## Current Position
 
-Phase: 2 of 6 (Content Layer) ✓
-Plan: 5/5 complete
-Status: Phase 2 verified (9/9 must-haves) — ready for Phase 3 (Layout Shell)
+Phase: 3 of 6 (Layout Shell)
+Plan: 03-02 complete (EmailLink component shipped)
+Status: In progress — wave-1 parallel plans executing
+Last activity: 2026-04-17 — Completed 03-02-PLAN.md
 
-Progress: [████░░░░░░] ~38%
+Progress: [█████░░░░░] ~43%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: ~13 min
-- Total execution time: ~1.9 hours
+- Total plans completed: 10
+- Average duration: ~12 min
+- Total execution time: ~2 hours
 
 **By Phase:**
 
@@ -28,14 +29,14 @@ Progress: [████░░░░░░] ~38%
 |-------|-------|-------|----------|
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
-| 3. Layout Shell | 0/TBD | — | — |
+| 3. Layout Shell | 1/TBD | ~2 min | ~2 min |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 03-02 ran ~2 min (pure-auto, two-file component, no checkpoints)
 - Phase 2 plans ran 3–30 min (01: 3 min pure-auto; 05: ~30 min with human-verify checkpoint)
-- 02-01 through 02-04 were fully autonomous; 02-05 required one human-verify checkpoint (approved first pass)
 
 *Updated after each plan completion*
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 | 02-05 | Photo-existence check post-parse, not via Zod .refine() | Schema stays filesystem-free; error category is visually distinct in CLI output |
 | 02-05 | generate-schemas is manual (not chained into prebuild) | Schema-JSON drift is visible via git diff; maintainer opts in to regeneration |
 | 02-05 | Zod .refine() rules do not translate to JSON Schema — build time only | photoPath and proseString smart-quote checks are runtime-only; not representable in JSON Schema |
+| 03-02 | Two-file EmailLink (server wrapper + 'use client' inner) via next/dynamic ssr:false | Only way to guarantee zero message-scheme literal in prerendered HTML source (Success Criterion 3 / NAV-03) |
+| 03-02 | No loading-state fallback on dynamic import | next/dynamic loading is zero-arg; prop-aware plaintext requires duplicating UI — accepted flash-of-nothing for simplicity |
+| 03-02 | URI scheme assembled via ['mai','lto'].join('') not string literal | Literal token must not appear as contiguous five characters in source or compiled bundle |
 
 ### Pending Todos
 
@@ -95,5 +99,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-17
-Stopped at: Phase 2 complete and verified (9/9 must-haves)
-Resume file: None — run `/gsd:discuss-phase 3`
+Stopped at: Completed 03-02-PLAN.md (EmailLink component)
+Resume file: None
