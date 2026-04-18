@@ -39,7 +39,8 @@ yarn-error.log*
 next-env.d.ts
 
 # editor
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .idea/
 
 # OS

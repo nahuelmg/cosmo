@@ -1,0 +1,9 @@
+{
+  "json.schemas": [
+    { "fileMatch": ["content/people.json"],       "url": "./content/people.schema.json" },
+    { "fileMatch": ["content/publications.json"],  "url": "./content/publications.schema.json" },
+    { "fileMatch": ["content/research.json"],      "url": "./content/research.schema.json" },
+    { "fileMatch": ["content/journal-club.json"],  "url": "./content/journal-club.schema.json" },
+    { "fileMatch": ["content/outreach.json"],      "url": "./content/outreach.schema.json" }
+  ]
+}
