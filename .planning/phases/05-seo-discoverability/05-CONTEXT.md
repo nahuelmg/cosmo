@@ -23,8 +23,8 @@ Visual design, content authoring, WCAG audit, and Core Web Vitals are explicitly
 - Per-page / portrait-based OG images deferred — planner note: revisit if custom 1200×630 cards are produced in a future content-polish phase.
 
 ### Schema.org coverage
-- **Root (every page)**: `ResearchOrganization` JSON-LD — group name (canonical Spanish), URL, UBA/FCEN/CONICET affiliations, contact email.
-- **`/people/[slug]`**: `Person` JSON-LD — **full shape**: name, jobTitle, affiliation, description (bio), identifier (ORCID), sameAs (Google Scholar + optional links), email (obfuscated form), image (photo path when present), worksFor (pointing at the root ResearchOrganization).
+- **Root (every page)**: `ResearchOrganization` JSON-LD — group name (canonical Spanish), URL, UBA/FCEN/CONICET affiliations, `contactPoint.url` pointing at the localized contact page (no raw email — NAV-03).
+- **`/people/[slug]`**: `Person` JSON-LD — **full shape**: name, jobTitle, affiliation, description (bio), identifier (ORCID), sameAs (Google Scholar + optional links), image (photo path when present), worksFor (pointing at the root ResearchOrganization). **No email field** — NAV-03 forbids raw email in any prerendered HTML (including JSON-LD). Scholar + ORCID + sameAs cover academic discovery.
 - **Publications page**: `ScholarlyArticle` JSON-LD per entry — authors, headline (title), datePublished (year), publisher/isPartOf (journal), sameAs/identifier (arXiv + DOI).
 - **NOT emitting** (this phase): `Event` for journal club sessions, `ItemList` for list pages. Deferred beyond Phase 5.
 - **Validation**: manual — paste the deployed URL into Google's Rich Results Test after Vercel deploy. No build-time schema validator.
