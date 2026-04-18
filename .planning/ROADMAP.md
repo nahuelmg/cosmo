@@ -59,10 +59,14 @@ Plans:
   4. Each `content/*.json` has a neighbouring `*.schema.json` generated from the Zod schema; opening a file in VS Code shows IntelliSense and inline validation errors (DATA-08).
   5. Per-entity bilingual fields (bios, research-area descriptions, outreach descriptions) render in the active locale when accessed via typed accessors (I18N-03).
 
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 02-01: TBD (sized during `/gsd:plan-phase 2`)
+- [ ] 02-01-PLAN.md — Install zod@^4 + tsx, shared Zod helpers, src/config/site.ts, scaffold folder tree, .vscode/settings.json wiring
+- [ ] 02-02-PLAN.md — People schema + realistic placeholder JSON (19–21 entries, 8 real photos, 4-part long name) + typed accessors with locale resolution
+- [ ] 02-03-PLAN.md — Publications schema (id uniqueness, arXiv/DOI regex) + 10–15 entries across 2024–2026 + accessors (year/topic filters)
+- [ ] 02-04-PLAN.md — Research (4 areas) + Journal Club (3–4 sessions) + Outreach (3–4 activities) schemas, JSON, and accessors
+- [ ] 02-05-PLAN.md — Prebuild validator (file-grouped errors, photo existence), JSON Schema generator (draft-07), barrel index, seeded-violation verification
 
 ---
 
