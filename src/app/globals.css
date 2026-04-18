@@ -17,7 +17,7 @@
   /* ── Ink — warm near-black; never pure #000 ── */
   --color-ink:        oklch(0.22 0.015 60);
   --color-ink-muted:  oklch(0.48 0.012 60);
-  --color-ink-subtle: oklch(0.62 0.010 60);
+  --color-ink-subtle: oklch(0.45 0.012 60);
 
   /* ── Accent — single warm hue, muted terracotta (hue 45°, warm band 30°–80°) ── */
   --color-accent:      oklch(0.52 0.12 45);
