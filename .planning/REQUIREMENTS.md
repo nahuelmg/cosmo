@@ -139,20 +139,65 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01..06 | Phase 7 | Pending |
-| DATA-09, 10 | Phase 7 | Pending |
-| ACC-01..05 | Phase 7 | Pending |
-| SYNC-01..15 | Phase 8 | Pending |
-| CI-01..08 | Phase 9 | Pending |
-| PUBS-05..12 | Phase 10 | Pending |
-| PEOP-13..18 | Phase 10 | Pending |
-| I18N-08, 09 | Phase 10 | Pending |
-| DOC-01, 02 | Phase 10 | Pending |
+| SCHEMA-01 | Phase 7 | Pending |
+| SCHEMA-02 | Phase 7 | Pending |
+| SCHEMA-03 | Phase 7 | Pending |
+| SCHEMA-04 | Phase 7 | Pending |
+| SCHEMA-05 | Phase 7 | Pending |
+| SCHEMA-06 | Phase 7 | Pending |
+| DATA-09 | Phase 7 | Pending |
+| DATA-10 | Phase 7 | Pending |
+| ACC-01 | Phase 8 | Pending |
+| ACC-02 | Phase 8 | Pending |
+| ACC-03 | Phase 8 | Pending |
+| ACC-04 | Phase 8 | Pending |
+| ACC-05 | Phase 8 | Pending |
+| SYNC-01 | Phase 9 | Pending |
+| SYNC-02 | Phase 9 | Pending |
+| SYNC-03 | Phase 9 | Pending |
+| SYNC-04 | Phase 9 | Pending |
+| SYNC-05 | Phase 9 | Pending |
+| SYNC-06 | Phase 9 | Pending |
+| SYNC-07 | Phase 9 | Pending |
+| SYNC-08 | Phase 9 | Pending |
+| SYNC-09 | Phase 9 | Pending |
+| SYNC-10 | Phase 9 | Pending |
+| SYNC-11 | Phase 9 | Pending |
+| SYNC-12 | Phase 9 | Pending |
+| SYNC-13 | Phase 9 | Pending |
+| SYNC-14 | Phase 9 | Pending |
+| SYNC-15 | Phase 9 | Pending |
+| CI-01 | Phase 10 | Pending |
+| CI-02 | Phase 10 | Pending |
+| CI-03 | Phase 10 | Pending |
+| CI-04 | Phase 10 | Pending |
+| CI-05 | Phase 10 | Pending |
+| CI-06 | Phase 10 | Pending |
+| CI-07 | Phase 10 | Pending |
+| CI-08 | Phase 10 | Pending |
+| PUBS-05 | Phase 11 | Pending |
+| PUBS-06 | Phase 11 | Pending |
+| PUBS-07 | Phase 11 | Pending |
+| PUBS-08 | Phase 11 | Pending |
+| PUBS-09 | Phase 11 | Pending |
+| PUBS-10 | Phase 11 | Pending |
+| PUBS-11 | Phase 11 | Pending |
+| PUBS-12 | Phase 11 | Pending |
+| PEOP-13 | Phase 11 | Pending |
+| PEOP-14 | Phase 11 | Pending |
+| PEOP-15 | Phase 11 | Pending |
+| PEOP-16 | Phase 11 | Pending |
+| PEOP-17 | Phase 11 | Pending |
+| PEOP-18 | Phase 11 | Pending |
+| I18N-08 | Phase 11 | Pending |
+| I18N-09 | Phase 11 | Pending |
+| DOC-01 | Phase 11 | Pending |
+| DOC-02 | Phase 11 | Pending |
 
-**Coverage target:** 48 requirements across phases 7–10.
+**Coverage:** 54 requirements across phases 7–11. All v1.1 requirements mapped.
 
-*Phase numbering tentative — finalized by roadmapper. Status column updated by `/gsd:execute-phase` as phases complete.*
+*Status column updated by `/gsd:execute-phase` as phases complete.*
 
 ---
 
-*Drafted 2026-04-18 as part of v1.1 milestone definition. Ready for `/gsd:plan-phase 7` after roadmap approval.*
+*Drafted 2026-04-18. Traceability finalized by roadmapper 2026-04-18. Ready for `/gsd:plan-phase 7`.*

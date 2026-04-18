@@ -5,79 +5,57 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Planning next milestone (v1.1) — arXiv + InspireHEP publication sync connecting PIs/postdocs/PhDs to profiles, with publications auto-populating on `/publications` and individual `/people/[slug]` pages.
+**Current focus:** v1.1 Phase 7 — Schema Extension (atomic prerequisite)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 7 of 11 (Schema Extension)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-18 — Milestone v1.1 started (arXiv + InspireHEP publication sync)
+Status: Ready to plan
+Last activity: 2026-04-18 — v1.1 ROADMAP.md created; phases 7–11 defined
 
-Progress: [done] v1.0 — 31/31 plans complete across 6 phases (100%); v1.1 defining requirements
+Progress: [██████░░░░░░░░░] 6/11 phases complete (v1.0 done; v1.1 starting)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
-**Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time.
+**Goal:** Auto-populate publications from InspireHEP + arXiv, refreshed weekly at build time.
 
-**Locked decisions (from milestone kickoff 2026-04-18):**
-- Sync mode: build-time GitHub Action (weekly cron) — preserves fully-static SSG, keeps PERF-01
-- Sources: InspireHEP + arXiv, no cross-source DOI dedup (entries source-tagged instead)
-- Author linkage: explicit `arxiv_id` + `inspirehep_id` fields in `content/people.json` (no ORCID, no name-heuristics)
-- Failure mode: fall back to last-good `content/publications.json`; site deploys regardless
-- Profile display: `/people/[slug]` shows last-N-years subset filtered by author match; `/publications` shows full archive
-- Scope: current members only (PIs / postdocs / PhDs); past members keep v1.0's flat list, no sync
+**Phase order:** 7 Schema → 8 Accessor → 9 Sync Script → 10 CI Wiring → 11 Display Layer
+
+**Critical ordering rule:** Schema (7) must be atomic and green before anything else. Sync script (9) must validate locally before CI (10) is wired.
+
+**Human dependency:** DATA-09 / DATA-10 — maintainer must populate `inspirehep_id` (BAI) and `arxiv_id` in `content/people.json` for all current members before Phase 9 can be tested end-to-end. Scheduled as Plan 07-02.
 
 ## Shipped — v1.0 MVP (2026-04-18)
 
-- Bilingual (es default / en toggle) institutional website
-- 45 fully-static routes prerendered
-- Schema.org ResearchOrganization + Person + ScholarlyArticle JSON-LD
-- Sitemap (20 canonical URLs + hreflang alternates) + robots.txt
-- axe-core 0 critical violations on 8 Spanish pages (WCAG AA)
-- 73/75 v1 requirements satisfied; 2 scope-adjusted (PUBS-03/04 deferred)
-- 158 commits, 2-day build span
+31 plans complete across 6 phases. 45 fully-static routes. axe-core 0 violations. 73/75 v1 requirements satisfied.
+Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
-Full archive: `.planning/milestones/v1.0-ROADMAP.md` + `v1.0-REQUIREMENTS.md` + `v1.0-MILESTONE-AUDIT.md`
+## Open Items Carried Forward (v1.0)
 
-## Open Items Carried Forward
+- PERF-04/05 deferred to Vercel production re-measurement (LCP + CLS numerical targets)
+- NAV-04 mobile drawer 375px live-deploy check (structural done)
+- `MobileNav.tsx:87` `focus:outline-none` flag (low risk)
+- `SiteFooter.tsx:1` unused `next/link` import (flip on next edit)
 
-**Deferred to production re-measurement** (needs Vercel deploy + Lighthouse Lab):
-- PERF-04: LCP < 2.5s on mobile 4G for Home / People / Publications
-- PERF-02: numerical CLS on 7 of 8 pages (structural verification complete)
-- PERF-05: CLS = 0 on 7 of 8 pages (Contact CLS=0.01 measured)
+## Accumulated Context
 
-**Runtime verification against live deploy**:
-- NAV-04: mobile drawer 375px runtime check (structural done)
-- HeroCarousel: pause / reduced-motion / MapEmbed IntersectionObserver runtime (deferred from 04-02 human-verify)
+### v1.1 Key Decisions (locked 2026-04-18)
 
-**Low-risk code polish**:
-- `src/components/layout/MobileNav.tsx:87` — `focus:outline-none` flag (box-shadow ring provides focus; lint only)
-- `src/components/layout/SiteFooter.tsx:1` — unused `next/link` dead import (flip to `@/i18n/navigation`)
+- Schema extension must be atomic (Zod + JSON Schema regeneration in one commit) — Pitfalls 1 + 7
+- No arXiv name-based fallback — skip members without `arxiv_id`, never use `au:name` search — Pitfall 3
+- Concurrency-limited InspireHEP queue (max 5 parallel, 2s pause, exponential backoff on 429) — Pitfall 2
+- Deterministic sort before JSON serialization + `git diff --quiet` skip-commit guard — Pitfall 5
+- Intra-run dedup by arXiv ID (prevents Planck/Euclid papers appearing once per co-author) — Pitfall 6
+- `scripts/sync-publications.ts` uses relative imports, NOT `@/` alias — tsx does not resolve webpack aliases
 
-## Accumulated Context (v1.0 shipped)
+### Blockers / Concerns
 
-### Key Decisions (see PROJECT.md for full table + outcomes)
+- DATA-09/10: Human action required in Phase 7 (Plan 07-02) — sync script cannot be end-to-end tested without real BAI IDs
+- CI-08: Check if `main` has branch protection rules before Phase 10 — may need `github-actions[bot]` bypass
 
-- Vercel-only deployment; fully-static build output
-- next-intl 4.9 with Spanish default + English toggle; pathnames map at `src/i18n/routing.ts` is the URL source of truth
-- CSS-first Tailwind v4 with `@theme` in `globals.css` + OKLCH tokens
-- Zod v4 strict schemas + `@/content` barrel + JSON Schema IntelliSense (no CMS)
-- Single `<main>` landmark in `[locale]/layout.tsx`; pages return content fragments
-- `EmailLink` two-file pattern (zero `mailto:` in prerendered HTML)
-- `buildPageMetadata` helper — single SEO composition site; static `metadata` export preserves SSG
-- `getPathname` as URL source of truth for sitemap + nav + canonicals
-- Scope-adjusted PUBS-03 / PUBS-04 beyond v1.0; HOME-03 dot-only carousel control
+## Session Continuity
 
-### Patterns established (reusable across milestones)
-
-- Parse-at-module-load for content JSON (throws at import time, not per-request)
-- Locale-resolved accessors (`getLocalized*`) — components never touch `.es`/`.en`
-- Props-down server composition — page RSCs resolve translations/data, pass strings down to leaves
-- Static ICON_MAP keyed by JSON field (tree-shake safe)
-- Per-entry stable `id="pub-{id}"` / slug-based anchors for deep links
-- Bundled atomic task commits per plan + plan-metadata commit + phase-completion commit
-
----
-
-*Updated 2026-04-18 — v1.1 milestone scope locked; next: research decision → requirements → roadmap.*
+Last session: 2026-04-18
+Stopped at: ROADMAP.md written; ready for `/gsd:plan-phase 7`
+Resume file: None
