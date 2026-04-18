@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 5 SEO & Discoverability — wave-1 prerequisite 05-01 shipped. buildPageMetadata + schema builders + JsonLd + seo messages + siteConfig.url are live; wave-2 plans (05-02..05-05) can now run in parallel.
+**Current focus:** Phase 5 SEO & Discoverability — wave-1 prerequisite 05-01 shipped; 05-02 site-wide metadataBase + title template + ResearchOrganization JSON-LD now live in the root locale layout. Wave-2 remainder (05-03, 05-04, 05-05) can run in parallel.
 
 ## Current Position
 
 Phase: 5 of 6 (SEO & Discoverability)
-Plan: 1 of 5 in Phase 5 (05-01 complete; 05-02, 05-03, 05-04, 05-05 queued as wave 2)
+Plan: 2 of 5 in Phase 5 (05-01, 05-02 complete; 05-03, 05-04, 05-05 queued as wave 2 remainder)
 Status: In progress
-Last activity: 2026-04-18 — Completed 05-01-PLAN.md (siteConfig.url + bilingual seo namespace + buildPageMetadata + schema builders + JsonLd; NAV-03 + PERF-01 guards verified; 43 pages still static)
+Last activity: 2026-04-18 — Completed 05-02-PLAN.md (static metadata export with metadataBase + title template + default OG/Twitter in [locale]/layout.tsx; ResearchOrganization JSON-LD rendered once per page via shared layout; NAV-03 + PERF-01 guards re-verified — zero email/mailto in curl, all 43 pages still static)
 
-Progress: [██████████████████████░░] ~89% (16/18 plans complete across phases 1-4 + 05-01)
+Progress: [███████████████████████░] ~94% (17/18 plans complete across phases 1-4 + 05-01 + 05-02)
 
 ## Performance Metrics
 
@@ -31,10 +31,11 @@ Progress: [██████████████████████░
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
 | 4. Core Pages | 8/8 COMPLETE (04-01..04-08) | ~69 min | ~9 min |
-| 5. SEO & Discoverability | 1/5 (05-01 complete; wave 2 queued) | ~3 min | ~3 min |
+| 5. SEO & Discoverability | 2/5 (05-01, 05-02 complete; 03..05 queued) | ~4 min | ~2 min |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 05-02 ran ~1 min (pure-auto, 1 task commit, zero deviations; typecheck + build clean on first attempt; all 43 pages still static — PERF-01 held; curl /es and /en both confirmed ResearchOrganization JSON-LD rendered with locale-correct contactPoint.url (/es/contacto vs /en/contact); NAV-03 zero-mailto + zero-"email" grep guards passed)
 - 05-01 ran ~3 min (pure-auto, 2 task commits, zero deviations; check-translations + typecheck clean on first attempt; build prerendered all 43 pages as static; NAV-03 constraint verified via zero `"email"` hits in src/lib/schemas.ts; PERF-01 satisfied — no cookies/headers/connection calls added)
 - 04-08 ran ~8 min (pure-auto, 2 task commits, 2 auto-fixes — default-import correction + never[] cast; TypeScript clean after fixes; build prerendered 43 static pages; zero mailto/iframe in prerender confirmed via curl)
 - 04-07 ran ~7 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build prerendered both locales; 4 articles/3 links/0 images verified via curl)
@@ -154,6 +155,11 @@ Recent decisions affecting current work:
 | 05-01 | Href type extracted via Parameters<typeof getPathname>[0]["href"] instead of duplicated type declaration | Keeps buildPageMetadata's Href in lockstep with routing.ts pathnames; adding a new localized route propagates to helper type without further edits |
 | 05-01 | Schema builders use conditional property assignment (`if (...) schema.x = ...`) on Record<string, unknown> base | Cleaner than spread-with-ternary-undefined under strict typecheck; avoids exactOptionalPropertyTypes friction |
 | 05-01 | JsonLd escapes `<` -> `\u003c` via String.replace in dangerouslySetInnerHTML | XSS guard: neutralises `</script>` tokens that could land inside JSON string values (e.g. a bio containing "<script>") |
+| 05-02 | Layout metadata is static `export const metadata: Metadata = {...}` (not generateMetadata) | Defaults are locale-independent; static evaluation preserves SSG eligibility (PERF-01). Per-page generateMetadata handles locale-varying cases downstream in 05-03 |
+| 05-02 | Title template `Grupo de Cosmología — %s` + default `Grupo de Cosmología` | Canonical Spanish brand; 05-03 home uses title.absolute to suppress the " — %s" suffix, inner pages prepend via the template |
+| 05-02 | description fallback is siteConfig.tagline.es (canonical Spanish) | Intentional last-resort; every page overrides via buildPageMetadata. Not a bilingual string because metadata export is static and locale-unaware |
+| 05-02 | JsonLd rendered inside `<body>` as a sibling of `<main>`, not inside `<head>` | Next/React hoist `<script type=application/ld+json>` appropriately; body placement keeps the layout tree simple and consistent with the single-landmark <main> from 03-05 |
+| 05-02 | `locale as Locale` cast when calling buildOrganizationSchema | hasLocale() already narrowed the runtime string; cast is a TypeScript-only convenience, matches the existing SiteFooter call-site pattern in the same file |
 
 ### Pending Todos
 
@@ -175,5 +181,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 05-01-PLAN.md (SEO wave-1 prereqs: siteConfig.url, bilingual seo messages namespace, buildPageMetadata helper, schema builders, JsonLd component). NAV-03 + PERF-01 guards pass; all 43 pages still prerendered static. Wave-2 plans 05-02..05-05 are unblocked.
+Stopped at: Completed 05-02-PLAN.md (site-wide metadataBase + title template + default OG/Twitter + ResearchOrganization JSON-LD wired into [locale]/layout.tsx). Verified: all 43 pages still static; curl /es and /en both emit ResearchOrganization JSON-LD with locale-correct contactPoint.url; zero mailto/email hits site-wide. Wave-2 remainder (05-03 page metadata overrides, 05-04 per-page schemas, 05-05 sitemap/robots) unblocked.
 Resume file: None
