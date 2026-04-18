@@ -9,12 +9,24 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 0 of TBD (v1.1 not yet planned)
-Plan: Not started
-Status: Ready to plan — run `/gsd:new-milestone` to define v1.1 requirements + roadmap.
-Last activity: 2026-04-18 — v1.0 milestone complete. Archived to `.planning/milestones/`. Tagged `v1.0`.
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-18 — Milestone v1.1 started (arXiv + InspireHEP publication sync)
 
-Progress: [done] v1.0 — 31/31 plans complete across 6 phases (100%)
+Progress: [done] v1.0 — 31/31 plans complete across 6 phases (100%); v1.1 defining requirements
+
+## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
+
+**Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time.
+
+**Locked decisions (from milestone kickoff 2026-04-18):**
+- Sync mode: build-time GitHub Action (weekly cron) — preserves fully-static SSG, keeps PERF-01
+- Sources: InspireHEP + arXiv, no cross-source DOI dedup (entries source-tagged instead)
+- Author linkage: explicit `arxiv_id` + `inspirehep_id` fields in `content/people.json` (no ORCID, no name-heuristics)
+- Failure mode: fall back to last-good `content/publications.json`; site deploys regardless
+- Profile display: `/people/[slug]` shows last-N-years subset filtered by author match; `/publications` shows full archive
+- Scope: current members only (PIs / postdocs / PhDs); past members keep v1.0's flat list, no sync
 
 ## Shipped — v1.0 MVP (2026-04-18)
 
@@ -68,4 +80,4 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md` + `v1.0-REQUIREMENTS.md` + 
 
 ---
 
-*Updated 2026-04-18 — v1.0 milestone archived; ready for `/gsd:new-milestone` (v1.1 arXiv + InspireHEP publication sync).*
+*Updated 2026-04-18 — v1.1 milestone scope locked; next: research decision → requirements → roadmap.*

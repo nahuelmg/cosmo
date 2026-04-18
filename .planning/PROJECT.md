@@ -8,6 +8,20 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
+## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
+
+**Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time — replacing v1.0's manual `content/publications.json`.
+
+**Target features:**
+- Person schema adds optional `arxiv_id` + `inspirehep_id` — maintainer pastes profile ID once
+- Weekly GitHub Action runs sync script, commits refreshed `content/publications.json`, preserves fully-static SSG (PERF-01 guarantee holds)
+- Sync script queries InspireHEP + arXiv in parallel, tags each entry by source, validates against extended Zod schema
+- `/people/[slug]` shows the person's last-N-years publications (filtered by author match); full archive lives on `/publications`
+- API failure falls back to last-good JSON (no broken builds from flaky upstreams)
+- Current members only — past members keep v1.0's flat list
+
+**Explicitly deferred:** ORCID lookup, NASA ADS, cross-source DOI dedup (entries stay source-tagged), runtime ISR, filter UI (PUBS-03/04 still deferred).
+
 ## Requirements
 
 ### Validated
@@ -47,9 +61,16 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 ### Active
 
-<!-- Current scope. Building toward these. -->
+<!-- Current scope. Building toward these. v1.1 — arXiv + InspireHEP sync. -->
 
-(None — next milestone requirements defined via `/gsd:new-milestone`.)
+- [ ] Person schema extended with `arxiv_id` + `inspirehep_id` (both optional strings)
+- [ ] Sync script queries InspireHEP + arXiv for every current-member ID, writes `content/publications.json`
+- [ ] Extended Publication Zod schema with `source: "inspirehep" | "arxiv"` tag
+- [ ] Weekly GitHub Action (cron) runs sync, commits JSON on success, leaves file untouched on failure
+- [ ] `/publications` renders the auto-populated archive, grouped by year, newest first
+- [ ] `/people/[slug]` filters publications by author match, limited to last N years
+- [ ] Sync failure logs to Action summary; site deploys last-good JSON
+- [ ] Documentation for maintainers: how to add `arxiv_id` / `inspirehep_id` to people.json
 
 ### Out of Scope
 
@@ -67,9 +88,16 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 <!--
 Previously out of scope, now revisited:
-- Real publication import (ADS / arXiv / ORCID) — deferred to v2 during v1.0 planning;
-  v1.1 will address the arXiv + InspireHEP half (ORCID deferred further).
+- Real publication import — v1.0 deferred the whole thing to v2; v1.1 takes the arXiv + InspireHEP half.
+  ORCID, NASA ADS, and cross-source DOI dedup remain deferred.
 -->
+
+**v1.1 deferrals (revisit later):**
+- ORCID-first author lookup — requires every person to register ORCID; nice-to-have, not blocking
+- NASA ADS API — HEP cosmology largely covered by InspireHEP; ADS adds astrophysics breadth if later needed
+- Cross-source DOI dedup — v1.1 keeps both sources as separate entries; merge logic added when maintainers report the duplication as annoying
+- Runtime ISR — v1.1 sticks with build-time Action; on-demand revalidation is a v2 architecture change
+- PUBS-03 / PUBS-04 filter UI — still deferred from v1.0
 
 ## Context
 
@@ -147,4 +175,4 @@ Previously out of scope, now revisited:
 | HeroCarousel pause button wording adjusted in Phase 4 human-verify | User preferred dot-only control; hover/focus deliberately don't pause | ✓ Good — HOME-03 rewording accepted by user |
 
 ---
-*Last updated: 2026-04-18 after v1.0 milestone*
+*Last updated: 2026-04-18 — v1.1 milestone scope locked (arXiv + InspireHEP publication sync)*
