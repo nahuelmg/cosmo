@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 6 Polish (A11y & Performance) — In progress. 06-01 audit complete: axe found single violation class (color-contrast, 15 nodes) across 8 Spanish pages. All owned by --color-ink-subtle token (3.41–3.58:1 vs 4.5:1 required). Zero HeroCarousel violations. 06-02 (carousel ARIA) + 06-03 (token fix) ready to execute.
+**Current focus:** Phase 6 Polish (A11y & Performance) — In progress. 06-01 audit + 06-02 carousel ARIA + 06-03 token fix all complete. Post-fix axe: 0 violations across all 8 Spanish pages. A11Y-01 + A11Y-02 satisfied. Remaining: 06-04 (performance) + 06-05 (final audit/review).
 
 ## Current Position
 
 Phase: 6 of 6 (Polish A11y & Performance) — In progress
-Plan: 1 of 4 in Phase 6 (06-01 complete)
+Plan: 3 of 4 in Phase 6 (06-01, 06-02, 06-03 complete)
 Status: In progress
-Last activity: 2026-04-18 — Completed 06-01 axe audit. Single rule: color-contrast (serious, 15 nodes, 3 components). Root cause: --color-ink-subtle token too light at oklch(0.62) → #8b8580, yields 3.41:1 on primary surface. Fix: darken token to ~oklch(0.48) in 06-03. Carousel has zero axe violations; proactive ARIA additions needed in 06-02 (pause button, aria-live, slide role="group"). Manual gradient contrast spot-check deferred to 06-02.
+Last activity: 2026-04-18 — Completed 06-03 axe remediation. Single token fix: --color-ink-subtle oklch(0.62→0.45), closes all 15 color-contrast violations. Post-fix axe run: 0 violations on all 8 pages. PERF-01 held (45 static routes). NAV-03 held (0 mailto in content HTML). 06-02 carousel ARIA also complete (Wave 2 parallel).
 
-Progress: [████████████████████████████] ~97% (22/26 plans complete, Phase 6 plan 1 of 4 done)
+Progress: [█████████████████████████████░] ~99% (24/26 plans complete, Phase 6 plans 1-3 of 4 done)
 
 ## Performance Metrics
 
@@ -163,6 +163,7 @@ Recent decisions affecting current work:
 | 05-02 | description fallback is siteConfig.tagline.es (canonical Spanish) | Intentional last-resort; every page overrides via buildPageMetadata. Not a bilingual string because metadata export is static and locale-unaware |
 | 05-02 | JsonLd rendered inside `<body>` as a sibling of `<main>`, not inside `<head>` | Next/React hoist `<script type=application/ld+json>` appropriately; body placement keeps the layout tree simple and consistent with the single-landmark <main> from 03-05 |
 | 05-02 | `locale as Locale` cast when calling buildOrganizationSchema | hasLocale() already narrowed the runtime string; cast is a TypeScript-only convenience, matches the existing SiteFooter call-site pattern in the same file |
+| 06-03 | --color-ink-subtle darkened to oklch(0.45 0.012 60) from oklch(0.62 0.010 60) | Token at 0.62 yielded 3.41–3.58:1 (fails WCAG AA 4.5:1). New value passes on both surface tiers. Semantic de-emphasis now via font-size/case/tracking, not color lightness |
 
 ### Pending Todos
 
@@ -185,5 +186,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 06-01-PLAN.md. axe-core 4.11.3 audit of 8 Spanish pages complete. Single violation class: color-contrast (serious, 15 nodes). Root cause: --color-ink-subtle token (#8b8580 at oklch ~0.62) yields 3.41–3.58:1 on surface backgrounds, below 4.5:1 threshold. Affected components: SiteFooter (copyright line, all 8 pages), ContactDetails (4 dt labels, /contacto), OutreachCard (type badge, /divulgacion). Zero carousel violations. 06-02 (carousel ARIA proactive fixes) and 06-03 (token fix + component sweep) have unambiguous work lists from SUMMARY.
+Stopped at: Completed 06-03-PLAN.md. --color-ink-subtle darkened (oklch 0.62→0.45). Post-fix axe: 0 violations on all 8 Spanish pages. 06-02 carousel ARIA also complete (Wave 2). A11Y-01 + A11Y-02 satisfied. Build: 45 static routes. NAV-03: 0 mailto in content HTML.
 Resume file: None
