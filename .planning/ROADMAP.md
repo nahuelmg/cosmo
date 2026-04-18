@@ -12,7 +12,7 @@ Six phases take the project from an empty repo to a deployed bilingual instituti
 
 - [x] **Phase 1: Foundation** — Next.js scaffold, OKLCH design tokens, i18n routing, fonts
 - [x] **Phase 2: Content Layer** — Zod-validated JSON content files and typed accessors
-- [ ] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
+- [x] **Phase 3: Layout Shell** — Header with language toggle, footer, skip link, EmailLink
 - [ ] **Phase 4: Core Pages** — Home, People (list + detail), Research, Publications, Journal Club, Outreach, Contact
 - [ ] **Phase 5: SEO & Discoverability** — Metadata, Schema.org JSON-LD, sitemap, robots
 - [ ] **Phase 6: Polish (A11y & Performance)** — WCAG AA audit, Core Web Vitals, SSG verification
@@ -93,7 +93,7 @@ Plans:
 - [x] 03-02-PLAN.md — EmailLink component (dynamic ssr:false wrapper) guaranteeing zero `mailto:` in prerendered HTML
 - [x] 03-03-PLAN.md — Nav primitives: NAV_ITEMS registry, NavLink with active state, LocaleToggle with Suspense
 - [x] 03-04-PLAN.md — SiteHeader (sticky, logo, desktop nav, locale toggle) + MobileNav (Radix Dialog drawer)
-- [ ] 03-05-PLAN.md — SiteFooter + integration into [locale]/layout.tsx + human-verify of the full shell
+- [x] 03-05-PLAN.md — SiteFooter + integration into [locale]/layout.tsx + human-verify of the full shell
 
 ---
 
@@ -178,7 +178,7 @@ Phase 4 may fan out into parallel per-page plans once planned.
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
 | 2. Content Layer | 5/5 | Complete ✓ | 2026-04-17 |
-| 3. Layout Shell | 4/5 | In progress | - |
+| 3. Layout Shell | 5/5 | Complete ✓ | 2026-04-17 |
 | 4. Core Pages | 0/TBD | Not started | - |
 | 5. SEO & Discoverability | 0/TBD | Not started | - |
 | 6. Polish (A11y & Performance) | 0/TBD | Not started | - |

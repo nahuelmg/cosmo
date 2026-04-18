@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 3 Layout Shell — wave-2 (03-04 SiteHeader+MobileNav complete; 03-05 layout integration + footer pending)
+**Current focus:** Phase 3 Layout Shell complete — ready for Phase 4 (Core Pages)
 
 ## Current Position
 
-Phase: 3 of 6 (Layout Shell)
-Plan: 4 of 5 in current phase (03-04 SiteHeader + MobileNav complete)
-Status: In progress — 03-05 (layout integration + SiteFooter) pending
-Last activity: 2026-04-17 — Completed 03-04-PLAN.md (SiteHeader + MobileNav)
+Phase: 3 of 6 (Layout Shell) — Complete ✓
+Plan: 5 of 5 in Phase 3 (03-05 layout integration + SiteFooter complete)
+Status: Phase 3 complete — ready for /gsd:plan-phase 4 (Core Pages)
+Last activity: 2026-04-17 — Completed 03-05-PLAN.md (layout shell integration + SiteFooter, 2 gap-closures)
 
-Progress: [█████████░] ~93%
+Progress: [█████████████░░░░░░░░░] ~56% (Phase 3 of 6 complete)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: ~10 min
-- Total execution time: ~2 hours 15 min
+- Total execution time: ~2 hours 30 min
 
 **By Phase:**
 
@@ -29,12 +29,13 @@ Progress: [█████████░] ~93%
 |-------|-------|-------|----------|
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
-| 3. Layout Shell | 4/5 (1 pending) | ~22 min | ~5 min |
+| 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 03-05 ran ~16 min (human-verify plan, 2 tasks + checkpoint; first-pass had 3 auto-fixes — SocialLink export, mailto JSDoc grep, Next.js 16 'use client' compat — then gap-closure surfaced LocaleToggle home-route stale-param bug + press-feedback baseline, both fixed in-plan)
 - 03-04 ran ~2 min (pure-auto, 2 atomic task commits, zero functional deviations)
 - 03-03 ran ~10 min (pure-auto, 3 nav primitives, one minor typecheck false alarm from parallel wave)
 - 03-02 ran ~2 min (pure-auto, two-file component, no checkpoints)
@@ -105,19 +106,31 @@ Recent decisions affecting current work:
 | 03-04 | Drawer width w-72 max-w-[85vw] | 18rem comfortable on tablet, 85vw cap prevents fullscreen on narrow phones |
 | 03-04 | Active-link inside drawer uses bg-surface-alt via activeClassName | Shaded row = restraint-consistent current-item indicator inside a drawer (no border, no underline) |
 | 03-04 | next/image priority on logo | Logo is in initial viewport on every route (LCP candidate); eager preload justified |
+| 03-05 | EmailLink forced 'use client' | Next.js 16 + Turbopack rejects dynamic({ssr:false}) inside Server Components; wrapper must be a Client Component. Zero-mailto guarantee still holds (curl confirms) because the server emits only the wrapper placeholder into prerendered HTML |
+| 03-05 | LocaleToggle strips params.locale before router.replace | useParams() in [locale]/* tree returns {locale: X} as part of its payload; forwarding it fights next-intl's {locale: otherLocale} option — especially on the home route where that key is the entire payload |
+| 03-05 | LocaleToggle uses useTransition + disabled/aria-busy while pending | Prevents rapid double-click races that can fire two concurrent router.replace calls against next-intl's reconciliation |
+| 03-05 | Press-feedback baseline (active:scale-95 transition-[color,transform] duration-75) on interactive controls (not NavLinks) | UI-UX-Pro-Max Result 1 tactile affordance; text links in reading flow (NavLinks, social anchors) intentionally skipped to avoid layout shift. Further tuning deferred per user direction |
+| 03-05 | Mobile verification deferred to deployed-site phase | Local mobile-viewport testing (devtools responsive mode) is unreliable pre-deploy; Radix Dialog primitives provide focus-trap/Escape/return-focus/aria-modal/scroll-lock by construction (RESEARCH.md Pattern 2), so deferral risk is low |
+| 03-05 | Layout owns the single <main> landmark | page.tsx's inner <main> replaced with <section>; Phase 4 pages return content only, MUST NOT add their own <main> wrapper (double-landmark is an a11y violation) |
+| 03-05 | Body is min-h-screen flex flex-col with main flex-1 + footer mt-auto | Standard sticky-footer pattern; footer pins to viewport bottom on short pages without JavaScript |
+| 03-05 | Footer affiliations render from translations, not siteConfig.affiliations | footer.affiliation* keys are already bilingual; siteConfig.affiliations remains available for Phase 5 Schema.org JSON-LD and future logo-linked references |
 
 ### Pending Todos
 
 [From .planning/todos/pending/ — ideas captured during sessions]
 
 - Add nvm init to shell profile so pnpm works without sourcing manually each session.
+- Revisit `react-hooks/set-state-in-effect` lint on `MobileNav.tsx:38` (predates 03-05; not blocking) when doing mobile-drawer verification against the live Vercel deployment.
+- Mobile drawer verification (focus trap, Escape, return-focus, 375px no-overflow) against the deployed Vercel site — deferred from 03-05 per user direction; fold into Phase 6 a11y audit or the deploy phase.
+- Press-feedback tuning (spring curve, exact duration) across the shell — baseline landed in 03-05; user flagged further iteration as a later polish concern.
 
 ### Blockers/Concerns
 
 - **Node version environment:** pnpm and Next.js 16 commands require Node 20. Must source nvm before running: `export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"`. Consider adding to .bashrc.
+- **Mobile-viewport verification debt:** The Phase 3 shell passed desktop verification, but mobile (375px, touch, real-device focus behaviour) was deferred to the deployed-site phase per user direction. Risk is low because Radix Dialog primitives provide the a11y-critical behaviours by construction, but it must be exercised before the site is publicly announced.
 
 ## Session Continuity
 
-Last session: 2026-04-18
-Stopped at: Completed 03-04-PLAN.md (SiteHeader + MobileNav — sticky header composition with Radix Dialog mobile drawer)
+Last session: 2026-04-17
+Stopped at: Completed 03-05-PLAN.md (SiteFooter + layout shell integration — Phase 3 complete, ready for /gsd:plan-phase 4)
 Resume file: None

@@ -14,11 +14,11 @@
 
 ### Navigation & Layout
 
-- [ ] **NAV-01**: Top navigation shows 7 links (Home, People, Research, Publications, Journal Club, Outreach, Contact) with an active-state indicator for the current page
-- [ ] **NAV-02**: Language toggle in the navbar switches between Spanish (default) and English and preserves the current route
-- [ ] **NAV-03**: Footer shows group name, affiliations (UBA, FCEN, CONICET), general contact email, and social links
-- [ ] **NAV-04**: Layout is responsive — mobile viewport does not overflow horizontally; the top navigation collapses to a mobile menu under the breakpoint
-- [ ] **NAV-05**: A "skip to content" link is visible on keyboard focus
+- [x] **NAV-01**: Top navigation shows 7 links (Home, People, Research, Publications, Journal Club, Outreach, Contact) with an active-state indicator for the current page
+- [x] **NAV-02**: Language toggle in the navbar switches between Spanish (default) and English and preserves the current route
+- [x] **NAV-03**: Footer shows group name, affiliations (UBA, FCEN, CONICET), general contact email, and social links
+- [x] **NAV-04**: Layout is responsive — mobile viewport does not overflow horizontally; the top navigation collapses to a mobile menu under the breakpoint (mobile-viewport verification against live deploy deferred to Phase 6; desktop + structural verification complete)
+- [x] **NAV-05**: A "skip to content" link is visible on keyboard focus
 
 ### Home
 
@@ -89,10 +89,10 @@
 
 ### Bilingual
 
-- [ ] **I18N-01**: All UI chrome (navigation, buttons, labels, form placeholders) is translated to Spanish (default) and English via `next-intl`
+- [x] **I18N-01**: All UI chrome (navigation, buttons, labels, form placeholders) is translated to Spanish (default) and English via `next-intl`
 - [ ] **I18N-02**: All page-level copy (Home intro, Research descriptions, Outreach intro, etc.) is available in both languages
 - [x] **I18N-03**: Per-entity content (person bios, research area descriptions, outreach descriptions) supports bilingual fields in the content files
-- [ ] **I18N-04**: Language toggle preserves the current route and deep links (`/en/people/[slug]` ↔ `/es/people/[slug]`)
+- [x] **I18N-04**: Language toggle preserves the current route and deep links (`/en/people/[slug]` ↔ `/es/people/[slug]`) — shell-level verified (pathname + query preserved); deep-slug paths re-verify in Phase 4 when routes exist
 - [x] **I18N-05**: `<html lang>` attribute matches the active locale on every page
 - [x] **I18N-06**: Missing translation keys log a warning in development; in production the key falls back to a safe default and does not crash the page
 - [x] **I18N-07**: CI fails if a key exists in one locale's messages but not the other (no silent untranslated UI)
