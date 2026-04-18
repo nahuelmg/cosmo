@@ -78,20 +78,20 @@
 
 ### Content Architecture
 
-- [ ] **DATA-01**: People content lives in `content/people.json` with a Zod-validated schema (slug, name, role, category, photo, short_bio, full_bio, research_interests, publications_selected, contact, social_links)
-- [ ] **DATA-02**: Publications content lives in `content/publications.json` with a Zod-validated schema (id, authors, title, journal, year, arxiv, doi, topic_tags)
-- [ ] **DATA-03**: Research areas live in `content/research.json` with a Zod-validated schema (id, title, short_description, full_description, icon)
-- [ ] **DATA-04**: Journal Club sessions live in `content/journal-club.json` with a Zod-validated schema (id, date, speaker, affiliation, title, paper_link, status)
-- [ ] **DATA-05**: Outreach activities live in `content/outreach.json` with a Zod-validated schema (id, date, title, description, image, type, link)
-- [ ] **DATA-06**: Group-wide config (site name, tagline, affiliations, contact email, social links) lives in a single `src/config/site.ts` file — one-line change renames the site everywhere
-- [ ] **DATA-07**: Build fails with a clear error message when any `content/*.json` violates its schema or references a non-existent photo file
-- [ ] **DATA-08**: JSON Schema files are generated from Zod schemas and placed next to content files so editors (VS Code) get IntelliSense + inline validation
+- [x] **DATA-01**: People content lives in `content/people.json` with a Zod-validated schema (slug, name, role, category, photo, short_bio, full_bio, research_interests, publications_selected, contact, social_links)
+- [x] **DATA-02**: Publications content lives in `content/publications.json` with a Zod-validated schema (id, authors, title, journal, year, arxiv, doi, topic_tags)
+- [x] **DATA-03**: Research areas live in `content/research.json` with a Zod-validated schema (id, title, short_description, full_description, icon)
+- [x] **DATA-04**: Journal Club sessions live in `content/journal-club.json` with a Zod-validated schema (id, date, speaker, affiliation, title, paper_link, status)
+- [x] **DATA-05**: Outreach activities live in `content/outreach.json` with a Zod-validated schema (id, date, title, description, image, type, link)
+- [x] **DATA-06**: Group-wide config (site name, tagline, affiliations, contact email, social links) lives in a single `src/config/site.ts` file — one-line change renames the site everywhere
+- [x] **DATA-07**: Build fails with a clear error message when any `content/*.json` violates its schema or references a non-existent photo file
+- [x] **DATA-08**: JSON Schema files are generated from Zod schemas and placed next to content files so editors (VS Code) get IntelliSense + inline validation
 
 ### Bilingual
 
 - [ ] **I18N-01**: All UI chrome (navigation, buttons, labels, form placeholders) is translated to Spanish (default) and English via `next-intl`
 - [ ] **I18N-02**: All page-level copy (Home intro, Research descriptions, Outreach intro, etc.) is available in both languages
-- [ ] **I18N-03**: Per-entity content (person bios, research area descriptions, outreach descriptions) supports bilingual fields in the content files
+- [x] **I18N-03**: Per-entity content (person bios, research area descriptions, outreach descriptions) supports bilingual fields in the content files
 - [ ] **I18N-04**: Language toggle preserves the current route and deep links (`/en/people/[slug]` ↔ `/es/people/[slug]`)
 - [x] **I18N-05**: `<html lang>` attribute matches the active locale on every page
 - [x] **I18N-06**: Missing translation keys log a warning in development; in production the key falls back to a safe default and does not crash the page
@@ -171,15 +171,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | I18N-05 | Phase 1 — Foundation | Complete |
 | I18N-06 | Phase 1 — Foundation | Complete |
 | I18N-07 | Phase 1 — Foundation | Complete |
-| DATA-01 | Phase 2 — Content Layer | Pending |
-| DATA-02 | Phase 2 — Content Layer | Pending |
-| DATA-03 | Phase 2 — Content Layer | Pending |
-| DATA-04 | Phase 2 — Content Layer | Pending |
-| DATA-05 | Phase 2 — Content Layer | Pending |
-| DATA-06 | Phase 2 — Content Layer | Pending |
-| DATA-07 | Phase 2 — Content Layer | Pending |
-| DATA-08 | Phase 2 — Content Layer | Pending |
-| I18N-03 | Phase 2 — Content Layer | Pending |
+| DATA-01 | Phase 2 — Content Layer | Complete |
+| DATA-02 | Phase 2 — Content Layer | Complete |
+| DATA-03 | Phase 2 — Content Layer | Complete |
+| DATA-04 | Phase 2 — Content Layer | Complete |
+| DATA-05 | Phase 2 — Content Layer | Complete |
+| DATA-06 | Phase 2 — Content Layer | Complete |
+| DATA-07 | Phase 2 — Content Layer | Complete |
+| DATA-08 | Phase 2 — Content Layer | Complete |
+| I18N-03 | Phase 2 — Content Layer | Complete |
 | NAV-01 | Phase 3 — Layout Shell | Pending |
 | NAV-02 | Phase 3 — Layout Shell | Pending |
 | NAV-03 | Phase 3 — Layout Shell | Pending |

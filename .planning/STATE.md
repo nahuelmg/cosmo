@@ -5,38 +5,37 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 2 complete — ready for Phase 3 (Layout Shell)
 
 ## Current Position
 
-Phase: 2 of 6 (Content Layer)
-Plan: 1 of 5 in current phase
-Status: In progress
-Last activity: 2026-04-18 — Completed 02-01-PLAN.md (foundation schemas)
+Phase: 2 of 6 (Content Layer) ✓
+Plan: 5/5 complete
+Status: Phase 2 verified (9/9 must-haves) — ready for Phase 3 (Layout Shell)
 
-Progress: [█████░░░░░] ~25%
+Progress: [████░░░░░░] ~38%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~14 min
-- Total execution time: ~0.9 hours
+- Total plans completed: 9
+- Average duration: ~13 min
+- Total execution time: ~1.9 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 4/4 | ~57 min | ~14 min |
-| 2. Content Layer | 1/5 | ~3 min | ~3 min |
+| 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
+| 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 0/TBD | — | — |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (~30 min including checkpoint), 01-03 (4 min), 01-04 (~17 min code + checkpoint)
-- Trend: Pure execution plans running 4–5 min; checkpoint plans 17–30 min; 01-02 outlier due to user decision checkpoint
+- Phase 2 plans ran 3–30 min (01: 3 min pure-auto; 05: ~30 min with human-verify checkpoint)
+- 02-01 through 02-04 were fully autonomous; 02-05 required one human-verify checkpoint (approved first pass)
 
 *Updated after each plan completion*
 
@@ -71,12 +70,17 @@ Recent decisions affecting current work:
 | 01-04 | locale-layout order locked: hasLocale → notFound → setRequestLocale → render | Required by next-intl for static rendering; deviation breaks SSG |
 | 01-04 | Greek probe retained in page.tsx until Phase 3 | Visual confirmation Greek subset stays wired across future changes |
 | 01-04 | Root layout.tsx + page.tsx deleted | Proxy from 01-03 guarantees locale-prefixed traffic; no root route needed |
-| 02-01 | `import * as z from "zod"` not `"zod/v4"` | Zod v4 ships as default export; /v4 path for v3-alongside compatibility only |
+| 02-01 | import * as z from "zod" not "zod/v4" | Zod v4 ships as default export; /v4 path for v3-alongside compatibility only |
 | 02-01 | z.strictObject() for bilingualString | .strict() chain is deprecated in Zod v4 API |
 | 02-01 | photoPath rejects leading slash | path.join(PUBLIC_DIR, "/people/Foo.png") resolves to filesystem root, not public/ |
 | 02-01 | siteConfig uses TypeScript satisfies not Zod | Developer-maintained file; compile-time sufficient; no runtime overhead |
 | 02-01 | groupName single canonical Spanish string | Argentine institutional identity; site-level identity not bilingual (I18N-03) |
 | 02-01 | .vscode/settings.json committed (.gitignore exception) | JSON schema wiring is shared team config, not user-specific |
+| 02-05 | node --import tsx (not tsx/esm) for prebuild scripts | tsx/esm requires explicit file extensions in import specifiers; bare tsx flag handles .ts imports from .mjs scripts |
+| 02-05 | JSON Schema target draft-07 for VS Code | VS Code JSON language server fully supports Draft 7; Draft 2020-12 (Zod v4 default) has limited VS Code support |
+| 02-05 | Photo-existence check post-parse, not via Zod .refine() | Schema stays filesystem-free; error category is visually distinct in CLI output |
+| 02-05 | generate-schemas is manual (not chained into prebuild) | Schema-JSON drift is visible via git diff; maintainer opts in to regeneration |
+| 02-05 | Zod .refine() rules do not translate to JSON Schema — build time only | photoPath and proseString smart-quote checks are runtime-only; not representable in JSON Schema |
 
 ### Pending Todos
 
@@ -90,6 +94,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-18T00:16:21Z
-Stopped at: Completed 02-01-PLAN.md
-Resume file: None
+Last session: 2026-04-17
+Stopped at: Phase 2 complete and verified (9/9 must-haves)
+Resume file: None — run `/gsd:discuss-phase 3`
