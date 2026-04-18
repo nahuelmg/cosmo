@@ -150,7 +150,7 @@ Plans:
 **Plans**: 5 plans (wave 1: 1 plan; wave 2: 4 plans parallel)
 
 Plans:
-- [ ] 05-01-PLAN.md — Prereqs: siteConfig.url + .env.example + full seo messages namespace (es+en) + buildPageMetadata helper + schema builders + JsonLd component [wave 1]
+- [x] 05-01-PLAN.md — Prereqs: siteConfig.url + .env.example + full seo messages namespace (es+en) + buildPageMetadata helper + schema builders + JsonLd component [wave 1]
 - [ ] 05-02-PLAN.md — Root locale layout: metadataBase + title template + default OG + ResearchOrganization JSON-LD on every page (SEO-01, SEO-02 defaults, SEO-03) [wave 2]
 - [ ] 05-03-PLAN.md — generateMetadata on 7 static pages (home absolute-title; others template-suffix) + ScholarlyArticle JSON-LD per publication entry (SEO-01, SEO-02) [wave 2]
 - [ ] 05-04-PLAN.md — /people/[slug] generateMetadata + Person JSON-LD (no email, ORCID + Scholar + socials in sameAs) (SEO-01, SEO-02, SEO-04) [wave 2]
@@ -192,8 +192,8 @@ Phase 4 fans out into parallel per-page plans (7 plans in Wave 2 after 1 shared-
 | 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
 | 2. Content Layer | 5/5 | Complete ✓ | 2026-04-17 |
 | 3. Layout Shell | 5/5 | Complete ✓ | 2026-04-17 |
-| 4. Core Pages | 0/8 | Not started | - |
-| 5. SEO & Discoverability | 0/5 | Not started | - |
+| 4. Core Pages | 8/8 | Complete ✓ | 2026-04-18 |
+| 5. SEO & Discoverability | 1/5 | In progress | - |
 | 6. Polish (A11y & Performance) | 0/TBD | Not started | - |
 
 ---

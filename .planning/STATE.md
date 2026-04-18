@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 4 Core Pages — COMPLETE. All 8 plans shipped. Advancing to Phase 5 (SEO & Discoverability).
+**Current focus:** Phase 5 SEO & Discoverability — wave-1 prerequisite 05-01 shipped. buildPageMetadata + schema builders + JsonLd + seo messages + siteConfig.url are live; wave-2 plans (05-02..05-05) can now run in parallel.
 
 ## Current Position
 
-Phase: 4 of 6 (Core Pages) — COMPLETE
-Plan: 8 of 8 in Phase 4 (04-01..04-08 all complete)
-Status: Phase 4 complete — Contact page shipped (bilingual address/office/email/map, CONT-01..05 + I18N-02 satisfied); Phase 5 (SEO) is next
-Last activity: 2026-04-18 — Phase 4 verified (35/35 must-haves); post-verify user direction: removed hero carousel pause button (HOME-03 rewritten), replaced people roster with 15 real group members (publications_selected cleared to resolve stale pub-YYYY-* filtering). Phase 5 (SEO) is next.
+Phase: 5 of 6 (SEO & Discoverability)
+Plan: 1 of 5 in Phase 5 (05-01 complete; 05-02, 05-03, 05-04, 05-05 queued as wave 2)
+Status: In progress
+Last activity: 2026-04-18 — Completed 05-01-PLAN.md (siteConfig.url + bilingual seo namespace + buildPageMetadata + schema builders + JsonLd; NAV-03 + PERF-01 guards verified; 43 pages still static)
 
-Progress: [██████████████████████░] ~85% (Phase 3 complete + Phase 4: all 8 plans complete)
+Progress: [██████████████████████░░] ~89% (16/18 plans complete across phases 1-4 + 05-01)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
+- Total plans completed: 16
 - Average duration: ~10 min
-- Total execution time: ~2 hours 30 min
+- Total execution time: ~2 hours 33 min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [██████████████████████░
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
 | 4. Core Pages | 8/8 COMPLETE (04-01..04-08) | ~69 min | ~9 min |
-| 5. SEO & Discoverability | 0/TBD | — | — |
+| 5. SEO & Discoverability | 1/5 (05-01 complete; wave 2 queued) | ~3 min | ~3 min |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 05-01 ran ~3 min (pure-auto, 2 task commits, zero deviations; check-translations + typecheck clean on first attempt; build prerendered all 43 pages as static; NAV-03 constraint verified via zero `"email"` hits in src/lib/schemas.ts; PERF-01 satisfied — no cookies/headers/connection calls added)
 - 04-08 ran ~8 min (pure-auto, 2 task commits, 2 auto-fixes — default-import correction + never[] cast; TypeScript clean after fixes; build prerendered 43 static pages; zero mailto/iframe in prerender confirmed via curl)
 - 04-07 ran ~7 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build prerendered both locales; 4 articles/3 links/0 images verified via curl)
 - 04-06 ran ~8 min (pure-auto, 2 task commits, zero deviations; TypeScript clean; SSG both locales; 2 upcoming + 3 past sessions rendered correctly)
@@ -146,6 +147,13 @@ Recent decisions affecting current work:
 | 04-08 | MapEmbed uses default export; import adjusted from plan's named { MapEmbed } to default import | MapEmbed.tsx only exports default; named import would silently resolve to undefined |
 | 04-08 | siteConfig.socialLinks cast to readonly SocialLink[] on call site (not in site.ts) | [] satisfies SocialLink[] + as const narrows element type to never; call-site cast avoids touching site.ts |
 | 04-08 | dl aria-label substitutes for heading landmark inside ContactDetails | Page H1 is above; no redundant section wrapper needed; consistent with plan's corrected dl form |
+| 05-01 | siteConfig.url falls back to https://cosmo.vercel.app when NEXT_PUBLIC_SITE_URL unset | Vercel preview domain is a safe placeholder until the group claims a production URL; one env-var swap in Vercel dashboard promotes to real domain |
+| 05-01 | Home locale title kept as "Inicio"/"Home" in seo namespace despite plan 05-03 using title.absolute | Value still drives OG/Twitter title prefix composition; absolute-title only suppresses the <title> element suffix, not social-card title |
+| 05-01 | ResearchOrganization contactPoint.url routed through getPathname (no /contacto\|/contact ternary) | routing.ts pathnames config is single source of truth; a rename there must not require a parallel edit in schemas.ts |
+| 05-01 | Person schema uses ORCID identifier + sameAs (scholar + social_links); email omitted | NAV-03: no raw email in any prerendered HTML, JSON-LD included. Academic identity still discoverable via ORCID + Scholar |
+| 05-01 | Href type extracted via Parameters<typeof getPathname>[0]["href"] instead of duplicated type declaration | Keeps buildPageMetadata's Href in lockstep with routing.ts pathnames; adding a new localized route propagates to helper type without further edits |
+| 05-01 | Schema builders use conditional property assignment (`if (...) schema.x = ...`) on Record<string, unknown> base | Cleaner than spread-with-ternary-undefined under strict typecheck; avoids exactOptionalPropertyTypes friction |
+| 05-01 | JsonLd escapes `<` -> `\u003c` via String.replace in dangerouslySetInnerHTML | XSS guard: neutralises `</script>` tokens that could land inside JSON string values (e.g. a bio containing "<script>") |
 
 ### Pending Todos
 
@@ -167,5 +175,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Phase 4 complete and verified (35/35 must-haves). Post-verify edits: pause-button removed per user direction; real 15-member roster replacing 20 placeholder people.json entries. Ready for Phase 5 (SEO & Discoverability).
+Stopped at: Completed 05-01-PLAN.md (SEO wave-1 prereqs: siteConfig.url, bilingual seo messages namespace, buildPageMetadata helper, schema builders, JsonLd component). NAV-03 + PERF-01 guards pass; all 43 pages still prerendered static. Wave-2 plans 05-02..05-05 are unblocked.
 Resume file: None
