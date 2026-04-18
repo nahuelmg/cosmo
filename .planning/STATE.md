@@ -30,11 +30,13 @@ Progress: [█████████████████████░] ~
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
-| 4. Core Pages | 5/8 (04-01 + 04-02 + 04-03 + 04-04 + 04-05 complete) | ~46 min | ~9 min |
+| 4. Core Pages | 7/8 (04-01 + 04-02 + 04-03 + 04-04 + 04-05 + 04-06 + 04-07 complete) | ~61 min | ~9 min |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 04-07 ran ~7 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build prerendered both locales; 4 articles/3 links/0 images verified via curl)
+- 04-06 ran ~8 min (pure-auto, 2 task commits, zero deviations; TypeScript clean; SSG both locales; 2 upcoming + 3 past sessions rendered correctly)
 - 04-05 ran ~8 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build 41 static pages; 3 years/13 entries/10 arXiv+10 DOI links confirmed via curl)
 - 04-04 ran ~8 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build static-prerendered both locales)
 - 03-05 ran ~16 min (human-verify plan, 2 tasks + checkpoint; first-pass had 3 auto-fixes — SocialLink export, mailto JSDoc grep, Next.js 16 'use client' compat — then gap-closure surfaced LocaleToggle home-route stale-param bug + press-feedback baseline, both fixed in-plan)
@@ -137,6 +139,9 @@ Recent decisions affecting current work:
 | 04-06 | SessionRow is a dumb presentational server component — receives already-localized props | getLocalizedSession called in page RSC; leaf never calls it (guardrail from plan revision) |
 | 04-06 | Intl.DateTimeFormat uses es-AR (not es) for Argentine date formatting | Argentine-first bias; produces correct long-form month names for Buenos Aires context |
 | 04-06 | Archive section gated on Object.keys(groupedLocalized).length > 0 | Prevents empty archive section rendering on fresh installs with zero past sessions |
+| 04-07 | activity.link && <a>: no disabled state, no "Coming soon" | Card reads cleanly as information card when link absent (OTRCH-03 requirement) |
+| 04-07 | activity.image && <div>: no placeholder box when image absent | Card height adapts to content; no layout shift from empty image slot |
+| 04-07 | activity.type rendered as raw enum uppercase text tag without translation | Phase 4 scope; localization of type tags deferred to polish phase |
 
 ### Pending Todos
 
@@ -156,5 +161,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 04-06-PLAN.md (Journal Club page — SessionRow, JournalClubArchive, page RSC; 2 upcoming + 3 past sessions; CLUB-01+02 + I18N-02 satisfied)
+Stopped at: Completed 04-07-PLAN.md (Outreach page — OutreachCard, OutreachGrid, page RSC; 4 activities, 3 with links, 0 with images; OTRCH-01..03 + I18N-02 satisfied)
 Resume file: None
