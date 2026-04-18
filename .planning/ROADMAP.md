@@ -86,10 +86,14 @@ Plans:
   5. Tab-first keyboard navigation reveals a "Skip to content" link that, when activated, moves focus to the page's main landmark (NAV-05).
   6. All nav labels, the mobile menu toggle, the language toggle, and the footer microcopy render in Spanish by default and in English when toggled (I18N-01).
 
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] 03-01: TBD (sized during `/gsd:plan-phase 3`)
+- [ ] 03-01-PLAN.md — Foundation: layout namespace, --header-height token, main landmark, SkipLink, Radix Dialog install
+- [ ] 03-02-PLAN.md — EmailLink component (dynamic ssr:false wrapper) guaranteeing zero `mailto:` in prerendered HTML
+- [ ] 03-03-PLAN.md — Nav primitives: NAV_ITEMS registry, NavLink with active state, LocaleToggle with Suspense
+- [ ] 03-04-PLAN.md — SiteHeader (sticky, logo, desktop nav, locale toggle) + MobileNav (Radix Dialog drawer)
+- [ ] 03-05-PLAN.md — SiteFooter + integration into [locale]/layout.tsx + human-verify of the full shell
 
 ---
 
@@ -174,7 +178,7 @@ Phase 4 may fan out into parallel per-page plans once planned.
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
 | 2. Content Layer | 5/5 | Complete ✓ | 2026-04-17 |
-| 3. Layout Shell | 0/TBD | Not started | - |
+| 3. Layout Shell | 0/5 | Not started | - |
 | 4. Core Pages | 0/TBD | Not started | - |
 | 5. SEO & Discoverability | 0/TBD | Not started | - |
 | 6. Polish (A11y & Performance) | 0/TBD | Not started | - |
