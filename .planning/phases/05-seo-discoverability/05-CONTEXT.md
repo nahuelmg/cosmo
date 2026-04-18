@@ -16,13 +16,11 @@ Visual design, content authoring, WCAG audit, and Core Web Vitals are explicitly
 ## Implementation Decisions
 
 ### Social card imagery (OG / Twitter)
-- **Per-page OG image strategy**:
-  - **Home** → one of the `portada_*` carousel images (existing asset, zero new design work)
-  - **`/people/[slug]`** → the member's portrait when `photo` is present; fall back to the shared portada when absent
-  - **Other pages** (Research, Publications, Journal Club, Outreach, Contact, People list) → same shared portada fallback
+- **Shared portada for every page** (updated 2026-04-18 after research found portrait photos are square, not 1200×630 OG-safe): `portada_1.jpg` is the OG image for Home, all list pages, Contact, AND `/people/[slug]` detail pages. Consistent brand, no awkward square-crop cards on social.
 - **Locale-matched OG content**: `/en/...` pages emit English OG title/description; `/es/...` pages emit Spanish. Matches I18N-02 (page copy localizes).
 - **Group name stays canonical Spanish** inside OG titles regardless of locale — consistent with decision 02-01.
 - No dynamic OG image generation in Phase 5 (deferred).
+- Per-page / portrait-based OG images deferred — planner note: revisit if custom 1200×630 cards are produced in a future content-polish phase.
 
 ### Schema.org coverage
 - **Root (every page)**: `ResearchOrganization` JSON-LD — group name (canonical Spanish), URL, UBA/FCEN/CONICET affiliations, contact email.
