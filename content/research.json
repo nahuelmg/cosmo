@@ -1,0 +1,70 @@
+[
+  {
+    "id": "dark-matter",
+    "title": {
+      "es": "Materia Oscura",
+      "en": "Dark Matter"
+    },
+    "short_description": {
+      "es": "Modelado de halos, simulaciones N-cuerpo y restricciones observacionales sobre la naturaleza de la materia oscura.",
+      "en": "Halo modelling, N-body simulations, and observational constraints on the nature of dark matter."
+    },
+    "full_description": {
+      "es": "La materia oscura constituye aproximadamente el 27% del contenido energetico total del universo, pero su naturaleza fundamental permanece como uno de los grandes enigmas de la fisica moderna. Nuestro grupo investiga la distribucion y estructura de halos de materia oscura mediante simulaciones numericas de N-cuerpos y modelos analiticos derivados de la teoria de perturbaciones.\n\nAplicamos tecnicas estadisticas avanzadas para extraer restricciones observacionales a partir de datos de lentes gravitacionales debiles, correlaciones de galaxias y la funcion de masa de cumulos. Colaboramos activamente con grupos observacionales del IAFE y del Observatorio Astronomico de Cordoba para contrastar nuestras predicciones teoricas con relevamientos fotometricos y espectroscopicos de gran escala.\n\nEntre nuestros objetivos actuales se encuentran el estudio de la concentracion de halos en funcion de la masa y el corrimiento al rojo, y la busqueda de senales de materia oscura tibia que podrian revelar desviaciones respecto al modelo Lambda-CDM estandar.",
+      "en": "Dark matter constitutes approximately 27% of the total energy content of the universe, yet its fundamental nature remains one of the great open questions in modern physics. Our group investigates the distribution and structure of dark matter halos through N-body numerical simulations and analytical models derived from perturbation theory.\n\nWe apply advanced statistical techniques to extract observational constraints from weak gravitational lensing data, galaxy correlations, and cluster mass functions. We actively collaborate with observational groups at IAFE and the Observatorio Astronomico de Cordoba to confront our theoretical predictions with large-scale photometric and spectroscopic surveys.\n\nAmong our current goals are the study of halo concentration as a function of mass and redshift, and the search for warm dark matter signatures that could reveal deviations from the standard Lambda-CDM model."
+    },
+    "icon": "atom",
+    "order": 0
+  },
+  {
+    "id": "gravitational-waves",
+    "title": {
+      "es": "Ondas Gravitacionales",
+      "en": "Gravitational Waves"
+    },
+    "short_description": {
+      "es": "Analisis de fuentes astrofisicas de ondas gravitacionales y sus contrapartes electromagneticas en el contexto cosmologico.",
+      "en": "Analysis of astrophysical gravitational-wave sources and their electromagnetic counterparts in a cosmological context."
+    },
+    "full_description": {
+      "es": "La deteccion directa de ondas gravitacionales por LIGO y Virgo abrio una nueva ventana observacional al universo. Nuestro grupo trabaja en la modelizacion teorica de fuentes compactas binarias — pares de agujeros negros y estrellas de neutrones — con enfasis en los aspectos cosmologicos de sus senales: la determinacion independiente de la constante de Hubble mediante sirenas estandar y la extraccion de informacion sobre la historia de formacion estelar.\n\nEstudiamos tambien el fondo estocastico de ondas gravitacionales producido por procesos del universo temprano, como transiciones de fase de primer orden y redes de defectos topologicos. Este fondo podria detectarse con futuros observatorios espaciales como LISA y constituye un complemento unico a las observaciones de la radiacion cosmica de fondo.\n\nColaboramos con el grupo de astrofisica relativista de la UBA y con equipos de analisis de datos de la colaboracion LIGO-Virgo-KAGRA para el estudio de parametros poblacionales de fuentes detectadas.",
+      "en": "The direct detection of gravitational waves by LIGO and Virgo opened a new observational window to the universe. Our group works on the theoretical modelling of compact binary sources — pairs of black holes and neutron stars — with emphasis on the cosmological aspects of their signals: the independent determination of the Hubble constant via standard sirens and the extraction of information about stellar formation history.\n\nWe also study the stochastic gravitational-wave background produced by early-universe processes, such as first-order phase transitions and networks of topological defects. This background could be detected by future space observatories such as LISA and constitutes a unique complement to observations of the cosmic microwave background.\n\nWe collaborate with the relativistic astrophysics group at UBA and with data analysis teams of the LIGO-Virgo-KAGRA collaboration for the study of population parameters of detected sources."
+    },
+    "icon": "waves",
+    "order": 1
+  },
+  {
+    "id": "early-universe",
+    "title": {
+      "es": "Universo Temprano",
+      "en": "Early Universe"
+    },
+    "short_description": {
+      "es": "Inflacion cosmologica, nucleosintesis primordial y formacion de estructura en las primeras epocas del universo.",
+      "en": "Cosmic inflation, primordial nucleosynthesis, and structure formation in the earliest epochs of the universe."
+    },
+    "full_description": {
+      "es": "El universo temprano, desde la era de Planck hasta la recombinacion, es el laboratorio natural para la fisica de altas energias mas alla del Modelo Estandar. Nuestro grupo estudia la dinamica inflacionaria y sus predicciones para el espectro de potencias de las perturbaciones primordiales, con enfasis en modelos de campo escalar motivados por supergravedad y teoria de cuerdas.\n\nAbordamos tambien la nucleosintesis primordial como sonda de la fisica del neutrino y de la asimetria barioncia, contrastando predicciones con las abundancias observadas de hidrogeno, deuterio y helio en objetos primitivos. El estudio de la radiacion cosmica de fondo en microondas (CMB), en particular sus anisotropias de temperatura y polarizacion, provee las restricciones mas precisas sobre los parametros cosmologicos fundamentales.\n\nNuestro interes se extiende a fenomenos no perturbativos del universo temprano: transiciones de fase cosmologicas, produccion de defectos topologicos y el mecanismo de bariogenesis, todos ellos con potenciales huellas observacionales en el espectro de ondas gravitacionales de fondo.",
+      "en": "The early universe, from the Planck era to recombination, is the natural laboratory for high-energy physics beyond the Standard Model. Our group studies inflationary dynamics and its predictions for the power spectrum of primordial perturbations, with emphasis on scalar field models motivated by supergravity and string theory.\n\nWe also address primordial nucleosynthesis as a probe of neutrino physics and baryon asymmetry, confronting predictions with the observed abundances of hydrogen, deuterium, and helium in pristine objects. The study of the cosmic microwave background (CMB), in particular its temperature and polarisation anisotropies, provides the most precise constraints on fundamental cosmological parameters.\n\nOur interest extends to non-perturbative phenomena of the early universe: cosmological phase transitions, the production of topological defects, and the baryogenesis mechanism, all of which leave potential observational imprints in the stochastic gravitational-wave spectrum."
+    },
+    "icon": "sparkles",
+    "order": 2
+  },
+  {
+    "id": "artificial-intelligence",
+    "title": {
+      "es": "Inteligencia Artificial",
+      "en": "Artificial Intelligence"
+    },
+    "short_description": {
+      "es": "Aplicacion de metodos de aprendizaje automatico y redes neuronales a problemas de cosmologia observacional y analisis de datos astronomicos.",
+      "en": "Application of machine learning methods and neural networks to problems in observational cosmology and astronomical data analysis."
+    },
+    "full_description": {
+      "es": "El volumen y la complejidad de los datos generados por relevamientos modernos como DESI, Rubin LSST y Euclid exigen nuevas herramientas de analisis que van mas alla de los metodos estadisticos clasicos. Nuestro grupo explora la aplicacion de tecnicas de aprendizaje profundo — redes convolucionales, transformers y modelos generativos — para la clasificacion de galaxias, la estimacion de corrimientos al rojo fotograficos y la deteccion de lentes gravitacionales en imagenes de gran escala.\n\nDesarrollamos tambien metodos de inferencia basados en simulaciones (simulation-based inference, SBI) que permiten extraer parametros cosmologicos directamente de los datos crudos sin necesidad de estadisticos resumen comprimidos. Estos enfoques son especialmente potentes en presencia de efectos sistematicos complejos o cuando la funcion de verosimilitud analitica es intratable.\n\nNuestro trabajo en IA se integra con las lineas de investigacion en materia oscura y universo temprano, proporcionando herramientas de analisis que aceleran el ciclo prediccion-observacion-restriccion en cosmologia de precision.",
+      "en": "The volume and complexity of data generated by modern surveys such as DESI, Rubin LSST, and Euclid demand new analysis tools that go beyond classical statistical methods. Our group explores the application of deep learning techniques — convolutional networks, transformers, and generative models — for galaxy classification, photometric redshift estimation, and gravitational lens detection in large-scale images.\n\nWe also develop simulation-based inference (SBI) methods that allow cosmological parameters to be extracted directly from raw data without the need for compressed summary statistics. These approaches are especially powerful in the presence of complex systematics or when the analytical likelihood function is intractable.\n\nOur AI work integrates with the dark matter and early universe research lines, providing analysis tools that accelerate the prediction-observation-constraint cycle in precision cosmology."
+    },
+    "icon": "cpu",
+    "order": 3
+  }
+]
