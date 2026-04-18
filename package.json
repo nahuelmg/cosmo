@@ -9,9 +9,12 @@
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "check-translations": "i18n-check --source es --locales messages --format next-intl",
-    "prebuild": "node --import tsx scripts/validate-content.mjs",
-    "validate-content": "node --import tsx scripts/validate-content.mjs",
-    "generate-schemas": "node --import tsx scripts/generate-schemas.mjs"
+    "prebuild": "tsx scripts/validate-content.mjs",
+    "validate-content": "tsx scripts/validate-content.mjs",
+    "generate-schemas": "tsx scripts/generate-schemas.mjs"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
