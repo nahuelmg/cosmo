@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 3 Layout Shell — parallel wave (03-01, 03-02, 03-03)
+**Current focus:** Phase 3 Layout Shell — wave-2 (03-04 SiteHeader+MobileNav complete; 03-05 layout integration + footer pending)
 
 ## Current Position
 
 Phase: 3 of 6 (Layout Shell)
-Plan: 03-01 + 03-02 complete (foundation + EmailLink)
-Status: In progress — wave-1 parallel plans executing
-Last activity: 2026-04-17 — Completed 03-01-PLAN.md (layout shell foundation)
+Plan: 4 of 5 in current phase (03-04 SiteHeader + MobileNav complete)
+Status: In progress — 03-05 (layout integration + SiteFooter) pending
+Last activity: 2026-04-17 — Completed 03-04-PLAN.md (SiteHeader + MobileNav)
 
-Progress: [█████░░░░░] ~46%
+Progress: [█████████░] ~93%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: ~11 min
-- Total execution time: ~2 hours
+- Total plans completed: 13
+- Average duration: ~10 min
+- Total execution time: ~2 hours 15 min
 
 **By Phase:**
 
@@ -29,14 +29,16 @@ Progress: [█████░░░░░] ~46%
 |-------|-------|-------|----------|
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
-| 3. Layout Shell | 2/TBD | ~6 min | ~3 min |
+| 3. Layout Shell | 4/5 (1 pending) | ~22 min | ~5 min |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
-- 03-01 ran ~4 min (pure-auto, 3 atomic task commits; 1 blocking-type deviation fixed inline)
+- 03-04 ran ~2 min (pure-auto, 2 atomic task commits, zero functional deviations)
+- 03-03 ran ~10 min (pure-auto, 3 nav primitives, one minor typecheck false alarm from parallel wave)
 - 03-02 ran ~2 min (pure-auto, two-file component, no checkpoints)
+- 03-01 ran ~4 min (pure-auto, 3 atomic task commits; 1 blocking-type deviation fixed inline)
 - Phase 2 plans ran 3–30 min (01: 3 min pure-auto; 05: ~30 min with human-verify checkpoint)
 
 *Updated after each plan completion*
@@ -91,6 +93,18 @@ Recent decisions affecting current work:
 | 03-01 | SkipLink focus ring via focus:ring-2 focus:ring-accent-ring | Box-shadow focus indicator, honours 01-02 no-border policy |
 | 03-01 | SkipLink focus:z-[100] | Sits above Phase 3 z-index ladder (header z-30, overlay z-40, drawer z-50) |
 | 03-01 | Locale prop narrowed to ('es' \| 'en') via (typeof routing.locales)[number] | Plain string rejected getTranslations namespace overload; matches existing pattern in page.tsx |
+| 03-03 | Import Link/usePathname/useRouter from @/i18n/navigation, not next/navigation | i18n versions return/accept internal pathname keys — required for active-state check + router.replace |
+| 03-03 | useParams/useSearchParams still from next/navigation | next-intl does not re-export these; must stay raw |
+| 03-03 | LocaleToggle Suspense fallback=null | 2-character button; single-paint absence is not a layout-shift concern |
+| 03-03 | aria-label strings inlined (not translated) | Abbreviation (ES/EN) is language-agnostic; wrapping verb is tiny — translation keys would be overkill |
+| 03-04 | MobileNav takes no props, owns its own `open` state | Lets SiteHeader compose declaratively; any future host can wrap without reaching inside render tree |
+| 03-04 | Inline hamburger/X SVGs, no icon library | Only 2 glyphs needed in the whole layout shell; lucide-react would add KB for zero net gain |
+| 03-04 | Dialog.Title is sr-only | Radix requires title for a11y; visible title would duplicate labelled X-close + nav |
+| 03-04 | Drawer slides in from right (not left) | Matches thumb-reach convention on LTR phones (hamburger top-right → drawer same edge) |
+| 03-04 | Logo alt text = canonical Spanish siteConfig.groupName on both locales | 02-01 canonical-Spanish rule; institutional identity is language-independent |
+| 03-04 | Drawer width w-72 max-w-[85vw] | 18rem comfortable on tablet, 85vw cap prevents fullscreen on narrow phones |
+| 03-04 | Active-link inside drawer uses bg-surface-alt via activeClassName | Shaded row = restraint-consistent current-item indicator inside a drawer (no border, no underline) |
+| 03-04 | next/image priority on logo | Logo is in initial viewport on every route (LCP candidate); eager preload justified |
 
 ### Pending Todos
 
@@ -104,6 +118,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-17
-Stopped at: Completed 03-01-PLAN.md (layout shell foundation: Radix Dialog, layout namespace, --header-height token, SkipLink, <main id="main-content"> landmark)
+Last session: 2026-04-18
+Stopped at: Completed 03-04-PLAN.md (SiteHeader + MobileNav — sticky header composition with Radix Dialog mobile drawer)
 Resume file: None
