@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 5 SEO & Discoverability — COMPLETE. Every page in both locales exposes canonical + hreflang + OG/Twitter + Schema.org JSON-LD (Org root, Person on /people/[slug], ScholarlyArticle per publication), plus sitemap.xml + robots.txt. NAV-03 + PERF-01 preserved. Next up: Phase 6 Polish (A11y & Performance).
+**Current focus:** Phase 6 Polish (A11y & Performance) — In progress. 06-01 audit complete: axe found single violation class (color-contrast, 15 nodes) across 8 Spanish pages. All owned by --color-ink-subtle token (3.41–3.58:1 vs 4.5:1 required). Zero HeroCarousel violations. 06-02 (carousel ARIA) + 06-03 (token fix) ready to execute.
 
 ## Current Position
 
-Phase: 5 of 6 (SEO & Discoverability) — COMPLETE 2026-04-18
-Plan: 5 of 5 in Phase 5 (05-01, 05-02, 05-03, 05-04, 05-05 complete)
-Status: Complete
-Last activity: 2026-04-18 — Completed Phase 5 end-to-end. 05-03 per-page metadata + ScholarlyArticle JSON-LD per publication entry; 05-04 per-person metadata + Person JSON-LD (email-free per NAV-03); 05-05 sitemap (20 URLs with xhtml:link alternates) + VERCEL_ENV-gated robots.txt. gsd-verifier reported 9/9 truths + 17/17 artifacts + 8/8 key links + 6/6 requirements verified; all routes still static.
+Phase: 6 of 6 (Polish A11y & Performance) — In progress
+Plan: 1 of 4 in Phase 6 (06-01 complete)
+Status: In progress
+Last activity: 2026-04-18 — Completed 06-01 axe audit. Single rule: color-contrast (serious, 15 nodes, 3 components). Root cause: --color-ink-subtle token too light at oklch(0.62) → #8b8580, yields 3.41:1 on primary surface. Fix: darken token to ~oklch(0.48) in 06-03. Carousel has zero axe violations; proactive ARIA additions needed in 06-02 (pause button, aria-live, slide role="group"). Manual gradient contrast spot-check deferred to 06-02.
 
-Progress: [███████████████████████████] ~95% (21/22 plans complete across phases 1-5; Phase 6 remaining)
+Progress: [████████████████████████████] ~97% (22/26 plans complete, Phase 6 plan 1 of 4 done)
 
 ## Performance Metrics
 
@@ -179,10 +179,11 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - **Node version environment:** pnpm and Next.js 16 commands require Node 20. Must source nvm before running: `export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"`. Consider adding to .bashrc.
+- **No system Chrome:** axe-core/cli requires Chrome; workaround is `CHROME_TEST_PATH` pointing to Playwright's cached Chromium (~/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome). Must set this env var for any future axe runs.
 - **Mobile-viewport verification debt:** The Phase 3 shell passed desktop verification, but mobile (375px, touch, real-device focus behaviour) was deferred to the deployed-site phase per user direction. Risk is low because Radix Dialog primitives provide the a11y-critical behaviours by construction, but it must be exercised before the site is publicly announced.
 
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Phase 5 COMPLETE. All five plans landed (05-01 through 05-05); verifier reports 9/9 truths, 17/17 artifacts, 8/8 key links, 6/6 requirements verified at source + build-output level. Every page in both locales carries canonical + hreflang + OG/Twitter + Schema.org JSON-LD (ResearchOrganization on all, Person on /people/[slug], ScholarlyArticle per publication entry). Sitemap.xml exposes 20 canonical URLs with xhtml:link alternates. Robots.txt gates allow/disallow on VERCEL_ENV === "production". NAV-03 (zero email/mailto in prerendered HTML) and PERF-01 (all routes static) held throughout. Next up: Phase 6 Polish (A11y & Performance).
+Stopped at: Completed 06-01-PLAN.md. axe-core 4.11.3 audit of 8 Spanish pages complete. Single violation class: color-contrast (serious, 15 nodes). Root cause: --color-ink-subtle token (#8b8580 at oklch ~0.62) yields 3.41–3.58:1 on surface backgrounds, below 4.5:1 threshold. Affected components: SiteFooter (copyright line, all 8 pages), ContactDetails (4 dt labels, /contacto), OutreachCard (type badge, /divulgacion). Zero carousel violations. 06-02 (carousel ARIA proactive fixes) and 06-03 (token fix + component sweep) have unambiguous work lists from SUMMARY.
 Resume file: None
