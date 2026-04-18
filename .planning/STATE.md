@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-01 Wave 1 + 04-02 Home + 04-04 Research complete)
+**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-01 Wave 1 + 04-02 Home + 04-03 People + 04-04 Research complete)
 
 ## Current Position
 
 Phase: 4 of 6 (Core Pages) — In Progress
-Plan: 3 of 8 in Phase 4 (04-01 Wave 1, 04-02 Home page, 04-04 Research page complete)
-Status: In progress — Home page and Research page shipped; remaining Wave 2 plans (04-03, 04-05..08) pending
-Last activity: 2026-04-18 — Completed 04-02-PLAN.md (Home page: Highlights, PartnerStrip, full RSC with carousel + 2-para intro + highlights + partners)
+Plan: 4 of 8 in Phase 4 (04-01 Wave 1, 04-02 Home, 04-03 People, 04-04 Research complete)
+Status: In progress — People pages shipped (list + detail, 26 static routes); remaining Wave 2 plans (04-05..08) pending
+Last activity: 2026-04-18 — Completed 04-03-PLAN.md (People pages: PersonCard, PersonRow, PeopleSection, PeoplePlainSection, PersonDetail, list page, detail page with generateStaticParams)
 
-Progress: [████████████████░░░░░░] ~66% (Phase 3 complete + Phase 4: Wave 1 + Home + Research)
+Progress: [█████████████████░░░░░] ~70% (Phase 3 complete + Phase 4: Wave 1 + Home + People + Research)
 
 ## Performance Metrics
 
@@ -126,6 +126,9 @@ Recent decisions affecting current work:
 | 04-02 | Named export { HeroCarousel } added alongside default export | Plan uses named import style; export default function creates a named binding that can be re-exported; default retained for backward compat |
 | 04-02 | home.intro already had 2-paragraph structure from 04-01 seed | No rewrite needed; plan sub-step 1 was pre-satisfied; verified with jq+awk paragraph count = 2 per locale |
 | 04-02 | Props-down server composition for Highlights and PartnerStrip | Page resolves all translations + siteConfig, passes resolved strings as props — leaves stay server-renderable with zero client coupling |
+| 04-03 | LocalizedPerson typed inline in each component | Return type of getLocalizedPeople() is an inferred anonymous type; inline interface avoids ReturnType<> generics and keeps content barrel unexpanded |
+| 04-03 | PersonDetail hasContactInfo boolean extracted from JSX | Prevents dl-with-no-dt edge case; outer section renders if either hasContactInfo or social_links.length > 0 |
+| 04-03 | All publications_selected IDs are stale (pub-YYYY-* vs actual YYYY-* format) | .filter(p => p !== undefined) silently drops all 12 stale refs; selectedPubs always empty; content editor must align IDs before public launch |
 
 ### Pending Todos
 
@@ -135,6 +138,7 @@ Recent decisions affecting current work:
 - Revisit `react-hooks/set-state-in-effect` lint on `MobileNav.tsx:38` (predates 03-05; not blocking) when doing mobile-drawer verification against the live Vercel deployment.
 - Mobile drawer verification (focus trap, Escape, return-focus, 375px no-overflow) against the deployed Vercel site — deferred from 03-05 per user direction; fold into Phase 6 a11y audit or the deploy phase.
 - Press-feedback tuning (spring curve, exact duration) across the shell — baseline landed in 03-05; user flagged further iteration as a later polish concern.
+- Update publications_selected IDs in content/people.json to match actual IDs in content/publications.json (current IDs use stale pub-YYYY-* format; actual IDs use YYYY-* format). Affects all 7 PI/postdoc entries. Silently handled by .filter(p => p !== undefined) in PersonDetailPage — no crash, but no publications render on detail pages until fixed.
 
 ### Blockers/Concerns
 
@@ -144,5 +148,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 04-02-PLAN.md (Home page — Highlights, PartnerStrip, full RSC with carousel + 2-para intro + highlights + partners, HOME-01..07 satisfied)
+Stopped at: Completed 04-03-PLAN.md (People pages — 5 components, list page, detail page with generateStaticParams; 26 static routes; PEOP-01..12 + I18N-02/04 satisfied)
 Resume file: None
