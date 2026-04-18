@@ -62,7 +62,7 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Install zod@^4 + tsx, shared Zod helpers, src/config/site.ts, scaffold folder tree, .vscode/settings.json wiring
+- [x] 02-01-PLAN.md — Install zod@^4 + tsx, shared Zod helpers, src/config/site.ts, scaffold folder tree, .vscode/settings.json wiring
 - [ ] 02-02-PLAN.md — People schema + realistic placeholder JSON (19–21 entries, 8 real photos, 4-part long name) + typed accessors with locale resolution
 - [ ] 02-03-PLAN.md — Publications schema (id uniqueness, arXiv/DOI regex) + 10–15 entries across 2024–2026 + accessors (year/topic filters)
 - [ ] 02-04-PLAN.md — Research (4 areas) + Journal Club (3–4 sessions) + Outreach (3–4 activities) schemas, JSON, and accessors
@@ -173,7 +173,7 @@ Phase 4 may fan out into parallel per-page plans once planned.
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete ✓ | 2026-04-17 |
-| 2. Content Layer | 0/TBD | Not started | - |
+| 2. Content Layer | 1/5 | In progress | - |
 | 3. Layout Shell | 0/TBD | Not started | - |
 | 4. Core Pages | 0/TBD | Not started | - |
 | 5. SEO & Discoverability | 0/TBD | Not started | - |

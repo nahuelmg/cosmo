@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-17)
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation)
-Plan: 4 of 4 in current phase
-Status: All Phase 1 plans complete — ready for phase verification
-Last activity: 2026-04-17 — Phase 1 Foundation plans complete; awaiting phase verification
+Phase: 2 of 6 (Content Layer)
+Plan: 1 of 5 in current phase
+Status: In progress
+Last activity: 2026-04-18 — Completed 02-01-PLAN.md (foundation schemas)
 
-Progress: [████░░░░░░] ~20%
+Progress: [█████░░░░░] ~25%
 
 ## Performance Metrics
 
@@ -28,7 +28,7 @@ Progress: [████░░░░░░] ~20%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Foundation | 4/4 | ~57 min | ~14 min |
-| 2. Content Layer | 0/TBD | — | — |
+| 2. Content Layer | 1/5 | ~3 min | ~3 min |
 | 3. Layout Shell | 0/TBD | — | — |
 | 4. Core Pages | 0/TBD | — | — |
 | 5. SEO & Discoverability | 0/TBD | — | — |
@@ -71,6 +71,12 @@ Recent decisions affecting current work:
 | 01-04 | locale-layout order locked: hasLocale → notFound → setRequestLocale → render | Required by next-intl for static rendering; deviation breaks SSG |
 | 01-04 | Greek probe retained in page.tsx until Phase 3 | Visual confirmation Greek subset stays wired across future changes |
 | 01-04 | Root layout.tsx + page.tsx deleted | Proxy from 01-03 guarantees locale-prefixed traffic; no root route needed |
+| 02-01 | `import * as z from "zod"` not `"zod/v4"` | Zod v4 ships as default export; /v4 path for v3-alongside compatibility only |
+| 02-01 | z.strictObject() for bilingualString | .strict() chain is deprecated in Zod v4 API |
+| 02-01 | photoPath rejects leading slash | path.join(PUBLIC_DIR, "/people/Foo.png") resolves to filesystem root, not public/ |
+| 02-01 | siteConfig uses TypeScript satisfies not Zod | Developer-maintained file; compile-time sufficient; no runtime overhead |
+| 02-01 | groupName single canonical Spanish string | Argentine institutional identity; site-level identity not bilingual (I18N-03) |
+| 02-01 | .vscode/settings.json committed (.gitignore exception) | JSON schema wiring is shared team config, not user-specific |
 
 ### Pending Todos
 
@@ -84,6 +90,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-04-17T21:35:00Z
-Stopped at: Phase 1 complete, verification pending
-Resume file: None — run `/gsd:complete-phase 01` to run phase verification and close Phase 1.
+Last session: 2026-04-18T00:16:21Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
