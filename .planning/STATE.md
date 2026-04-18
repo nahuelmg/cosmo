@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-01 Wave 1 + 04-02 Home + 04-03 People + 04-04 Research + 04-05 Publications + 04-06 Journal Club complete)
+**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-01 Wave 1 + 04-02 Home + 04-03 People + 04-04 Research + 04-05 Publications + 04-06 Journal Club + 04-07 Outreach complete)
 
 ## Current Position
 
 Phase: 4 of 6 (Core Pages) — In Progress
-Plan: 6 of 8 in Phase 4 (04-01 Wave 1, 04-02 Home, 04-03 People, 04-04 Research, 04-05 Publications, 04-06 Journal Club complete)
-Status: In progress — Journal Club page shipped (upcoming + archive, SSG both locales, CLUB-01+02 satisfied); remaining Wave 2 plans (04-07, 04-08) pending
-Last activity: 2026-04-18 — Completed 04-06-PLAN.md (Journal Club page: SessionRow, JournalClubArchive, page RSC; 2 upcoming + 3 past sessions across 2 academic years)
+Plan: 7 of 8 in Phase 4 (04-01 Wave 1, 04-02 Home, 04-03 People, 04-04 Research, 04-05 Publications, 04-06 Journal Club, 04-07 Outreach complete)
+Status: In progress — Outreach page shipped (4-activity grid, conditional link/image, SSG both locales, OTRCH-01..03 satisfied); remaining Wave 2 plan (04-08 Contact) pending
+Last activity: 2026-04-18 — Completed 04-07-PLAN.md (Outreach page: OutreachCard, OutreachGrid, page RSC; 4 activities, 3 with links, 0 with images — both conditional paths exercised)
 
-Progress: [████████████████████░░] ~78% (Phase 3 complete + Phase 4: Wave 1 + Home + People + Research + Publications + Journal Club)
+Progress: [█████████████████████░] ~80% (Phase 3 complete + Phase 4: Wave 1 + Home + People + Research + Publications + Journal Club + Outreach)
 
 ## Performance Metrics
 
@@ -130,6 +130,10 @@ Recent decisions affecting current work:
 | 04-03 | LocalizedPerson typed inline in each component | Return type of getLocalizedPeople() is an inferred anonymous type; inline interface avoids ReturnType<> generics and keeps content barrel unexpanded |
 | 04-03 | PersonDetail hasContactInfo boolean extracted from JSX | Prevents dl-with-no-dt edge case; outer section renders if either hasContactInfo or social_links.length > 0 |
 | 04-03 | All publications_selected IDs are stale (pub-YYYY-* vs actual YYYY-* format) | .filter(p => p !== undefined) silently drops all 12 stale refs; selectedPubs always empty; content editor must align IDs before public launch |
+| 04-05 | labels object built once in page, passed as prop to PublicationEntry | Avoids per-entry t() calls; consistent with props-down server composition from 04-02/04-03 |
+| 04-05 | max-w-4xl container for publications bibliography | Narrower than 6xl card grids — one-column reading-flow for academic bibliography |
+| 04-05 | Per-entry id="pub-{id}" anchor included | Free shareable deep links; Phase 5 SEO can reference in JSON-LD citation structured data |
+| 04-05 | PUBS-03 (filter controls) and PUBS-04 (URL-synced state) deferred beyond Phase 4 | No filter UI shipped; clean slate for future phase |
 | 04-06 | SessionRow is a dumb presentational server component — receives already-localized props | getLocalizedSession called in page RSC; leaf never calls it (guardrail from plan revision) |
 | 04-06 | Intl.DateTimeFormat uses es-AR (not es) for Argentine date formatting | Argentine-first bias; produces correct long-form month names for Buenos Aires context |
 | 04-06 | Archive section gated on Object.keys(groupedLocalized).length > 0 | Prevents empty archive section rendering on fresh installs with zero past sessions |
