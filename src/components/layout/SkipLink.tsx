@@ -39,6 +39,10 @@ export async function SkipLink({ locale }: SkipLinkProps) {
         'focus:shadow-md focus:outline-none',
         'focus:ring-2 focus:ring-accent-ring',
         'font-sans text-sm font-semibold',
+        // Press-feedback: only perceivable while focus-visible reveals the
+        // chip and the user presses Enter / click. Keyed by `transition-transform`
+        // because there is no competing `transition-colors` on this element.
+        'transition-transform duration-75 active:scale-95',
       ].join(' ')}
     >
       {t('skipToContent')}

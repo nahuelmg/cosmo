@@ -47,6 +47,10 @@ export function MobileNav() {
           'inline-flex items-center justify-center',
           'w-10 h-10 rounded',
           'text-ink hover:text-accent',
+          // Press-feedback: combined transition so color + scale animate together
+          // without one clobbering the other's transition-property.
+          'transition-[color,transform] duration-75',
+          'active:scale-95',
           'focus-visible:outline-none',
           'focus-visible:ring-2 focus-visible:ring-accent-ring',
         ].join(' ')}
@@ -93,6 +97,9 @@ export function MobileNav() {
                 'inline-flex items-center justify-center',
                 'w-10 h-10 rounded',
                 'text-ink hover:text-accent',
+                // Press-feedback (see trigger).
+                'transition-[color,transform] duration-75',
+                'active:scale-95',
                 'focus-visible:outline-none',
                 'focus-visible:ring-2 focus-visible:ring-accent-ring',
               ].join(' ')}
