@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 3 Layout Shell complete — ready for Phase 4 (Core Pages)
+**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-04 Research page complete)
 
 ## Current Position
 
 Phase: 4 of 6 (Core Pages) — In Progress
-Plan: 1 of 8 in Phase 4 (04-01 shared prerequisites complete)
-Status: In progress — Wave 1 shipped; Wave 2 (7 page plans) ready to execute
-Last activity: 2026-04-18 — Completed 04-01-PLAN.md (lucide-react, portada_3, siteConfig address/mapQuery, 8 i18n namespaces, HeroCarousel, MapEmbed)
+Plan: 2 of 8 in Phase 4 (04-01 Wave 1 + 04-04 Research page complete)
+Status: In progress — Research page shipped; remaining Wave 2 plans (04-02, 04-03, 04-05..08) pending
+Last activity: 2026-04-18 — Completed 04-04-PLAN.md (Research page: ResearchCard, ResearchGrid, /es/investigacion + /en/research)
 
-Progress: [██████████████░░░░░░░░] ~60% (Phase 3 complete + Phase 4 Wave 1)
+Progress: [███████████████░░░░░░░] ~63% (Phase 3 complete + Phase 4 Wave 1 + Research page)
 
 ## Performance Metrics
 
@@ -30,11 +30,12 @@ Progress: [██████████████░░░░░░░░] ~
 | 1. Foundation | 4/4 Complete | ~57 min | ~14 min |
 | 2. Content Layer | 5/5 Complete | ~40 min est. | ~8 min |
 | 3. Layout Shell | 5/5 Complete | ~38 min | ~7.5 min |
-| 4. Core Pages | 1/8 (Wave 1 complete) | ~12 min | ~12 min |
+| 4. Core Pages | 2/8 (04-01 + 04-04 complete) | ~20 min | ~10 min |
 | 5. SEO & Discoverability | 0/TBD | — | — |
 | 6. Polish (A11y & Performance) | 0/TBD | — | — |
 
 **Recent Trend:**
+- 04-04 ran ~8 min (pure-auto, 2 task commits, zero deviations; TypeScript clean on first attempt; build static-prerendered both locales)
 - 03-05 ran ~16 min (human-verify plan, 2 tasks + checkpoint; first-pass had 3 auto-fixes — SocialLink export, mailto JSDoc grep, Next.js 16 'use client' compat — then gap-closure surfaced LocaleToggle home-route stale-param bug + press-feedback baseline, both fixed in-plan)
 - 03-04 ran ~2 min (pure-auto, 2 atomic task commits, zero functional deviations)
 - 03-03 ran ~10 min (pure-auto, 3 nav primitives, one minor typecheck false alarm from parallel wave)
@@ -119,6 +120,9 @@ Recent decisions affecting current work:
 | 04-01 | HeroCarousel uses setTimeout (not setInterval) per index/isPaused useEffect deps | Avoids interval drift; timer restarts cleanly on advance; prefers-reduced-motion checked inside effect (SSR-safe) |
 | 04-01 | MapEmbed fallback anchor is always-rendered (not gated on shouldLoad) | Ensures crawlability in prerendered HTML and functional with JS disabled; iframe overlays it once IntersectionObserver fires |
 | 04-01 | Pause/play glyphs are inline SVGs (not lucide) | 2 glyphs only; consistent with 03-04 hamburger/X decision; lucide-react installed for page-level icons |
+| 04-04 | Static ICON_MAP (Record<string, LucideIcon>) keyed by JSON icon field | Dynamic require() breaks tree-shaking; all 4 icons (atom/waves/sparkles/cpu) resolve — no HelpCircle fallback fires on real data |
+| 04-04 | HelpCircle as fallback for unknown icon names | Loud visual signal of content drift; never crashes |
+| 04-04 | 2-up grid (sm:grid-cols-2) for 4 research areas | 3-up would orphan 4th card; 2×2 fits cleanly on tablet/desktop |
 
 ### Pending Todos
 
@@ -137,5 +141,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 04-01-PLAN.md (Phase 4 Wave 1 shared prerequisites — lucide-react, portada_3, siteConfig address/mapQuery, 8 i18n namespaces, HeroCarousel, MapEmbed)
+Stopped at: Completed 04-04-PLAN.md (Research page — ResearchCard, ResearchGrid, /es/investigacion + /en/research, static SSG both locales)
 Resume file: None
