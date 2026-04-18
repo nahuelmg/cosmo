@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-17)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-04 Research page complete)
+**Current focus:** Phase 4 Core Pages — Wave 2 in progress (04-01 Wave 1 + 04-02 Home + 04-04 Research complete)
 
 ## Current Position
 
 Phase: 4 of 6 (Core Pages) — In Progress
-Plan: 2 of 8 in Phase 4 (04-01 Wave 1 + 04-04 Research page complete)
-Status: In progress — Research page shipped; remaining Wave 2 plans (04-02, 04-03, 04-05..08) pending
-Last activity: 2026-04-18 — Completed 04-04-PLAN.md (Research page: ResearchCard, ResearchGrid, /es/investigacion + /en/research)
+Plan: 3 of 8 in Phase 4 (04-01 Wave 1, 04-02 Home page, 04-04 Research page complete)
+Status: In progress — Home page and Research page shipped; remaining Wave 2 plans (04-03, 04-05..08) pending
+Last activity: 2026-04-18 — Completed 04-02-PLAN.md (Home page: Highlights, PartnerStrip, full RSC with carousel + 2-para intro + highlights + partners)
 
-Progress: [███████████████░░░░░░░] ~63% (Phase 3 complete + Phase 4 Wave 1 + Research page)
+Progress: [████████████████░░░░░░] ~66% (Phase 3 complete + Phase 4: Wave 1 + Home + Research)
 
 ## Performance Metrics
 
@@ -123,6 +123,9 @@ Recent decisions affecting current work:
 | 04-04 | Static ICON_MAP (Record<string, LucideIcon>) keyed by JSON icon field | Dynamic require() breaks tree-shaking; all 4 icons (atom/waves/sparkles/cpu) resolve — no HelpCircle fallback fires on real data |
 | 04-04 | HelpCircle as fallback for unknown icon names | Loud visual signal of content drift; never crashes |
 | 04-04 | 2-up grid (sm:grid-cols-2) for 4 research areas | 3-up would orphan 4th card; 2×2 fits cleanly on tablet/desktop |
+| 04-02 | Named export { HeroCarousel } added alongside default export | Plan uses named import style; export default function creates a named binding that can be re-exported; default retained for backward compat |
+| 04-02 | home.intro already had 2-paragraph structure from 04-01 seed | No rewrite needed; plan sub-step 1 was pre-satisfied; verified with jq+awk paragraph count = 2 per locale |
+| 04-02 | Props-down server composition for Highlights and PartnerStrip | Page resolves all translations + siteConfig, passes resolved strings as props — leaves stay server-renderable with zero client coupling |
 
 ### Pending Todos
 
@@ -141,5 +144,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-04-18
-Stopped at: Completed 04-04-PLAN.md (Research page — ResearchCard, ResearchGrid, /es/investigacion + /en/research, static SSG both locales)
+Stopped at: Completed 04-02-PLAN.md (Home page — Highlights, PartnerStrip, full RSC with carousel + 2-para intro + highlights + partners, HOME-01..07 satisfied)
 Resume file: None
