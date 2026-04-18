@@ -21,5 +21,10 @@
     "affiliationFcen": "Facultad de Ciencias Exactas y Naturales",
     "affiliationConicet": "CONICET",
     "copyright": "© {year} Grupo de Cosmología — FCEN / UBA"
+  },
+  "layout": {
+    "skipToContent": "Saltar al contenido principal",
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación"
   }
 }
