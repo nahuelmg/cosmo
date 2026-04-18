@@ -45,6 +45,9 @@
   /* ── Shadows — restrained, two tiers only (--shadow-lg/xl removed per MASTER.md) ── */
   --shadow-sm: 0 1px 2px 0 oklch(0.22 0.015 60 / 0.04);
   --shadow-md: 0 2px 8px 0 oklch(0.22 0.015 60 / 0.06);
+
+  /* ── Layout — sticky header height, matches Tailwind h-14 (56px) ── */
+  --header-height: 56px;
 }
 
 /* ── Base styles ── */
@@ -63,4 +66,14 @@ h1, h2, h3, h4 {
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--color-ink);
+}
+
+/* ── Main landmark — skip-link target and anchor-jump offset ──
+   scroll-margin-top prevents the sticky header from covering the focus target
+   when the skip link (or any #-anchor) scrolls to #main-content. outline:none
+   suppresses the native focus ring added by tabIndex={-1}; the landmark
+   content itself provides the visual confirmation of focus movement. */
+#main-content {
+  scroll-margin-top: var(--header-height);
+  outline: none;
 }
