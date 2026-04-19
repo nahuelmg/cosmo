@@ -94,10 +94,10 @@ Plans:
 3. The accessor file has zero imports from `src/content/people.ts` — circular dependency is structurally impossible
 4. `getPublicationsByAuthor(["Someone"], {})` called with the full v1.0 publication list returns results (not an empty array caused by a missing `.default("manual")` source field)
 
-**Plans:** TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 08-01: Implement `getPublicationsByAuthor` in `src/content/accessors/publications.ts`; re-export from `src/content/index.ts` barrel; verify no circular import; test with v1.0 placeholder data
+- [ ] 08-01-PLAN.md — Install Vitest + implement `getPublicationsByAuthor` in `src/content/accessors/publications.ts` using NFD-strip `normalizeName` + unit tests covering 4-char guard, diacritic fold, year window (incl. `lastNYears: 0`), pre-sort, non-mutation, ACC-04 barrel identity, ACC-05 no-people-import
 
 ---
 
@@ -116,7 +116,7 @@ Plans:
 4. A member with no `arxiv_id` produces a logged warning ("skipping arXiv for [name]: no arxiv_id") and is not searched by name — arXiv output is partial, not contaminated
 5. Passing an `INSPIRE-00XXXXXX` numeric ID (wrong format) causes the script to exit 1 with a clear format-error message before any network requests are made
 
-**Plans:** TBD
+**Plans:** 3 plans
 
 Plans:
 - [ ] 09-01: Add `fast-xml-parser@^5.7.1` devDependency; add `sync-publications` script to `package.json`; scaffold `scripts/sync-publications.ts` with startup validation (BAI format check, people.json read), concurrency-limited InspireHEP queue, arXiv Atom fetch, `fast-xml-parser` config with `isArray` callback
@@ -139,7 +139,7 @@ Plans:
 3. Running the workflow twice in succession with no upstream data change results in zero commits the second time — `git diff --quiet` guard confirmed
 4. A Vercel deploy is triggered only when `content/publications.json` actually changes — confirmed by reviewing Vercel deploy history after two consecutive workflow runs
 
-**Plans:** TBD
+**Plans:** 1 plan
 
 Plans:
 - [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 22 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
@@ -164,7 +164,7 @@ Plans:
 5. `/people/[slug]` for a current PI, postdoc, or PhD shows a "Publications" section listing their last-10-years output with count subtitle ("N publicaciones en los últimos 10 años" / "N publications in the last 10 years"); the old `publications_selected` list is gone
 6. `pnpm check-translations` passes with 0 key drift — all new UI strings present in both `messages/es.json` and `messages/en.json`
 
-**Plans:** TBD
+**Plans:** 3 plans
 
 Plans:
 - [ ] 11-01: Shared publication entry component — source badge pill, preprint/published indicator, author list formatting (≤5 full / >5 et al.), author highlighting via `display_name_normalized` matching; add all new i18n keys to `messages/es.json` + `messages/en.json`

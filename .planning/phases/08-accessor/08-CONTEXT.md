@@ -19,8 +19,9 @@ Implement a single pure helper `getPublicationsByAuthor(nameVariants: string[], 
 
 ### Name matching
 
-- **Match style:** substring match, case-insensitive, NFC-normalized, with a **minimum variant length of 4 characters**. Variants shorter than 4 chars are silently skipped; if no variants remain, accessor returns `[]`.
+- **Match style:** substring match, case-insensitive, **diacritic-folded (NFD-decompose → strip combining marks → lowercase)**, with a **minimum variant length of 4 characters**. Variants shorter than 4 chars are silently skipped; if no variants remain, accessor returns `[]`.
   - Rationale: substring is forgiving for the many author-string layouts in publications.json ("García, F.", "F. García", "García, Federico"). The 4-char guard prevents accidental matches from initials like `"F."` or `"J."`.
+  - **Normalization correction (post-research):** initial CONTEXT draft said "NFC-normalized". NFC alone preserves diacritics as single codepoints, so the ASCII variant `"acuna"` (from `person.display_name_normalized`) would NOT match the author string `"Acuña"`. The project already has `normalizeName` in `src/content/schemas/shared.ts` which does NFD-decompose + strip combining marks + lowercase — the accessor MUST reuse it on both variants and author strings. See `08-RESEARCH.md §Normalization` for live Node 20 proof.
   - Known trade-off: "García" will also match "García-Bellido" (different person). This is acceptable — callers know their people and will pass full surnames (≥4 chars) that disambiguate, and the group has no collision between current members.
 - **Author scope:** match if the variant substring appears in **any element** of the publication's `authors: string[]` array, not just the first author. Co-authored papers surface on every matching member's profile.
 - **Variant generation:** **caller passes variants explicitly**. Accessor takes `string[]` and does not import from `people.ts`. The caller (`/people/[slug]`) assembles its own variant list (typically `[person.displayName, person.display_name_normalized]` and any other forms the maintainer knows about). No `deriveNameVariants` helper in this phase — YAGNI until there's a second caller that needs it.
@@ -50,7 +51,7 @@ Implement a single pure helper `getPublicationsByAuthor(nameVariants: string[], 
 
 - Exact internal helper shape (e.g., separate `matchesName(pub, variants)` pure fn vs inline filter) — planner/implementer picks what reads best.
 - How NFC normalization is applied (normalize both variants and author strings once, or per comparison) — correctness equivalent; optimize if measurable.
-- Test fixtures and coverage mix — but tests should cover: 4-char guard, any-author match, NFC diacritic fold, year-window cutoff including `lastNYears: 0`, empty variants, no matches, pre-sorted output, non-mutation of input.
+- Test fixtures and coverage mix — but tests should cover: 4-char guard, any-author match, diacritic fold (variant `"acuna"` ↔ author `"Acuña"`), year-window cutoff including `lastNYears: 0`, empty variants, no matches, pre-sorted output, non-mutation of input.
 
 </decisions>
 
