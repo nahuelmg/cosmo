@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 9 — Sync Script
+**Current focus:** v1.1 Phase 10 — CI Wiring
 
 ## Current Position
 
-Phase: 9 of 11 (Sync Script) — IN PROGRESS
-Plan: 09-02 complete (3 plans total in Phase 9; 09-03 next)
-Status: In progress — 09-02 extraction layer complete; ready for 09-03 (write gate)
-Last activity: 2026-04-19 — Completed 09-02-PLAN.md (extraction helpers, dedup, merge, wired main())
+Phase: 9 of 11 (Sync Script) — COMPLETE
+Plan: 09-03 complete (all 3 plans in Phase 9 done; Phase 10 next)
+Status: Phase 9 complete — sync script runs locally, write gate + idempotence verified; ready for Phase 10 (CI Wiring)
+Last activity: 2026-04-19 — Completed 09-03-PLAN.md (write gate, PublicationsFileSchema, E2E smoke test)
 
-Progress: [█████████░░░░░░] 9/11 phases started (09-01 + 09-02 done; 09-03 remains)
+Progress: [██████████░░░░░] Phase 9 complete; Phases 10-11 remain
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -24,7 +24,7 @@ Progress: [█████████░░░░░░] 9/11 phases started (0
 
 **Critical ordering rule:** Schema (7) must be atomic and green before anything else. Sync script (9) must validate locally before CI (10) is wired.
 
-**Human dependency:** DATA-09 / DATA-10 (partial) — `tomas-ferreira-chase` populated; 13 members still need `inspirehep_id` + `orcid_id` before Phase 9 can be tested end-to-end. Follow-up data commit before Phase 9 E2E test.
+**Human dependency:** DATA-09 / DATA-10 (partial) — `tomas-ferreira-chase` populated; 13 members still need `inspirehep_id` + `orcid_id` for full-group E2E. Phase 9 E2E with 1 member is complete; full-group pagination stress test deferred to data follow-up.
 
 ## Shipped — v1.0 MVP (2026-04-18)
 
@@ -64,6 +64,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Google Scholar `scholar_id` deferred to Phase 11 / v1.2 — no public API, useful as profile link only
 - DATA-09/10 partial: 1 member populated this cycle; remaining 13 are follow-up data commit
 
+### 09-03 Decisions (2026-04-19)
+
+- Cross-source arXiv ID dedup applied after `mergePublications` — InspireHEP + arXiv ORCID feed both return entries with the same arXiv ID; merged array fails `superRefine` without global dedup. Fix: `dedupByArxivId(preMerged)` where InspireHEP wins (merge order: manual → inspire → arxiv)
+- `generate-schemas.mjs` updated to emit `PublicationsFileSchema` — `publications.schema.json` now describes wrapped `{ _meta, publications }` shape
+- Accessor defensive bridge (safeParse → fallback) committed in Task 1 and removed in Task 3 within the same plan — avoids task-ordering hazard without a separate bridge-removal plan
+- `readAllExistingEntries()` exported separately from `readManualEntries()` — handles all three file shapes for accurate added/removed/unchanged diff counts
+
 ### 09-02 Decisions (2026-04-19)
 
 - `require.main === module` guard required — tsx CJS module executes `main()` on import without it; guard prevents test runs from triggering I/O
@@ -91,12 +98,12 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ### Blockers / Concerns
 
-- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit before Phase 9 E2E test — not a code blocker)
-- No arXiv name-based fallback — skip members without `inspirehep_id`, never use `au:name` search — Pitfall 3 (updated: `orcid_id` is the secondary query key, not `arxiv_id`)
+- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker for Phase 10 CI wiring)
 - CI-08: Check if `main` has branch protection rules before Phase 10 — may need `github-actions[bot]` bypass
+- Phase 10 CI steps: `pnpm sync-publications` → `pnpm validate-content` → `git diff --quiet content/publications.json` → commit if changed. Script stdout format is step-summary compatible.
 
 ## Session Continuity
 
-Last session: 2026-04-19
-Stopped at: Completed 09-02-PLAN.md — extraction helpers + wired main() live-verified; ready for 09-03 (write gate)
+Last session: 2026-04-19T17:13:08Z
+Stopped at: Completed 09-03-PLAN.md — Phase 9 fully done; write gate + E2E + idempotence confirmed; ready for Phase 10 (CI Wiring)
 Resume file: None
