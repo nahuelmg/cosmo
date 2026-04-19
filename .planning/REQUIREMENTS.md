@@ -33,11 +33,11 @@
 
 ### Accessor (helper library)
 
-- [ ] **ACC-01**: `getPublicationsByAuthor(nameVariants: string[], options?: { lastNYears?: number }): Publication[]` lives in `src/content/accessors/publications.ts`
-- [ ] **ACC-02**: Accessor filters publications where any author name matches any `nameVariants` string (case-insensitive, diacritic-normalized via NFC)
-- [ ] **ACC-03**: `lastNYears` option cuts results to the last N calendar years counted from `new Date().getFullYear()`
-- [ ] **ACC-04**: Accessor re-exported from `src/content/index.ts` barrel (24-symbol surface)
-- [ ] **ACC-05**: Accessor has no imports from `people.ts` (avoids circular dependency)
+- [x] **ACC-01**: `getPublicationsByAuthor(nameVariants: string[], options?: { lastNYears?: number }): Publication[]` lives in `src/content/accessors/publications.ts`
+- [x] **ACC-02**: Accessor filters publications where any author name matches any `nameVariants` string (case-insensitive, diacritic-normalized via NFD-strip)
+- [x] **ACC-03**: `lastNYears` option cuts results to the last N calendar years counted from `new Date().getFullYear()`
+- [x] **ACC-04**: Accessor re-exported from `src/content/index.ts` barrel (24-symbol surface)
+- [x] **ACC-05**: Accessor has no imports from `people.ts` (avoids circular dependency)
 
 ### Sync Script
 
@@ -147,11 +147,11 @@
 | SCHEMA-06 | Phase 7 | Complete |
 | DATA-09 | Phase 7 | Partial (1/13; follow-up data commit before Phase 9 E2E) |
 | DATA-10 | Phase 7 | Partial (1/13; reconceived as orcid_id coverage) |
-| ACC-01 | Phase 8 | Pending |
-| ACC-02 | Phase 8 | Pending |
-| ACC-03 | Phase 8 | Pending |
-| ACC-04 | Phase 8 | Pending |
-| ACC-05 | Phase 8 | Pending |
+| ACC-01 | Phase 8 | Complete |
+| ACC-02 | Phase 8 | Complete |
+| ACC-03 | Phase 8 | Complete |
+| ACC-04 | Phase 8 | Complete |
+| ACC-05 | Phase 8 | Complete |
 | SYNC-01 | Phase 9 | Pending |
 | SYNC-02 | Phase 9 | Pending |
 | SYNC-03 | Phase 9 | Pending |

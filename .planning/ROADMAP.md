@@ -97,7 +97,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md — Install Vitest + implement `getPublicationsByAuthor` in `src/content/accessors/publications.ts` using NFD-strip `normalizeName` + unit tests covering 4-char guard, diacritic fold, year window (incl. `lastNYears: 0`), pre-sort, non-mutation, ACC-04 barrel identity, ACC-05 no-people-import
+- [x] 08-01-PLAN.md — Install Vitest + implement `getPublicationsByAuthor` in `src/content/accessors/publications.ts` using NFD-strip `normalizeName` + unit tests covering 4-char guard, diacritic fold, year window (incl. `lastNYears: 0`), pre-sort, non-mutation, ACC-04 barrel identity, ACC-05 no-people-import
 
 ---
 
@@ -186,7 +186,7 @@ Plans:
 | 5. SEO & Discoverability | v1.0 | 5/5 | Complete | 2026-04-18 |
 | 6. Polish (A11y & Perf) | v1.0 | 4/4 | Complete | 2026-04-18 |
 | 7. Schema Extension | v1.1 | 2/2 | Complete | 2026-04-18 |
-| 8. Accessor | v1.1 | 0/1 | Not started | - |
+| 8. Accessor | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 9. Sync Script | v1.1 | 0/3 | Not started | - |
 | 10. CI Wiring | v1.1 | 0/1 | Not started | - |
 | 11. Display Layer | v1.1 | 0/3 | Not started | - |

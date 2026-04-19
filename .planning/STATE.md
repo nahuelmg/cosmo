@@ -9,7 +9,7 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 8 of 11 (Accessor Layer) — IN PROGRESS
+Phase: 8 of 11 (Accessor Layer) — COMPLETE
 Plan: 08-01 complete (all plans in Phase 8 done — single-plan phase)
 Status: Phase 8 complete — ready for Phase 9 (Sync Script)
 Last activity: 2026-04-19 — Completed 08-01-PLAN.md (getPublicationsByAuthor + Vitest infra + 20 green tests)
