@@ -16,11 +16,12 @@
  */
 
 import { parseArgs } from "node:util";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { XMLParser, type MatcherView } from "fast-xml-parser";
-// Relative import — no @/ alias; tsx CJS does not resolve webpack aliases
+// Relative imports — no @/ alias; tsx CJS does not resolve webpack aliases
 import { PersonSchema } from "../src/content/schemas/people.schema";
+import type { Publication } from "../src/content/schemas/publications.schema";
 import type { z } from "zod";
 
 // ---------------------------------------------------------------------------
@@ -300,7 +301,180 @@ async function fetchArXiv(orcid: string): Promise<ArXivEntry[]> {
 }
 
 // ---------------------------------------------------------------------------
-// I. main()
+// I. Extraction helpers — pure functions (exported for tests)
+// ---------------------------------------------------------------------------
+
+/**
+ * Defensive strip of BibTeX markup from InspireHEP title strings.
+ * In practice InspireHEP JSON API rarely contains LaTeX markup, but this
+ * guard prevents garbage like "\textit{foo}" from appearing in the UI.
+ */
+export function stripBibTeX(title: string): string {
+  // Remove outer braces: {Title} → Title
+  let cleaned = title.replace(/^\{(.+)\}$/, "$1");
+  // Remove \command{text} patterns: \textit{foo} → foo
+  cleaned = cleaned.replace(/\\[A-Za-z]+\{([^}]*)\}/g, "$1");
+  // Remove remaining standalone braces
+  cleaned = cleaned.replace(/[{}]/g, "");
+  return cleaned.trim();
+}
+
+/**
+ * Transform a raw InspireHEP hit into a Publication object.
+ *
+ * Year resolution (SYNC-07):
+ *   1. publication_info[0].year
+ *   2. preprint_date YYYY segment
+ *   3. current year (last resort)
+ */
+export function inspireHitToPublication(hit: InspireHit): Publication {
+  const meta = hit.metadata;
+  const arxivId = meta.arxiv_eprints?.[0]?.value; // bare, e.g. "2603.11236"
+  const pi = meta.publication_info?.[0];
+
+  // Year resolution: publication_info[0].year → preprint_date YYYY → current year
+  const parsedPreprintYear = meta.preprint_date
+    ? parseInt(meta.preprint_date.split("-")[0], 10)
+    : NaN;
+  const year: number =
+    pi?.year ?? (Number.isFinite(parsedPreprintYear) ? parsedPreprintYear : new Date().getFullYear());
+
+  const journal: string = pi
+    ? [pi.journal_title, pi.journal_volume, pi.year ? `(${pi.year})` : "", pi.artid]
+        .filter(Boolean)
+        .join(" ")
+    : "Preprint";
+
+  // DOI preference: material==="publication" over "bibmatch"
+  const doi =
+    meta.dois?.find((d) => d.material === "publication")?.value ?? meta.dois?.[0]?.value;
+
+  // Title: prefer non-arXiv-sourced title (Pitfall 9)
+  const rawTitle =
+    meta.titles.find((t) => t.source !== "arXiv")?.title ??
+    meta.titles[0]?.title ??
+    "Untitled";
+
+  const pub: Publication = {
+    id: arxivId ?? `inspire-${meta.control_number}`,
+    authors: meta.authors.map((a) => a.full_name.normalize("NFC")),
+    title: stripBibTeX(rawTitle).normalize("NFC"),
+    journal,
+    year,
+    topic_tags: [],
+    source: "inspirehep",
+    ...(arxivId ? { arxiv: arxivId } : {}),
+    ...(doi ? { doi } : {}),
+    ...(meta.abstracts?.[0]?.value
+      ? { abstract: meta.abstracts[0].value.normalize("NFC") }
+      : {}),
+  };
+  return pub;
+}
+
+/**
+ * Transform a raw arXiv atom2 entry into a Publication object.
+ *
+ * atom2 author format (Pitfall 3): ONE <author> element whose <name> is a
+ * comma-delimited CSV of all authors — NOT one element per author.
+ */
+export function arxivEntryToPublication(entry: ArXivEntry): Publication {
+  // entry.id = "http://arxiv.org/abs/1305.1476v1" → "1305.1476"
+  const arxivId = entry.id.split("/abs/")[1]?.replace(/v\d+$/, "");
+  if (!arxivId) throw new Error(`arXiv entry without parseable id: ${entry.id}`);
+
+  const year = parseInt(entry.published.slice(0, 4), 10);
+
+  // atom2 packs all authors into ONE <name> as a comma-delimited string (Pitfall 3)
+  const authorCsv = entry.author?.[0]?.name ?? "";
+  const authors = authorCsv
+    .split(", ")
+    .map((a) => a.normalize("NFC").trim())
+    .filter((a) => a.length > 0);
+
+  return {
+    id: arxivId,
+    authors: authors.length > 0 ? authors : ["Unknown"],
+    title: stripBibTeX(entry.title).normalize("NFC"),
+    journal: "Preprint",
+    year,
+    arxiv: arxivId,
+    topic_tags: [],
+    source: "arxiv",
+    ...(entry.summary ? { abstract: entry.summary.normalize("NFC") } : {}),
+  };
+}
+
+/**
+ * Intra-source dedup by arXiv ID (SYNC-09, Pitfall 6).
+ * Prevents Planck/Euclid co-authored papers from appearing once per member.
+ * Key on p.arxiv when present; falls back to p.id for InspireHEP-only entries.
+ * First-seen wins.
+ */
+export function dedupByArxivId(entries: Publication[]): Publication[] {
+  const seen = new Set<string>();
+  const out: Publication[] = [];
+  for (const p of entries) {
+    const key = p.arxiv ?? p.id;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(p);
+  }
+  return out;
+}
+
+/**
+ * Read existing content/publications.json and extract manual entries.
+ *
+ * Handles three file shapes:
+ *  1. File missing → []
+ *  2. Bare array (v1.0) → filter where source==="manual" || source===undefined
+ *  3. Wrapped { _meta, publications } (v1.1 produced by a sync run) → same filter
+ *
+ * Uses plain JSON.parse (no Zod) to preserve byte-identical source fields on
+ * entries that don't have the field explicitly set.
+ */
+export function readManualEntries(cwd: string = process.cwd()): Publication[] {
+  const filePath = resolve(cwd, "content/publications.json");
+  if (!existsSync(filePath)) return [];
+  const raw = JSON.parse(readFileSync(filePath, "utf-8")) as unknown;
+  const list: Publication[] = Array.isArray(raw)
+    ? (raw as Publication[])
+    : ((raw as { publications?: Publication[] }).publications ?? []);
+  return list
+    .filter((p) => p.source === "manual" || p.source === undefined)
+    .map((p) => ({ ...p, source: "manual" as const }));
+}
+
+/**
+ * Merge publications from all sources and sort deterministically (SYNC-10, SYNC-13).
+ *
+ * Sort order matches getPublicationsByAuthor in src/content/accessors/publications.ts:
+ *   1. year desc
+ *   2. arXiv ID desc (localeCompare) — within same year, for entries with arXiv IDs
+ *   3. no-arXiv entries last within a year bucket
+ *
+ * No cross-source dedup (locked v1.1 decision).
+ * Dedup is applied per-source at the call site before mergePublications is called.
+ */
+export function mergePublications(
+  manualEntries: Publication[],
+  inspireEntries: Publication[],
+  arxivEntries: Publication[],
+): Publication[] {
+  const merged = [...manualEntries, ...inspireEntries, ...arxivEntries];
+  merged.sort((a, b) => {
+    if (b.year !== a.year) return b.year - a.year;
+    if (a.arxiv && b.arxiv) return b.arxiv.localeCompare(a.arxiv);
+    if (a.arxiv) return -1;
+    if (b.arxiv) return 1;
+    return 0;
+  });
+  return merged;
+}
+
+// ---------------------------------------------------------------------------
+// J. main()
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
@@ -352,14 +526,21 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((err) => {
-  process.stderr.write(`Fatal: ${err instanceof Error ? err.message : String(err)}\n`);
-  process.exit(1);
-});
+// Guard: only run main() when executed directly (not when imported by Vitest or other modules)
+if (require.main === module) {
+  main().catch((err) => {
+    process.stderr.write(`Fatal: ${err instanceof Error ? err.message : String(err)}\n`);
+    process.exit(1);
+  });
+}
 
 // ---------------------------------------------------------------------------
-// J. Exports — for 09-02 extraction layer and unit tests
+// K. Exports — for 09-02/09-03 and unit tests
 // ---------------------------------------------------------------------------
 
+// 09-01 primitives (not inline-exported — exported here)
 export { fetchInspireHEP, fetchArXiv, fetchWithRetry, runBatched, xmlParser, BAI_REGEX };
+// 09-02 extraction layer (inline-exported on their declarations above)
+// stripBibTeX, inspireHitToPublication, arxivEntryToPublication,
+// dedupByArxivId, readManualEntries, mergePublications
 export type { InspireHit, ArXivEntry, PersonWithSyncIds };
