@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 7 — Schema Extension (atomic prerequisite)
+**Current focus:** v1.1 Phase 8 — Accessor Layer
 
 ## Current Position
 
-Phase: 7 of 11 (Schema Extension)
-Plan: 07-01 complete; 07-02 is next
-Status: In progress — 07-01 shipped; awaiting 07-02 (DATA-09/10 human population)
-Last activity: 2026-04-19 — Completed 07-01-PLAN.md (schema extension + JSON Schema regen + SYNC.md)
+Phase: 7 of 11 (Schema Extension) — COMPLETE
+Plan: 07-02 complete (all plans in Phase 7 done)
+Status: Phase 7 complete — ready for Phase 8 (Accessor Layer)
+Last activity: 2026-04-19 — Completed 07-02-PLAN.md (BAI regex fix + orcid_id swap + tomas IDs)
 
-Progress: [██████░░░░░░░░░] 6/11 phases complete (v1.1 in progress; Phase 7 partially done)
+Progress: [███████░░░░░░░░] 7/11 phases complete (v1.1 in progress; Phase 8 next)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -24,7 +24,7 @@ Progress: [██████░░░░░░░░░] 6/11 phases complete (
 
 **Critical ordering rule:** Schema (7) must be atomic and green before anything else. Sync script (9) must validate locally before CI (10) is wired.
 
-**Human dependency:** DATA-09 / DATA-10 — maintainer must populate `inspirehep_id` (BAI) and `arxiv_id` in `content/people.json` for all current members before Phase 9 can be tested end-to-end. Scheduled as Plan 07-02.
+**Human dependency:** DATA-09 / DATA-10 (partial) — `tomas-ferreira-chase` populated; 13 members still need `inspirehep_id` + `orcid_id` before Phase 9 can be tested end-to-end. Follow-up data commit before Phase 9 E2E test.
 
 ## Shipped — v1.0 MVP (2026-04-18)
 
@@ -51,18 +51,25 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ### 07-01 Decisions (2026-04-19)
 
-- `display_name_normalized` is REQUIRED (not optional) on PersonSchema — Plan 07-02 populates it; until then `pnpm validate-content` fails on people.json (expected)
+- `display_name_normalized` is REQUIRED (not optional) on PersonSchema — populated for all 15 current members in 07-02
 - `publications_selected` deprecation is JSDoc-only — Zod shape unchanged; v1.2 removes it
-- `arxiv_id` on PersonSchema reuses shared `arxivId` validator — benefits automatically from pre-2007 regex
 - JSON Schemas regenerated in back-to-back commits (feat + chore) within phase — satisfies Pitfall 1 atomicity requirement
+
+### 07-02 Decisions (2026-04-19)
+
+- BAI regex widened to `/^[A-Z][A-Za-z-]*(\.[A-Za-z-]+)+\.\d+$/` — old regex rejected `S.J.Landau.1` and `Tomas.F.Chase.1`; latent bug from 07-01
+- `arxiv_id` field on PersonSchema REPLACED with `orcid_id` (reuses `orcidId` shared helper) — ORCID is portable and supported by both arXiv + InspireHEP as author-query key; arXiv author-page slugs unavailable for most group members. `PublicationSchema.arxiv` (paper IDs) unaffected.
+- Google Scholar `scholar_id` deferred to Phase 11 / v1.2 — no public API, useful as profile link only
+- DATA-09/10 partial: 1 member populated this cycle; remaining 13 are follow-up data commit
 
 ### Blockers / Concerns
 
-- DATA-09/10: Human action required in Phase 7 (Plan 07-02) — sync script cannot be end-to-end tested without real BAI IDs
+- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit before Phase 9 E2E test — not a code blocker)
+- No arXiv name-based fallback — skip members without `inspirehep_id`, never use `au:name` search — Pitfall 3 (updated: `orcid_id` is the secondary query key, not `arxiv_id`)
 - CI-08: Check if `main` has branch protection rules before Phase 10 — may need `github-actions[bot]` bypass
 
 ## Session Continuity
 
 Last session: 2026-04-19
-Stopped at: Completed 07-01-PLAN.md — schema extension shipped; pnpm validate-content fails only on display_name_normalized (expected handoff to 07-02)
+Stopped at: Completed 07-02-PLAN.md — Phase 7 complete; validate-content green; PersonSchema locked; ready for Phase 8
 Resume file: None
