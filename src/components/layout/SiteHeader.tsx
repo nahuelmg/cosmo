@@ -23,16 +23,15 @@ import {MobileNav} from './MobileNav';
  *   - Sticky, z-30, surface background with `shadow-sm` — visual separation
  *     without a border. `shadow-sm` is the one allowed separator under the
  *     shadow ceiling.
- *   - Height 56px mirrors the `--header-height` token Plan 01 added, so the
- *     SkipLink's `scroll-margin-top: var(--header-height)` aligns perfectly.
+ *   - Height 96px mirrors the `--header-height` token, so the SkipLink's
+ *     `scroll-margin-top: var(--header-height)` aligns perfectly.
  *   - `max-w-5xl` container width keeps the header span consistent with page
  *     content; individual pages may use narrower widths.
  *
  * Logo sizing:
- *   - `h-8 w-auto` renders the logo at 32px tall inside the 56px header —
- *     sensible visual weight for a compact-density bar.
- *   - `width={40} height={40}` match the PNG's intrinsic ~1:1 aspect;
- *     next/image downscales for the rendered 32px box.
+ *   - `h-16 w-auto` renders the logo at 64px tall inside the 96px header.
+ *   - `width={80} height={80}` match the PNG's intrinsic ~1:1 aspect;
+ *     next/image downscales for the rendered 64px box.
  *   - `loading="eager" fetchPriority="high"` because the logo is in the
  *     initial viewport on every route; no `preload` because the logo is NOT
  *     the LCP element on any page — preloading it would delay the true LCP
@@ -55,7 +54,7 @@ export function SiteHeader() {
         'sticky top-0 z-30',
         'bg-surface',
         'shadow-sm',
-        'h-14',
+        'h-24',
       ].join(' ')}
     >
       <div
@@ -78,11 +77,11 @@ export function SiteHeader() {
           <Image
             src="/logo_cosmo.png"
             alt={siteConfig.groupName}
-            width={40}
-            height={40}
+            width={80}
+            height={80}
             loading="eager"
             fetchPriority="high"
-            className="h-8 w-auto"
+            className="h-16 w-auto"
           />
         </Link>
 
@@ -92,7 +91,7 @@ export function SiteHeader() {
           className="hidden md:flex items-center gap-5 ml-2"
         >
           {NAV_ITEMS.map((item) => (
-            <NavLink key={item.href} href={item.href} className="text-sm">
+            <NavLink key={item.href} href={item.href} className="text-base lg:text-lg">
               {tNav(item.labelKey)}
             </NavLink>
           ))}

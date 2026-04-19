@@ -93,7 +93,7 @@ function LocaleToggleInner({className = ''}: LocaleToggleProps) {
           : `Switch to ${otherLocale.toUpperCase()}`
       }
       className={[
-        'text-sm font-semibold tracking-wide',
+        'text-base lg:text-lg font-semibold tracking-wide',
         'text-ink-muted hover:text-ink',
         // Animate both color and transform in one shorthand so the active:
         // press-scale doesn't clobber the hover:text color transition.
