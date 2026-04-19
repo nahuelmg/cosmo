@@ -185,7 +185,7 @@ Plans:
 | 4. Core Pages | v1.0 | 8/8 | Complete | 2026-04-18 |
 | 5. SEO & Discoverability | v1.0 | 5/5 | Complete | 2026-04-18 |
 | 6. Polish (A11y & Perf) | v1.0 | 4/4 | Complete | 2026-04-18 |
-| 7. Schema Extension | v1.1 | 0/2 | Not started | - |
+| 7. Schema Extension | v1.1 | 2/2 | Complete | 2026-04-18 |
 | 8. Accessor | v1.1 | 0/1 | Not started | - |
 | 9. Sync Script | v1.1 | 0/3 | Not started | - |
 | 10. CI Wiring | v1.1 | 0/1 | Not started | - |

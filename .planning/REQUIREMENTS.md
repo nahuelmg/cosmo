@@ -19,17 +19,17 @@
 
 ### Schema Extension (atomic prerequisite)
 
-- [ ] **SCHEMA-01**: `PublicationSchema` extended with `source: z.enum(["manual", "inspirehep", "arxiv"]).default("manual")` — existing v1.0 entries parse without modification
-- [ ] **SCHEMA-02**: `PublicationSchema` arxiv ID regex accepts both modern (`2306.12345`) and pre-2007 (`gr-qc/9209007`) formats
-- [ ] **SCHEMA-03**: `PersonSchema` extended with top-level optional `arxiv_id?: string` and `inspirehep_id?: string` (BAI format, e.g. `E.Calzetta.1`)
-- [ ] **SCHEMA-04**: `PersonSchema.publications_selected` marked `@deprecated` via JSDoc; field still tolerated; sync script logs warning if populated
-- [ ] **SCHEMA-05**: `content/publications.schema.json` + `content/people.schema.json` regenerated from Zod (`pnpm generate-schemas`) in the same commit as schema changes
-- [ ] **SCHEMA-06**: `pnpm check-content` passes on existing v1.0 JSON content with no data changes
+- [x] **SCHEMA-01**: `PublicationSchema` extended with `source: z.enum(["manual", "inspirehep", "arxiv"]).default("manual")` — existing v1.0 entries parse without modification
+- [x] **SCHEMA-02**: `PublicationSchema` arxiv ID regex accepts both modern (`2306.12345`) and pre-2007 (`gr-qc/9209007`) formats
+- [x] **SCHEMA-03**: `PersonSchema` extended with top-level optional `orcid_id?: string` (portable author identifier; superseded `arxiv_id` after real-data check — arXiv author-page slugs unavailable) and `inspirehep_id?: string` (BAI format, widened regex accepts multi-segment names like `Tomas.F.Chase.1`)
+- [x] **SCHEMA-04**: `PersonSchema.publications_selected` marked `@deprecated` via JSDoc; field still tolerated; sync script logs warning if populated
+- [x] **SCHEMA-05**: `content/publications.schema.json` + `content/people.schema.json` regenerated from Zod (`pnpm generate-schemas`) in the same commit as schema changes
+- [x] **SCHEMA-06**: `pnpm validate-content` passes on existing v1.0 JSON content with no data changes
 
 ### Content Data (human dependency)
 
-- [ ] **DATA-09**: `content/people.json` populated with `inspirehep_id` (BAI format) for every current PI, postdoc, and PhD where the person has an InspireHEP profile
-- [ ] **DATA-10**: `content/people.json` populated with `arxiv_id` (claimed arXiv author identifier) for every current member who has claimed one on arxiv.org
+- [~] **DATA-09**: `content/people.json` populated with `inspirehep_id` (BAI format) — partial: 1 of 13 current members (tomas-ferreira-chase); remaining 12 tracked in 07-02-SUMMARY as follow-up data commit before Phase 9 E2E test
+- [~] **DATA-10**: `content/people.json` populated with `orcid_id` (reconceived from arxiv_id) — partial: 1 of 13; same follow-up schedule as DATA-09
 
 ### Accessor (helper library)
 
@@ -139,14 +139,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | Phase 7 | Pending |
-| SCHEMA-02 | Phase 7 | Pending |
-| SCHEMA-03 | Phase 7 | Pending |
-| SCHEMA-04 | Phase 7 | Pending |
-| SCHEMA-05 | Phase 7 | Pending |
-| SCHEMA-06 | Phase 7 | Pending |
-| DATA-09 | Phase 7 | Pending |
-| DATA-10 | Phase 7 | Pending |
+| SCHEMA-01 | Phase 7 | Complete |
+| SCHEMA-02 | Phase 7 | Complete |
+| SCHEMA-03 | Phase 7 | Complete |
+| SCHEMA-04 | Phase 7 | Complete |
+| SCHEMA-05 | Phase 7 | Complete |
+| SCHEMA-06 | Phase 7 | Complete |
+| DATA-09 | Phase 7 | Partial (1/13; follow-up data commit before Phase 9 E2E) |
+| DATA-10 | Phase 7 | Partial (1/13; reconceived as orcid_id coverage) |
 | ACC-01 | Phase 8 | Pending |
 | ACC-02 | Phase 8 | Pending |
 | ACC-03 | Phase 8 | Pending |

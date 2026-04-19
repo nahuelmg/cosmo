@@ -37,6 +37,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - NAV-04 mobile drawer 375px live-deploy check (structural done)
 - `MobileNav.tsx:87` `focus:outline-none` flag (low risk)
 - `SiteFooter.tsx:1` unused `next/link` import (flip on next edit)
+- Hero "Grupo de Cosmología" title loses contrast on JWST starfield backgrounds — needs stronger text-shadow or dedicated gradient scrim (reported 2026-04-19)
 
 ## Accumulated Context
 
