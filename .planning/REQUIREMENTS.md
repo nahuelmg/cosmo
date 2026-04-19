@@ -41,21 +41,21 @@
 
 ### Sync Script
 
-- [ ] **SYNC-01**: `scripts/sync-publications.ts` runnable via `pnpm exec tsx scripts/sync-publications.ts` and `pnpm sync-publications`
-- [ ] **SYNC-02**: `fast-xml-parser@^5.7.1` added as devDependency with `isArray` callback for arXiv Atom `entry` / `author` / `link` / `category` nodes
-- [ ] **SYNC-03**: Script fetches InspireHEP literature per `inspirehep_id` with concurrency-limited queue (max 5 parallel), 2s inter-batch pause, exponential backoff on HTTP 429
-- [ ] **SYNC-04**: Script reads `hits.total` from first InspireHEP response and paginates until complete (or configured cap); logs "fetched X of Y total" per author
-- [ ] **SYNC-05**: Script fetches arXiv for `arxiv_id`-populated members only; skips and logs warning when `arxiv_id` missing (never falls back to name-based `au:` search)
-- [ ] **SYNC-06**: Script validates `inspirehep_id` values match the BAI format at startup; exits with clear error on `INSPIRE-00...` numeric IDs
-- [ ] **SYNC-07**: Script extracts publication year from InspireHEP `publication_info[0].year` with fallback to `preprint_date` year; from arXiv `<published>` (version 1) date
-- [ ] **SYNC-08**: Script normalizes author strings with `.normalize("NFC")`; strips BibTeX markup from titles (curly braces, LaTeX escapes)
-- [ ] **SYNC-09**: Script performs intra-run dedup by arXiv ID within each source (prevents Planck/Euclid papers appearing once per co-authoring member)
-- [ ] **SYNC-10**: Script sorts publications deterministically (year desc, then arxiv ID alpha) before serialization
-- [ ] **SYNC-11**: Script validates the full result with `PublicationsSchema.safeParse()` in memory before writing; exits non-zero without writing on any failure
-- [ ] **SYNC-12**: Script writes `content/publications.json` with `_meta: { synced_at: ISO8601, status: "ok" }` block and 2-space indentation
-- [ ] **SYNC-13**: Script tags each entry with the appropriate `source: "inspirehep" | "arxiv"`; entries remain source-tagged (no cross-source dedup)
-- [ ] **SYNC-14**: Every request uses `AbortSignal.timeout(10_000)`; script exits non-zero and preserves last-good JSON if any upstream request fails
-- [ ] **SYNC-15**: Script emits a summary line "X added, Y removed, Z unchanged" suitable for GitHub Action step output
+- [x] **SYNC-01**: `scripts/sync-publications.ts` runnable via `pnpm exec tsx scripts/sync-publications.ts` and `pnpm sync-publications`
+- [x] **SYNC-02**: `fast-xml-parser@^5.7.1` added as devDependency with `isArray` callback for arXiv Atom `entry` / `author` / `link` / `category` nodes
+- [x] **SYNC-03**: Script fetches InspireHEP literature per `inspirehep_id` with concurrency-limited queue (max 5 parallel), 2s inter-batch pause, exponential backoff on HTTP 429
+- [x] **SYNC-04**: Script reads `hits.total` from first InspireHEP response and paginates until complete (or configured cap); logs "fetched X of Y total" per author
+- [x] **SYNC-05**: Script fetches arXiv for `arxiv_id`-populated members only; skips and logs warning when `arxiv_id` missing (never falls back to name-based `au:` search)
+- [x] **SYNC-06**: Script validates `inspirehep_id` values match the BAI format at startup; exits with clear error on `INSPIRE-00...` numeric IDs
+- [x] **SYNC-07**: Script extracts publication year from InspireHEP `publication_info[0].year` with fallback to `preprint_date` year; from arXiv `<published>` (version 1) date
+- [x] **SYNC-08**: Script normalizes author strings with `.normalize("NFC")`; strips BibTeX markup from titles (curly braces, LaTeX escapes)
+- [x] **SYNC-09**: Script performs intra-run dedup by arXiv ID within each source (prevents Planck/Euclid papers appearing once per co-authoring member)
+- [x] **SYNC-10**: Script sorts publications deterministically (year desc, then arxiv ID alpha) before serialization
+- [x] **SYNC-11**: Script validates the full result with `PublicationsSchema.safeParse()` in memory before writing; exits non-zero without writing on any failure
+- [x] **SYNC-12**: Script writes `content/publications.json` with `_meta: { synced_at: ISO8601, status: "ok" }` block and 2-space indentation
+- [x] **SYNC-13**: Script tags each entry with the appropriate `source: "inspirehep" | "arxiv"`; entries remain source-tagged (no cross-source dedup)
+- [x] **SYNC-14**: Every request uses `AbortSignal.timeout(10_000)`; script exits non-zero and preserves last-good JSON if any upstream request fails
+- [x] **SYNC-15**: Script emits a summary line "X added, Y removed, Z unchanged" suitable for GitHub Action step output
 
 ### GitHub Action (CI automation)
 
@@ -152,21 +152,21 @@
 | ACC-03 | Phase 8 | Complete |
 | ACC-04 | Phase 8 | Complete |
 | ACC-05 | Phase 8 | Complete |
-| SYNC-01 | Phase 9 | Pending |
-| SYNC-02 | Phase 9 | Pending |
-| SYNC-03 | Phase 9 | Pending |
-| SYNC-04 | Phase 9 | Pending |
-| SYNC-05 | Phase 9 | Pending |
-| SYNC-06 | Phase 9 | Pending |
-| SYNC-07 | Phase 9 | Pending |
-| SYNC-08 | Phase 9 | Pending |
-| SYNC-09 | Phase 9 | Pending |
-| SYNC-10 | Phase 9 | Pending |
-| SYNC-11 | Phase 9 | Pending |
-| SYNC-12 | Phase 9 | Pending |
-| SYNC-13 | Phase 9 | Pending |
-| SYNC-14 | Phase 9 | Pending |
-| SYNC-15 | Phase 9 | Pending |
+| SYNC-01 | Phase 9 | Complete |
+| SYNC-02 | Phase 9 | Complete |
+| SYNC-03 | Phase 9 | Complete |
+| SYNC-04 | Phase 9 | Complete |
+| SYNC-05 | Phase 9 | Complete |
+| SYNC-06 | Phase 9 | Complete |
+| SYNC-07 | Phase 9 | Complete |
+| SYNC-08 | Phase 9 | Complete |
+| SYNC-09 | Phase 9 | Complete |
+| SYNC-10 | Phase 9 | Complete |
+| SYNC-11 | Phase 9 | Complete |
+| SYNC-12 | Phase 9 | Complete |
+| SYNC-13 | Phase 9 | Complete |
+| SYNC-14 | Phase 9 | Complete |
+| SYNC-15 | Phase 9 | Complete |
 | CI-01 | Phase 10 | Pending |
 | CI-02 | Phase 10 | Pending |
 | CI-03 | Phase 10 | Pending |

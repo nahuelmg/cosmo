@@ -119,9 +119,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Scaffold `scripts/sync-publications.ts`: `fast-xml-parser@^5.7.1` devDependency + `sync-publications` script, `node:util parseArgs` CLI (dry-run / member / no-arxiv / no-inspire / verbose), startup BAI-format validation, `runBatched` (max 5 concurrent + 2s batch pause), `fetchWithRetry` (429 exp-backoff, `AbortSignal.timeout(10_000)`), InspireHEP + arXiv-atom2 fetch primitives, `isArray` jpath Set on `feed.entry` / `feed.entry.author` / `feed.entry.link` / `feed.entry.category`
-- [ ] 09-02-PLAN.md — Extraction + merge layer: `inspireHitToPublication` (year from `publication_info[0].year` / `preprint_date` fallback, NFC author/title/abstract, BibTeX strip, DOI preference, `source: "inspirehep"`), `arxivEntryToPublication` (CSV author split, version-suffix strip, `source: "arxiv"`), `dedupByArxivId` (intra-source), `readManualEntries` pass-through, `mergePublications` deterministic sort (year desc → arXiv desc via `localeCompare` → no-arxiv last); wire `main()` per-member fetch→extract→dedup→merge with stdout progress + stderr warnings
-- [ ] 09-03-PLAN.md — Introduce `PublicationsFileSchema` wrapping existing `PublicationsSchema`; update `src/content/accessors/publications.ts` (defensive bridge → clean `PublicationsFileSchema.parse` after first sync) + `scripts/validate-content.mjs` to the wrapped shape; regenerate JSON Schemas; wire `_meta` block (synced_at ISO, sources[], counts{inspirehep,arxiv,manual}, warnings[]), `safeParse` write-gate, `--dry-run` / `--member` output branching to `scripts/tmp/sync-<slug>.json`, SYNC-15 summary log (`N publications (X added, Y removed, Z unchanged, W warnings)`); local E2E smoke against real `tomas-ferreira-chase` data + idempotence diff check
+- [x] 09-01-PLAN.md — Scaffold `scripts/sync-publications.ts`: `fast-xml-parser@^5.7.1` devDependency + `sync-publications` script, `node:util parseArgs` CLI (dry-run / member / no-arxiv / no-inspire / verbose), startup BAI-format validation, `runBatched` (max 5 concurrent + 2s batch pause), `fetchWithRetry` (429 exp-backoff, `AbortSignal.timeout(10_000)`), InspireHEP + arXiv-atom2 fetch primitives, `isArray` jpath Set on `feed.entry` / `feed.entry.author` / `feed.entry.link` / `feed.entry.category`
+- [x] 09-02-PLAN.md — Extraction + merge layer: `inspireHitToPublication` (year from `publication_info[0].year` / `preprint_date` fallback, NFC author/title/abstract, BibTeX strip, DOI preference, `source: "inspirehep"`), `arxivEntryToPublication` (CSV author split, version-suffix strip, `source: "arxiv"`), `dedupByArxivId` (intra-source), `readManualEntries` pass-through, `mergePublications` deterministic sort (year desc → arXiv desc via `localeCompare` → no-arxiv last); wire `main()` per-member fetch→extract→dedup→merge with stdout progress + stderr warnings
+- [x] 09-03-PLAN.md — Introduce `PublicationsFileSchema` wrapping existing `PublicationsSchema`; update `src/content/accessors/publications.ts` (defensive bridge → clean `PublicationsFileSchema.parse` after first sync) + `scripts/validate-content.mjs` to the wrapped shape; regenerate JSON Schemas; wire `_meta` block (synced_at ISO, sources[], counts{inspirehep,arxiv,manual}, warnings[]), `safeParse` write-gate, `--dry-run` / `--member` output branching to `scripts/tmp/sync-<slug>.json`, SYNC-15 summary log (`N publications (X added, Y removed, Z unchanged, W warnings)`); local E2E smoke against real `tomas-ferreira-chase` data + idempotence diff check
 
 ---
 
@@ -187,6 +187,6 @@ Plans:
 | 6. Polish (A11y & Perf) | v1.0 | 4/4 | Complete | 2026-04-18 |
 | 7. Schema Extension | v1.1 | 2/2 | Complete | 2026-04-18 |
 | 8. Accessor | v1.1 | 1/1 | Complete | 2026-04-19 |
-| 9. Sync Script | v1.1 | 0/3 | Not started | - |
+| 9. Sync Script | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 10. CI Wiring | v1.1 | 0/1 | Not started | - |
 | 11. Display Layer | v1.1 | 0/3 | Not started | - |
