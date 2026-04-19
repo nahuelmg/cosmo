@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 11 of 11 (Display Layer) — In progress
-Plan: 11-02 complete (/publications page rewire); 11-03 complete or in progress (Wave 2, parallel)
-Status: Phase 11 Wave 2 — 11-02 done (publications page: filter, staleness, footnote, author highlighting); 11-03 status per parallel execution
-Last activity: 2026-04-19 — Completed 11-02-PLAN.md (publications page filter + staleness + footnote)
+Phase: 11 of 11 (Display Layer) — COMPLETE
+Plan: 11-03 complete (profile publications section — final Wave 2 plan); all 3 plans done
+Status: Phase 11 COMPLETE — all plans shipped; pnpm build 45/45 routes, check-translations 0 drift, 65/65 tests passing
+Last activity: 2026-04-19 — Completed 11-03-PLAN.md (profile publications section + legacy selectedPubs removal)
 
-Progress: [█████████████░] Phase 11 in progress (Wave 2 of 3 plans done)
+Progress: [██████████████] Phase 11 complete — v1.1 Display Layer milestone DONE
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -126,14 +126,23 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - `makePub` test helper: spread override after base object (not inline literal) to avoid TS2783 duplicate-key error. Minor fix within Task 2 scope.
 - PublicationsYearGroup + PersonDetail call sites still use old PublicationEntry prop shape — 2 expected TypeScript errors (isolated, intentional; fixed in 11-02 + 11-03).
 
+### 11-03 Decisions (2026-04-19)
+
+- `publications_selected` render path stripped entirely from page.tsx and PersonDetail.tsx — `getPublicationById` import removed; `SelectedPub` interface removed; legacy ~42-line render block removed
+- PEOP-14 count subtitle intentionally absent — heading is `publications.title` alone; SC5 softened per 11-CONTEXT.md locked decision. Verifier must not treat absence of count as a gap.
+- Empty-state hide: `{memberPubs.length > 0 && <section>}` — section absent from DOM when empty; intentional during DATA-09/10 rollout (~13/14 members lack IDs)
+- `people.selectedPublications` i18n key preserved — v1.2 cleanup alongside Zod `publications_selected` field removal (RESEARCH Pitfall 5)
+- PEOP-17 `generateStaticParams` category filter unchanged — pi/postdoc/phd only, confirmed by grep and build route list
+- `buildMemberSurnameSet(getPeople())` passes all people unfiltered (past + current) — CONTEXT locked decision for group historical continuity
+
 ### Blockers / Concerns
 
-- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker for Phase 11 Display Layer)
-- Phase 11 entry point: start with 11-01 (shared publication entry component — source badge, preprint indicator, author list, author highlighting via `display_name_normalized`), then 11-02 (/publications page with filter + staleness), then 11-03 (/people/[slug] last-10-years section)
-- `_meta.synced_at` on disk now only advances on real publications change — safe for Phase 11 PUBS-09 "Actualizado el" to consume directly
+- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker; Phase 11 Display Layer is complete; profiles will show Publications section automatically when IDs are added)
+- v1.2 cleanup scheduled: Zod `publications_selected` field removal + `people.selectedPublications` i18n key deletion
+- `_meta.synced_at` on disk only advances on real publications change — safe for PUBS-09 "Actualizado el" consumption on /publications page
 
 ## Session Continuity
 
-Last session: 2026-04-19T20:10:00Z
-Stopped at: Completed 11-02-PLAN.md — /publications page rewired: SourceFilter + PublicationsClientShell client island, staleness line from _meta.synced_at, footnote, memberSurnameSet author highlighting. pnpm build 45/45 SSG, pnpm check-translations 0.
+Last session: 2026-04-19T19:17Z
+Stopped at: Completed 11-03-PLAN.md — profile publications section (getPublicationsByAuthor + deriveNameVariants + shared PublicationEntry), legacy selectedPubs removed (~66 lines), pnpm build 45/45, check-translations 0 drift, 65 tests passing. Phase 11 COMPLETE.
 Resume file: None
