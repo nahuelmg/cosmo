@@ -48,3 +48,6 @@ Thumbs.db
 
 # dev tooling — design reference, not deployed
 ui-ux-pro-max/
+
+# sync-publications --member output sink (per-member dry files, never committed)
+scripts/tmp/
