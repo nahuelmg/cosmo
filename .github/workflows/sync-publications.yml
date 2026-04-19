@@ -52,3 +52,19 @@ jobs:
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Configure git identity
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit changes
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git add content/publications.json
+          git commit -m "chore(publications): sync weekly feed [skip ci]"
+
+      - name: Push to main
+        if: steps.diff.outputs.changed == 'true'
+        run: git push origin main
