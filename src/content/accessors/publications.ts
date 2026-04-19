@@ -18,14 +18,14 @@
  */
 
 import rawFile from "../../../content/publications.json";
-import { PublicationsFileSchema, type Publication } from "../schemas/publications.schema";
+import { PublicationsFileSchema, type Publication, type PublicationsMeta } from "../schemas/publications.schema";
 import { normalizeName } from "../schemas/shared";
 
 // Parse once at module load — throws at import time if invalid.
 // content/publications.json has the wrapped { _meta, publications } shape produced
 // by scripts/sync-publications.ts. Any invalid data causes an import-time throw,
 // surfacing content errors at build time rather than runtime.
-const { publications } = PublicationsFileSchema.parse(rawFile);
+const { publications, _meta } = PublicationsFileSchema.parse(rawFile);
 
 // ---------------------------------------------------------------------------
 // Accessor functions
@@ -114,6 +114,17 @@ export function getAllYears(): number[] {
  * // full archive match for author highlighting on /publications
  * getPublicationsByAuthor([person.display_name_normalized]);
  */
+/**
+ * Returns the `_meta` block of content/publications.json (synced_at, sources,
+ * counts, warnings). Written by scripts/sync-publications.ts. Page components
+ * render `_meta.synced_at` as the "Actualizado el [date]" staleness line.
+ *
+ * Requirements: PUBS-09.
+ */
+export function getPublicationsMeta(): PublicationsMeta {
+  return _meta;
+}
+
 export function getPublicationsByAuthor(
   nameVariants: string[],
   options?: { lastNYears?: number },

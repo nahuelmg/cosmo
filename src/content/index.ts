@@ -27,7 +27,7 @@ export * from "./accessors/outreach";
 // ---------------------------------------------------------------------------
 
 export type { Person, People } from "./schemas/people.schema";
-export type { Publication, Publications } from "./schemas/publications.schema";
+export type { Publication, Publications, PublicationsMeta } from "./schemas/publications.schema";
 export type { ResearchArea, Research } from "./schemas/research.schema";
 export type {
   JournalClubSession,
