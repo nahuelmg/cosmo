@@ -70,28 +70,28 @@
 
 ### Publications Page (/publications)
 
-- [ ] **PUBS-05**: `/publications` renders the synced archive grouped by year, newest first (existing v1.0 UI preserved; data source flipped from hand-curated to synced)
-- [ ] **PUBS-06**: Each entry renders a source badge ("InspireHEP" / "arXiv" / "Manual") — small pill, text-xs, accessible
-- [ ] **PUBS-07**: Source filter toggle ("Todos / InspireHEP / arXiv / Manual") filters the page in-browser — no URL state persistence (PUBS-04 still deferred)
-- [ ] **PUBS-08**: Preprint vs published indicator per entry (inferred from presence of `publication_info.journal_title`)
-- [ ] **PUBS-09**: "Actualizado el [date]" staleness indicator rendered from `_meta.synced_at`
-- [ ] **PUBS-10**: Footnote (bilingual) explains two-source design and why duplicates may appear for the same paper
-- [ ] **PUBS-11**: Author list formatted as: full list if ≤5 authors; first 3 + "et al." if >5
-- [ ] **PUBS-12**: Group member author names rendered in bold via `display_name_normalized` matching (differentiator: author highlighting)
+- [x] **PUBS-05**: `/publications` renders the synced archive grouped by year, newest first (existing v1.0 UI preserved; data source flipped from hand-curated to synced)
+- [x] **PUBS-06**: Each entry renders a source badge ("InspireHEP" / "arXiv" / "Manual") — small pill, text-xs, accessible
+- [x] **PUBS-07**: Source filter toggle ("Todos / InspireHEP / arXiv / Manual") filters the page in-browser — no URL state persistence (PUBS-04 still deferred)
+- [x] **PUBS-08**: Preprint vs published indicator per entry (semantic signal `pub.journal === "Preprint"`; consistent with sync-script fallback)
+- [x] **PUBS-09**: "Actualizado el [date]" staleness indicator rendered from `_meta.synced_at` with locale-aware `Intl.DateTimeFormat`
+- [x] **PUBS-10**: Footnote (bilingual) explains two-source design and why duplicates may appear for the same paper
+- [x] **PUBS-11**: Author list formatted as: full list if ≤5 authors; first 3 + "et al." if >5 — with member-visible invariant (extend head-through-member when a highlighted author falls past position 3)
+- [x] **PUBS-12**: Group member author names rendered in bold (plain font-weight 700, no color/underline) via surname-match against `display_name_normalized` last word
 
 ### Person Profile Page (/people/[slug])
 
-- [ ] **PEOP-13**: `/people/[slug]` renders a new "Publications" section listing the person's last-10-years output via `getPublicationsByAuthor(nameVariants, { lastNYears: 10 })`
-- [ ] **PEOP-14**: Profile publication subtitle shows count ("N publicaciones en los últimos 10 años" / "N publications in the last 10 years")
-- [ ] **PEOP-15**: Profile publication entries render the same source badge as `/publications`
-- [ ] **PEOP-16**: Profile publication entries render preprint vs published indicator
-- [ ] **PEOP-17**: Profile filters exclude past members (v1.0 PEOP-05 unchanged — no profile pages for past members)
-- [ ] **PEOP-18**: v1.0 manual "selected publications" list (driven by deprecated `publications_selected`) REPLACED by the synced last-10-years list — no longer rendered
+- [x] **PEOP-13**: `/people/[slug]` renders a new "Publications" section listing the person's last-10-years output via `getPublicationsByAuthor(deriveNameVariants(person), { lastNYears: 10 })`; section hidden entirely when list is empty (intentional during DATA-09/10 rollout)
+- [~] **PEOP-14**: Count subtitle DROPPED per locked 11-CONTEXT decision (softens SC5). Heading is bare `Publicaciones` / `Publications` — the list's own length does the communication. Softening recorded in 11-CONTEXT.md, 11-03-PLAN.md, 11-03-SUMMARY.md, and 11-VERIFICATION.md (not treated as a gap)
+- [x] **PEOP-15**: Profile publication entries render the same source badge as `/publications` — shared `PublicationEntry.tsx` component verbatim
+- [x] **PEOP-16**: Profile publication entries render preprint vs published indicator — shared `PublicationEntry.tsx` component verbatim
+- [x] **PEOP-17**: `generateStaticParams` category filter (pi / postdoc / phd) preserved — no profile pages for past members
+- [x] **PEOP-18**: v1.0 manual "selected publications" list (driven by deprecated `publications_selected`) REPLACED by the synced last-10-years list — `getPublicationById` import removed, `SelectedPub` interface removed, legacy ~66-line render block stripped
 
 ### Bilingual (i18n drift prevention)
 
-- [ ] **I18N-08**: All new UI strings present in both `messages/es.json` and `messages/en.json`: source badge labels, status indicators, filter labels, "last updated" format, two-source footnote, profile publications section heading, count subtitle
-- [ ] **I18N-09**: `pnpm check-translations` passes with no key drift
+- [x] **I18N-08**: All new UI strings present in both `messages/es.json` and `messages/en.json`: source badge labels, preprint/published indicators, filter labels (`Todos`/`All` + 3 sources), `updatedAt` ICU format, two-source footnote (count subtitle dropped per locked 11-CONTEXT decision)
+- [x] **I18N-09**: `pnpm check-translations` passes with zero key drift (confirmed in 11-03-SUMMARY.md)
 
 ### Documentation
 
@@ -175,22 +175,22 @@
 | CI-06 | Phase 10 | Complete |
 | CI-07 | Phase 10 | Complete |
 | CI-08 | Phase 10 | Complete |
-| PUBS-05 | Phase 11 | Pending |
-| PUBS-06 | Phase 11 | Pending |
-| PUBS-07 | Phase 11 | Pending |
-| PUBS-08 | Phase 11 | Pending |
-| PUBS-09 | Phase 11 | Pending |
-| PUBS-10 | Phase 11 | Pending |
-| PUBS-11 | Phase 11 | Pending |
-| PUBS-12 | Phase 11 | Pending |
-| PEOP-13 | Phase 11 | Pending |
-| PEOP-14 | Phase 11 | Pending |
-| PEOP-15 | Phase 11 | Pending |
-| PEOP-16 | Phase 11 | Pending |
-| PEOP-17 | Phase 11 | Pending |
-| PEOP-18 | Phase 11 | Pending |
-| I18N-08 | Phase 11 | Pending |
-| I18N-09 | Phase 11 | Pending |
+| PUBS-05 | Phase 11 | Complete |
+| PUBS-06 | Phase 11 | Complete |
+| PUBS-07 | Phase 11 | Complete |
+| PUBS-08 | Phase 11 | Complete |
+| PUBS-09 | Phase 11 | Complete |
+| PUBS-10 | Phase 11 | Complete |
+| PUBS-11 | Phase 11 | Complete |
+| PUBS-12 | Phase 11 | Complete |
+| PEOP-13 | Phase 11 | Complete |
+| PEOP-14 | Phase 11 | Softened (count subtitle dropped per 11-CONTEXT; not a gap) |
+| PEOP-15 | Phase 11 | Complete |
+| PEOP-16 | Phase 11 | Complete |
+| PEOP-17 | Phase 11 | Complete |
+| PEOP-18 | Phase 11 | Complete |
+| I18N-08 | Phase 11 | Complete |
+| I18N-09 | Phase 11 | Complete |
 | DOC-01 | Phase 11 | Pending |
 | DOC-02 | Phase 11 | Pending |
 

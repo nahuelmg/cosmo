@@ -167,9 +167,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 11-01: Shared publication entry component — source badge pill, preprint/published indicator, author list formatting (≤5 full / >5 et al.), author highlighting via `display_name_normalized` matching; add all new i18n keys to `messages/es.json` + `messages/en.json`
-- [ ] 11-02: `/publications` page updates — flip data source to synced JSON, wire source filter toggle, render staleness indicator from `_meta.synced_at`, add bilingual two-source footnote; `pnpm check-translations` passes
-- [ ] 11-03: `/people/[slug]` publications section — call `getPublicationsByAuthor(nameVariants, { lastNYears: 10 })`, render count subtitle, reuse shared entry component, remove `publications_selected` render path; verify PEOP-17 (past members unchanged); final `pnpm build` + `pnpm check-translations` verification
+- [x] 11-01: Shared publication entry component — source badge pill, preprint/published indicator, author list formatting (≤5 full / >5 et al.), author highlighting via surname-match (last word of `display_name_normalized`); add all new i18n keys to `messages/es.json` + `messages/en.json`
+- [x] 11-02: `/publications` page updates — flip data source to synced JSON, wire source filter toggle, render staleness indicator from `_meta.synced_at`, add bilingual two-source footnote; `pnpm check-translations` passes
+- [x] 11-03: `/people/[slug]` publications section — call `getPublicationsByAuthor(deriveNameVariants(person), { lastNYears: 10 })`, reuse shared entry component, remove `publications_selected` render path; PEOP-17 `generateStaticParams` pi/postdoc/phd filter preserved; final `pnpm build` + `pnpm check-translations` verification. Count subtitle DROPPED per locked 11-CONTEXT decision (softens SC5 / PEOP-14)
 
 ---
 
@@ -189,4 +189,4 @@ Plans:
 | 8. Accessor | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 9. Sync Script | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 10. CI Wiring | v1.1 | 1/1 | Complete | 2026-04-19 |
-| 11. Display Layer | v1.1 | 0/3 | Not started | - |
+| 11. Display Layer | v1.1 | 3/3 | Complete | 2026-04-19 |

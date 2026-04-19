@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 11 — Display Layer
+**Current focus:** v1.1 milestone — all phases complete; ready for milestone audit
 
 ## Current Position
 
-Phase: 11 of 11 (Display Layer) — COMPLETE
-Plan: 11-03 complete (profile publications section — final Wave 2 plan); all 3 plans done
-Status: Phase 11 COMPLETE — all plans shipped; pnpm build 45/45 routes, check-translations 0 drift, 65/65 tests passing
-Last activity: 2026-04-19 — Completed 11-03-PLAN.md (profile publications section + legacy selectedPubs removal)
+Phase: 11 of 11 (Display Layer) — VERIFIED ✓
+Plan: All 3 plans shipped (11-01, 11-02, 11-03)
+Status: v1.1 milestone code-complete — verifier PASSED 7/7 must-haves; pnpm build 45/45 routes, check-translations 0 drift, 65/65 tests passing
+Last activity: 2026-04-19 — Phase 11 verification PASSED; ready for /gsd:audit-milestone
 
-Progress: [██████████████] Phase 11 complete — v1.1 Display Layer milestone DONE
+Progress: [██████████████] v1.1 milestone complete — ready for audit
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -143,6 +143,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T19:17Z
-Stopped at: Completed 11-03-PLAN.md — profile publications section (getPublicationsByAuthor + deriveNameVariants + shared PublicationEntry), legacy selectedPubs removed (~66 lines), pnpm build 45/45, check-translations 0 drift, 65 tests passing. Phase 11 COMPLETE.
+Last session: 2026-04-19T19:30Z
+Stopped at: Phase 11 VERIFIED 7/7 must-haves (`.planning/phases/11-display-layer/11-VERIFICATION.md`); ROADMAP + STATE + REQUIREMENTS updated; v1.1 milestone code-complete. Next: `/gsd:audit-milestone` to verify cross-phase integration before `/gsd:complete-milestone v1.1`.
 Resume file: None
