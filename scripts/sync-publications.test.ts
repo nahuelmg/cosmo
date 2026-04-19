@@ -144,6 +144,12 @@ describe("inspireHitToPublication", () => {
     expect(pub.source).toBe("inspirehep");
   });
 
+  it("returns 'Preprint' when publication_info[0] exists but all fields are null", () => {
+    const hit = makeInspireHit({ publication_info: [{}] });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.journal).toBe("Preprint");
+  });
+
   it("prefers non-arXiv title source", () => {
     const hit = makeInspireHit({
       titles: [

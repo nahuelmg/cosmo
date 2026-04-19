@@ -343,11 +343,12 @@ export function inspireHitToPublication(hit: InspireHit): Publication {
   const year: number =
     pi?.year ?? (Number.isFinite(parsedPreprintYear) ? parsedPreprintYear : new Date().getFullYear());
 
-  const journal: string = pi
-    ? [pi.journal_title, pi.journal_volume, pi.year ? `(${pi.year})` : "", pi.artid]
-        .filter(Boolean)
-        .join(" ")
-    : "Preprint";
+  const journal: string =
+    (pi
+      ? [pi.journal_title, pi.journal_volume, pi.year ? `(${pi.year})` : "", pi.artid]
+          .filter(Boolean)
+          .join(" ")
+      : "") || "Preprint";
 
   // DOI preference: material==="publication" over "bibmatch"
   const doi =
