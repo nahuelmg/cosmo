@@ -18,21 +18,14 @@
  */
 
 import rawFile from "../../../content/publications.json";
-import {
-  PublicationsFileSchema,
-  PublicationsSchema,
-  type Publication,
-} from "../schemas/publications.schema";
+import { PublicationsFileSchema, type Publication } from "../schemas/publications.schema";
 import { normalizeName } from "../schemas/shared";
 
 // Parse once at module load — throws at import time if invalid.
-// Defensive bridge: try wrapped shape (v1.1 post-sync) first, fall back to bare
-// array (v1.0 manual) so pnpm build works before the first sync script run.
-// Bridge removed in v1.2 once the wrapped shape is the permanent format.
-const parsedFile = PublicationsFileSchema.safeParse(rawFile);
-const publications: Publication[] = parsedFile.success
-  ? parsedFile.data.publications
-  : PublicationsSchema.parse(rawFile); // fallback to v1.0 bare array
+// content/publications.json has the wrapped { _meta, publications } shape produced
+// by scripts/sync-publications.ts. Any invalid data causes an import-time throw,
+// surfacing content errors at build time rather than runtime.
+const { publications } = PublicationsFileSchema.parse(rawFile);
 
 // ---------------------------------------------------------------------------
 // Accessor functions
