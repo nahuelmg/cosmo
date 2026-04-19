@@ -63,7 +63,16 @@
     "title": "Publicaciones",
     "arxiv": "arXiv",
     "doi": "DOI",
-    "preprint": "Preprint"
+    "preprint": "Preprint",
+    "published": "Publicado",
+    "filter": {
+      "all": "Todos",
+      "inspirehep": "InspireHEP",
+      "arxiv": "arXiv",
+      "manual": "Manual"
+    },
+    "updatedAt": "Actualizado el {date}",
+    "footnote": "Las publicaciones provienen de InspireHEP y arXiv. Un mismo trabajo puede aparecer duplicado si fue indexado por ambas fuentes."
   },
   "journalClub": {
     "title": "Journal Club",

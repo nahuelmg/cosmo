@@ -63,7 +63,16 @@
     "title": "Publications",
     "arxiv": "arXiv",
     "doi": "DOI",
-    "preprint": "Preprint"
+    "preprint": "Preprint",
+    "published": "Published",
+    "filter": {
+      "all": "All",
+      "inspirehep": "InspireHEP",
+      "arxiv": "arXiv",
+      "manual": "Manual"
+    },
+    "updatedAt": "Last updated {date}",
+    "footnote": "Publications are sourced from InspireHEP and arXiv. The same paper may appear twice if indexed by both sources."
   },
   "journalClub": {
     "title": "Journal Club",
