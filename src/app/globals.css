@@ -33,7 +33,8 @@
   --text-xl:   1.375rem;
   --text-2xl:  1.625rem;
   --text-3xl:  1.875rem;
-  --text-4xl:  2rem;
+  --text-4xl:  2.25rem; /* 36px — inner page H1s */
+  --text-5xl:  2.5rem;  /* 40px — hero H1 (HeroCarousel only) */
 
   --font-weight-normal:   400;
   --font-weight-semibold: 600;
