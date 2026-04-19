@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 shipped. Planning next milestone — run `/gsd:new-milestone` to scope v1.2.
+**Current focus:** v1.2 Aesthetic Polish — ui-ux-pro-max consultation + application across typography, buttons, spacing, photo sizing, micro-interactions. Preserves warm-academic direction.
 
 ## Current Position
 
-Phase: — (no active milestone)
+Phase: Not started (defining requirements)
 Plan: —
-Status: v1.1 archived + tagged. Ready to plan next milestone.
-Last activity: 2026-04-19 — v1.1 milestone complete, tag pushed.
+Status: Milestone v1.2 started — running ui-ux-pro-max research before requirements.
+Last activity: 2026-04-19 — v1.2 Aesthetic Polish scope captured.
 
-Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12)
+Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 scoping in progress
 
 ## Shipped Milestones
 

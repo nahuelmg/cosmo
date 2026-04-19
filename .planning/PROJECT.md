@@ -8,11 +8,22 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
-## Current State: v1.1 Shipped — Planning next milestone
+## Current State: v1.1 Shipped — v1.2 Aesthetic Polish in planning
 
 **Latest shipped:** v1.1 arXiv + InspireHEP Publication Sync (2026-04-19) — auto-populated `/publications` + per-member last-10-years section via weekly GitHub Actions from InspireHEP (BAI) + arXiv (ORCID), with `jq` payload diff-guard preventing spurious commits and last-good preservation on upstream failure. 45 static routes preserved, 321 real publications from 9 current members, 10/10 cross-phase wiring verified.
 
-**Next milestone:** TBD — run `/gsd:new-milestone` to scope v1.2 (likely: remaining 4 member IDs + legacy cleanup of `publications_selected` Zod field, orphaned accessor exports, dead i18n key).
+## Current Milestone: v1.2 Aesthetic Polish
+
+**Goal:** Thorough aesthetic polish across the whole site using ui-ux-pro-max consultations, preserving the warm-academic direction from v1.0 while tightening the details that still feel rough.
+
+**Target areas:**
+- Typography rhythm & scale — recalibrate type scale, line-height, letter-spacing across headings, body, captions, metadata
+- Buttons & interactive elements — consistency pass on sizes, padding, hover/active/focus states (buttons, nav links, locale toggle, filter pills, carousel dots)
+- Spacing rhythm & layout density — vertical rhythm, section spacing, card padding, page margins across all 8 page types
+- Media sizing — specifically member photos on `/people` and `/people/[slug]` (currently read oversized); hero carousel and outreach/activity imagery reviewed in the same pass
+- Micro-interactions & polish — transitions, focus rings, hover treatments, loading/empty states (respecting "no flashy animations" constraint)
+
+**Design direction:** Keep the academic-journal aesthetic. No visual overhaul — polish the details, don't redesign.
 
 ## Requirements
 
