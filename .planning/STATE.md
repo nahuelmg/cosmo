@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 12 of 12 (Polish & Docs) — gap closure phase scoped
-Plan: 0/3 (12-01 trivia, 12-02 data backfill + sync purge, 12-03 maintainer docs)
-Status: v1.1 Phases 7–11 VERIFIED; audit returned `tech_debt`; Phase 12 closes DOC-01 + DOC-02 and extends DATA-09/10 coverage (1/14 → 9/14)
-Last activity: 2026-04-19 — /gsd:audit-milestone passed with tech_debt; Phase 12 scoped; Phase 11 UI polish (DOI color + no-bold authors) committed as fix(11) on top of merged work
+Phase: 12 of 12 (Polish & Docs) — gap closure phase in progress
+Plan: 2/3 (12-01 trivia DONE, 12-02 data backfill + sync purge DONE, 12-03 maintainer docs PENDING)
+Status: v1.1 Phases 7–11 VERIFIED; Phase 12 gap closure 2/3 complete — lint-green, JSDoc accurate, data backfilled; DOC-01/DOC-02 pending
+Last activity: 2026-04-19 — Plan 12-01 executed (JSDoc cleanup + MobileNav React 19 lint fix + SiteFooter next/link removal); lint 0 errors, tsc clean, 65/65 tests, 45 static routes
 
-Progress: [█████████████░] Phase 11 shipped; Phase 12 scoped; ready for /gsd:plan-phase 12
+Progress: [██████████████░] 26/29 plans complete (Phase 12: 2/3); 12-03 (maintainer docs) remains before /gsd:complete-milestone
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -36,9 +36,10 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - PERF-04/05 deferred to Vercel production re-measurement (LCP + CLS numerical targets)
 - NAV-04 mobile drawer 375px live-deploy check (structural done)
 - `MobileNav.tsx:87` `focus:outline-none` flag (low risk)
-- `MobileNav.tsx:38` `react-hooks/set-state-in-effect` ESLint error — `setOpen(false)` in `useEffect` on `[pathname]`. Pre-existing on main before Phase 8; caught by `pnpm lint` after React 19 / eslint-config-next upgrade. Fix on next MobileNav edit — low risk, closes a drawer on route change which is the intended UX.
-- `SiteFooter.tsx:1` unused `next/link` import (flip on next edit)
+- ~~`MobileNav.tsx:38` `react-hooks/set-state-in-effect` ESLint error~~ — CLOSED in 12-01 (`70337f8`). Refactored from `useEffect([pathname]) → setOpen(false)` to click-handler-only topology (NavLink.onNavigate + onClickCapture on LocaleToggle wrapper + Radix onOpenChange).
+- ~~`SiteFooter.tsx:1` unused `next/link` import~~ — CLOSED in 12-01 (`4bf708d`). Replaced `<Link>` for external social URLs with plain `<a target="_blank">`; dropped the import.
 - Hero "Grupo de Cosmología" title loses contrast on JWST starfield backgrounds — needs stronger text-shadow or dedicated gradient scrim (reported 2026-04-19)
+- `pnpm build` has an implicit side-effect on `content/publications.json` (rewrites with a fresh sync + timestamp). Observed in 12-01 Task 3 verify; reverted before commit. Worth confirming whether the sync pipeline should run under an explicit flag rather than as a build side-effect.
 
 ## Accumulated Context
 
@@ -126,6 +127,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - `makePub` test helper: spread override after base object (not inline literal) to avoid TS2783 duplicate-key error. Minor fix within Task 2 scope.
 - PublicationsYearGroup + PersonDetail call sites still use old PublicationEntry prop shape — 2 expected TypeScript errors (isolated, intentional; fixed in 11-02 + 11-03).
 
+### 12-01 Decisions (2026-04-19)
+
+- Plan's preferred `useRef`-guarded `useEffect` pattern for MobileNav auto-close does NOT satisfy `react-hooks/set-state-in-effect` — the rule fires on any `setState` inside `useEffect`, guarded or not. Render-time compare-and-setState trips the sibling `react-hooks/refs` rule ("Cannot access refs during render"). Fell back to plan's explicit alternative: remove the effect entirely, close drawer in click handlers. Only programmatic-nav source inside the drawer is LocaleToggle (grep `router.push|router.replace` across `src/` — single hit). Wrapped in `onClickCapture` so `setOpen(false)` runs before `startTransition` schedules `router.replace`.
+- `onClickCapture` not `onClick` — capture-phase listener is essential; bubble-phase would race the navigation commit and leave the drawer visually open on top of the freshly-rendered route.
+- SiteFooter external URLs use plain `<a target="_blank" rel="noopener noreferrer">`, NOT `@/i18n/navigation` — the next-intl wrapper prepends locale segments to internal paths, which is wrong for off-site URLs. STATE.md's earlier "flip to @/i18n/navigation" carryover was superseded by the semantic analysis in 12-01.
+- JSDoc-only edit to `publications_selected` — Zod shape untouched, no `pnpm generate-schemas` rerun needed. JSON Schemas in `content/*.schema.json` are regenerated from Zod shapes, not from JSDoc comments.
+
 ### 11-03 Decisions (2026-04-19)
 
 - `publications_selected` render path stripped entirely from page.tsx and PersonDetail.tsx — `getPublicationById` import removed; `SelectedPub` interface removed; legacy ~42-line render block removed
@@ -143,6 +151,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T21:00Z
-Stopped at: Audit returned `tech_debt` (no critical gaps); Phase 12 (Polish & Docs) added to ROADMAP to close DOC-01/02 + extend DATA-09/10 to 9/14 + purge residual template publications + fix v1.0 lint carryovers. Phase 11 UI polish (DOI dark-blue + member-author bold dropped) committed as `fix(11-display-layer)`. PUBS-12 softened in REQUIREMENTS (member bold dropped per user feedback; not a gap). Next: `/gsd:plan-phase 12`.
+Last session: 2026-04-19T20:51Z
+Stopped at: Plan 12-01 complete — 3 atomic commits (`0a09581` JSDoc, `70337f8` MobileNav React 19 fix, `4bf708d` SiteFooter anchor). All gates green: `pnpm lint` 0 errors, `pnpm tsc --noEmit` clean, `pnpm test` 65/65, `pnpm build` 45 static routes. Phase 12 now 2/3 (12-02 data backfill already landed as `d3b528a`). Next: execute Plan 12-03 (maintainer docs DOC-01 + DOC-02), then `/gsd:audit-milestone` re-run, then `/gsd:complete-milestone`.
 Resume file: None
