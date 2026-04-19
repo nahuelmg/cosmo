@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 8 — Accessor Layer
+**Current focus:** v1.1 Phase 9 — Sync Script
 
 ## Current Position
 
-Phase: 8 of 11 (Accessor Layer) — COMPLETE
-Plan: 08-01 complete (all plans in Phase 8 done — single-plan phase)
-Status: Phase 8 complete — ready for Phase 9 (Sync Script)
-Last activity: 2026-04-19 — Completed 08-01-PLAN.md (getPublicationsByAuthor + Vitest infra + 20 green tests)
+Phase: 9 of 11 (Sync Script) — IN PROGRESS
+Plan: 09-01 complete (3 plans total in Phase 9; 09-02 next)
+Status: In progress — 09-01 scaffold complete; ready for 09-02 (extraction layer)
+Last activity: 2026-04-19 — Completed 09-01-PLAN.md (CLI scaffold, BAI validation, InspireHEP + arXiv fetch primitives)
 
-Progress: [████████░░░░░░░] 8/11 phases complete (v1.1 in progress; Phase 9 next)
+Progress: [█████████░░░░░░] 9/11 phases started (09-01 done; 09-02 and 09-03 remain)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -64,6 +64,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Google Scholar `scholar_id` deferred to Phase 11 / v1.2 — no public API, useful as profile link only
 - DATA-09/10 partial: 1 member populated this cycle; remaining 13 are follow-up data commit
 
+### 09-01 Decisions (2026-04-19)
+
+- `fast-xml-parser@5.7.1` isArray callback requires `string | MatcherView` union — `typeof jpath === "string"` guard needed before `Set.has()` in TypeScript strict mode
+- `isVerbose` declared at module level (not threaded as parameter) — idiomatic for single-process CLI scripts
+- Live API confirmed: InspireHEP returns 4 hits for `Tomas.F.Chase.1`; arXiv returns 3 entries for ORCID `0009-0001-0286-2136`
+- `fetchInspireHEP`, `fetchArXiv`, `fetchWithRetry`, `runBatched`, `xmlParser`, `BAI_REGEX` exported for 09-02 extraction layer
+
 ### 08-01 Decisions (2026-04-19)
 
 - `getPublicationsByAuthor` is caller-provides-variants — no `Person` dependency, no `deriveNameVariants` helper (deferred to Phase 11 / v1.2). Guarantees ACC-05 structurally: `src/content/accessors/publications.ts` has zero imports from `people.ts`.
@@ -83,5 +90,5 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 ## Session Continuity
 
 Last session: 2026-04-19
-Stopped at: Completed 08-01-PLAN.md — Phase 8 complete; pnpm test green (20/20); pnpm build green; accessor contract pinned for Phase 11
+Stopped at: Completed 09-01-PLAN.md — CLI scaffold + fetch primitives live-verified; ready for 09-02 (extraction layer)
 Resume file: None
