@@ -38,7 +38,7 @@ export default async function ResearchPage({ params }: Props) {
   }));
 
   return (
-    <section className="mx-auto max-w-5xl px-6 py-16">
+    <section className="mx-auto max-w-6xl px-6 py-16">
       <header>
         <h1 className="font-serif text-3xl md:text-4xl font-semibold">{t('title')}</h1>
         <p className="mt-4 max-w-3xl font-serif text-lg leading-relaxed text-ink-muted">

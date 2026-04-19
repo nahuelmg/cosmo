@@ -27,7 +27,7 @@ export function PeoplePlainSection({
   return (
     <section
       aria-labelledby={`people-${id}`}
-      className="mx-auto max-w-4xl px-6 py-12"
+      className="mx-auto max-w-5xl px-6 py-12"
     >
       <h2
         id={`people-${id}`}

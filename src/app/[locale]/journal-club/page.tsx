@@ -52,7 +52,7 @@ export default async function JournalClubPage({ params }: Props) {
   const paperLinkLabel = t("paperLink");
 
   return (
-    <section className="mx-auto max-w-4xl px-6 py-16">
+    <section className="mx-auto max-w-5xl px-6 py-16">
       <header>
         <h1 className="font-serif text-3xl md:text-4xl font-semibold">
           {t("title")}
