@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 12 — polish, data backfill (9/14 members), and maintainer docs (DOC-01 + DOC-02). Audit passed `tech_debt`; cleanup phase scoped before milestone completion.
+**Current focus:** v1.1 Phase 12 — polish, data backfill (9/14 members), and maintainer docs (DOC-01 + DOC-02). Audit passed `tech_debt`; cleanup phase complete pending milestone audit.
 
 ## Current Position
 
-Phase: 12 of 12 (Polish & Docs) — gap closure phase in progress
-Plan: 2/3 (12-01 trivia DONE, 12-02 data backfill + sync purge DONE, 12-03 maintainer docs PENDING)
-Status: v1.1 Phases 7–11 VERIFIED; Phase 12 gap closure 2/3 complete — lint-green, JSDoc accurate, data backfilled to 9/13 sync-scoped members, publications.json now holds 321 real entries (0 placeholders); DOC-01/DOC-02 pending
-Last activity: 2026-04-19 — Plan 12-02 executed (9-member backfill + Leizerovich rename + live sync 321 pubs + determinism verified + REQUIREMENTS.md DATA-09/10 updated to 9/13 empirical coverage); 65/65 tests, 45 static routes, 0 i18n drift
+Phase: 12 of 12 (Polish & Docs) — gap closure phase COMPLETE
+Plan: 3/3 (12-01 trivia DONE, 12-02 data backfill + sync purge DONE, 12-03 maintainer docs DONE)
+Status: v1.1 Phases 7–12 ready for /gsd:audit-milestone re-run — lint-green, JSDoc accurate, 9/13 sync-scoped members backfilled, publications.json holds 321 real entries (0 placeholders), content/SYNC.md covers DOC-01+DOC-02 (ID-lookup + operational troubleshooting), REQUIREMENTS.md traceability clean (DOC-01/02 = Complete, Coverage line = phases 7–12)
+Last activity: 2026-04-19 — Plan 12-03 executed (SYNC.md +132 lines: paste-ready diana-lopez-nacir snippet + Operational Troubleshooting h2; REQUIREMENTS.md DOC-01/02 flipped Pending→Complete); 45 static routes, 2 atomic commits (`518b4d7`, `71546de`)
 
-Progress: [██████████████░] 26/29 plans complete (Phase 12: 2/3); 12-03 (maintainer docs) remains before /gsd:complete-milestone
+Progress: [███████████████] 27/29 plans complete (Phase 12: 3/3 DONE); v1.1 ready for /gsd:audit-milestone → /gsd:complete-milestone
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -127,6 +127,14 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - `makePub` test helper: spread override after base object (not inline literal) to avoid TS2783 duplicate-key error. Minor fix within Task 2 scope.
 - PublicationsYearGroup + PersonDetail call sites still use old PublicationEntry prop shape — 2 expected TypeScript errors (isolated, intentional; fixed in 11-02 + 11-03).
 
+### 12-03 Decisions (2026-04-19)
+
+- Paste-ready snippet uses diana-lopez-nacir (real 12-02 backfill) — pulls actual `inspirehep_id: "D.Lopez.Nacir.1"` + `orcid_id: "0000-0003-4398-1147"` + email. Long prose fields (`short_bio`, `full_bio`, `research_interests`) elided to `"..."` / `[ { "es": "...", "en": "..." } ]` to keep snippet ~22 lines. Dropped `contact.orcid` and `contact.office` from example (redundant / optional); retained `contact.email` + empty `publications_selected` + empty `social_links`.
+- Example placed as `### Example full entry` subsection UNDER the existing `## Field Summary` (not under "Finding Your ORCID") — keeps the two ID-lookup how-tos tight and self-contained; paste-ready JSON naturally belongs with the field-shape table.
+- `## Operational Troubleshooting` is a single h2 with four h3 subsections (manual `workflow_dispatch` / reading step summary / when cron fails / local `--dry-run`) rather than four h2s — compact VS Code outline, groups operational content as one unit, matches operator mental model.
+- Cross-reference pattern locked: each cron-failure mode is tagged with its originating REQUIREMENTS ID (`SYNC-02`, `SYNC-03`, `SYNC-06`, `CI-04`, `SYNC-14`, `CI-05`, `CI-06`, `CI-07`). Operator hits an error → greps REQUIREMENTS.md → finds decision context. First time SYNC.md cross-references REQUIREMENTS.md by ID; pattern for future v1.2 operational docs.
+- REQUIREMENTS.md spec bullets rewritten on flip (NOT preserved archaeologically) — original DOC-01 bullet mentioned `arxiv_id` which was reconceived as `orcid_id` in Phase 7-02; updated bullet notes the reconception inline. Coverage line: `phases 7–11` → `phases 7–12` + Phase 12 closure note (en-dash preserved).
+
 ### 12-02 Decisions (2026-04-19)
 
 - Denominator correction: plan / ROADMAP said 9/14 coverage; empirical count is 9 of 13 sync-scoped (pi/postdoc/phd) + 2 undergrads = 15 total. Used 9/13 in REQUIREMENTS.md per plan's empirical fallback directive.
@@ -162,6 +170,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T20:58Z
-Stopped at: Plan 12-02 complete — 3 atomic commits (`d3b528a` backfill/rename/cleanup, `3fd81aa` sync regen + test updates, `a7e18ff` REQUIREMENTS traceability). All gates green: `pnpm validate-content` ✓, `pnpm test` 65/65, `pnpm build` 45 static routes, `pnpm check-translations` 0 drift. Determinism verified. Phase 12 now 2/3. Next: execute Plan 12-03 (maintainer docs DOC-01 + DOC-02), optionally fix the cecilia-scannapieco display_name_normalized typo, then `/gsd:audit-milestone` re-run, then `/gsd:complete-milestone`.
+Last session: 2026-04-19T21:22Z
+Stopped at: Plan 12-03 complete — 2 atomic commits (`518b4d7` SYNC.md +132 lines (paste-ready diana-lopez-nacir snippet + Operational Troubleshooting h2), `71546de` REQUIREMENTS.md DOC-01/02 Pending→Complete + Coverage phases 7–12). Build green 45 routes. Phase 12 gap closure complete (3/3). Next: optionally fix cecilia-scannapieco `display_name_normalized` typo (flagged in 12-02 decisions), then `/gsd:audit-milestone` re-run, then `/gsd:complete-milestone`.
 Resume file: None
