@@ -92,6 +92,41 @@ Two-tier convention per v1.2 Phase 13:
 
 ---
 
+## Layout
+
+Codified in v1.2 Phase 13. All measurements encoded as Tailwind classes on components; no CSS custom properties introduced beyond `--text-5xl`.
+
+### Container Widths (SPACE-01)
+
+| Use case | Wrapper width | Applies to |
+|----------|---------------|-----------|
+| Prose / single-column | `max-w-5xl` (~1024 px) | Contact, PersonDetail, Journal Club, Publications, PeoplePlainSection |
+| Grid / multi-column | `max-w-6xl` (~1152 px) | People (grid + page header), Outreach, Research, HomePage sections |
+| Inline reading prose | `max-w-3xl` (~768 px) | HomePage intro, any inline prose block inside a wider grid wrapper |
+
+Rule of thumb: if the page is mostly text read top-to-bottom, use `max-w-5xl`. If the page is a grid of cards or imagery, use `max-w-6xl`. HomePage uses `max-w-6xl` outer with `max-w-3xl` inner for prose sections.
+
+### Vertical Rhythm (SPACE-02)
+
+| Scope | Padding | Applies to |
+|-------|---------|-----------|
+| Page wrapper | `py-16` | Every top-level page `<section>` / `<header>` / `<article>` |
+| Sub-section | `py-12` | `PeopleSection`, `PeoplePlainSection`, other in-page sections with their own vertical scope |
+| Hero | `py-20` (reserved) | Not applied as a wrapper in v1.2; hero rhythm carried by `HeroCarousel` internal `p-8 md:p-12` + image height. Retained in convention for future full-bleed variants. |
+
+### Card Padding Tiers (SPACE-03)
+
+Two tiers, flat across breakpoints (no responsive step):
+
+| Tier | Padding | Semantic use | Exemplars |
+|------|---------|--------------|-----------|
+| Dense | `p-4` (or `py-5` for row-based) | "Read a lot of these at once" — grid tiles, list rows | `PersonCard`, `SessionRow` |
+| Spacious | `p-6` | "Feature this one" — editorial or hero-card context | `ResearchCard`, `OutreachCard` |
+
+No named utility wrapper (e.g., `.card-dense`, `.card-spacious`) — components carry Tailwind classes directly. Revisit this decision if cards proliferate beyond the four exemplars.
+
+---
+
 ## Component Specs
 
 ### Buttons
