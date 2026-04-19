@@ -95,8 +95,8 @@
 
 ### Documentation
 
-- [ ] **DOC-01**: Maintainer note in `content/` or README explains how to add `arxiv_id` / `inspirehep_id` to `people.json`, with screenshots or copy-pasteable examples for finding the BAI on InspireHEP
-- [ ] **DOC-02**: Troubleshooting note covers: what to do when the cron fails, how to run a manual sync via `workflow_dispatch`, how to read the Action step summary
+- [x] **DOC-01**: Maintainer note in `content/SYNC.md` explains how to add `inspirehep_id` + `orcid_id` to `people.json`, with paste-ready example entry and BAI/ORCID lookup workflow (arxiv_id reference updated — field was reconceived as orcid_id in Phase 7-02)
+- [x] **DOC-02**: Operational Troubleshooting section in `content/SYNC.md` covers: manual `workflow_dispatch` steps, step-summary interpretation (added/removed/unchanged + warnings), failed-cron diagnosis (BAI format, 429 retry, Atom parse, validate-content gate), local `--dry-run` fallback
 
 ---
 
@@ -191,10 +191,10 @@
 | PEOP-18 | Phase 11 | Complete |
 | I18N-08 | Phase 11 | Complete |
 | I18N-09 | Phase 11 | Complete |
-| DOC-01 | Phase 11 | Pending |
-| DOC-02 | Phase 11 | Pending |
+| DOC-01 | Phase 11 / closed Phase 12 | Complete |
+| DOC-02 | Phase 11 / closed Phase 12 | Complete |
 
-**Coverage:** 54 requirements across phases 7–11. All v1.1 requirements mapped.
+**Coverage:** 54 requirements across phases 7–12. DOC-01 + DOC-02 closed Phase 12; DATA-09/10 improved to 9/14 coverage Phase 12. All v1.1 requirements mapped.
 
 *Status column updated by `/gsd:execute-phase` as phases complete.*
 
