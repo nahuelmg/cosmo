@@ -9,12 +9,13 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Milestone v1.2 started — running ui-ux-pro-max research before requirements.
-Last activity: 2026-04-19 — v1.2 Aesthetic Polish scope captured.
+Phase: 13 of ? (13-design-tokens-layout-rhythm)
+Plan: 01 of ? in phase
+Status: In progress — Phase 13 Wave 1 complete
+Last activity: 2026-04-19 — Completed 13-01-PLAN.md (token update + h1 line-height)
 
-Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 scoping in progress
+Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started (1 plan complete)
+░░░░░░░░░░ Phase 13: 1/? plans complete
 
 ## Shipped Milestones
 
@@ -45,5 +46,13 @@ Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 scoping in progr
 
 ## Session Continuity
 
-Last session: 2026-04-19 — v1.1 milestone complete, archived, tagged.
+Last session: 2026-04-19T22:22:07Z — 13-01 token update complete.
+Stopped at: Completed 13-01-PLAN.md
 Resume file: None
+
+## Accumulated Decisions (v1.2)
+
+| Decision | Context | Phase |
+|---|---|---|
+| Scope `line-height: 1.2` to `h1` only in `@layer base` | H3 at text-2xl is sub-display; tight leading hurts readability there | 13-01 |
+| `--text-5xl: 2.5rem` caps hero H1 at 40px (not Tailwind default 48px) | HeroCarousel only; inner page H1s use text-4xl (36px) | 13-01 |
