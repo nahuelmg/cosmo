@@ -11,8 +11,8 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 Phase: 12 of 12 (Polish & Docs) — gap closure phase in progress
 Plan: 2/3 (12-01 trivia DONE, 12-02 data backfill + sync purge DONE, 12-03 maintainer docs PENDING)
-Status: v1.1 Phases 7–11 VERIFIED; Phase 12 gap closure 2/3 complete — lint-green, JSDoc accurate, data backfilled; DOC-01/DOC-02 pending
-Last activity: 2026-04-19 — Plan 12-01 executed (JSDoc cleanup + MobileNav React 19 lint fix + SiteFooter next/link removal); lint 0 errors, tsc clean, 65/65 tests, 45 static routes
+Status: v1.1 Phases 7–11 VERIFIED; Phase 12 gap closure 2/3 complete — lint-green, JSDoc accurate, data backfilled to 9/13 sync-scoped members, publications.json now holds 321 real entries (0 placeholders); DOC-01/DOC-02 pending
+Last activity: 2026-04-19 — Plan 12-02 executed (9-member backfill + Leizerovich rename + live sync 321 pubs + determinism verified + REQUIREMENTS.md DATA-09/10 updated to 9/13 empirical coverage); 65/65 tests, 45 static routes, 0 i18n drift
 
 Progress: [██████████████░] 26/29 plans complete (Phase 12: 2/3); 12-03 (maintainer docs) remains before /gsd:complete-milestone
 
@@ -24,7 +24,7 @@ Progress: [██████████████░] 26/29 plans complete (
 
 **Critical ordering rule:** Schema (7) must be atomic and green before anything else. Sync script (9) must validate locally before CI (10) is wired.
 
-**Human dependency:** DATA-09 / DATA-10 (partial) — `tomas-ferreira-chase` populated; 13 members still need `inspirehep_id` + `orcid_id` for full-group E2E. Phase 9 E2E with 1 member is complete; full-group pagination stress test deferred to data follow-up.
+**Human dependency:** DATA-09 / DATA-10 (partial, extended in 12-02) — 9 of 13 sync-scoped members populated with `inspirehep_id` + `orcid_id`. Remaining: juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia. 2 undergrads (javier-pineau, tomas-cicarella) are intentionally out of sync scope per Phase 9 category filter.
 
 ## Shipped — v1.0 MVP (2026-04-18)
 
@@ -127,6 +127,16 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - `makePub` test helper: spread override after base object (not inline literal) to avoid TS2783 duplicate-key error. Minor fix within Task 2 scope.
 - PublicationsYearGroup + PersonDetail call sites still use old PublicationEntry prop shape — 2 expected TypeScript errors (isolated, intentional; fixed in 11-02 + 11-03).
 
+### 12-02 Decisions (2026-04-19)
+
+- Denominator correction: plan / ROADMAP said 9/14 coverage; empirical count is 9 of 13 sync-scoped (pi/postdoc/phd) + 2 undergrads = 15 total. Used 9/13 in REQUIREMENTS.md per plan's empirical fallback directive.
+- Matias Leizerovich email renamed (matias.leizerovitch -> matias.leizerovich @df.uba.ar) alongside slug/name/display_name_normalized/short_bio to satisfy the plan's verify gate `grep -c leizerovitch content/people.json = 0`. Institutional emails track surname spelling.
+- At-source purge pattern: `readManualEntries()` in scripts/sync-publications.ts is a pass-through merge, so clearing the 13 v1.0 fictional entries required a node one-liner filter BEFORE the live sync, not a script change. Locked as the idiomatic pattern for clearing template seed data.
+- Test-data coupling: 2 accessor tests asserted on v1.0 placeholder surnames (Di Sarcina + source==="manual"). Migrated to real group surname (Landau) + valid-enum assertion. Pattern locked: author-name tests should anchor on real group surnames so data refreshes don't break the suite.
+- 321 publications total (317 InspireHEP + 4 arXiv, cross-source dedup keeps InspireHEP on arXiv overlap per 09-03). 3 arXiv-ORCID-not-registered warnings (Calzetta, Landau, Badia) are acceptable; InspireHEP covers 206 of the 317 entries for those three combined.
+- Latent gap flagged: `cecilia-scannapieco` display_name_normalized is `cecilia scanapiecco` (typo); real InspireHEP author string is "Scannapieco". Surname-match lookup will NOT link her profile to her 47 papers under current accessor logic. Out of 12-02 scope; fix before /gsd:complete-milestone.
+- Observed 12-01 parallel-executor artifact: they reverted content/publications.json and publications.test.ts twice during my Task 2, believing the sync output was a pnpm build side-effect (their STATE.md note makes this claim; it's incorrect — prebuild only runs validate-content.mjs which has no writes). Re-ran Task 2 after 12-01 finished. No data loss (Task 1 commit d3b528a was never at risk, already in HEAD).
+
 ### 12-01 Decisions (2026-04-19)
 
 - Plan's preferred `useRef`-guarded `useEffect` pattern for MobileNav auto-close does NOT satisfy `react-hooks/set-state-in-effect` — the rule fires on any `setState` inside `useEffect`, guarded or not. Render-time compare-and-setState trips the sibling `react-hooks/refs` rule ("Cannot access refs during render"). Fell back to plan's explicit alternative: remove the effect entirely, close drawer in click handlers. Only programmatic-nav source inside the drawer is LocaleToggle (grep `router.push|router.replace` across `src/` — single hit). Wrapped in `onClickCapture` so `setOpen(false)` runs before `startTransition` schedules `router.replace`.
@@ -145,12 +155,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ### Blockers / Concerns
 
-- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker; Phase 11 Display Layer is complete; profiles will show Publications section automatically when IDs are added)
+- DATA-09/10 partial (post-12-02): 4 sync-scoped members still need `inspirehep_id` + `orcid_id` — juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia. Not a code blocker; profiles will show Publications section automatically when IDs are added.
+- `cecilia-scannapieco` typo: display_name_normalized is `cecilia scanapiecco` but real InspireHEP entries list her as "Scannapieco" — surname-match will NOT link her 47 papers to her profile page until fixed. Low-risk one-line fix; flagged for 12-03 or a separate fix commit before /gsd:complete-milestone.
 - v1.2 cleanup scheduled: Zod `publications_selected` field removal + `people.selectedPublications` i18n key deletion
 - `_meta.synced_at` on disk only advances on real publications change — safe for PUBS-09 "Actualizado el" consumption on /publications page
 
 ## Session Continuity
 
-Last session: 2026-04-19T20:51Z
-Stopped at: Plan 12-01 complete — 3 atomic commits (`0a09581` JSDoc, `70337f8` MobileNav React 19 fix, `4bf708d` SiteFooter anchor). All gates green: `pnpm lint` 0 errors, `pnpm tsc --noEmit` clean, `pnpm test` 65/65, `pnpm build` 45 static routes. Phase 12 now 2/3 (12-02 data backfill already landed as `d3b528a`). Next: execute Plan 12-03 (maintainer docs DOC-01 + DOC-02), then `/gsd:audit-milestone` re-run, then `/gsd:complete-milestone`.
+Last session: 2026-04-19T20:58Z
+Stopped at: Plan 12-02 complete — 3 atomic commits (`d3b528a` backfill/rename/cleanup, `3fd81aa` sync regen + test updates, `a7e18ff` REQUIREMENTS traceability). All gates green: `pnpm validate-content` ✓, `pnpm test` 65/65, `pnpm build` 45 static routes, `pnpm check-translations` 0 drift. Determinism verified. Phase 12 now 2/3. Next: execute Plan 12-03 (maintainer docs DOC-01 + DOC-02), optionally fix the cecilia-scannapieco display_name_normalized typo, then `/gsd:audit-milestone` re-run, then `/gsd:complete-milestone`.
 Resume file: None
