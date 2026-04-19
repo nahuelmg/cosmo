@@ -1,0 +1,23 @@
+name: Sync Publications
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Monday 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: sync-publications
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # Steps added in subsequent tasks
+      - name: Placeholder
+        run: echo "scaffold — steps added in follow-up tasks"
