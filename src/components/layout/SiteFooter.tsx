@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import {getTranslations} from 'next-intl/server';
 import {routing} from '@/i18n/routing';
 import {siteConfig, type SocialLink} from '@/config/site';
@@ -92,7 +91,7 @@ export async function SiteFooter({locale}: SiteFooterProps) {
             <ul className="flex flex-wrap gap-4 text-sm text-ink-muted md:justify-end">
               {(siteConfig.socialLinks as ReadonlyArray<SocialLink>).map((link) => (
                 <li key={link.url}>
-                  <Link
+                  <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -104,7 +103,7 @@ export async function SiteFooter({locale}: SiteFooterProps) {
                     ].join(' ')}
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
