@@ -1,9 +1,8 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import {useTranslations} from 'next-intl';
-import {usePathname} from '@/i18n/navigation';
 import {NAV_ITEMS} from './nav-items';
 import {NavLink} from './NavLink';
 import {LocaleToggle} from './LocaleToggle';
@@ -19,9 +18,15 @@ import {LocaleToggle} from './LocaleToggle';
  *   - The Trigger is hidden on desktop via `md:hidden`, so the SiteHeader does
  *     not need to wrap this component in a media-query — the responsive boundary
  *     lives inside MobileNav.
- *   - Passing `setOpen(false)` as each NavLink's `onNavigate` closes the drawer
- *     when a link is tapped. `useEffect([pathname])` covers the edge case of
- *     programmatic navigation (no click event).
+ *   - Close paths (React 19 / `react-hooks/set-state-in-effect` compliant —
+ *     no `useEffect([pathname])` auto-close, which would trip the new rule):
+ *       1. Link tap: `NavLink.onNavigate` → `setOpen(false)` (lines below).
+ *       2. Locale swap: onClick-capture on the LocaleToggle wrapper closes the
+ *          drawer before `router.replace` fires. This is the only programmatic
+ *          navigation source rendered inside the drawer (verified by grepping
+ *          for `router.push|router.replace` across src/ — only LocaleToggle).
+ *       3. Escape / overlay click / explicit close button: handled by Radix
+ *          `onOpenChange` → `setOpen`.
  *   - z-index ladder from RESEARCH.md Pattern 6: overlay z-40, content z-50.
  *     SkipLink's focus:z-[100] still sits above if the user tabs to it while
  *     the drawer is open.
@@ -30,13 +35,6 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
   const t = useTranslations('layout');
   const tNav = useTranslations('nav');
-  const pathname = usePathname();
-
-  // Auto-close when the route actually changes — belt-and-braces alongside
-  // NavLink's onNavigate. Covers programmatic navigation.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -135,7 +133,18 @@ export function MobileNav() {
             ))}
           </nav>
 
-          <div className="mt-auto pt-6">
+          {/*
+            onClickCapture closes the drawer BEFORE LocaleToggle's onClick
+            handler triggers `router.replace`. Without this, the drawer would
+            stay visually open on top of the freshly-rendered route. The
+            capture phase is essential: a bubble-phase listener would fire
+            after LocaleToggle's startTransition has already scheduled the
+            replace, and setOpen(false) would race the navigation commit.
+          */}
+          <div
+            className="mt-auto pt-6"
+            onClickCapture={() => setOpen(false)}
+          >
             <LocaleToggle className="w-full text-left px-2 py-3 text-base" />
           </div>
         </Dialog.Content>
