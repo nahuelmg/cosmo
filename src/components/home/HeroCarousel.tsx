@@ -137,8 +137,12 @@ export default function HeroCarousel({
         ))}
       </div>
 
-      {/* Static overlay — same on every slide per CONTEXT decision */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/85 via-30% to-transparent to-65% flex flex-col justify-end p-8 md:p-12">
+      {/* Static overlay — same on every slide per CONTEXT decision.
+          Gradient pushed up (from-30%) so the text block sits in fully
+          opaque ink. Prevents bright stars in JWST-Carina from peeking
+          through behind serif letterforms and reducing perceived contrast
+          even when pixel-average WCAG still passes. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink from-30% via-ink/70 via-55% to-transparent to-80% flex flex-col justify-end p-8 md:p-12">
         <h1 className="font-serif font-bold text-4xl md:text-5xl text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_0.95),_0_0_24px_rgb(0_0_0_/_0.85)]">
           {groupName}
         </h1>
