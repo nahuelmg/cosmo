@@ -146,7 +146,7 @@
   },
   {
     "slug": "cecilia-scannapieco",
-    "name": "Cecilia Scanapiecco",
+    "name": "Cecilia Scannapieco",
     "role": {
       "es": "Investigadora Principal",
       "en": "Principal Investigator"
@@ -154,8 +154,8 @@
     "category": "pi",
     "photo": "people/Cecilia_C.png",
     "short_bio": {
-      "es": "Cecilia Scanapiecco es investigadora del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Cecilia Scanapiecco is a researcher in the cosmology group. Detailed biography to be completed."
+      "es": "Cecilia Scannapieco es investigadora del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Cecilia Scannapieco is a researcher in the cosmology group. Detailed biography to be completed."
     },
     "full_bio": {
       "es": "Biografia detallada a completar.",
@@ -170,7 +170,7 @@
     "publications_selected": [],
     "inspirehep_id": "C.Scannapieco.2",
     "orcid_id": "0000-0003-0376-333X",
-    "display_name_normalized": "cecilia scanapiecco",
+    "display_name_normalized": "cecilia scannapieco",
     "contact": {
       "email": "cecilia.scannapieco@df.uba.ar"
     },
