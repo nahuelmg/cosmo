@@ -1,7 +1,7 @@
 # content/SYNC.md — Maintainer Lookup Guide
 
 How to populate the three per-person fields that drive the v1.1 arXiv + InspireHEP sync:
-`inspirehep_id`, `arxiv_id`, and `display_name_normalized`.
+`inspirehep_id`, `orcid_id`, and `display_name_normalized`.
 
 All three live on each entry in `content/people.json`. The Zod schema is
 `src/content/schemas/people.schema.ts`. VS Code will auto-validate via the
@@ -27,32 +27,36 @@ Identifier) of the form `Initial.Surname.N`, e.g. `E.Calzetta.1`.
    "inspirehep_id": "E.Calzetta.1"
    ```
 
-Schema validation: `/^[A-Z]\.[A-Za-z-]+\.\d+$/` (initial, dot, surname, dot, digit).
+Schema validation: `/^[A-Z][A-Za-z-]*(\.[A-Za-z-]+)+\.\d+$/` (initial segment, one or more name segments, digit — supports multi-part names like `S.J.Landau.1`, `Tomas.F.Chase.1`).
 
 ---
 
-## Finding Your arXiv Author ID
+## Finding Your ORCID
 
-arXiv uses a "claimed author ID" — an opaque string you set once in your
-arXiv account that lets the API group your papers.
+ORCID (Open Researcher and Contributor ID) is a portable 16-digit
+identifier that links to your publications across arXiv, InspireHEP,
+and most academic databases.
 
-1. Log in to <https://arxiv.org/user>.
-2. Click "Change user information" → scroll to "Author identifier".
-3. Copy the value (it looks like `calzetta_e_1` or similar — format is
-   opaque, arXiv-assigned).
-4. If you have never claimed any papers: click "My Articles" on arxiv.org
-   and claim each of your submissions. This wires papers to the ID.
+1. If you don't have one: sign up at <https://orcid.org/register>
+   (free, ~2 minutes).
+2. Once registered, find your ORCID on the top-right of your orcid.org
+   profile. Format: `0000-0002-1234-5678` (four 4-digit groups, the
+   last may end in `X`).
+3. Link it to arXiv: log in at <https://arxiv.org/user> → "Change user
+   information" → paste your ORCID.
+4. Link it to InspireHEP: open your author profile, click "Update your
+   profile" → add ORCID under "Other IDs".
 5. Paste into `people.json`:
 
    ```json
-   "arxiv_id": "calzetta_e_1"
+   "orcid_id": "0000-0002-1234-5678"
    ```
 
-Schema validation: `/^(\d{4}\.\d{4,5}|[a-z-]+\/\d{7})(v\d+)?$/` — same helper
-as the publication-level `arxiv` field. Modern and pre-2007 formats both pass.
+Schema validation: `/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/` (same helper as
+the shared `orcidId`).
 
-Students without a claimed arXiv ID: leave the field out. Populate it the
-first time you put a paper on arXiv and claim authorship.
+Students without ORCID: leave the field out. Register when you
+publish your first paper.
 
 ---
 
@@ -93,8 +97,8 @@ Quick check in a Node shell:
 
 | Field                      | Required | Shape                                     |
 |----------------------------|----------|-------------------------------------------|
-| `inspirehep_id`            | optional | BAI (e.g. `E.Calzetta.1`)                 |
-| `arxiv_id`                 | optional | claimed arXiv author ID                   |
+| `inspirehep_id`            | optional | BAI (e.g. `E.Calzetta.1`, `S.J.Landau.1`)|
+| `orcid_id`                 | optional | 16-digit ORCID (e.g. `0000-0002-1234-5678`) |
 | `display_name_normalized`  | required | ASCII-fold + lowercase of `name`          |
 
 Definitive source: `src/content/schemas/people.schema.ts`. VS Code hover on

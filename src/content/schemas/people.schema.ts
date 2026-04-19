@@ -22,7 +22,6 @@ import {
   slugString,
   optionalPhoto,
   orcidId,
-  arxivId,
 } from "./shared";
 
 // ---------------------------------------------------------------------------
@@ -89,18 +88,19 @@ export const PersonSchema = z.strictObject({
   inspirehep_id: z
     .string()
     .regex(
-      /^[A-Z]\.[A-Za-z-]+\.\d+$/,
-      "InspireHEP BAI format: Initial.Surname.N (e.g. E.Calzetta.1)",
+      /^[A-Z][A-Za-z-]*(\.[A-Za-z-]+)+\.\d+$/,
+      "InspireHEP BAI format: Initial.Surname.N or MultiPart.Name.N (e.g. E.Calzetta.1, S.J.Landau.1, Tomas.F.Chase.1)",
     )
     .optional(),
 
   /**
-   * Claimed arXiv author ID (modern or pre-2007 format).
+   * ORCID iD (16-digit identifier like 0000-0002-1234-5678).
    * Optional — students may not have one yet.
-   * Populate once you have your first paper on arXiv and have claimed authorship.
+   * Used by Phase 9 sync as a secondary author-query mechanism
+   * (arXiv + InspireHEP both support ORCID-keyed queries).
    * @see content/SYNC.md
    */
-  arxiv_id: arxivId.optional(),
+  orcid_id: orcidId.optional(),
 
   /**
    * ASCII-folded lowercase display name for author-string matching.
