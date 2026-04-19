@@ -35,12 +35,13 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "E.Calzetta.1",
+    "orcid_id": "0000-0002-3083-3420",
     "display_name_normalized": "esteban calzetta",
     "contact": {
       "email": "calzetta@df.uba.ar",
       "orcid": "0000-0001-7842-3105",
-      "office": "Pabellon 1, Oficina 319, Ciudad Universitaria",
-      "scholar": "https://scholar.google.com/citations?user=calzetta_placeholder"
+      "office": "Pabellon 1, Oficina 319, Ciudad Universitaria"
     },
     "social_links": [
       {
@@ -81,6 +82,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "D.Lopez.Nacir.1",
+    "orcid_id": "0000-0003-4398-1147",
     "display_name_normalized": "diana lopez nacir",
     "contact": {
       "email": "diana.lopezn@df.uba.ar",
@@ -126,6 +129,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "S.J.Landau.1",
+    "orcid_id": "0000-0003-2645-9197",
     "display_name_normalized": "susana landau",
     "contact": {
       "email": "susana.landau@df.uba.ar",
@@ -163,6 +168,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "C.Scannapieco.2",
+    "orcid_id": "0000-0003-0376-333X",
     "display_name_normalized": "cecilia scanapiecco",
     "contact": {
       "email": "cecilia.scannapieco@df.uba.ar"
@@ -193,6 +200,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "N.MironGranese.1",
+    "orcid_id": "0000-0003-0770-1865",
     "display_name_normalized": "nahuel miron granese",
     "contact": {
       "email": "nahuel.mirongranese@df.uba.ar"
@@ -253,6 +262,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "J.Badia.1",
+    "orcid_id": "0000-0002-9095-9594",
     "display_name_normalized": "javier badia",
     "contact": {
       "email": "javier.badia@df.uba.ar"
@@ -292,8 +303,8 @@
     "social_links": []
   },
   {
-    "slug": "matias-leizerovitch",
-    "name": "Matias Leizerovitch",
+    "slug": "matias-leizerovich",
+    "name": "Matias Leizerovich",
     "role": {
       "es": "Estudiante de Doctorado",
       "en": "PhD Student"
@@ -301,8 +312,8 @@
     "category": "phd",
     "photo": "people/Matias_L.png",
     "short_bio": {
-      "es": "Matias Leizerovitch es estudiante de doctorado del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Matias Leizerovitch is a doctoral student in the cosmology group. Detailed biography to be completed."
+      "es": "Matias Leizerovich es estudiante de doctorado del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Matias Leizerovich is a doctoral student in the cosmology group. Detailed biography to be completed."
     },
     "full_bio": {
       "es": "Biografia detallada a completar.",
@@ -315,9 +326,11 @@
       }
     ],
     "publications_selected": [],
-    "display_name_normalized": "matias leizerovitch",
+    "inspirehep_id": "M.Leizerovich.1",
+    "orcid_id": "0000-0002-6438-2285",
+    "display_name_normalized": "matias leizerovich",
     "contact": {
-      "email": "matias.leizerovitch@df.uba.ar"
+      "email": "matias.leizerovich@df.uba.ar"
     },
     "social_links": []
   },
@@ -374,6 +387,8 @@
       }
     ],
     "publications_selected": [],
+    "inspirehep_id": "A.T.Chantada.1",
+    "orcid_id": "0000-0002-4480-9595",
     "display_name_normalized": "augusto chantada",
     "contact": {
       "email": "augusto.chantada@df.uba.ar"
