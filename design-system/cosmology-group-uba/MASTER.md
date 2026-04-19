@@ -49,7 +49,23 @@
 | `--text-xl` | `1.375rem` | ~22px | H4 (sans, semibold 600) |
 | `--text-2xl` | `1.625rem` | 26px | H3 (serif, semibold 600) |
 | `--text-3xl` | `1.875rem` | 30px | H2 (serif, semibold 600) |
-| `--text-4xl` | `2rem` | 32px | H1 (serif, semibold 600) |
+| `--text-4xl` | `2.25rem` | 36px | H1 on inner pages (serif, semibold 600) |
+| `--text-5xl` | `2.5rem` | 40px | Hero H1 (HomePage HeroCarousel only, serif, semibold 600) |
+
+> **v1.2 update:** `--text-4xl` bumped from 32 px → 36 px and `--text-5xl` added at 40 px so H1 (36 px) sits ≥1.20× above H2 (30 px). The v1.0 scale entries above this line (`--text-xs` through `--text-3xl`) are unchanged. Any external doc or branch referring to `--text-4xl: 2rem` is superseded.
+
+### Line-Height Convention
+
+Two-tier convention per v1.2 Phase 13:
+
+| Tier | Applies to | Value | Tailwind utility |
+|------|-----------|-------|------------------|
+| Display | `text-3xl` and larger (H1, large H2) | `1.2` | `leading-tight` |
+| Body | `text-xl` and smaller (paragraph, list items, card copy) | `1.625` | `leading-relaxed` |
+
+- `h1` is encoded in `@layer base` as `line-height: 1.2`. H2 elements that render at `text-3xl` add `leading-tight` per-component.
+- Body prose converges on `leading-relaxed` (1.625). Existing `leading-normal` usage is migrated case-by-case; no blanket `@layer base` body override.
+- Letter-spacing unchanged: `-0.01em` on headings via `@layer base`; body stays at 0.
 
 **Weights:** Serif display at `600` (semibold); Sans body at `400` (regular) / `600` (semibold) / `700` (bold).
 
