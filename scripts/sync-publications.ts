@@ -16,12 +16,16 @@
  */
 
 import { parseArgs } from "node:util";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { XMLParser, type MatcherView } from "fast-xml-parser";
 // Relative imports — no @/ alias; tsx CJS does not resolve webpack aliases
 import { PersonSchema } from "../src/content/schemas/people.schema";
-import type { Publication } from "../src/content/schemas/publications.schema";
+import {
+  PublicationsFileSchema,
+  type Publication,
+  type PublicationsMeta,
+} from "../src/content/schemas/publications.schema";
 import type { z } from "zod";
 
 // ---------------------------------------------------------------------------
@@ -447,6 +451,20 @@ export function readManualEntries(cwd: string = process.cwd()): Publication[] {
 }
 
 /**
+ * Read ALL entries from the existing content/publications.json (both manual and synced).
+ * Used to compute added/removed/unchanged counts for the summary log.
+ * Handles three file shapes: missing → [], bare array (v1.0), wrapped { _meta, publications }.
+ */
+export function readAllExistingEntries(cwd: string = process.cwd()): Publication[] {
+  const filePath = resolve(cwd, "content/publications.json");
+  if (!existsSync(filePath)) return [];
+  const raw = JSON.parse(readFileSync(filePath, "utf-8")) as unknown;
+  return Array.isArray(raw)
+    ? (raw as Publication[])
+    : ((raw as { publications?: Publication[] }).publications ?? []);
+}
+
+/**
  * Merge publications from all sources and sort deterministically (SYNC-10, SYNC-13).
  *
  * Sort order matches getPublicationsByAuthor in src/content/accessors/publications.ts:
@@ -552,6 +570,10 @@ async function main(): Promise<void> {
   const runInspire = !flags["no-inspire"];
   const runArxiv = !flags["no-arxiv"];
 
+  // Capture existing file state BEFORE any writes (for added/removed/unchanged counts)
+  const existingAll = readAllExistingEntries();
+  const existingIds = new Set(existingAll.map((p) => p.id));
+
   // Filter to --member if specified; otherwise sync all members with at least one ID
   const targetPeople = flags.member
     ? people.filter((p) => p.slug === flags.member)
@@ -564,7 +586,9 @@ async function main(): Promise<void> {
 
   process.stdout.write(`Syncing ${targetPeople.length} member(s)...\n`);
 
-  // Run per-member fetch + extraction via runBatched (5 parallel, 2s inter-batch pause)
+  // NOTE: runBatched uses Promise.all, so any per-member fetch error propagates here
+  // and aborts the whole sync BEFORE the write-gate is reached. This enforces
+  // Pitfall 2 / CONTEXT.md "file-level atomicity" — last-good JSON is preserved.
   const tasks = targetPeople.map((p) => () => syncMember(p, runInspire, runArxiv));
   const memberResults = await runBatched(tasks);
 
@@ -585,20 +609,80 @@ async function main(): Promise<void> {
   const allArxiv = dedupByArxivId(memberResults.flatMap((r) => r.arxivPubs));
   const manualEntries = readManualEntries();
 
-  const merged = mergePublications(manualEntries, allInspire, allArxiv);
+  const preMerged = mergePublications(manualEntries, allInspire, allArxiv);
 
-  // Summary line — 09-03 will replace this tail with schema validation + writeFileSync
+  // Cross-source dedup by arXiv ID (Rule 1 Bug fix):
+  // A paper appearing in both InspireHEP (with arxiv_eprints[0]) and arXiv (ORCID feed)
+  // gets id = arXiv ID from both extractors, producing duplicate IDs in the merged array.
+  // Apply first-seen-wins dedup across the full merged set — since mergePublications puts
+  // manualEntries first, then inspireEntries, then arxivEntries, InspireHEP entries (which
+  // have structured journal info) win over arXiv-only duplicates of the same paper.
+  const merged = dedupByArxivId(preMerged);
+
+  // Build _meta block (CONTEXT.md §_meta block shape)
+  const meta: PublicationsMeta = {
+    synced_at: new Date().toISOString(),
+    sources: [
+      ...(runInspire ? (["inspirehep"] as const) : []),
+      ...(runArxiv   ? (["arxiv"]     as const) : []),
+    ],
+    counts: {
+      inspirehep: allInspire.length,
+      arxiv:      allArxiv.length,
+      manual:     manualEntries.length,
+    },
+    warnings: allWarnings,
+  };
+
+  const fileData = { _meta: meta, publications: merged };
+
+  // Schema validation gate (SYNC-11): safeParse in memory before any write
+  const result = PublicationsFileSchema.safeParse(fileData);
+  if (!result.success) {
+    process.stderr.write("Schema validation failed:\n");
+    for (const issue of result.error.issues) {
+      process.stderr.write(`  ${issue.path.join(".")}: ${issue.message}\n`);
+    }
+    process.exit(1);
+  }
+
+  // Compute diff counts for summary line (SYNC-15)
+  const newIds = new Set(merged.map((p) => p.id));
+  const added = [...newIds].filter((id) => !existingIds.has(id)).length;
+  const removed = [...existingIds].filter((id) => !newIds.has(id)).length;
+  const unchanged = merged.length - added;
+
+  // Determine output path (SYNC-12, CONTEXT.md §CLI surface)
+  let outputPath: string;
+  if (flags.member) {
+    // --member MUST NOT write to content/publications.json (corruption risk)
+    mkdirSync(resolve(process.cwd(), "scripts/tmp"), { recursive: true });
+    outputPath = resolve(process.cwd(), `scripts/tmp/sync-${flags.member}.json`);
+  } else {
+    outputPath = resolve(process.cwd(), "content/publications.json");
+  }
+
+  const json = JSON.stringify(fileData, null, 2) + "\n"; // 2-space indent, trailing newline
+
+  if (flags["dry-run"]) {
+    process.stdout.write(
+      `Sync complete (dry-run): ${merged.length} publications` +
+        ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${allWarnings.length} warnings)\n` +
+        `Would write ${json.length} bytes to ${outputPath}\n`,
+    );
+    return;
+  }
+
+  writeFileSync(outputPath, json);
+
+  // SYNC-15: final summary line captured by GitHub Action step summary (Phase 10)
   process.stdout.write(
-    `Extracted ${merged.length} publications` +
-      ` (manual=${manualEntries.length},` +
-      ` inspirehep=${allInspire.length},` +
-      ` arxiv=${allArxiv.length})\n`,
+    `Sync complete: ${merged.length} publications` +
+      ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${allWarnings.length} warnings)\n`,
   );
-
-  // `merged` and `allWarnings` remain in scope for 09-03's write gate to consume.
-  // 09-03 replaces the summary line above with PublicationsFileSchema validation + writeFileSync.
-  void merged;
-  void allWarnings;
+  if (flags.member) {
+    process.stdout.write(`Wrote per-member output to ${outputPath} (git-ignored)\n`);
+  }
 }
 
 // Guard: only run main() when executed directly (not when imported by Vitest or other modules)
