@@ -100,7 +100,7 @@ export function PersonDetail({
           )}
         </div>
         <div>
-          <h1 className="font-serif text-4xl font-semibold tracking-tight">
+          <h1 className="font-serif text-3xl md:text-4xl font-semibold">
             {person.name}
           </h1>
           <p className="mt-2 text-lg text-ink-muted">{person.role}</p>

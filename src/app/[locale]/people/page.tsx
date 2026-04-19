@@ -38,7 +38,7 @@ export default async function PeoplePage({ params }: Props) {
   return (
     <>
       <header className="mx-auto max-w-6xl px-6 pt-16 pb-4">
-        <h1 className="font-serif text-4xl font-semibold tracking-tight">
+        <h1 className="font-serif text-3xl md:text-4xl font-semibold">
           {t('title')}
         </h1>
       </header>

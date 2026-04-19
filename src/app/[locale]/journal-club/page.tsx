@@ -54,7 +54,7 @@ export default async function JournalClubPage({ params }: Props) {
   return (
     <section className="mx-auto max-w-4xl px-6 py-16">
       <header>
-        <h1 className="font-serif text-4xl font-semibold tracking-tight">
+        <h1 className="font-serif text-3xl md:text-4xl font-semibold">
           {t("title")}
         </h1>
         <p className="mt-4 max-w-2xl font-serif text-lg text-ink-muted">

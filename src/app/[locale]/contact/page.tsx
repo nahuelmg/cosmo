@@ -43,7 +43,7 @@ export default async function ContactPage({ params }: Props) {
   return (
     <section className="mx-auto max-w-4xl px-6 py-16">
       <header>
-        <h1 className="font-serif text-4xl font-semibold tracking-tight">
+        <h1 className="font-serif text-3xl md:text-4xl font-semibold">
           {t('title')}
         </h1>
       </header>
