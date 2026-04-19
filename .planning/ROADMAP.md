@@ -79,6 +79,12 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 ### Phase 13: Design Tokens & Layout Rhythm
 **Goal:** The type scale, page-container widths, and vertical rhythm reflect the audited polish targets — `text-5xl` token exists, `text-4xl` bumped to 36 px, page widths standardised, vertical spacing codified. All other v1.2 phases depend on these tokens.
 **Requirements:** TYPO-01, TYPO-02, TYPO-03, TYPO-04, TYPO-05, SPACE-01, SPACE-02, SPACE-03, SPACE-04
+**Plans:** 4 plans in 3 waves
+Plans:
+- [ ] 13-01-PLAN.md — globals.css `@theme` token update (`--text-4xl` → 2.25rem, add `--text-5xl`) + `@layer base` h1 leading-tight
+- [ ] 13-02-PLAN.md — H1 responsive migration + container widths (SPACE-01) + nav sizing consolidation (TYPO-03/04, SPACE-01/02)
+- [ ] 13-03-PLAN.md — ResearchCard padding `p-8` → `p-6` + audit PersonCard/OutreachCard/SessionRow (SPACE-03)
+- [ ] 13-04-PLAN.md — MASTER.md documentation of v1.2 type scale + Layout section (TYPO-05, SPACE-04)
 **Success criteria:**
 1. `--text-5xl` token is defined and H1 elements use the new 36 px size
 2. Every page wrapper uses `max-w-5xl` (prose) or `max-w-6xl` (grids) per the codified rule
@@ -121,6 +127,6 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 | 10. CI Wiring | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 11. Display Layer | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 12. Polish & Docs | v1.1 | 3/3 | Complete | 2026-04-19 |
-| 13. Design Tokens & Layout Rhythm | v1.2 | 0/TBD | Not started | — |
+| 13. Design Tokens & Layout Rhythm | v1.2 | 0/4 | Not started | — |
 | 14. Media Sizing | v1.2 | 0/TBD | Not started | — |
 | 15. Interactive Polish & Documentation | v1.2 | 0/TBD | Not started | — |
