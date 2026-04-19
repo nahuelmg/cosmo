@@ -77,7 +77,7 @@
 - [x] **PUBS-09**: "Actualizado el [date]" staleness indicator rendered from `_meta.synced_at` with locale-aware `Intl.DateTimeFormat`
 - [x] **PUBS-10**: Footnote (bilingual) explains two-source design and why duplicates may appear for the same paper
 - [x] **PUBS-11**: Author list formatted as: full list if ≤5 authors; first 3 + "et al." if >5 — with member-visible invariant (extend head-through-member when a highlighted author falls past position 3)
-- [x] **PUBS-12**: Group member author names rendered in bold (plain font-weight 700, no color/underline) via surname-match against `display_name_normalized` last word
+- [~] **PUBS-12**: Member-author bold highlighting DROPPED per user feedback in Phase 12 polish — the bold weight read as visually confusing against the serif body type. Member-visibility-under-`et al.` invariant (PUBS-11) still honored via `formatAuthors` + `buildMemberSurnameSet`; the helper still drives author-list truncation. Softening follows the PEOP-14 pattern (not treated as a gap)
 
 ### Person Profile Page (/people/[slug])
 
@@ -182,7 +182,7 @@
 | PUBS-09 | Phase 11 | Complete |
 | PUBS-10 | Phase 11 | Complete |
 | PUBS-11 | Phase 11 | Complete |
-| PUBS-12 | Phase 11 | Complete |
+| PUBS-12 | Phase 11 / softened Phase 12 | Softened (member bold dropped per user feedback; not a gap) |
 | PEOP-13 | Phase 11 | Complete |
 | PEOP-14 | Phase 11 | Softened (count subtitle dropped per 11-CONTEXT; not a gap) |
 | PEOP-15 | Phase 11 | Complete |

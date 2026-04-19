@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-04-18)
-- 🚧 **v1.1 arXiv + InspireHEP Sync** — Phases 7–11 (in progress)
+- 🚧 **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (in progress)
 
 ---
 
@@ -42,7 +42,7 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase details.
 
 ---
 
-### 🚧 v1.1 arXiv + InspireHEP Sync (Phases 7–11)
+### 🚧 v1.1 arXiv + InspireHEP Sync (Phases 7–12)
 
 **Milestone Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time — replacing v1.0's manual `content/publications.json` while preserving the fully-static SSG guarantee (PERF-01).
 
@@ -173,9 +173,35 @@ Plans:
 
 ---
 
+#### Phase 12: v1.1 Polish & Docs (Gap Closure)
+
+**Goal:** Address `tech_debt` items surfaced by `/gsd:audit-milestone`: commit Phase 11 UI polish, extend content backfill to 9/14 members (arXiv + InspireHEP coverage), purge residual template publications, fix v1.0 lint carryovers, and deliver the maintainer documentation that satisfies DOC-01 + DOC-02.
+
+**Depends on:** Phase 11 (display layer shipped); v1.1-MILESTONE-AUDIT.md gap scoping
+
+**Requirements:** DOC-01, DOC-02 (closed); DATA-09, DATA-10 (improved from 1/14 → 9/14); PUBS-12 (softened, member bold dropped per user feedback)
+
+**Success Criteria** (what must be TRUE when this phase completes):
+1. `content/people.json` has `inspirehep_id` + `orcid_id` on all 9 target current members (tomas-ferreira-chase already; + diana-lopez-nacir, susana-landau, matias-leizerovich, nahuel-miron-granese, esteban-calzetta, javier-badia, cecilia-scannapieco, augusto-chantada)
+2. Matias Leizerovich name spelling corrected to match authoritative InspireHEP form (slug rename, display_name, display_name_normalized)
+3. `pnpm sync-publications` runs locally against the 9 members and writes a valid `content/publications.json` containing only real InspireHEP/arXiv entries (zero template/placeholder leftovers from v1.0)
+4. `content/SYNC.md` extended with (a) how to find InspireHEP BAI, (b) how to find ORCID, (c) paste-ready `people.json` example, (d) troubleshooting — manual `workflow_dispatch`, reading step summary, failed-cron response — closes DOC-01 + DOC-02
+5. `pnpm lint` exits 0 (MobileNav.tsx:38 `set-state-in-effect` + SiteFooter.tsx dead `next/link` import fixed)
+6. Stale `arxiv_id` JSDoc comment in `people.schema.ts` removed; `esteban-calzetta` placeholder scholar URL removed
+7. `pnpm tsc --noEmit`, `pnpm test`, `pnpm build` all green
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 12-01-PLAN.md — UI trivia + v1.0 carryovers: strip stale `arxiv_id` JSDoc in `people.schema.ts`, remove `esteban-calzetta` placeholder scholar URL, fix `MobileNav.tsx:38` `react-hooks/set-state-in-effect` lint (setOpen in useEffect pattern), fix `SiteFooter.tsx:1` dead `next/link` import, verify `pnpm lint` 0 errors
+- [ ] 12-02-PLAN.md — Data backfill + sync + placeholder purge: add `inspirehep_id` + `orcid_id` to the 8 members above, correct Matias Leizerovich spelling (slug + display_name + display_name_normalized), run `pnpm sync-publications` locally to regenerate `content/publications.json`, purge any residual v1.0 template/placeholder entries (manual-source publications with fictional authors not matching any group member), commit the new file, confirm `pnpm validate-content` + `pnpm test` + `pnpm build` green
+- [ ] 12-03-PLAN.md — Maintainer docs (DOC-01 + DOC-02): extend `content/SYNC.md` with BAI lookup (author-profiles URL pattern, example screenshots/text), ORCID lookup (orcid.org ID format), paste-ready `people.json` block, operational playbook (manual `workflow_dispatch`, reading step summary, cron failure response); flip DOC-01 + DOC-02 → Complete in `REQUIREMENTS.md` traceability
+
+---
+
 ## Progress
 
-**Execution Order:** 7 → 8 → 9 → 10 → 11
+**Execution Order:** 7 → 8 → 9 → 10 → 11 → 12
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -190,3 +216,4 @@ Plans:
 | 9. Sync Script | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 10. CI Wiring | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 11. Display Layer | v1.1 | 3/3 | Complete | 2026-04-19 |
+| 12. Polish & Docs | v1.1 | 0/3 | Not started | — |

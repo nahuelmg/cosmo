@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 milestone — all phases complete; ready for milestone audit
+**Current focus:** v1.1 Phase 12 — polish, data backfill (9/14 members), and maintainer docs (DOC-01 + DOC-02). Audit passed `tech_debt`; cleanup phase scoped before milestone completion.
 
 ## Current Position
 
-Phase: 11 of 11 (Display Layer) — VERIFIED ✓
-Plan: All 3 plans shipped (11-01, 11-02, 11-03)
-Status: v1.1 milestone code-complete — verifier PASSED 7/7 must-haves; pnpm build 45/45 routes, check-translations 0 drift, 65/65 tests passing
-Last activity: 2026-04-19 — Phase 11 verification PASSED; ready for /gsd:audit-milestone
+Phase: 12 of 12 (Polish & Docs) — gap closure phase scoped
+Plan: 0/3 (12-01 trivia, 12-02 data backfill + sync purge, 12-03 maintainer docs)
+Status: v1.1 Phases 7–11 VERIFIED; audit returned `tech_debt`; Phase 12 closes DOC-01 + DOC-02 and extends DATA-09/10 coverage (1/14 → 9/14)
+Last activity: 2026-04-19 — /gsd:audit-milestone passed with tech_debt; Phase 12 scoped; Phase 11 UI polish (DOI color + no-bold authors) committed as fix(11) on top of merged work
 
-Progress: [██████████████] v1.1 milestone complete — ready for audit
+Progress: [█████████████░] Phase 11 shipped; Phase 12 scoped; ready for /gsd:plan-phase 12
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -143,6 +143,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T19:30Z
-Stopped at: Phase 11 VERIFIED 7/7 must-haves (`.planning/phases/11-display-layer/11-VERIFICATION.md`); ROADMAP + STATE + REQUIREMENTS updated; v1.1 milestone code-complete. Next: `/gsd:audit-milestone` to verify cross-phase integration before `/gsd:complete-milestone v1.1`.
+Last session: 2026-04-19T21:00Z
+Stopped at: Audit returned `tech_debt` (no critical gaps); Phase 12 (Polish & Docs) added to ROADMAP to close DOC-01/02 + extend DATA-09/10 to 9/14 + purge residual template publications + fix v1.0 lint carryovers. Phase 11 UI polish (DOI dark-blue + member-author bold dropped) committed as `fix(11-display-layer)`. PUBS-12 softened in REQUIREMENTS (member bold dropped per user feedback; not a gap). Next: `/gsd:plan-phase 12`.
 Resume file: None
