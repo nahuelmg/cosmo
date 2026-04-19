@@ -76,7 +76,7 @@ export const PersonSchema = z.strictObject({
    * Cross-file ID validation is deferred to the Plan 05 prebuild script.
    * @deprecated v1.1 — field is inert in v1.1; scheduled for removal in v1.2. The
    *   v1.1 sync pipeline (Phase 9) replaces hand-curated selections with auto-populated
-   *   results from InspireHEP + arXiv queried via `inspirehep_id` / `arxiv_id`.
+   *   results from InspireHEP + arXiv queried via `inspirehep_id` / `orcid_id`.
    */
   publications_selected: z.array(z.string()).optional().default([]),
 
