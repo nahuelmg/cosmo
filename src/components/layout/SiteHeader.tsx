@@ -91,7 +91,7 @@ export function SiteHeader() {
           className="hidden md:flex items-center gap-5 ml-2"
         >
           {NAV_ITEMS.map((item) => (
-            <NavLink key={item.href} href={item.href} className="text-base lg:text-lg">
+            <NavLink key={item.href} href={item.href} className="text-sm">
               {tNav(item.labelKey)}
             </NavLink>
           ))}

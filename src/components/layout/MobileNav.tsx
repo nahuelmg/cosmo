@@ -125,7 +125,7 @@ export function MobileNav() {
                 key={item.href}
                 href={item.href}
                 onNavigate={() => setOpen(false)}
-                className="text-base py-3 px-2 rounded"
+                className="text-sm py-3 px-2 rounded"
                 activeClassName="bg-surface-alt"
               >
                 {tNav(item.labelKey)}
@@ -145,7 +145,7 @@ export function MobileNav() {
             className="mt-auto pt-6"
             onClickCapture={() => setOpen(false)}
           >
-            <LocaleToggle className="w-full text-left px-2 py-3 text-base" />
+            <LocaleToggle className="w-full text-left px-2 py-3 text-sm" />
           </div>
         </Dialog.Content>
       </Dialog.Portal>
