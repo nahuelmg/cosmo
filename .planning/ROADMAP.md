@@ -66,17 +66,17 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase details.
 **Note on DATA-09 / DATA-10:** These are human-action prerequisites, not code tasks. The maintainer (PI or group admin) must look up each current member's InspireHEP BAI identifier and claimed arXiv author ID before Phase 9 can be tested end-to-end. This phase gates that action by making the schema safe to receive those fields.
 
 **Success Criteria** (what must be TRUE when this phase completes):
-1. `pnpm check-content` passes on the existing v1.0 `content/publications.json` with no data changes — the `.default("manual")` guard holds
-2. Adding `"inspirehep_id": "E.Calzetta.1"` to any entry in `content/people.json` passes VS Code schema validation and `pnpm check-content` — no Zod strictObject rejection
+1. `pnpm validate-content` passes on the existing v1.0 `content/publications.json` with no data changes — the `.default("manual")` guard holds
+2. Adding `"inspirehep_id": "E.Calzetta.1"` to any entry in `content/people.json` passes VS Code schema validation and `pnpm validate-content` — no Zod strictObject rejection
 3. A publication entry with an arXiv ID in the pre-2007 format (`gr-qc/9209007`) passes schema validation
 4. `content/publications.schema.json` and `content/people.schema.json` are regenerated in the same commit as the schema code changes — VS Code IntelliSense reflects the new fields immediately
-5. `PublicationSchema.publications_selected` is marked `@deprecated` in JSDoc; the field still parses without error
+5. `PersonSchema.publications_selected` is marked `@deprecated` in JSDoc; the field still parses without error
 
-**Plans:** TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 07-01: Extend PublicationSchema (`source` enum + `.default("manual")` + pre-2007 arXiv regex) and PersonSchema (`arxiv_id?`, `inspirehep_id?`); deprecate `publications_selected` with JSDoc; regenerate JSON Schemas; verify `pnpm check-content` passes on unchanged v1.0 JSON
-- [ ] 07-02: Human-action — populate `content/people.json` with `inspirehep_id` (BAI) and `arxiv_id` for every current PI, postdoc, and PhD; run `pnpm check-content` to confirm new fields parse correctly
+- [ ] 07-01-PLAN.md — Extend PublicationSchema (`source` enum + `.default("manual")` + pre-2007 arXiv regex in `shared.ts`) and PersonSchema (`inspirehep_id?`, `arxiv_id?`, required `display_name_normalized`); deprecate `publications_selected` via JSDoc; export `normalizeName` helper; regenerate all 5 JSON Schemas; create `content/SYNC.md` maintainer lookup guide
+- [ ] 07-02-PLAN.md — Populate `content/people.json` — `display_name_normalized` on every entry; `inspirehep_id` (BAI) and `arxiv_id` (claimed author ID) on every current PI, postdoc, and PhD via maintainer checkpoint; run `pnpm validate-content` to confirm the updated JSON parses cleanly
 
 ---
 
@@ -112,7 +112,7 @@ Plans:
 **Success Criteria** (what must be TRUE when this phase completes):
 1. `pnpm sync-publications` completes without error when run locally with real BAI IDs populated in `people.json`; `content/publications.json` is written with a valid `_meta.synced_at` ISO timestamp and `source`-tagged entries
 2. Running the script a second time with identical upstream data produces a byte-for-byte identical `content/publications.json` — deterministic sort is confirmed
-3. `pnpm check-content` passes on the freshly written JSON without manual edits
+3. `pnpm validate-content` passes on the freshly written JSON without manual edits
 4. A member with no `arxiv_id` produces a logged warning ("skipping arXiv for [name]: no arxiv_id") and is not searched by name — arXiv output is partial, not contaminated
 5. Passing an `INSPIRE-00XXXXXX` numeric ID (wrong format) causes the script to exit 1 with a clear format-error message before any network requests are made
 
@@ -142,17 +142,19 @@ Plans:
 **Plans:** TBD
 
 Plans:
-- [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 22 setup, `--frozen-lockfile`, sync script step, `pnpm check-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
+- [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 22 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
 
 ---
 
 #### Phase 11: Display Layer
 
-**Goal:** `/publications` renders the auto-populated archive with source badges, source filter, preprint indicators, staleness date, and author highlighting; `/people/[slug]` renders each member's last-10-years publication list with the same badges and indicators; all new UI strings are bilingual and translation-complete; maintainers have documentation to operate the sync.
+**Goal:** `/publications` renders the auto-populated archive with source badges, source filter, preprint indicators, staleness date, and author highlighting; `/people/[slug]` renders each member's last-10-years publication list with the same badges and indicators; all new UI strings are bilingual and translation-complete.
+
+**Note:** Maintainer documentation (BAI lookup, arXiv ID claiming, `display_name_normalized` format) is owned by Phase 7's `content/SYNC.md`. Operational docs for the sync (CI triggers, troubleshooting failed crons) — if needed — will be added directly to README or a lightweight ops note, not duplicated here.
 
 **Depends on:** Phase 8 (accessor for `/people/[slug]`), Phase 9 (sync produces valid output for realistic UI testing)
 
-**Requirements:** PUBS-05, PUBS-06, PUBS-07, PUBS-08, PUBS-09, PUBS-10, PUBS-11, PUBS-12, PEOP-13, PEOP-14, PEOP-15, PEOP-16, PEOP-17, PEOP-18, I18N-08, I18N-09, DOC-01, DOC-02
+**Requirements:** PUBS-05, PUBS-06, PUBS-07, PUBS-08, PUBS-09, PUBS-10, PUBS-11, PUBS-12, PEOP-13, PEOP-14, PEOP-15, PEOP-16, PEOP-17, PEOP-18, I18N-08, I18N-09
 
 **Success Criteria** (what must be TRUE when this phase completes):
 1. `/publications` loads with publications grouped by year, newest-first; each entry shows a source pill ("InspireHEP" / "arXiv" / "Manual"), a preprint-vs-published indicator, and an author list formatted as full list if ≤5 authors or "First, Second, Third et al." if >5
@@ -161,15 +163,13 @@ Plans:
 4. A group member's name in any publication author list is rendered in bold; non-member names are rendered in normal weight
 5. `/people/[slug]` for a current PI, postdoc, or PhD shows a "Publications" section listing their last-10-years output with count subtitle ("N publicaciones en los últimos 10 años" / "N publications in the last 10 years"); the old `publications_selected` list is gone
 6. `pnpm check-translations` passes with 0 key drift — all new UI strings present in both `messages/es.json` and `messages/en.json`
-7. The maintainer guide covers: how to add `arxiv_id` / `inspirehep_id` to `people.json` with copy-pasteable examples; what to do when the cron fails; how to trigger a manual `workflow_dispatch`; how to read the Action step summary
 
 **Plans:** TBD
 
 Plans:
 - [ ] 11-01: Shared publication entry component — source badge pill, preprint/published indicator, author list formatting (≤5 full / >5 et al.), author highlighting via `display_name_normalized` matching; add all new i18n keys to `messages/es.json` + `messages/en.json`
 - [ ] 11-02: `/publications` page updates — flip data source to synced JSON, wire source filter toggle, render staleness indicator from `_meta.synced_at`, add bilingual two-source footnote; `pnpm check-translations` passes
-- [ ] 11-03: `/people/[slug]` publications section — call `getPublicationsByAuthor(nameVariants, { lastNYears: 10 })`, render count subtitle, reuse shared entry component, remove `publications_selected` render path; verify PEOP-17 (past members unchanged)
-- [ ] 11-04: Maintainer documentation — `content/SYNC.md` or README addendum covering BAI lookup, arXiv ID claiming, `workflow_dispatch` manual run, reading Action summary, troubleshooting failed crons; final `pnpm build` + `pnpm check-translations` verification
+- [ ] 11-03: `/people/[slug]` publications section — call `getPublicationsByAuthor(nameVariants, { lastNYears: 10 })`, render count subtitle, reuse shared entry component, remove `publications_selected` render path; verify PEOP-17 (past members unchanged); final `pnpm build` + `pnpm check-translations` verification
 
 ---
 
@@ -189,4 +189,4 @@ Plans:
 | 8. Accessor | v1.1 | 0/1 | Not started | - |
 | 9. Sync Script | v1.1 | 0/3 | Not started | - |
 | 10. CI Wiring | v1.1 | 0/1 | Not started | - |
-| 11. Display Layer | v1.1 | 0/4 | Not started | - |
+| 11. Display Layer | v1.1 | 0/3 | Not started | - |
