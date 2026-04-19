@@ -10,12 +10,12 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 ## Current Position
 
 Phase: 13 of ? (13-design-tokens-layout-rhythm)
-Plan: 01 of ? in phase
-Status: In progress — Phase 13 Wave 1 complete
-Last activity: 2026-04-19 — Completed 13-01-PLAN.md (token update + h1 line-height)
+Plan: 03 of ? in phase
+Status: In progress — Phase 13 Wave 2 (13-03 complete; 13-02 may be concurrent)
+Last activity: 2026-04-19 — Completed 13-03-PLAN.md (ResearchCard p-8→p-6, SPACE-03 card audit)
 
-Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started (1 plan complete)
-░░░░░░░░░░ Phase 13: 1/? plans complete
+Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started (plans 01 + 03 complete)
+░░░░░░░░░░ Phase 13: 2+/? plans complete
 
 ## Shipped Milestones
 
@@ -46,8 +46,8 @@ Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started
 
 ## Session Continuity
 
-Last session: 2026-04-19T22:22:07Z — 13-01 token update complete.
-Stopped at: Completed 13-01-PLAN.md
+Last session: 2026-04-19T22:30:00Z — 13-03 card padding audit complete.
+Stopped at: Completed 13-03-PLAN.md
 Resume file: None
 
 ## Accumulated Decisions (v1.2)
@@ -56,3 +56,5 @@ Resume file: None
 |---|---|---|
 | Scope `line-height: 1.2` to `h1` only in `@layer base` | H3 at text-2xl is sub-display; tight leading hurts readability there | 13-01 |
 | `--text-5xl: 2.5rem` caps hero H1 at 40px (not Tailwind default 48px) | HeroCarousel only; inner page H1s use text-4xl (36px) | 13-01 |
+| SPACE-03 two-tier rule: dense = p-4 (grid cards), spacious = p-6 (feature cards), flat across breakpoints | No CSS abstraction, no responsive variants per CONTEXT.md | 13-03 |
+| ResearchCard p-8 was out-of-spec; reduced to p-6 | Only card using p-8; now uniform with OutreachCard spacious tier | 13-03 |
