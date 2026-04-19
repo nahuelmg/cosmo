@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 10 — CI Wiring
+**Current focus:** v1.1 Phase 11 — Display Layer
 
 ## Current Position
 
-Phase: 9 of 11 (Sync Script) — COMPLETE
-Plan: 09-03 complete (all 3 plans in Phase 9 done; Phase 10 next)
-Status: Phase 9 complete — sync script runs locally, write gate + idempotence verified; ready for Phase 10 (CI Wiring)
-Last activity: 2026-04-19 — Completed 09-03-PLAN.md (write gate, PublicationsFileSchema, E2E smoke test)
+Phase: 10 of 11 (CI Wiring) — COMPLETE
+Plan: 10-01 complete (workflow live on main; first dispatch + back-to-back no-op verified); Phase 11 next
+Status: Phase 10 complete — weekly cron + workflow_dispatch wired, payload-aware diff guard prevents spurious Vercel rebuilds on `_meta.synced_at`-only drift; ready for Phase 11 (Display Layer)
+Last activity: 2026-04-19 — Completed 10-01-PLAN.md (workflow YAML + journal fallback + diff-guard fix)
 
-Progress: [██████████░░░░░] Phase 9 complete; Phases 10-11 remain
+Progress: [███████████░░░] Phase 10 complete; Phase 11 remains
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -96,14 +96,25 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Vitest 3.2.4 is the project's first unit-test runner — colocated `.test.ts` files beside source, `pnpm test` runs once (CI-friendly), `@` alias in `vitest.config.ts` mirrors tsconfig paths.
 - `src/content/index.ts` unchanged — existing `export * from "./accessors/publications"` wildcard auto-re-exports the new function (ACC-04 satisfied). In-test `toBe` identity check proves wildcard coverage at runtime.
 
+### 10-01 Decisions (2026-04-19)
+
+- Node 20 (not 22 per REQUIREMENTS.md CI-03) + `pnpm validate-content` (not `check-content`) — pinned to code-of-record (`.nvmrc`, `engines.node`, `package.json scripts`); REQ table updated with reconciled wording
+- `pnpm/action-setup@v4` (not v5) + `actions/checkout@v4` + `actions/setup-node@v4` — widest-adopted stable tags; major-pinned so Dependabot bumps patch releases
+- `"Preprint"` journal fallback at `scripts/sync-publications.ts:346` — fixes Phase 9 latent bug where `publication_info[0]` exists with all-null fields produced `journal: ""` and failed `PublicationSchema.min(1)`; matches arXiv path's fallback for Phase 11 UI consistency
+- **Diff-guard pivot:** plain `git diff --quiet content/publications.json` proved insufficient because `scripts/sync-publications.ts:625` writes `_meta.synced_at: new Date().toISOString()` unconditionally, producing a byte-different file on every run. Fix: `jq -cS '.publications'` comparison against `HEAD:content/publications.json`; on payload-unchanged, `git checkout HEAD -- content/publications.json` discards the synced_at-only rewrite before the commit-decision step. Semantic win: `synced_at` now advances only on real content change, which aligns with PUBS-09 meaning for Phase 11.
+- Concurrency `group: sync-publications, cancel-in-progress: false` — manual dispatch never aborts a running cron
+- Commit scope is `content/publications.json` only (never `git add .`) — any incidental drift is a bug we want to surface, not auto-reconcile
+- First-run validation produced 3 historical bot commits (`ebdd41e`, `4674f6a`, `b25386c`) on origin/main BEFORE the diff-guard fix landed — kept as historical evidence (non-destructive rebase over them, not force-pushed)
+- `main` currently has no branch protection — direct push works; if protection is later added, `github-actions[bot]` must go in the bypass allowlist
+
 ### Blockers / Concerns
 
-- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker for Phase 10 CI wiring)
-- CI-08: Check if `main` has branch protection rules before Phase 10 — may need `github-actions[bot]` bypass
-- Phase 10 CI steps: `pnpm sync-publications` → `pnpm validate-content` → `git diff --quiet content/publications.json` → commit if changed. Script stdout format is step-summary compatible.
+- DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker for Phase 11 Display Layer)
+- Phase 11 entry point: start with 11-01 (shared publication entry component — source badge, preprint indicator, author list, author highlighting via `display_name_normalized`), then 11-02 (/publications page with filter + staleness), then 11-03 (/people/[slug] last-10-years section)
+- `_meta.synced_at` on disk now only advances on real publications change — safe for Phase 11 PUBS-09 "Actualizado el" to consume directly
 
 ## Session Continuity
 
-Last session: 2026-04-19T17:13:08Z
-Stopped at: Completed 09-03-PLAN.md — Phase 9 fully done; write gate + E2E + idempotence confirmed; ready for Phase 10 (CI Wiring)
+Last session: 2026-04-19T(phase-10-complete)
+Stopped at: Completed 10-01-PLAN.md — workflow YAML live on main, first dispatch + back-to-back no-op verified, payload-aware diff-guard fix landed; ready for Phase 11 (Display Layer)
 Resume file: None

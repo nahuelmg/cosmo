@@ -142,7 +142,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 20 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; includes task-zero fix for Phase 9 `journal: ""` fallback bug (`|| "Preprint"` in `scripts/sync-publications.ts:346`); run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
+- [x] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 20 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; includes task-zero fix for Phase 9 `journal: ""` fallback bug (`|| "Preprint"` in `scripts/sync-publications.ts:346`); run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
 
 ---
 
@@ -188,5 +188,5 @@ Plans:
 | 7. Schema Extension | v1.1 | 2/2 | Complete | 2026-04-18 |
 | 8. Accessor | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 9. Sync Script | v1.1 | 3/3 | Complete | 2026-04-19 |
-| 10. CI Wiring | v1.1 | 0/1 | Not started | - |
+| 10. CI Wiring | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 11. Display Layer | v1.1 | 0/3 | Not started | - |

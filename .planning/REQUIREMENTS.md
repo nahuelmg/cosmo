@@ -59,14 +59,14 @@
 
 ### GitHub Action (CI automation)
 
-- [ ] **CI-01**: `.github/workflows/sync-publications.yml` scheduled at `0 6 * * 1` (Monday 06:00 UTC) with `workflow_dispatch` for manual runs
-- [ ] **CI-02**: Workflow declares `permissions: contents: write`
-- [ ] **CI-03**: Workflow sets up pnpm (`pnpm/action-setup@v5`) and Node 22, installs with `--frozen-lockfile`, runs the sync script
-- [ ] **CI-04**: Workflow runs `pnpm check-content` after sync writes JSON, as an independent second-gate validation
-- [ ] **CI-05**: Workflow uses `git diff --quiet content/publications.json` to skip the commit on byte-identical output (prevents empty-diff Vercel rebuilds)
-- [ ] **CI-06**: Workflow commits with message including `[skip ci]` (prevents the push from triggering a second workflow run)
-- [ ] **CI-07**: Workflow step summary reports per-run delta ("X added, Y removed") or "No changes"; sync failures leave `content/publications.json` untouched
-- [ ] **CI-08**: Manual `workflow_dispatch` verified to push successfully — covers any branch-protection rule on `main` (adjust permissions or add `github-actions[bot]` bypass if blocked)
+- [x] **CI-01**: `.github/workflows/sync-publications.yml` scheduled at `0 6 * * 1` (Monday 06:00 UTC) with `workflow_dispatch` for manual runs
+- [x] **CI-02**: Workflow declares `permissions: contents: write`
+- [x] **CI-03**: Workflow sets up pnpm (`pnpm/action-setup@v4`) and Node 20, installs with `--frozen-lockfile`, runs the sync script (versions pinned to project's `.nvmrc` / `engines.node` and widest-adopted stable action tag; original spec said `v5` / Node 22 before the project pinned Node 20)
+- [x] **CI-04**: Workflow runs `pnpm validate-content` after sync writes JSON, as an independent second-gate validation (package.json uses `validate-content`; original spec said `check-content`, which has never existed)
+- [x] **CI-05**: Workflow uses a payload-aware diff check over `content/publications.json` (`jq -cS '.publications'` comparison against `HEAD` + `git checkout HEAD -- ...` if unchanged) to skip the commit on identical publications data — ignores `_meta.synced_at` byte drift that made a plain `git diff --quiet` always report changes
+- [x] **CI-06**: Workflow commits with message including `[skip ci]` (prevents the push from triggering a second workflow run)
+- [x] **CI-07**: Workflow step summary reports per-run delta ("X added, Y removed") or "No changes"; sync failures leave `content/publications.json` untouched
+- [x] **CI-08**: Manual `workflow_dispatch` verified to push successfully — covers any branch-protection rule on `main` (adjust permissions or add `github-actions[bot]` bypass if blocked)
 
 ### Publications Page (/publications)
 
@@ -167,14 +167,14 @@
 | SYNC-13 | Phase 9 | Complete |
 | SYNC-14 | Phase 9 | Complete |
 | SYNC-15 | Phase 9 | Complete |
-| CI-01 | Phase 10 | Pending |
-| CI-02 | Phase 10 | Pending |
-| CI-03 | Phase 10 | Pending |
-| CI-04 | Phase 10 | Pending |
-| CI-05 | Phase 10 | Pending |
-| CI-06 | Phase 10 | Pending |
-| CI-07 | Phase 10 | Pending |
-| CI-08 | Phase 10 | Pending |
+| CI-01 | Phase 10 | Complete |
+| CI-02 | Phase 10 | Complete |
+| CI-03 | Phase 10 | Complete |
+| CI-04 | Phase 10 | Complete |
+| CI-05 | Phase 10 | Complete |
+| CI-06 | Phase 10 | Complete |
+| CI-07 | Phase 10 | Complete |
+| CI-08 | Phase 10 | Complete |
 | PUBS-05 | Phase 11 | Pending |
 | PUBS-06 | Phase 11 | Pending |
 | PUBS-07 | Phase 11 | Pending |
