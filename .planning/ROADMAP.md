@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-04-18)
 - ✅ **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (shipped 2026-04-19)
+- 🔨 **v1.2 Aesthetic Polish** — Phases 13–15 (in progress)
 
 ---
 
@@ -73,6 +74,37 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 
 ---
 
+## v1.2 Aesthetic Polish (Phases 13–15)
+
+### Phase 13: Design Tokens & Layout Rhythm
+**Goal:** The type scale, page-container widths, and vertical rhythm reflect the audited polish targets — `text-5xl` token exists, `text-4xl` bumped to 36 px, page widths standardised, vertical spacing codified. All other v1.2 phases depend on these tokens.
+**Requirements:** TYPO-01, TYPO-02, TYPO-03, TYPO-04, TYPO-05, SPACE-01, SPACE-02, SPACE-03, SPACE-04
+**Success criteria:**
+1. `--text-5xl` token is defined and H1 elements use the new 36 px size
+2. Every page wrapper uses `max-w-5xl` (prose) or `max-w-6xl` (grids) per the codified rule
+3. Every section / page wrapper uses `py-12` / `py-16` per the codified rhythm
+4. `pnpm build` passes; visually, heading hierarchy reads distinctly on People / Research / Contact
+
+### Phase 14: Media Sizing
+**Goal:** Member photos no longer dominate their pages — `PersonCard` cards cap at ≤ 280 px wide, `PersonDetail` hero photo reduced to 180–200 px, `next/image` `sizes` attributes updated so Next serves the correct srcset.
+**Requirements:** MEDIA-01, MEDIA-02, MEDIA-03, MEDIA-04, MEDIA-05
+**Success criteria:**
+1. `/people` renders `PersonCard` at ≤ 280 px card width on `lg+` (visual check + CSS inspection)
+2. `/people/[slug]` hero photo renders at 180–200 px on desktop
+3. No layout shift introduced; Hero carousel and outreach imagery verified at 375 / 768 / 1024 / 1440 px
+4. Next.js image srcset loads appropriate sizes (no oversized downloads)
+
+### Phase 15: Interactive Polish & Documentation
+**Goal:** Every interactive element meets the 44 × 44 tap-target bar, all focus rings unify on `accent-ring`, subtle motion is added where it clarifies state, and the design system docs reflect the v1.2 token + component deltas.
+**Requirements:** BTN-01, BTN-02, BTN-03, BTN-04, BTN-05, BTN-06, MICRO-01, MICRO-02, MICRO-03, MICRO-04, MICRO-05, DOC-01, DOC-02
+**Success criteria:**
+1. Every interactive element (buttons, nav links, pills, dots) has an effective ≥ 44 × 44 tap area
+2. Every `focus-visible:ring-*` uses `ring-accent-ring` (grep confirms zero `ring-surface/70` or stray variants)
+3. `pnpm axe` reports zero violations on all 8 Spanish pages
+4. `design-system/cosmology-group-uba/MASTER.md` + OVERRIDES.md reflect v1.2 adjustments
+
+---
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -89,3 +121,6 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 | 10. CI Wiring | v1.1 | 1/1 | Complete | 2026-04-19 |
 | 11. Display Layer | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 12. Polish & Docs | v1.1 | 3/3 | Complete | 2026-04-19 |
+| 13. Design Tokens & Layout Rhythm | v1.2 | 0/TBD | Not started | — |
+| 14. Media Sizing | v1.2 | 0/TBD | Not started | — |
+| 15. Interactive Polish & Documentation | v1.2 | 0/TBD | Not started | — |

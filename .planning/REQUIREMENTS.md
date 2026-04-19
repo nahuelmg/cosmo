@@ -88,12 +88,12 @@ Explicit exclusions with reasoning.
 
 | REQ-ID | Phase | Plan | Status |
 |--------|-------|------|--------|
-| TYPO-01..05 | TBD | TBD | Pending |
-| BTN-01..06 | TBD | TBD | Pending |
-| SPACE-01..04 | TBD | TBD | Pending |
-| MEDIA-01..05 | TBD | TBD | Pending |
-| MICRO-01..05 | TBD | TBD | Pending |
-| DOC-01..02 | TBD | TBD | Pending |
+| TYPO-01..05 | 13 | TBD | Pending |
+| SPACE-01..04 | 13 | TBD | Pending |
+| MEDIA-01..05 | 14 | TBD | Pending |
+| BTN-01..06 | 15 | TBD | Pending |
+| MICRO-01..05 | 15 | TBD | Pending |
+| DOC-01..02 | 15 | TBD | Pending |
 
 ---
 *Last updated: 2026-04-19 — v1.2 milestone requirements defined.*
