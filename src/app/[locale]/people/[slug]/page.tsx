@@ -8,9 +8,10 @@ import {
   getPeople,
   getPersonBySlug,
   getLocalizedPerson,
-  getPublicationById,
+  getPublicationsByAuthor,
   siteConfig,
 } from '@/content';
+import { deriveNameVariants, buildMemberSurnameSet } from '@/lib/publications-helpers';
 import { PersonDetail } from '@/components/people/PersonDetail';
 import { buildPageMetadata } from '@/lib/metadata';
 import { buildPersonSchema } from '@/lib/schemas';
@@ -72,29 +73,31 @@ export default async function PersonDetailPage({ params }: Props) {
   if (person.category === 'undergrad' || person.category === 'past') notFound();
 
   const t = await getTranslations('people');
+  const tPubs = await getTranslations('publications');
 
-  const selectedPubs = person.publications_selected
-    .map((id) => getPublicationById(id))
-    .filter((p): p is NonNullable<typeof p> => p !== undefined)
-    .map((p) => ({
-      id: p.id,
-      authors: p.authors,
-      title: p.title,
-      journal: p.journal,
-      year: p.year,
-      arxiv: p.arxiv,
-      doi: p.doi,
-    }));
+  const memberPubs = getPublicationsByAuthor(
+    deriveNameVariants(rawPerson),
+    { lastNYears: 10 },
+  );
+  const memberSurnameSet = buildMemberSurnameSet(getPeople());
+  const pubLabels = {
+    arxiv: tPubs('arxiv'),
+    doi: tPubs('doi'),
+    preprint: tPubs('preprint'),
+    published: tPubs('published'),
+  };
 
   return (
     <>
       <JsonLd data={buildPersonSchema(rawPerson, locale)} />
       <PersonDetail
         person={person}
-        selectedPubs={selectedPubs}
+        memberPubs={memberPubs}
+        memberSurnameSet={memberSurnameSet}
+        pubLabels={pubLabels}
+        publicationsHeading={tPubs('title')}
         labels={{
           researchInterests: t('researchInterests'),
-          selectedPublications: t('selectedPublications'),
           email: t('email'),
           office: t('office'),
           orcid: t('orcid'),
