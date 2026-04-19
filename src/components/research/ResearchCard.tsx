@@ -18,7 +18,7 @@ export function ResearchCard({ id, title, shortDescription, iconName }: Research
   const Icon = iconName ? (ICON_MAP[iconName] ?? HelpCircle) : HelpCircle;
 
   return (
-    <article aria-labelledby={`research-${id}`} className="rounded-md bg-surface-alt p-8">
+    <article aria-labelledby={`research-${id}`} className="rounded-md bg-surface-alt p-6">
       <Icon aria-hidden="true" className="h-10 w-10 text-accent" />
       <h2 id={`research-${id}`} className="mt-6 font-serif text-2xl font-semibold">
         {title}
