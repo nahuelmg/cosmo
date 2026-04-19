@@ -21,19 +21,12 @@ export function PublicationEntry({
 
   return (
     <li id={`pub-${publication.id}`} className="py-5 border-b border-ink/5 last:border-b-0">
-      {/* Author list with member bold-highlighting */}
       <p className="font-serif leading-snug">
         <span className="text-ink">
           {tokens.map((token, i) => (
             <span key={i}>
               {i > 0 && ", "}
-              {token.isEllipsis ? (
-                <span>{token.display}</span>
-              ) : token.isMember ? (
-                <strong className="font-bold">{token.display}</strong>
-              ) : (
-                <span>{token.display}</span>
-              )}
+              {token.display}
             </span>
           ))}
           {etAl && " et al."}
@@ -101,7 +94,7 @@ export function PublicationEntry({
               href={`https://doi.org/${publication.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
+              className="text-[oklch(0.38_0.10_235)] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
             >
               {labels.doi}:{publication.doi}
             </a>
