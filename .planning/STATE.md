@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 10 of 11 (CI Wiring) — COMPLETE
-Plan: 10-01 complete (workflow live on main; first dispatch + back-to-back no-op verified); Phase 11 next
-Status: Phase 10 complete — weekly cron + workflow_dispatch wired, payload-aware diff guard prevents spurious Vercel rebuilds on `_meta.synced_at`-only drift; ready for Phase 11 (Display Layer)
-Last activity: 2026-04-19 — Completed 10-01-PLAN.md (workflow YAML + journal fallback + diff-guard fix)
+Phase: 11 of 11 (Display Layer) — In progress
+Plan: 11-01 complete (shared helpers + PublicationEntry v2 + i18n keys); 11-02 + 11-03 next (Wave 2, parallel)
+Status: Phase 11 Wave 1 complete — getPublicationsMeta, publications-helpers, PublicationEntry extended, 7 i18n keys added; Wave 2 unblocked for parallel execution
+Last activity: 2026-04-19 — Completed 11-01-PLAN.md (shared publication entry helpers + i18n)
 
-Progress: [███████████░░░] Phase 10 complete; Phase 11 remains
+Progress: [████████████░░] Phase 11 in progress (Wave 1 of 3 plans done)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -107,6 +107,18 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - First-run validation produced 3 historical bot commits (`ebdd41e`, `4674f6a`, `b25386c`) on origin/main BEFORE the diff-guard fix landed — kept as historical evidence (non-destructive rebase over them, not force-pushed)
 - `main` currently has no branch protection — direct push works; if protection is later added, `github-actions[bot]` must go in the bypass allowlist
 
+### 11-01 Decisions (2026-04-19)
+
+- Surname-based author matching confirmed: last word of `display_name_normalized` (not full string) — "tomas ferreira chase" does NOT substring-match "chase, tomas ferreira"; "chase" does. Unit tested empirically.
+- `buildMemberSurnameSet` consumes all people unfiltered (CONTEXT locked) — past members included. Verified by test with `status: past`-equivalent entry.
+- Et al. member-visible invariant: member at position 7 (index 6) in a 7-author list produces `[A, B, C, …, Chase, Tomas]` output with `etAl: true`. Locked in Vitest.
+- `preprint` detection via `pub.journal === "Preprint"` (semantic signal, consistent with sync script fallback). RESEARCH Section 3 confirmed.
+- Manual source pill rendered as `<span>` (non-link) — `getSourcePillHref` returns `null` for `source === "manual"`, driving the href ternary to the span branch.
+- Source pill OKLCH tones: InspireHEP `bg-[oklch(0.95_0.04_235)]`, arXiv `bg-[oklch(0.95_0.05_30)]`, Manual uses `bg-surface-alt`. Chroma ≤ 0.05 for backgrounds (subdued, no saturated brand colors).
+- `people.selectedPublications` key left in `messages/*.json` — v1.2 cleanup (RESEARCH Pitfall 5; one-directional key enforcement allows extra keys without failure).
+- `makePub` test helper: spread override after base object (not inline literal) to avoid TS2783 duplicate-key error. Minor fix within Task 2 scope.
+- PublicationsYearGroup + PersonDetail call sites still use old PublicationEntry prop shape — 2 expected TypeScript errors (isolated, intentional; fixed in 11-02 + 11-03).
+
 ### Blockers / Concerns
 
 - DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit — not a code blocker for Phase 11 Display Layer)
@@ -115,6 +127,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T(phase-10-complete)
-Stopped at: Completed 10-01-PLAN.md — workflow YAML live on main, first dispatch + back-to-back no-op verified, payload-aware diff-guard fix landed; ready for Phase 11 (Display Layer)
+Last session: 2026-04-19T19:06:00Z
+Stopped at: Completed 11-01-PLAN.md — Wave 1 foundation: getPublicationsMeta, publications-helpers (23 Vitest tests), PublicationEntry extended (two-chip badges + author highlighting), 7 i18n keys in both locales. Ready for Wave 2: 11-02 (/publications page) + 11-03 (/people/[slug] section) in parallel.
 Resume file: None
