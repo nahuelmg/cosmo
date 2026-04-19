@@ -109,11 +109,12 @@ export interface AuthorToken {
  *   - ≤ 5 authors: render all, annotated with isMember
  *   - > 5 authors:
  *       * max member index ≤ 2 → first 3 + "et al."
- *       * any member index > 2 → first 3 + ellipsis token + head-through-last-member + "et al."
+ *       * any member index > 2 → first 3 + ellipsis + group members only + "et al."
  *
  * Invariant: a member is never hidden under `et al.` (CONTEXT locked decision).
- * The literal "et al." is NOT in the returned token list — callers append it
- * when `etAl` is true.
+ * Non-member authors between the head slice and a member are collapsed into the
+ * ellipsis — critical for white-paper / collaboration entries with hundreds of
+ * authors, where rendering everything up to the last member is unreadable.
  *
  * Requirements: PUBS-11, PUBS-12.
  */
@@ -138,9 +139,9 @@ export function formatAuthors(
   }
 
   const head = annotated.slice(0, 3);
-  const tail = annotated.slice(3, lastMemberIdx + 1);
+  const deepMembers = memberIndices.filter((i) => i > 2).map((i) => annotated[i]);
   const ellipsis: AuthorToken = { display: "…", isMember: false, isEllipsis: true };
-  return { tokens: [...head, ellipsis, ...tail], etAl: true };
+  return { tokens: [...head, ellipsis, ...deepMembers], etAl: true };
 }
 
 // ---------------------------------------------------------------------------

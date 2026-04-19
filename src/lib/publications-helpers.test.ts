@@ -159,6 +159,42 @@ describe("formatAuthors", () => {
     expect(etAl).toBe(true);
   });
 
+  it("collaboration paper: head + ellipsis + member only, non-members between are collapsed", () => {
+    // ~500-author white-paper with the member at position 250 should render as
+    // [A, B, C, …, member] — NOT [A, B, C, …, D, E, F, ..., 247 others, member].
+    const authors = Array.from({ length: 500 }, (_, i) =>
+      i === 250 ? "Leizerovich, Matias" : `Author, ${i}`,
+    );
+    const { tokens, etAl } = formatAuthors(authors, new Set(["leizerovich"]));
+
+    expect(tokens).toHaveLength(5); // 3 head + ellipsis + 1 member
+    expect(tokens[0].display).toBe("Author, 0");
+    expect(tokens[1].display).toBe("Author, 1");
+    expect(tokens[2].display).toBe("Author, 2");
+    expect(tokens[3].isEllipsis).toBe(true);
+    expect(tokens[4].display).toBe("Leizerovich, Matias");
+    expect(tokens[4].isMember).toBe(true);
+    expect(etAl).toBe(true);
+  });
+
+  it("multiple deep members are all shown, non-members between them collapsed", () => {
+    const authors = [
+      "A", "B", "C",
+      "D", "E",
+      "Chase, Tomas",     // index 5 — member
+      "F", "G", "H",
+      "Nacir, Diana",     // index 9 — member
+      "I", "J",
+    ];
+    const { tokens, etAl } = formatAuthors(authors, new Set(["chase", "nacir"]));
+
+    expect(tokens).toHaveLength(6); // 3 head + ellipsis + 2 members
+    expect(tokens[3].isEllipsis).toBe(true);
+    expect(tokens[4].display).toBe("Chase, Tomas");
+    expect(tokens[5].display).toBe("Nacir, Diana");
+    expect(etAl).toBe(true);
+  });
+
   it("annotates member tokens with isMember: true for short lists", () => {
     const { tokens } = formatAuthors(
       ["Chase, Tomas", "Smith, J."],
