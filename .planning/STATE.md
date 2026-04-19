@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 ## Current Position
 
 Phase: 9 of 11 (Sync Script) — IN PROGRESS
-Plan: 09-01 complete (3 plans total in Phase 9; 09-02 next)
-Status: In progress — 09-01 scaffold complete; ready for 09-02 (extraction layer)
-Last activity: 2026-04-19 — Completed 09-01-PLAN.md (CLI scaffold, BAI validation, InspireHEP + arXiv fetch primitives)
+Plan: 09-02 complete (3 plans total in Phase 9; 09-03 next)
+Status: In progress — 09-02 extraction layer complete; ready for 09-03 (write gate)
+Last activity: 2026-04-19 — Completed 09-02-PLAN.md (extraction helpers, dedup, merge, wired main())
 
-Progress: [█████████░░░░░░] 9/11 phases started (09-01 done; 09-02 and 09-03 remain)
+Progress: [█████████░░░░░░] 9/11 phases started (09-01 + 09-02 done; 09-03 remains)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -64,6 +64,14 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Google Scholar `scholar_id` deferred to Phase 11 / v1.2 — no public API, useful as profile link only
 - DATA-09/10 partial: 1 member populated this cycle; remaining 13 are follow-up data commit
 
+### 09-02 Decisions (2026-04-19)
+
+- `require.main === module` guard required — tsx CJS module executes `main()` on import without it; guard prevents test runs from triggering I/O
+- TypeScript strict mode rejects `?? ||` mixing — year resolution uses `Number.isFinite(parsedPreprintYear)` guard instead of `|| currentYear` fallback
+- `vitest.config.ts` include must cover `scripts/**/*.test.ts` — was src/ only; scripts/ tests were not discovered
+- Live run confirmed: `tomas-ferreira-chase — InspireHEP: 4, arXiv: 3`; 14 other members have no IDs (DATA-09/10 partial)
+- Determinism confirmed: two back-to-back runs produce identical output
+
 ### 09-01 Decisions (2026-04-19)
 
 - `fast-xml-parser@5.7.1` isArray callback requires `string | MatcherView` union — `typeof jpath === "string"` guard needed before `Set.has()` in TypeScript strict mode
@@ -90,5 +98,5 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 ## Session Continuity
 
 Last session: 2026-04-19
-Stopped at: Completed 09-01-PLAN.md — CLI scaffold + fetch primitives live-verified; ready for 09-02 (extraction layer)
+Stopped at: Completed 09-02-PLAN.md — extraction helpers + wired main() live-verified; ready for 09-03 (write gate)
 Resume file: None
