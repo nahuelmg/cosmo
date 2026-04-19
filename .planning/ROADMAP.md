@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-04-18)
-- ✅ **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (all phases verified; audit re-run pending)
+- ✅ **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (shipped 2026-04-19)
 
 ---
 
@@ -40,168 +40,40 @@ See `.planning/milestones/v1.0-ROADMAP.md` for full phase details.
 
 </details>
 
----
+<details>
+<summary>✅ v1.1 arXiv + InspireHEP Sync (Phases 7–12) — SHIPPED 2026-04-19</summary>
 
-### 🚧 v1.1 arXiv + InspireHEP Sync (Phases 7–12)
+See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 
-**Milestone Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time — replacing v1.0's manual `content/publications.json` while preserving the fully-static SSG guarantee (PERF-01).
+### Phase 7: Schema Extension
+**Goal:** Zod schemas for Publication and Person extended atomically; existing v1.0 JSON parses without modification.
+**Plans:** 2 — all complete
 
-**Locked decisions:**
-- Build-time GitHub Action (weekly cron) — no runtime ISR
-- Sources: InspireHEP (BAI) + arXiv (claimed author ID) — entries source-tagged, no cross-source DOI dedup
-- Author linkage: explicit `arxiv_id` + `inspirehep_id` in `content/people.json`
-- Failure mode: last-good JSON preserved on any upstream failure
-- Profile display: last-10-years window on `/people/[slug]`; full archive on `/publications`
+### Phase 8: Accessor
+**Goal:** `getPublicationsByAuthor` in the content barrel, filtering by name variant + year window.
+**Plans:** 1 — all complete
 
----
+### Phase 9: Sync Script
+**Goal:** `pnpm sync-publications` queries InspireHEP + arXiv, writes valid `content/publications.json`, preserves last-good on upstream failure.
+**Plans:** 3 — all complete
 
-#### Phase 7: Schema Extension
+### Phase 10: CI Wiring
+**Goal:** GitHub Actions workflow runs sync on weekly Monday cron + manual dispatch; `jq` payload diff-guard prevents spurious commits.
+**Plans:** 1 — all complete
 
-**Goal:** The Zod schemas for Publication and Person are extended atomically — existing v1.0 JSON parses without modification, and maintainers can safely add `arxiv_id` / `inspirehep_id` to `people.json`.
+### Phase 11: Display Layer
+**Goal:** `/publications` and `/people/[slug]` render synced data with source badges, staleness line, filter, member-visible author truncation; all bilingual.
+**Plans:** 3 — all complete
 
-**Depends on:** Phase 6 (v1.0 shipped)
+### Phase 12: v1.1 Polish & Docs (Gap Closure)
+**Goal:** Close audit tech debt — DOC-01/02 shipped, DATA-09/10 lifted to 9/13, lint carryovers + placeholders purged, Leizerovich rename, Scannapieco typo fix.
+**Plans:** 3 — all complete
 
-**Requirements:** SCHEMA-01, SCHEMA-02, SCHEMA-03, SCHEMA-04, SCHEMA-05, SCHEMA-06, DATA-09, DATA-10
-
-**Note on DATA-09 / DATA-10:** These are human-action prerequisites, not code tasks. The maintainer (PI or group admin) must look up each current member's InspireHEP BAI identifier and claimed arXiv author ID before Phase 9 can be tested end-to-end. This phase gates that action by making the schema safe to receive those fields.
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. `pnpm validate-content` passes on the existing v1.0 `content/publications.json` with no data changes — the `.default("manual")` guard holds
-2. Adding `"inspirehep_id": "E.Calzetta.1"` to any entry in `content/people.json` passes VS Code schema validation and `pnpm validate-content` — no Zod strictObject rejection
-3. A publication entry with an arXiv ID in the pre-2007 format (`gr-qc/9209007`) passes schema validation
-4. `content/publications.schema.json` and `content/people.schema.json` are regenerated in the same commit as the schema code changes — VS Code IntelliSense reflects the new fields immediately
-5. `PersonSchema.publications_selected` is marked `@deprecated` in JSDoc; the field still parses without error
-
-**Plans:** 2 plans
-
-Plans:
-- [ ] 07-01-PLAN.md — Extend PublicationSchema (`source` enum + `.default("manual")` + pre-2007 arXiv regex in `shared.ts`) and PersonSchema (`inspirehep_id?`, `arxiv_id?`, required `display_name_normalized`); deprecate `publications_selected` via JSDoc; export `normalizeName` helper; regenerate all 5 JSON Schemas; create `content/SYNC.md` maintainer lookup guide
-- [ ] 07-02-PLAN.md — Populate `content/people.json` — `display_name_normalized` on every entry; `inspirehep_id` (BAI) and `arxiv_id` (claimed author ID) on every current PI, postdoc, and PhD via maintainer checkpoint; run `pnpm validate-content` to confirm the updated JSON parses cleanly
-
----
-
-#### Phase 8: Accessor
-
-**Goal:** `getPublicationsByAuthor` exists in the content barrel and correctly filters publications by name variant and year window — the page component that will call it can be written against a stable, tested interface.
-
-**Depends on:** Phase 7 (updated Publication type must be in place)
-
-**Requirements:** ACC-01, ACC-02, ACC-03, ACC-04, ACC-05
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. `import { getPublicationsByAuthor } from "@/content"` compiles in strict TypeScript with no type errors
-2. `getPublicationsByAuthor(["García", "garcia"], { lastNYears: 10 })` returns only entries where any author field contains a case-insensitive, NFC-normalized match to "García" or "garcia" AND whose year falls within the last 10 calendar years
-3. The accessor file has zero imports from `src/content/people.ts` — circular dependency is structurally impossible
-4. `getPublicationsByAuthor(["Someone"], {})` called with the full v1.0 publication list returns results (not an empty array caused by a missing `.default("manual")` source field)
-
-**Plans:** 1 plan
-
-Plans:
-- [x] 08-01-PLAN.md — Install Vitest + implement `getPublicationsByAuthor` in `src/content/accessors/publications.ts` using NFD-strip `normalizeName` + unit tests covering 4-char guard, diacritic fold, year window (incl. `lastNYears: 0`), pre-sort, non-mutation, ACC-04 barrel identity, ACC-05 no-people-import
-
----
-
-#### Phase 9: Sync Script
-
-**Goal:** `pnpm sync-publications` runs locally, queries InspireHEP and arXiv for all members with IDs populated, writes a valid `content/publications.json`, and exits non-zero without writing anything if any upstream request fails.
-
-**Depends on:** Phase 7 (updated schema types for imports and validation), Phase 8 (accessor not strictly required but schema must be stable), DATA-09/DATA-10 populated (human action from Phase 7)
-
-**Requirements:** SYNC-01, SYNC-02, SYNC-03, SYNC-04, SYNC-05, SYNC-06, SYNC-07, SYNC-08, SYNC-09, SYNC-10, SYNC-11, SYNC-12, SYNC-13, SYNC-14, SYNC-15
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. `pnpm sync-publications` completes without error when run locally with real BAI IDs populated in `people.json`; `content/publications.json` is written with a valid `_meta.synced_at` ISO timestamp and `source`-tagged entries
-2. Running the script a second time with identical upstream data produces a byte-for-byte identical `content/publications.json` — deterministic sort is confirmed
-3. `pnpm validate-content` passes on the freshly written JSON without manual edits
-4. A member with no `arxiv_id` produces a logged warning ("skipping arXiv for [name]: no arxiv_id") and is not searched by name — arXiv output is partial, not contaminated
-5. Passing an `INSPIRE-00XXXXXX` numeric ID (wrong format) causes the script to exit 1 with a clear format-error message before any network requests are made
-
-**Plans:** 3 plans
-
-Plans:
-- [x] 09-01-PLAN.md — Scaffold `scripts/sync-publications.ts`: `fast-xml-parser@^5.7.1` devDependency + `sync-publications` script, `node:util parseArgs` CLI (dry-run / member / no-arxiv / no-inspire / verbose), startup BAI-format validation, `runBatched` (max 5 concurrent + 2s batch pause), `fetchWithRetry` (429 exp-backoff, `AbortSignal.timeout(10_000)`), InspireHEP + arXiv-atom2 fetch primitives, `isArray` jpath Set on `feed.entry` / `feed.entry.author` / `feed.entry.link` / `feed.entry.category`
-- [x] 09-02-PLAN.md — Extraction + merge layer: `inspireHitToPublication` (year from `publication_info[0].year` / `preprint_date` fallback, NFC author/title/abstract, BibTeX strip, DOI preference, `source: "inspirehep"`), `arxivEntryToPublication` (CSV author split, version-suffix strip, `source: "arxiv"`), `dedupByArxivId` (intra-source), `readManualEntries` pass-through, `mergePublications` deterministic sort (year desc → arXiv desc via `localeCompare` → no-arxiv last); wire `main()` per-member fetch→extract→dedup→merge with stdout progress + stderr warnings
-- [x] 09-03-PLAN.md — Introduce `PublicationsFileSchema` wrapping existing `PublicationsSchema`; update `src/content/accessors/publications.ts` (defensive bridge → clean `PublicationsFileSchema.parse` after first sync) + `scripts/validate-content.mjs` to the wrapped shape; regenerate JSON Schemas; wire `_meta` block (synced_at ISO, sources[], counts{inspirehep,arxiv,manual}, warnings[]), `safeParse` write-gate, `--dry-run` / `--member` output branching to `scripts/tmp/sync-<slug>.json`, SYNC-15 summary log (`N publications (X added, Y removed, Z unchanged, W warnings)`); local E2E smoke against real `tomas-ferreira-chase` data + idempotence diff check
-
----
-
-#### Phase 10: CI Wiring
-
-**Goal:** A GitHub Actions workflow runs the sync script on a weekly Monday cron and on manual `workflow_dispatch`, commits `content/publications.json` only when the content changes, and surfaces per-run delta in the step summary — with no spurious Vercel rebuilds on identical data.
-
-**Depends on:** Phase 9 (locally validated sync script — do not wire CI before the script is confirmed working)
-
-**Requirements:** CI-01, CI-02, CI-03, CI-04, CI-05, CI-06, CI-07, CI-08
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. A manual `workflow_dispatch` run completes successfully and either commits an updated `content/publications.json` to `main` or logs "No changes — skipping commit" if data is identical
-2. The Action step summary shows a per-run delta line ("X added, Y removed") or "No changes"
-3. Running the workflow twice in succession with no upstream data change results in zero commits the second time — `git diff --quiet` guard confirmed
-4. A Vercel deploy is triggered only when `content/publications.json` actually changes — confirmed by reviewing Vercel deploy history after two consecutive workflow runs
-
-**Plans:** 1 plan
-
-Plans:
-- [x] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 20 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; includes task-zero fix for Phase 9 `journal: ""` fallback bug (`|| "Preprint"` in `scripts/sync-publications.ts:346`); run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
-
----
-
-#### Phase 11: Display Layer
-
-**Goal:** `/publications` renders the auto-populated archive with source badges, source filter, preprint indicators, staleness date, and author highlighting; `/people/[slug]` renders each member's last-10-years publication list with the same badges and indicators; all new UI strings are bilingual and translation-complete.
-
-**Note:** Maintainer documentation (BAI lookup, arXiv ID claiming, `display_name_normalized` format) is owned by Phase 7's `content/SYNC.md`. Operational docs for the sync (CI triggers, troubleshooting failed crons) — if needed — will be added directly to README or a lightweight ops note, not duplicated here.
-
-**Depends on:** Phase 8 (accessor for `/people/[slug]`), Phase 9 (sync produces valid output for realistic UI testing)
-
-**Requirements:** PUBS-05, PUBS-06, PUBS-07, PUBS-08, PUBS-09, PUBS-10, PUBS-11, PUBS-12, PEOP-13, PEOP-14, PEOP-15, PEOP-16, PEOP-17, PEOP-18, I18N-08, I18N-09
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. `/publications` loads with publications grouped by year, newest-first; each entry shows a source pill ("InspireHEP" / "arXiv" / "Manual"), a preprint-vs-published indicator, and an author list formatted as full list if ≤5 authors or "First, Second, Third et al." if >5
-2. The source filter toggle ("Todos / InspireHEP / arXiv / Manual") narrows the visible entries in-browser without a page reload; selecting "Todos" restores the full list
-3. The "Actualizado el [date]" staleness indicator renders the date from `_meta.synced_at`; the bilingual two-source footnote appears below the list in both locales
-4. A group member's name in any publication author list is rendered in bold; non-member names are rendered in normal weight
-5. `/people/[slug]` for a current PI, postdoc, or PhD shows a "Publications" section listing their last-10-years output with count subtitle ("N publicaciones en los últimos 10 años" / "N publications in the last 10 years"); the old `publications_selected` list is gone
-6. `pnpm check-translations` passes with 0 key drift — all new UI strings present in both `messages/es.json` and `messages/en.json`
-
-**Plans:** 3 plans
-
-Plans:
-- [x] 11-01: Shared publication entry component — source badge pill, preprint/published indicator, author list formatting (≤5 full / >5 et al.), author highlighting via surname-match (last word of `display_name_normalized`); add all new i18n keys to `messages/es.json` + `messages/en.json`
-- [x] 11-02: `/publications` page updates — flip data source to synced JSON, wire source filter toggle, render staleness indicator from `_meta.synced_at`, add bilingual two-source footnote; `pnpm check-translations` passes
-- [x] 11-03: `/people/[slug]` publications section — call `getPublicationsByAuthor(deriveNameVariants(person), { lastNYears: 10 })`, reuse shared entry component, remove `publications_selected` render path; PEOP-17 `generateStaticParams` pi/postdoc/phd filter preserved; final `pnpm build` + `pnpm check-translations` verification. Count subtitle DROPPED per locked 11-CONTEXT decision (softens SC5 / PEOP-14)
-
----
-
-#### Phase 12: v1.1 Polish & Docs (Gap Closure)
-
-**Goal:** Address `tech_debt` items surfaced by `/gsd:audit-milestone`: commit Phase 11 UI polish, extend content backfill to 9/14 members (arXiv + InspireHEP coverage), purge residual template publications, fix v1.0 lint carryovers, and deliver the maintainer documentation that satisfies DOC-01 + DOC-02.
-
-**Depends on:** Phase 11 (display layer shipped); v1.1-MILESTONE-AUDIT.md gap scoping
-
-**Requirements:** DOC-01, DOC-02 (closed); DATA-09, DATA-10 (improved from 1/14 → 9/14); PUBS-12 (softened, member bold dropped per user feedback)
-
-**Success Criteria** (what must be TRUE when this phase completes):
-1. `content/people.json` has `inspirehep_id` + `orcid_id` on all 9 target current members (tomas-ferreira-chase already; + diana-lopez-nacir, susana-landau, matias-leizerovich, nahuel-miron-granese, esteban-calzetta, javier-badia, cecilia-scannapieco, augusto-chantada)
-2. Matias Leizerovich name spelling corrected to match authoritative InspireHEP form (slug rename, display_name, display_name_normalized)
-3. `pnpm sync-publications` runs locally against the 9 members and writes a valid `content/publications.json` containing only real InspireHEP/arXiv entries (zero template/placeholder leftovers from v1.0)
-4. `content/SYNC.md` extended with (a) how to find InspireHEP BAI, (b) how to find ORCID, (c) paste-ready `people.json` example, (d) troubleshooting — manual `workflow_dispatch`, reading step summary, failed-cron response — closes DOC-01 + DOC-02
-5. `pnpm lint` exits 0 (MobileNav.tsx:38 `set-state-in-effect` + SiteFooter.tsx dead `next/link` import fixed)
-6. Stale `arxiv_id` JSDoc comment in `people.schema.ts` removed; `esteban-calzetta` placeholder scholar URL removed
-7. `pnpm tsc --noEmit`, `pnpm test`, `pnpm build` all green
-
-**Plans:** 3 plans
-
-Plans:
-- [x] 12-01-PLAN.md — UI trivia + v1.0 carryovers: strip stale `arxiv_id` JSDoc in `people.schema.ts`, remove `esteban-calzetta` placeholder scholar URL, fix `MobileNav.tsx:38` `react-hooks/set-state-in-effect` lint (setOpen in useEffect pattern), fix `SiteFooter.tsx:1` dead `next/link` import, verify `pnpm lint` 0 errors
-- [x] 12-02-PLAN.md — Data backfill + sync + placeholder purge: add `inspirehep_id` + `orcid_id` to the 8 members above, correct Matias Leizerovich spelling (slug + display_name + display_name_normalized), run `pnpm sync-publications` locally to regenerate `content/publications.json`, purge any residual v1.0 template/placeholder entries (manual-source publications with fictional authors not matching any group member), commit the new file, confirm `pnpm validate-content` + `pnpm test` + `pnpm build` green
-- [x] 12-03-PLAN.md — Maintainer docs (DOC-01 + DOC-02): extend `content/SYNC.md` with BAI lookup (author-profiles URL pattern, example screenshots/text), ORCID lookup (orcid.org ID format), paste-ready `people.json` block, operational playbook (manual `workflow_dispatch`, reading step summary, cron failure response); flip DOC-01 + DOC-02 → Complete in `REQUIREMENTS.md` traceability
+</details>
 
 ---
 
 ## Progress
-
-**Execution Order:** 7 → 8 → 9 → 10 → 11 → 12
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|

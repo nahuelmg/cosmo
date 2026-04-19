@@ -1,5 +1,40 @@
 # Project Milestones: Cosmology Group Website (UBA / FCEN)
 
+## v1.1 arXiv + InspireHEP Publication Sync (Shipped: 2026-04-19)
+
+**Delivered:** Auto-populated `/publications` archive + per-member last-10-years publication section, refreshed weekly via GitHub Actions from InspireHEP (BAI) + arXiv (ORCID), source-tagged and preserving v1.0's fully-static SSG guarantee.
+
+**Phases completed:** 7–12 (13 plans total)
+
+**Key accomplishments:**
+
+- **Schema extension + content plumbing** — `PublicationSchema` gained `source: z.enum(["manual", "inspirehep", "arxiv"]).default("manual")` + pre-2007 arXiv-ID regex; `PersonSchema` gained `inspirehep_id?` (BAI, multi-segment-name regex) + `orcid_id?` (reconceived from `arxiv_id` after real-data check) + required `display_name_normalized`; `publications_selected` marked `@deprecated`; all 5 JSON Schemas regenerated; maintainer lookup guide at `content/SYNC.md`.
+- **Accessor layer + test discipline** — `getPublicationsByAuthor(nameVariants, { lastNYears })` lives in `src/content/accessors/publications.ts` with NFD-normalized case-insensitive author match and calendar-year window; zero imports from `people.ts` (circular-dep-proof); 20/20 Vitest tests covering 4-char guard, diacritic fold, `lastNYears: 0`, pre-sort, non-mutation.
+- **Sync script with real upstream hardening** — `pnpm sync-publications` fetches InspireHEP literature (BAI-scoped, pagination over `hits.total`) + arXiv Atom (ORCID-linked) with concurrency ≤5 + 2s batch pause + exp-backoff on 429 + `AbortSignal.timeout(10_000)`; deterministic sort (year desc → arXiv desc) + intra-source arXiv-ID dedup; `PublicationsFileSchema` write-gate with `_meta { synced_at, sources, counts, warnings }`; last-good JSON preserved on any upstream failure; SYNC-15 summary log.
+- **Weekly CI automation that doesn't spam Vercel** — `.github/workflows/sync-publications.yml` runs `cron: 0 6 * * 1` + `workflow_dispatch`, installs with `--frozen-lockfile` + Node 20 + `pnpm/action-setup@v4`; `jq -cS '.publications'` payload-aware diff-guard ignores `_meta.synced_at` byte drift → zero spurious commits on identical data; `[skip ci]` commit prefix prevents retrigger; step summary reports per-run delta or "No changes".
+- **Display layer, bilingual and softened by user feedback** — `/publications` flips to synced source with `SourceFilter` pill toggle, `Intl.DateTimeFormat` staleness line, bilingual two-source footnote, and author-list truncation that preserves member visibility past position 3; `/people/[slug]` renders each PI/postdoc/PhD's last-10-years section via `getPublicationsByAuthor(deriveNameVariants(person), { lastNYears: 10 })` — old `publications_selected` render path removed; all new UI strings pass `pnpm check-translations` with zero drift; count subtitle (PEOP-14) and member-author bold (PUBS-12) softened per 11-CONTEXT / user feedback.
+- **Polish phase that closed audit tech debt** — DOC-01 + DOC-02 shipped via extended `content/SYNC.md` (paste-ready example + Operational Troubleshooting); DATA-09/10 lifted 1 → 9 current members; 13 v1.0 template publications purged via live sync run producing 321 real entries (317 InspireHEP + 4 arXiv); `matias-leizerovich` rename end-to-end (authoritative InspireHEP BAI drops the "t"); `cecilia-scannapieco` display_name_normalized typo fix (unblocked surname-match linking to her 47 real papers); pre-existing MobileNav `set-state-in-effect` v1.0 lint carryover resolved via React-19-compliant click-handler topology.
+
+**Stats:**
+
+- 13 plans across 6 phases (7:2, 8:1, 9:3, 10:1, 11:3, 12:3)
+- 45 static routes preserved (SSG guarantee held)
+- 86 files changed, +24,302 / -1,206 LOC since v1.0
+- 89 commits from v1.0 tag to ship
+- Timeline: 2026-04-18 → 2026-04-19 (2 days)
+- 45/48 v1.1 requirements complete + 2 softened (PEOP-14, PUBS-12) + 2 partial (DATA-09/10 at 9/13; 4 slugs deferred to v1.2)
+- Cross-phase integration: 10/10 wiring checks passed (re-verified post-Phase-12)
+
+**Git range:** `feat(07-01): extend PublicationSchema + PersonSchema for v1.1 sync` → `docs(12): complete polish-docs phase`
+
+**Deferred to v1.2:** Remaining 4 member IDs (content task), `publications_selected` Zod field removal, orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`), dead `people.selectedPublications` i18n key, REQUIREMENTS PR-flow description update, OPS-DEFER-01 (Action failure notifications), SYNC-DEFER-02/03 (NASA ADS, cross-source DOI dedup).
+
+**Technical debt:** None unplanned — all deferrals are explicit scope calls, not workaround debt.
+
+**What's next:** v1.2 — Cleanup (legacy cleanup + remaining 4 member IDs), or new capability milestone TBD.
+
+---
+
 ## v1.0 MVP (Shipped: 2026-04-18)
 
 **Delivered:** Bilingual (es default / en toggle) institutional website for the Cosmology Group at UBA-FCEN — 45 fully static routes, Schema.org-structured, WCAG-AA accessible, ready to deploy to Vercel.

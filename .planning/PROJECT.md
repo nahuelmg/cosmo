@@ -8,19 +8,11 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
-## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
+## Current State: v1.1 Shipped — Planning next milestone
 
-**Goal:** Auto-populate publications from InspireHEP + arXiv for each current PI, postdoc, and PhD, refreshed weekly at build time — replacing v1.0's manual `content/publications.json`.
+**Latest shipped:** v1.1 arXiv + InspireHEP Publication Sync (2026-04-19) — auto-populated `/publications` + per-member last-10-years section via weekly GitHub Actions from InspireHEP (BAI) + arXiv (ORCID), with `jq` payload diff-guard preventing spurious commits and last-good preservation on upstream failure. 45 static routes preserved, 321 real publications from 9 current members, 10/10 cross-phase wiring verified.
 
-**Target features:**
-- Person schema adds optional `arxiv_id` + `inspirehep_id` — maintainer pastes profile ID once
-- Weekly GitHub Action runs sync script, commits refreshed `content/publications.json`, preserves fully-static SSG (PERF-01 guarantee holds)
-- Sync script queries InspireHEP + arXiv in parallel, tags each entry by source, validates against extended Zod schema
-- `/people/[slug]` shows the person's last-N-years publications (filtered by author match); full archive lives on `/publications`
-- API failure falls back to last-good JSON (no broken builds from flaky upstreams)
-- Current members only — past members keep v1.0's flat list
-
-**Explicitly deferred:** ORCID lookup, NASA ADS, cross-source DOI dedup (entries stay source-tagged), runtime ISR, filter UI (PUBS-03/04 still deferred).
+**Next milestone:** TBD — run `/gsd:new-milestone` to scope v1.2 (likely: remaining 4 member IDs + legacy cleanup of `publications_selected` Zod field, orphaned accessor exports, dead i18n key).
 
 ## Requirements
 
@@ -59,18 +51,21 @@ A credible, professional academic presence that makes it easy for visitors to fi
 **Deployment**
 - ✓ Deployable to Vercel out of the box (static output confirmed) — v1.0
 
+**Publication Sync** — all shipped v1.1
+- ✓ `PersonSchema` extended with optional `inspirehep_id` (BAI) + `orcid_id` (reconceived from `arxiv_id` after real-data check) — v1.1
+- ✓ Extended `PublicationSchema` with `source: "manual" | "inspirehep" | "arxiv"` tag + pre-2007 arXiv-ID regex — v1.1
+- ✓ `pnpm sync-publications` queries InspireHEP + arXiv for every current-member ID, writes `content/publications.json` — v1.1 (concurrency ≤5, 2s batch pause, exp-backoff, AbortSignal timeout)
+- ✓ Weekly GitHub Action (Monday 06:00 UTC) runs sync, `jq` payload diff-guard skips commit on identical data, `[skip ci]` prevents retrigger — v1.1
+- ✓ `/publications` renders auto-populated archive with source filter, staleness line, bilingual two-source footnote, member-visible author truncation — v1.1
+- ✓ `/people/[slug]` renders last-10-years section via `getPublicationsByAuthor(deriveNameVariants(person), { lastNYears: 10 })` — v1.1
+- ✓ Sync failure preserves last-good JSON; site deploys unchanged content — v1.1
+- ✓ Maintainer documentation in `content/SYNC.md` (BAI lookup + ORCID lookup + paste-ready example + Operational Troubleshooting) — v1.1
+
 ### Active
 
-<!-- Current scope. Building toward these. v1.1 — arXiv + InspireHEP sync. -->
+<!-- Current scope. No active milestone yet — run /gsd:new-milestone to scope v1.2. -->
 
-- [ ] Person schema extended with `arxiv_id` + `inspirehep_id` (both optional strings)
-- [ ] Sync script queries InspireHEP + arXiv for every current-member ID, writes `content/publications.json`
-- [ ] Extended Publication Zod schema with `source: "inspirehep" | "arxiv"` tag
-- [ ] Weekly GitHub Action (cron) runs sync, commits JSON on success, leaves file untouched on failure
-- [ ] `/publications` renders the auto-populated archive, grouped by year, newest first
-- [ ] `/people/[slug]` filters publications by author match, limited to last N years
-- [ ] Sync failure logs to Action summary; site deploys last-good JSON
-- [ ] Documentation for maintainers: how to add `arxiv_id` / `inspirehep_id` to people.json
+(None — v1.1 shipped; planning next milestone)
 
 ### Out of Scope
 
@@ -112,24 +107,29 @@ Previously out of scope, now revisited:
 - Facultad de Ciencias Exactas y Naturales (FCEN)
 - CONICET
 
-**Shipped state (post-v1.0)**
-- Tech stack: Next.js 16 App Router + TypeScript strict + Tailwind v4 (CSS-first `@theme`) + next-intl 4.9 + Zod v4 + Radix Dialog + lucide-react
+**Shipped state (post-v1.1)**
+- Tech stack: Next.js 16 App Router + TypeScript strict + Tailwind v4 (CSS-first `@theme`) + next-intl 4.9 + Zod v4 + Radix Dialog + lucide-react + fast-xml-parser 5.7 (arXiv Atom)
 - Design system: warm-academic OKLCH tokens + Source Serif 4 + Source Sans 3 with Greek subset
-- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 23-symbol `@/content` barrel
-- 45 fully-static routes, 158 commits, 2-day build span (2026-04-17 → 2026-04-18)
-- Audited: 0 axe-core violations, 73/75 v1 requirements satisfied, 0 cross-phase wiring defects
+- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 24-symbol `@/content` barrel; `content/publications.json` now auto-populated (321 entries, `_meta { synced_at, sources, counts, warnings }`)
+- Sync: `scripts/sync-publications.ts` + `.github/workflows/sync-publications.yml` (weekly cron + workflow_dispatch + `jq` payload diff-guard); `content/SYNC.md` maintainer + operational guide
+- 45 fully-static routes, 247 commits total (158 v1.0 + 89 v1.1), 3-day total span (2026-04-17 → 2026-04-19)
+- Audited: 0 axe-core violations, v1.0 73/75 requirements satisfied, v1.1 45/48 complete + 2 softened + 2 partial (9/13 DATA-09/10), 10/10 cross-phase wiring verified in both milestone audits
 - Deferred to production re-measurement: PERF-02 / PERF-04 / PERF-05 (Vercel prod LCP + CLS)
 
-**Known issues / tech debt carried forward**
+**Known issues / tech debt carried forward to v1.2**
 - NAV-04 mobile drawer 375px runtime check against live deploy (structural verification complete)
 - HeroCarousel pause / reduced-motion / MapEmbed IntersectionObserver runtime verification (deferred from 04-02 human-verify)
 - `MobileNav.tsx:87` `focus:outline-none` (box-shadow ring provides visible focus; lint flag only)
-- Latent `next/link` dead import in `SiteFooter.tsx:1` (unused; flip to `@/i18n/navigation` on next edit)
 - PUBS-03 / PUBS-04 deferred beyond v1 scope during Phase 4 planning; revisit when maintainers ask for filters
+- DATA-09/10: 4 remaining sync-scoped members need IDs (juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia) — content task
+- Legacy Zod field `publications_selected` still marked `@deprecated` — remove in v1.2
+- Orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`) — legacy v1.0 APIs retained to avoid breaking change; v1.2 cleanup
+- Dead `people.selectedPublications` i18n key in both locales — v1.2 cleanup
+- REQUIREMENTS.md PR-flow description (implementation pushes direct-to-main per Phase 10 decision) — update in v1.2
 
 **Content policy**
-- Placeholder names / bios / photos throughout; real content populates `content/*.json` post-launch
-- arXiv / InspireHEP publication import is the v1.1 goal (flips "Out of Scope: Real publication import")
+- Placeholder names / bios / photos remain where real content not yet provided (13/15 current members carry photos + bios; publications now real via v1.1 sync)
+- `content/publications.json` is auto-managed by the sync script — maintainers should not hand-edit (any edits get overwritten on next cron run)
 - Group name stored in single config file for one-line swap
 
 **Skills / prior work relied on**
@@ -161,7 +161,7 @@ Previously out of scope, now revisited:
 | Journal Club as 7th nav page | Table-stakes for peer cosmology sites | ✓ Good — SSG works, academic-year grouping reads naturally |
 | Keep auto-fade carousel | User preference over research-flagged anti-pattern; ≥6s dwell + reduced-motion respect | ✓ Good — a11y upgrade in Phase 6 closed the loop (pause button, aria-live, focus-within pause) |
 | JSON/YAML content over CMS | Academic maintainers edit infrequently | ✓ Good — Zod prebuild + JSON Schema IntelliSense gives CMS-level editor feedback without CMS infra |
-| Defer arXiv/ADS importer to v2 | Significant scope; placeholder data enough for v1.0 page layout | ⚠️ Revisit — v1.1 will tackle the arXiv + InspireHEP half |
+| Defer arXiv/ADS importer to v2 | Significant scope; placeholder data enough for v1.0 page layout | ✓ Good — v1.1 shipped arXiv + InspireHEP half; NASA ADS still deferred |
 | next-intl for i18n | Standard for Next.js App Router + Spanish default | ✓ Good — path translation + locale toggle work end-to-end |
 | Extract `domains/research-group/SKILL.md` on completion | Pattern (people + publications + research areas + outreach) reusable | — Pending (post-retrospective) |
 | CSS-first Tailwind v4 (`@theme` in `globals.css`, no `tailwind.config.js`) | Tailwind v4 default | ✓ Good — OKLCH tokens live next to the mapping |
@@ -173,6 +173,13 @@ Previously out of scope, now revisited:
 | `getPathname` as URL source of truth (not hardcoded locale paths) | Pathnames map drives sitemap + nav + canonicals | ✓ Good — renaming a path in `routing.ts` updates everywhere |
 | Scope-adjust PUBS-03 / PUBS-04 during Phase 4 | Filter UI not needed for v1.0 launch | — Pending — revisit when maintainers ask for filtering |
 | HeroCarousel pause button wording adjusted in Phase 4 human-verify | User preferred dot-only control; hover/focus deliberately don't pause | ✓ Good — HOME-03 rewording accepted by user |
+| Reconceive `arxiv_id` as `orcid_id` mid-Phase-7 (v1.1) | Real-data check found arXiv author slugs are not reliably discoverable; ORCID-indexed arXiv Atom feed replaces it cleanly | ✓ Good — ORCID-linked arXiv Atom + InspireHEP BAI combination covers all 9 currently-backfilled members |
+| Payload-aware CI diff-guard (`jq -cS '.publications'` vs HEAD) over plain `git diff --quiet` | `_meta.synced_at` byte drift would make plain diff always report changes → spurious Vercel rebuilds | ✓ Good — zero spurious commits observed across repeat workflow runs |
+| CI workflow pushes direct-to-main (not PR) | Group publishing cadence slow; auto-commit with Zod validation + Vercel build guard is safe enough | ✓ Good — REQUIREMENTS description still mentions PR flow; doc inconsistency flagged for v1.2 |
+| Drop member-author bold highlighting (PUBS-12 softened) in Phase 12 | User feedback: bold weight read as visually confusing against serif body type | ✓ Good — member-visibility invariant (PUBS-11 author-list truncation) still honored via `buildMemberSurnameSet` |
+| Drop count subtitle on `/people/[slug]` (PEOP-14 softened) in 11-CONTEXT | Heading is bare "Publicaciones" / "Publications" — list length self-communicates | ✓ Good — less chrome, cleaner reading |
+| Matias Leizerovich rename to authoritative InspireHEP BAI `M.Leizerovich.1` (drops "t") | Canonical identifier from InspireHEP, not legacy slug | ✓ Good — zero dangling `leizerovitch` refs; surname-match links his 3 first-author papers |
+| Intra-source arXiv-ID dedup only (no cross-source) | Source-tagged separate entries is v1.1's explicit design; InspireHEP/arXiv dupes are a feature, not a bug | ⚠️ Revisit — v1.2 if maintainer reports duplication as annoying |
 
 ---
-*Last updated: 2026-04-18 — v1.1 milestone scope locked (arXiv + InspireHEP publication sync)*
+*Last updated: 2026-04-19 — v1.1 shipped (arXiv + InspireHEP publication sync)*
