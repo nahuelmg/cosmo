@@ -17,12 +17,22 @@
  *   const paper  = getPublicationById("2025-sigma8-cmb-lensing-cross");
  */
 
-import rawPublications from "../../../content/publications.json";
-import { PublicationsSchema, type Publication } from "../schemas/publications.schema";
+import rawFile from "../../../content/publications.json";
+import {
+  PublicationsFileSchema,
+  PublicationsSchema,
+  type Publication,
+} from "../schemas/publications.schema";
 import { normalizeName } from "../schemas/shared";
 
-// Parse once at module load — throws at import time if invalid
-const publications: Publication[] = PublicationsSchema.parse(rawPublications);
+// Parse once at module load — throws at import time if invalid.
+// Defensive bridge: try wrapped shape (v1.1 post-sync) first, fall back to bare
+// array (v1.0 manual) so pnpm build works before the first sync script run.
+// Bridge removed in v1.2 once the wrapped shape is the permanent format.
+const parsedFile = PublicationsFileSchema.safeParse(rawFile);
+const publications: Publication[] = parsedFile.success
+  ? parsedFile.data.publications
+  : PublicationsSchema.parse(rawFile); // fallback to v1.0 bare array
 
 // ---------------------------------------------------------------------------
 // Accessor functions

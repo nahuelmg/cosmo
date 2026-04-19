@@ -124,3 +124,35 @@ export const PublicationsSchema = z
 
 export type Publication = z.infer<typeof PublicationSchema>;
 export type Publications = z.infer<typeof PublicationsSchema>;
+
+// ---------------------------------------------------------------------------
+// File-level wrapper (Phase 9 sync script output)
+// ---------------------------------------------------------------------------
+
+/**
+ * Meta block written by scripts/sync-publications.ts at the top of publications.json.
+ * Shape per .planning/phases/09-sync-script/09-CONTEXT.md §_meta block shape.
+ */
+export const PublicationsMetaSchema = z.object({
+  synced_at: z.string().datetime({ offset: true }), // ISO-8601 UTC, e.g. "2026-04-19T06:00:00Z"
+  sources:   z.array(z.enum(["inspirehep", "arxiv"])),
+  counts: z.object({
+    inspirehep: z.number().int().min(0),
+    arxiv:      z.number().int().min(0),
+    manual:     z.number().int().min(0),
+  }),
+  warnings: z.array(z.string()),
+});
+
+/**
+ * File-level shape of content/publications.json after the Phase 9 sync script first runs.
+ * Wraps the existing PublicationsSchema (array + duplicate-id superRefine) — downstream
+ * consumers of the Publication[] type and PublicationsSchema are unchanged.
+ */
+export const PublicationsFileSchema = z.object({
+  _meta:        PublicationsMetaSchema,
+  publications: PublicationsSchema,
+});
+
+export type PublicationsMeta = z.infer<typeof PublicationsMetaSchema>;
+export type PublicationsFile = z.infer<typeof PublicationsFileSchema>;

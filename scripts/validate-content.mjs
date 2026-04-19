@@ -21,7 +21,10 @@ import { join } from "node:path";
 // tsx ESM loader (node --import tsx/esm) strips TypeScript types on the fly,
 // so we can import .ts files directly from this .mjs script.
 import { PeopleSchema } from "../src/content/schemas/people.schema.ts";
-import { PublicationsSchema } from "../src/content/schemas/publications.schema.ts";
+import {
+  PublicationsFileSchema,
+  PublicationsSchema,
+} from "../src/content/schemas/publications.schema.ts";
 import { ResearchSchema } from "../src/content/schemas/research.schema.ts";
 import { JournalClubSchema } from "../src/content/schemas/journal-club.schema.ts";
 import { OutreachSchema } from "../src/content/schemas/outreach.schema.ts";
@@ -104,7 +107,7 @@ const errors = [];
 
 const files = [
   { name: "people.json",       schema: PeopleSchema },
-  { name: "publications.json", schema: PublicationsSchema },
+  { name: "publications.json", schema: PublicationsFileSchema },
   { name: "research.json",     schema: ResearchSchema },
   { name: "journal-club.json", schema: JournalClubSchema },
   { name: "outreach.json",     schema: OutreachSchema },
