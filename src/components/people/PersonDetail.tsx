@@ -1,20 +1,11 @@
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { EmailLink } from '@/components/ui/EmailLink';
-
-interface SelectedPub {
-  id: string;
-  authors: string[];
-  title: string;
-  journal: string;
-  year: number;
-  arxiv?: string;
-  doi?: string;
-}
+import type { Publication } from '@/content';
+import { PublicationEntry } from '@/components/publications/PublicationEntry';
 
 interface Labels {
   researchInterests: string;
-  selectedPublications: string;
   email: string;
   office: string;
   orcid: string;
@@ -32,7 +23,6 @@ interface LocalizedPerson {
   full_bio: string;
   research_interests: string[];
   current_position?: string;
-  publications_selected: string[];
   contact: {
     email?: string;
     orcid?: string;
@@ -49,10 +39,25 @@ interface LocalizedPerson {
 interface PersonDetailProps {
   person: LocalizedPerson;
   labels: Labels;
-  selectedPubs: SelectedPub[];
+  memberPubs: Publication[];
+  memberSurnameSet: Set<string>;
+  pubLabels: {
+    arxiv: string;
+    doi: string;
+    preprint: string;
+    published: string;
+  };
+  publicationsHeading: string;
 }
 
-export function PersonDetail({ person, labels, selectedPubs }: PersonDetailProps) {
+export function PersonDetail({
+  person,
+  labels,
+  memberPubs,
+  memberSurnameSet,
+  pubLabels,
+  publicationsHeading,
+}: PersonDetailProps) {
   const hasContactInfo =
     Boolean(person.contact.email) ||
     Boolean(person.contact.office) ||
@@ -128,46 +133,21 @@ export function PersonDetail({ person, labels, selectedPubs }: PersonDetailProps
         </section>
       )}
 
-      {selectedPubs.length > 0 && (
+      {memberPubs.length > 0 && (
         <section className="mt-12">
           <h2 className="font-serif text-2xl font-semibold">
-            {labels.selectedPublications}
+            {publicationsHeading}
           </h2>
-          <ul className="mt-4 space-y-4">
-            {selectedPubs.map((pub) => (
-              <li key={pub.id} className="text-ink-muted">
-                <span className="text-ink">{pub.authors.join(', ')}</span>.{' '}
-                <span className="italic">{pub.title}</span>.{' '}
-                <span>{pub.journal}</span> ({pub.year}).
-                {pub.arxiv && (
-                  <>
-                    {' '}
-                    <a
-                      href={`https://arxiv.org/abs/${pub.arxiv}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent underline underline-offset-4"
-                    >
-                      arXiv:{pub.arxiv}
-                    </a>
-                  </>
-                )}
-                {pub.doi && (
-                  <>
-                    {' '}
-                    <a
-                      href={`https://doi.org/${pub.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent underline underline-offset-4"
-                    >
-                      doi:{pub.doi}
-                    </a>
-                  </>
-                )}
-              </li>
+          <ol className="mt-4 list-none">
+            {memberPubs.map((pub) => (
+              <PublicationEntry
+                key={pub.id}
+                publication={pub}
+                memberSurnameSet={memberSurnameSet}
+                labels={pubLabels}
+              />
             ))}
-          </ul>
+          </ol>
         </section>
       )}
 
