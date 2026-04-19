@@ -28,8 +28,8 @@
 
 ### Content Data (human dependency)
 
-- [~] **DATA-09**: `content/people.json` populated with `inspirehep_id` (BAI format) — partial: 1 of 13 current members (tomas-ferreira-chase); remaining 12 tracked in 07-02-SUMMARY as follow-up data commit before Phase 9 E2E test
-- [~] **DATA-10**: `content/people.json` populated with `orcid_id` (reconceived from arxiv_id) — partial: 1 of 13; same follow-up schedule as DATA-09
+- [~] **DATA-09**: `content/people.json` populated with `inspirehep_id` (BAI format) — partial: 9 of 13 sync-scoped current members (esteban-calzetta, diana-lopez-nacir, susana-landau, cecilia-scannapieco, nahuel-miron-granese, javier-badia, tomas-ferreira-chase, matias-leizerovich, augusto-chantada); 4 remaining (juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia) tracked in 12-02-SUMMARY as follow-up data commit. Sync scope = categories pi/postdoc/phd per Phase 9 decision; 2 undergrads (javier-pineau, tomas-cicarella) intentionally excluded.
+- [~] **DATA-10**: `content/people.json` populated with `orcid_id` (reconceived from arxiv_id) — partial: 9 of 13 sync-scoped current members; same coverage schedule and remaining-slug list as DATA-09.
 
 ### Accessor (helper library)
 
@@ -145,8 +145,8 @@
 | SCHEMA-04 | Phase 7 | Complete |
 | SCHEMA-05 | Phase 7 | Complete |
 | SCHEMA-06 | Phase 7 | Complete |
-| DATA-09 | Phase 7 | Partial (1/13; follow-up data commit before Phase 9 E2E) |
-| DATA-10 | Phase 7 | Partial (1/13; reconceived as orcid_id coverage) |
+| DATA-09 | Phase 7 / extended Phase 12 | Partial (9/13 sync-scoped; 4 remaining — juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia. 2 undergrads out of sync scope.) |
+| DATA-10 | Phase 7 / extended Phase 12 | Partial (9/13 sync-scoped; same follow-up schedule and remaining-slug list as DATA-09) |
 | ACC-01 | Phase 8 | Complete |
 | ACC-02 | Phase 8 | Complete |
 | ACC-03 | Phase 8 | Complete |
