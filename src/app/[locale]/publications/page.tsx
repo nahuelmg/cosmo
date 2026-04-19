@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
-import { getAllYears, getPublicationsByYear } from '@/content';
+import { getAllYears, getPublicationsByYear, getPublicationsMeta, getPeople } from '@/content';
+import { buildMemberSurnameSet } from '@/lib/publications-helpers';
 import { buildPageMetadata } from '@/lib/metadata';
 import { buildScholarlyArticleSchema } from '@/lib/schemas';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { PublicationsYearGroup } from '@/components/publications/PublicationsYearGroup';
+import { PublicationsClientShell } from '@/components/publications/PublicationsClientShell';
 
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
@@ -30,14 +31,29 @@ export default async function PublicationsPage({ params }: Props) {
   setRequestLocale(locale);
 
   const t = await getTranslations('publications');
-  const years = getAllYears(); // accessor returns years descending
 
-  const labels = { arxiv: t('arxiv'), doi: t('doi') };
-
-  // Flatten all publications across years for JSON-LD emission. Each entry gets
-  // its own <script type="application/ld+json"> ScholarlyArticle block. Rendering
-  // before the visible content keeps rich markup high in the DOM for crawlers.
-  const allPublications = years.flatMap((year) => getPublicationsByYear(year));
+  const years = getAllYears();
+  const meta = getPublicationsMeta();
+  const people = getPeople();
+  const memberSurnameSet = buildMemberSurnameSet(people);
+  // Convert Set<string> to string[] for RSC → client boundary serialization.
+  // Set is not JSON-serializable; PublicationsClientShell rebuilds the Set via useMemo.
+  const memberSurnameList = [...memberSurnameSet];
+  const groups = years.map((year) => ({
+    year,
+    publications: getPublicationsByYear(year),
+  }));
+  const labels = {
+    arxiv: t('arxiv'),
+    doi: t('doi'),
+    preprint: t('preprint'),
+    published: t('published'),
+  };
+  const allPublications = groups.flatMap((g) => g.publications);
+  const formattedSyncedAt = new Intl.DateTimeFormat(
+    locale === 'es' ? 'es-AR' : 'en-US',
+    { year: 'numeric', month: 'long', day: 'numeric' },
+  ).format(new Date(meta.synced_at));
 
   return (
     <>
@@ -50,15 +66,18 @@ export default async function PublicationsPage({ params }: Props) {
       <section className="mx-auto max-w-4xl px-6 py-16">
         <header>
           <h1 className="font-serif text-4xl font-semibold tracking-tight">{t('title')}</h1>
+          <p className="mt-2 text-sm text-ink-muted">
+            {t('updatedAt', { date: formattedSyncedAt })}
+          </p>
         </header>
-        {years.map((year) => (
-          <PublicationsYearGroup
-            key={year}
-            year={year}
-            publications={getPublicationsByYear(year)}
-            labels={labels}
-          />
-        ))}
+        <PublicationsClientShell
+          groups={groups}
+          memberSurnameList={memberSurnameList}
+          labels={labels}
+        />
+        <p className="mt-12 text-sm text-ink-subtle">
+          {t('footnote')}
+        </p>
       </section>
     </>
   );
