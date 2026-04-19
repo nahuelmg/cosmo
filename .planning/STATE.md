@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 ## Current Position
 
 Phase: 7 of 11 (Schema Extension)
-Plan: —
-Status: Ready to plan
-Last activity: 2026-04-18 — v1.1 ROADMAP.md created; phases 7–11 defined
+Plan: 07-01 complete; 07-02 is next
+Status: In progress — 07-01 shipped; awaiting 07-02 (DATA-09/10 human population)
+Last activity: 2026-04-19 — Completed 07-01-PLAN.md (schema extension + JSON Schema regen + SYNC.md)
 
-Progress: [██████░░░░░░░░░] 6/11 phases complete (v1.0 done; v1.1 starting)
+Progress: [██████░░░░░░░░░] 6/11 phases complete (v1.1 in progress; Phase 7 partially done)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -49,6 +49,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Intra-run dedup by arXiv ID (prevents Planck/Euclid papers appearing once per co-author) — Pitfall 6
 - `scripts/sync-publications.ts` uses relative imports, NOT `@/` alias — tsx does not resolve webpack aliases
 
+### 07-01 Decisions (2026-04-19)
+
+- `display_name_normalized` is REQUIRED (not optional) on PersonSchema — Plan 07-02 populates it; until then `pnpm validate-content` fails on people.json (expected)
+- `publications_selected` deprecation is JSDoc-only — Zod shape unchanged; v1.2 removes it
+- `arxiv_id` on PersonSchema reuses shared `arxivId` validator — benefits automatically from pre-2007 regex
+- JSON Schemas regenerated in back-to-back commits (feat + chore) within phase — satisfies Pitfall 1 atomicity requirement
+
 ### Blockers / Concerns
 
 - DATA-09/10: Human action required in Phase 7 (Plan 07-02) — sync script cannot be end-to-end tested without real BAI IDs
@@ -56,6 +63,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-18
-Stopped at: ROADMAP.md written; ready for `/gsd:plan-phase 7`
+Last session: 2026-04-19
+Stopped at: Completed 07-01-PLAN.md — schema extension shipped; pnpm validate-content fails only on display_name_normalized (expected handoff to 07-02)
 Resume file: None
