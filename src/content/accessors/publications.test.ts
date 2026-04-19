@@ -33,12 +33,26 @@ describe("getPublicationsByAuthor", () => {
   // --- Any-author match (locked: match on ANY element of authors[]) ---
   describe("any-author match", () => {
     it("matches when the variant is NOT the first author", () => {
-      // "Di Sarcina" appears as a later-position author in multiple entries.
-      const results = getPublicationsByAuthor(["Di Sarcina"]);
+      // Post 12-02 live-sync data: "Landau" appears as a later-position
+      // author in dozens of real entries (co-author on Leizerovich / Scóccola
+      // / others-led papers). Replaces the v1.0 placeholder "Di Sarcina"
+      // anchor which was purged with the fictional manual entries.
+      const results = getPublicationsByAuthor(["Landau"]);
       expect(results.length).toBeGreaterThan(0);
+      // Assert at least one result has Landau in a non-first author position.
+      const laterPositionHits = results.filter((pub) => {
+        if (pub.authors.length < 2) return false;
+        const first = pub.authors[0].toLowerCase();
+        const hasLandau = pub.authors.some((a) =>
+          a.toLowerCase().includes("landau"),
+        );
+        return hasLandau && !first.includes("landau");
+      });
+      expect(laterPositionHits.length).toBeGreaterThan(0);
+      // Every result has Landau somewhere in authors[] (the invariant under test).
       for (const pub of results) {
         const hit = pub.authors.some((a) =>
-          a.toLowerCase().includes("di sarcina"),
+          a.toLowerCase().includes("landau"),
         );
         expect(hit).toBe(true);
       }
@@ -177,17 +191,20 @@ describe("getPublicationsByAuthor", () => {
     });
   });
 
-  // --- source default field (locked: Phase 7 .default("manual") must hold) ---
-  describe("Phase 7 source default holds for v1.0 data", () => {
-    it("does not return [] because of a missing source field (v1.0 data never had it)", () => {
-      // If PublicationsSchema had required `source`, the module-load parse would
-      // have thrown on v1.0's source-less JSON. That the accessor returns a
-      // non-empty array for a known-present surname proves the default held.
-      const results = getPublicationsByAuthor(["rodriguez"]);
+  // --- source field (post-12-02: all entries from live sync have source set) ---
+  describe("source field populated for all entries", () => {
+    it("every matched publication has a valid source value", () => {
+      // Post 12-02 purge + live sync, content/publications.json contains only
+      // real InspireHEP + arXiv entries (no source-less or "manual" placeholders
+      // — the 13 v1.0 fictional manual entries were purged).
+      // Schema-level: PublicationSchema.source is a non-optional enum
+      // ("manual" | "inspirehep" | "arxiv") with .default("manual") retained for
+      // forward-compatibility with manually-curated future entries.
+      const results = getPublicationsByAuthor(["landau"]);
       expect(results.length).toBeGreaterThan(0);
-      // Every result has source === "manual" (the Phase 7 default).
+      const validSources = new Set(["manual", "inspirehep", "arxiv"]);
       for (const pub of results) {
-        expect(pub.source).toBe("manual");
+        expect(validSources.has(pub.source)).toBe(true);
       }
     });
   });
