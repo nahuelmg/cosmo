@@ -119,14 +119,17 @@ export const optionalPhoto = photoPath.optional();
 
 /**
  * Bare arXiv ID (no "arXiv:" prefix, no URL).
- * Formats: YYMM.NNNNN or YYMM.NNNN, optional vN version suffix.
- * Examples: "2501.12345", "0706.0001v2"
+ * Formats:
+ *  - Modern (post-2007): YYMM.NNNNN or YYMM.NNNN, optional vN version suffix.
+ *    Examples: "2501.12345", "0706.0001v2"
+ *  - Pre-2007: category/NNNNNNN (7-digit number), optional vN version suffix.
+ *    Examples: "gr-qc/9209007", "hep-th/0207269v2"
  */
 export const arxivId = z
   .string()
   .regex(
-    /^\d{4}\.\d{4,5}(v\d+)?$/,
-    "arXiv ID format: YYMM.NNNNN or YYMM.NNNN, optional vN suffix (e.g. 2501.12345, 0706.0001v2)",
+    /^(\d{4}\.\d{4,5}|[a-z-]+\/\d{7})(v\d+)?$/,
+    "arXiv ID: modern YYMM.NNNNN or pre-2007 category/NNNNNNN, optional vN suffix",
   );
 
 /**
@@ -168,4 +171,15 @@ export function localize<T extends { es: string; en: string }>(
   locale: Locale,
 ): string {
   return field[locale];
+}
+
+/**
+ * ASCII-fold + lowercase a human name for author-string matching.
+ * Spec: Unicode NFD decomposition → strip combining marks → lowercase.
+ * Used by Phase 11 to substring-match normalized author strings
+ * against PersonSchema.display_name_normalized.
+ * Example: "Núñez, María" → "nunez, maria"
+ */
+export function normalizeName(value: string): string {
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 }

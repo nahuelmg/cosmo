@@ -79,6 +79,13 @@ export const PublicationSchema = z.strictObject({
   topic_tags: z.array(z.string().min(1)).optional().default([]),
 
   /**
+   * Where this publication record originated.
+   * @default "manual"
+   * @see content/SYNC.md
+   */
+  source: z.enum(["manual", "inspirehep", "arxiv"]).default("manual"),
+
+  /**
    * Raw abstract if the maintainer cared to include it.
    * Canonical (no bilingual); no smart-quote check (maintainers legitimately
    * paste arXiv/journal abstracts with their own punctuation).

@@ -22,6 +22,7 @@ import {
   slugString,
   optionalPhoto,
   orcidId,
+  arxivId,
 } from "./shared";
 
 // ---------------------------------------------------------------------------
@@ -74,8 +75,41 @@ export const PersonSchema = z.strictObject({
   /**
    * References to publication IDs from content/publications.json.
    * Cross-file ID validation is deferred to the Plan 05 prebuild script.
+   * @deprecated v1.1 — field is inert in v1.1; scheduled for removal in v1.2. The
+   *   v1.1 sync pipeline (Phase 9) replaces hand-curated selections with auto-populated
+   *   results from InspireHEP + arXiv queried via `inspirehep_id` / `arxiv_id`.
    */
   publications_selected: z.array(z.string()).optional().default([]),
+
+  /**
+   * InspireHEP BAI identifier (e.g. "E.Calzetta.1").
+   * Optional — students may not have one yet.
+   * @see content/SYNC.md
+   */
+  inspirehep_id: z
+    .string()
+    .regex(
+      /^[A-Z]\.[A-Za-z-]+\.\d+$/,
+      "InspireHEP BAI format: Initial.Surname.N (e.g. E.Calzetta.1)",
+    )
+    .optional(),
+
+  /**
+   * Claimed arXiv author ID (modern or pre-2007 format).
+   * Optional — students may not have one yet.
+   * Populate once you have your first paper on arXiv and have claimed authorship.
+   * @see content/SYNC.md
+   */
+  arxiv_id: arxivId.optional(),
+
+  /**
+   * ASCII-folded lowercase display name for author-string matching.
+   * Used by Phase 11 sync to substring-match normalized author strings.
+   * Format: "firstname lastname" (all lowercase, ASCII only, no diacritics).
+   * Example: "esteban calzetta", "diana lopez nacir"
+   * @see content/SYNC.md
+   */
+  display_name_normalized: z.string().min(1),
 
   /**
    * Contact details shown on the individual profile page (PEOP-11).
