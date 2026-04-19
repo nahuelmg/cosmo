@@ -68,3 +68,28 @@ jobs:
       - name: Push to main
         if: steps.diff.outputs.changed == 'true'
         run: git push origin main
+
+      - name: Write step summary
+        if: always()
+        run: |
+          if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
+            SYNC_LINE=$(tail -1 /tmp/sync-stdout.txt)
+            SYNCED_AT=$(jq -r '._meta.synced_at' content/publications.json 2>/dev/null || echo "unknown")
+            echo "${SYNC_LINE}" >> $GITHUB_STEP_SUMMARY
+            WARNINGS=$(grep '^Warning:' /tmp/sync-stderr.txt 2>/dev/null || true)
+            if [ -n "$WARNINGS" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "## Warnings" >> $GITHUB_STEP_SUMMARY
+              while IFS= read -r line; do
+                echo "- ${line#Warning: }" >> $GITHUB_STEP_SUMMARY
+              done <<< "$WARNINGS"
+            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Synced at ${SYNCED_AT}" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.diff.outputs.changed }}" = "false" ]; then
+            echo "No changes — skipping commit" >> $GITHUB_STEP_SUMMARY
+            SYNCED_AT=$(jq -r '._meta.synced_at' content/publications.json 2>/dev/null || echo "unknown")
+            echo "Synced at ${SYNCED_AT}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Sync failed — see logs" >> $GITHUB_STEP_SUMMARY
+          fi
