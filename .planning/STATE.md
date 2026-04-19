@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.1 Phase 12 — polish, data backfill (9/14 members), and maintainer docs (DOC-01 + DOC-02). Audit passed `tech_debt`; cleanup phase complete pending milestone audit.
+**Current focus:** v1.1 milestone audit re-run / completion. Phase 12 verified 7/7 must-haves passed; orchestrator closed a latent `cecilia-scannapieco` name typo between waves (commit `0848a6e`). Ready for `/gsd:audit-milestone` re-run and `/gsd:complete-milestone v1.1`.
 
 ## Current Position
 
-Phase: 12 of 12 (Polish & Docs) — gap closure phase COMPLETE
-Plan: 3/3 (12-01 trivia DONE, 12-02 data backfill + sync purge DONE, 12-03 maintainer docs DONE)
-Status: v1.1 Phases 7–12 ready for /gsd:audit-milestone re-run — lint-green, JSDoc accurate, 9/13 sync-scoped members backfilled, publications.json holds 321 real entries (0 placeholders), content/SYNC.md covers DOC-01+DOC-02 (ID-lookup + operational troubleshooting), REQUIREMENTS.md traceability clean (DOC-01/02 = Complete, Coverage line = phases 7–12)
-Last activity: 2026-04-19 — Plan 12-03 executed (SYNC.md +132 lines: paste-ready diana-lopez-nacir snippet + Operational Troubleshooting h2; REQUIREMENTS.md DOC-01/02 flipped Pending→Complete); 45 static routes, 2 atomic commits (`518b4d7`, `71546de`)
+Phase: 12 of 12 (Polish & Docs) — VERIFIED 7/7 must-haves
+Plan: 3/3 DONE; VERIFICATION.md in phase dir (status: passed)
+Status: v1.1 milestone gate unlocked — lint-green, JSDoc accurate, 9/13 sync-scoped members backfilled (321 real publications; 0 placeholders), content/SYNC.md covers DOC-01+DOC-02, REQUIREMENTS.md traceability clean. Orchestrator closed cecilia-scannapieco typo between waves (Rule 3 correction, `0848a6e`).
+Last activity: 2026-04-19 — Phase 12 verified PASSED (7/7); ready for /gsd:audit-milestone re-run → /gsd:complete-milestone v1.1
 
-Progress: [███████████████] 27/29 plans complete (Phase 12: 3/3 DONE); v1.1 ready for /gsd:audit-milestone → /gsd:complete-milestone
+Progress: [███████████████] 29/29 plans complete (Phase 12: 3/3 DONE, verifier PASSED 7/7); v1.1 ready for /gsd:audit-milestone → /gsd:complete-milestone v1.1
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
