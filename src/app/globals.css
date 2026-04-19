@@ -61,11 +61,13 @@ body {
   color: var(--color-ink);
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--color-ink);
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
 }
 
 /* ── Main landmark — skip-link target and anchor-jump offset ──

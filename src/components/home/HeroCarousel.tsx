@@ -142,11 +142,11 @@ export default function HeroCarousel({
           a heavy gradient. Pure white (#fff) on a cool neutral reads crisper
           than warm-white against JWST starfields. */}
       <div className="absolute inset-0 bg-gradient-to-t from-ink/70 from-0% via-ink/20 via-45% to-transparent to-75% flex flex-col justify-end p-8 md:p-12">
-        <h1 className="font-serif font-bold text-4xl md:text-5xl text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.9),_0_2px_8px_rgb(0_0_0_/_0.7)]">
+        <h1 className="font-serif font-bold text-4xl md:text-5xl text-stone-200 [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.9),_0_2px_8px_rgb(0_0_0_/_0.7)]">
           {groupName}
         </h1>
-        <p className="text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{tagline}</p>
-        <p className="text-white/90 text-sm [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{affiliation}</p>
+        <p className="text-stone-200 [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{tagline}</p>
+        <p className="text-stone-200/90 text-sm [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{affiliation}</p>
       </div>
 
       {/* Controls cluster — pause/play button leads the dots (visual order: [pause][dot1][dot2][dot3]) */}
