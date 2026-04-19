@@ -137,17 +137,16 @@ export default function HeroCarousel({
         ))}
       </div>
 
-      {/* Static overlay — same on every slide per CONTEXT decision.
-          Gradient pushed up (from-30%) so the text block sits in fully
-          opaque ink. Prevents bright stars in JWST-Carina from peeking
-          through behind serif letterforms and reducing perceived contrast
-          even when pixel-average WCAG still passes. */}
-      <div className="absolute inset-0 bg-gradient-to-t from-ink from-30% via-ink/70 via-55% to-transparent to-80% flex flex-col justify-end p-8 md:p-12">
-        <h1 className="font-serif font-bold text-4xl md:text-5xl text-white [text-shadow:_0_2px_6px_rgb(0_0_0_/_0.95),_0_0_24px_rgb(0_0_0_/_0.85)]">
+      {/* Softer scrim — lets the photo breathe while keeping text legible.
+          Contrast is carried by tight, high-contrast text-shadows rather than
+          a heavy gradient. Pure white (#fff) on a cool neutral reads crisper
+          than warm-white against JWST starfields. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/70 from-0% via-ink/20 via-45% to-transparent to-75% flex flex-col justify-end p-8 md:p-12">
+        <h1 className="font-serif font-bold text-4xl md:text-5xl text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.9),_0_2px_8px_rgb(0_0_0_/_0.7)]">
           {groupName}
         </h1>
-        <p className="text-white [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.9),_0_1px_10px_rgb(0_0_0_/_0.75)]">{tagline}</p>
-        <p className="text-white/90 text-sm [text-shadow:_0_1px_3px_rgb(0_0_0_/_0.9),_0_1px_10px_rgb(0_0_0_/_0.75)]">{affiliation}</p>
+        <p className="text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{tagline}</p>
+        <p className="text-white/90 text-sm [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{affiliation}</p>
       </div>
 
       {/* Controls cluster — pause/play button leads the dots (visual order: [pause][dot1][dot2][dot3]) */}
