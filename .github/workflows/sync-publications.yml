@@ -44,10 +44,13 @@ jobs:
       - name: Validate content
         run: pnpm validate-content
 
-      - name: Check for changes
+      - name: Check for changes (publications payload only; ignore synced_at drift)
         id: diff
         run: |
-          if git diff --quiet content/publications.json; then
+          NEW_PUBS=$(jq -cS '.publications' content/publications.json)
+          OLD_PUBS=$(git show HEAD:content/publications.json 2>/dev/null | jq -cS '.publications' 2>/dev/null || echo "null")
+          if [ "$NEW_PUBS" = "$OLD_PUBS" ]; then
+            git checkout HEAD -- content/publications.json
             echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
