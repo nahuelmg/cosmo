@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 ## Current Position
 
 Phase: 11 of 11 (Display Layer) — In progress
-Plan: 11-01 complete (shared helpers + PublicationEntry v2 + i18n keys); 11-02 + 11-03 next (Wave 2, parallel)
-Status: Phase 11 Wave 1 complete — getPublicationsMeta, publications-helpers, PublicationEntry extended, 7 i18n keys added; Wave 2 unblocked for parallel execution
-Last activity: 2026-04-19 — Completed 11-01-PLAN.md (shared publication entry helpers + i18n)
+Plan: 11-02 complete (/publications page rewire); 11-03 complete or in progress (Wave 2, parallel)
+Status: Phase 11 Wave 2 — 11-02 done (publications page: filter, staleness, footnote, author highlighting); 11-03 status per parallel execution
+Last activity: 2026-04-19 — Completed 11-02-PLAN.md (publications page filter + staleness + footnote)
 
-Progress: [████████████░░] Phase 11 in progress (Wave 1 of 3 plans done)
+Progress: [█████████████░] Phase 11 in progress (Wave 2 of 3 plans done)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -107,6 +107,13 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - First-run validation produced 3 historical bot commits (`ebdd41e`, `4674f6a`, `b25386c`) on origin/main BEFORE the diff-guard fix landed — kept as historical evidence (non-destructive rebase over them, not force-pushed)
 - `main` currently has no branch protection — direct push works; if protection is later added, `github-actions[bot]` must go in the bypass allowlist
 
+### 11-02 Decisions (2026-04-19)
+
+- `Set<string>` not passed across RSC boundary — JSON serialization does not support Set; pass `string[]` from page, rebuild `new Set()` in client shell via `useMemo`
+- next-intl strict key types prevent dynamic `t(variableKey)` — typed label calls materialized inside component body as `{ key, label }[]` array
+- No `generateStaticParams` needed in publications page — inherited from `[locale]/layout.tsx`
+- Filter state is in-memory only (`useState`) — no URL params; reload resets to `Todos`
+
 ### 11-01 Decisions (2026-04-19)
 
 - Surname-based author matching confirmed: last word of `display_name_normalized` (not full string) — "tomas ferreira chase" does NOT substring-match "chase, tomas ferreira"; "chase" does. Unit tested empirically.
@@ -127,6 +134,6 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 ## Session Continuity
 
-Last session: 2026-04-19T19:06:00Z
-Stopped at: Completed 11-01-PLAN.md — Wave 1 foundation: getPublicationsMeta, publications-helpers (23 Vitest tests), PublicationEntry extended (two-chip badges + author highlighting), 7 i18n keys in both locales. Ready for Wave 2: 11-02 (/publications page) + 11-03 (/people/[slug] section) in parallel.
+Last session: 2026-04-19T20:10:00Z
+Stopped at: Completed 11-02-PLAN.md — /publications page rewired: SourceFilter + PublicationsClientShell client island, staleness line from _meta.synced_at, footnote, memberSurnameSet author highlighting. pnpm build 45/45 SSG, pnpm check-translations 0.
 Resume file: None
