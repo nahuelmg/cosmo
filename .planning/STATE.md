@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-18 after v1.0 milestone)
 
 ## Current Position
 
-Phase: 7 of 11 (Schema Extension) — COMPLETE
-Plan: 07-02 complete (all plans in Phase 7 done)
-Status: Phase 7 complete — ready for Phase 8 (Accessor Layer)
-Last activity: 2026-04-19 — Completed 07-02-PLAN.md (BAI regex fix + orcid_id swap + tomas IDs)
+Phase: 8 of 11 (Accessor Layer) — IN PROGRESS
+Plan: 08-01 complete (all plans in Phase 8 done — single-plan phase)
+Status: Phase 8 complete — ready for Phase 9 (Sync Script)
+Last activity: 2026-04-19 — Completed 08-01-PLAN.md (getPublicationsByAuthor + Vitest infra + 20 green tests)
 
-Progress: [███████░░░░░░░░] 7/11 phases complete (v1.1 in progress; Phase 8 next)
+Progress: [████████░░░░░░░] 8/11 phases complete (v1.1 in progress; Phase 9 next)
 
 ## Current Milestone: v1.1 arXiv + InspireHEP Publication Sync
 
@@ -36,6 +36,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - PERF-04/05 deferred to Vercel production re-measurement (LCP + CLS numerical targets)
 - NAV-04 mobile drawer 375px live-deploy check (structural done)
 - `MobileNav.tsx:87` `focus:outline-none` flag (low risk)
+- `MobileNav.tsx:38` `react-hooks/set-state-in-effect` ESLint error — `setOpen(false)` in `useEffect` on `[pathname]`. Pre-existing on main before Phase 8; caught by `pnpm lint` after React 19 / eslint-config-next upgrade. Fix on next MobileNav edit — low risk, closes a drawer on route change which is the intended UX.
 - `SiteFooter.tsx:1` unused `next/link` import (flip on next edit)
 - Hero "Grupo de Cosmología" title loses contrast on JWST starfield backgrounds — needs stronger text-shadow or dedicated gradient scrim (reported 2026-04-19)
 
@@ -63,6 +64,16 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - Google Scholar `scholar_id` deferred to Phase 11 / v1.2 — no public API, useful as profile link only
 - DATA-09/10 partial: 1 member populated this cycle; remaining 13 are follow-up data commit
 
+### 08-01 Decisions (2026-04-19)
+
+- `getPublicationsByAuthor` is caller-provides-variants — no `Person` dependency, no `deriveNameVariants` helper (deferred to Phase 11 / v1.2). Guarantees ACC-05 structurally: `src/content/accessors/publications.ts` has zero imports from `people.ts`.
+- Normalization reuses `normalizeName` from `shared.ts` (NFD-decompose → strip combining marks → lowercase) — symmetry with `PersonSchema.display_name_normalized` means ASCII variants match accented author strings without extra transform.
+- 4-char minimum variant length (post-normalization) silently filters initials ("F.", "J.") — returns `[]` when all variants are short.
+- `lastNYears: 0` is valid (current-year only) — guard is `options?.lastNYears !== undefined`, not truthiness. Locked distinction from unset.
+- Results pre-sorted: year desc → arXiv ID desc (`localeCompare`) → no-arXiv entries last within year bucket. Non-mutating (uses `[...publications]`).
+- Vitest 3.2.4 is the project's first unit-test runner — colocated `.test.ts` files beside source, `pnpm test` runs once (CI-friendly), `@` alias in `vitest.config.ts` mirrors tsconfig paths.
+- `src/content/index.ts` unchanged — existing `export * from "./accessors/publications"` wildcard auto-re-exports the new function (ACC-04 satisfied). In-test `toBe` identity check proves wildcard coverage at runtime.
+
 ### Blockers / Concerns
 
 - DATA-09/10 partial: 13 members still need `inspirehep_id` + `orcid_id` (follow-up data commit before Phase 9 E2E test — not a code blocker)
@@ -72,5 +83,5 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 ## Session Continuity
 
 Last session: 2026-04-19
-Stopped at: Completed 07-02-PLAN.md — Phase 7 complete; validate-content green; PersonSchema locked; ready for Phase 8
+Stopped at: Completed 08-01-PLAN.md — Phase 8 complete; pnpm test green (20/20); pnpm build green; accessor contract pinned for Phase 11
 Resume file: None
