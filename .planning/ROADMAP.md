@@ -142,7 +142,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 22 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
+- [ ] 10-01: Author `.github/workflows/sync-publications.yml` — cron `0 6 * * 1`, `workflow_dispatch`, `permissions: contents: write`, pnpm + Node 20 setup, `--frozen-lockfile`, sync script step, `pnpm validate-content` gate, `git diff --quiet` skip-commit guard, `[skip ci]` commit message, step summary reporting; includes task-zero fix for Phase 9 `journal: ""` fallback bug (`|| "Preprint"` in `scripts/sync-publications.ts:346`); run first manual `workflow_dispatch` to verify push lands on `main` (tests any branch-protection rules)
 
 ---
 
