@@ -19,6 +19,7 @@
 
 import rawPublications from "../../../content/publications.json";
 import { PublicationsSchema, type Publication } from "../schemas/publications.schema";
+import { normalizeName } from "../schemas/shared";
 
 // Parse once at module load — throws at import time if invalid
 const publications: Publication[] = PublicationsSchema.parse(rawPublications);
@@ -75,4 +76,70 @@ export function getAllTopics(): string[] {
  */
 export function getAllYears(): number[] {
   return [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+}
+
+/**
+ * Returns publications where any author matches any of the given name variants.
+ *
+ * Matching: substring, case-insensitive, diacritic-folded via `normalizeName`
+ * (NFD-decompose → strip combining marks → lowercase). The same transform
+ * populates `PersonSchema.display_name_normalized`, so ASCII variants like
+ * `"ahumada acuna"` cleanly match author strings like `"Ahumada Acuña, G."`.
+ *
+ * Variants shorter than 4 characters (post-normalization) are silently
+ * filtered to avoid false positives from initials ("F.", "J."). If no
+ * variants survive the filter, returns `[]`.
+ *
+ * `options.lastNYears` narrows results to `year >= currentYear - lastNYears`
+ * inclusive. `lastNYears: 0` returns only current-year papers. Omitting the
+ * option (or the whole options arg) applies no year filter. Guarded via
+ * `!== undefined` so `0` is distinguishable from unset.
+ *
+ * Results are pre-sorted: year desc → arXiv ID desc → no-arXiv entries last
+ * (stable within each bucket). Non-mutating — uses `[...publications]`.
+ *
+ * Requirements: ACC-01, ACC-02, ACC-03, ACC-04, ACC-05.
+ *
+ * @example
+ * // last-10-years publications for a group member on /people/[slug]
+ * getPublicationsByAuthor(
+ *   [person.display_name, person.display_name_normalized],
+ *   { lastNYears: 10 },
+ * );
+ *
+ * @example
+ * // full archive match for author highlighting on /publications
+ * getPublicationsByAuthor([person.display_name_normalized]);
+ */
+export function getPublicationsByAuthor(
+  nameVariants: string[],
+  options?: { lastNYears?: number },
+): Publication[] {
+  const validVariants = nameVariants
+    .map((v) => normalizeName(v))
+    .filter((v) => v.length >= 4);
+
+  if (validVariants.length === 0) return [];
+
+  const currentYear = new Date().getFullYear();
+  const yearMin =
+    options?.lastNYears !== undefined
+      ? currentYear - options.lastNYears
+      : -Infinity;
+
+  return [...publications]
+    .filter((pub) => {
+      if (pub.year < yearMin) return false;
+      const normalizedAuthors = pub.authors.map((a) => normalizeName(a));
+      return validVariants.some((variant) =>
+        normalizedAuthors.some((author) => author.includes(variant)),
+      );
+    })
+    .sort((a, b) => {
+      if (b.year !== a.year) return b.year - a.year;
+      if (a.arxiv && b.arxiv) return b.arxiv.localeCompare(a.arxiv);
+      if (a.arxiv) return -1;
+      if (b.arxiv) return 1;
+      return 0;
+    });
 }
