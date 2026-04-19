@@ -11,11 +11,11 @@
 
 ### Typography (TYPO)
 
-- [ ] **TYPO-01:** Add `--text-5xl` (40 px / 2.5 rem) token in `globals.css` `@theme`; documents the hero size and stops `text-5xl` from falling through to Tailwind default 48 px.
-- [ ] **TYPO-02:** Soften `--text-4xl` from 32 px to 36 px so H1 ≥ 1.20 × H2 (30 → 36 = 1.20×) and the heading hierarchy on People / Research / Contact reads clearly.
-- [ ] **TYPO-03:** Re-key every existing H1 usage (`font-serif text-4xl md:text-5xl` on Hero; `text-3xl`, `text-4xl` on page headings) against the new scale and ensure consistent weight (`font-weight-semibold`, 600) and letter-spacing (`-0.01em` from `@layer base`).
-- [ ] **TYPO-04:** Audit body-text `text-base` / `text-sm` / `text-xs` usage across all components; consolidate inconsistent applications (e.g. nav jumping `text-base lg:text-lg` breaks sans cadence — justify or align).
-- [ ] **TYPO-05:** Document the final scale + weights + line-heights in `design-system/cosmology-group-uba/MASTER.md` "Type Scale" table and mark v1.0 scale as superseded.
+- [x] **TYPO-01:** Add `--text-5xl` (40 px / 2.5 rem) token in `globals.css` `@theme`; documents the hero size and stops `text-5xl` from falling through to Tailwind default 48 px.
+- [x] **TYPO-02:** Soften `--text-4xl` from 32 px to 36 px so H1 ≥ 1.20 × H2 (30 → 36 = 1.20×) and the heading hierarchy on People / Research / Contact reads clearly.
+- [x] **TYPO-03:** Re-key every existing H1 usage (`font-serif text-4xl md:text-5xl` on Hero; `text-3xl`, `text-4xl` on page headings) against the new scale and ensure consistent weight (`font-weight-semibold`, 600) and letter-spacing (`-0.01em` from `@layer base`).
+- [x] **TYPO-04:** Audit body-text `text-base` / `text-sm` / `text-xs` usage across all components; consolidate inconsistent applications (e.g. nav jumping `text-base lg:text-lg` breaks sans cadence — justify or align).
+- [x] **TYPO-05:** Document the final scale + weights + line-heights in `design-system/cosmology-group-uba/MASTER.md` "Type Scale" table and mark v1.0 scale as superseded.
 
 ### Buttons & Interactive Elements (BTN)
 
@@ -28,10 +28,10 @@
 
 ### Spacing & Layout Density (SPACE)
 
-- [ ] **SPACE-01:** Codify page-container widths: `max-w-5xl` for prose / single-column (Contact, PersonDetail, Journal Club), `max-w-6xl` for grids (People, Outreach, Research, Publications). Apply across all 8 page wrappers.
-- [ ] **SPACE-02:** Codify vertical-rhythm scale: section `py-12`, page wrapper `py-16`, hero `py-20` when applicable. Apply consistently.
-- [ ] **SPACE-03:** Audit card padding across `PersonCard` / `ResearchCard` / `OutreachCard` / `SessionRow` — document intent for `p-4` vs `p-8` delta or converge if the delta carries no meaning.
-- [ ] **SPACE-04:** Document container widths + vertical rhythm in `design-system/cosmology-group-uba/MASTER.md` "Layout" subsection.
+- [x] **SPACE-01:** Codify page-container widths: `max-w-5xl` for prose / single-column (Contact, PersonDetail, Journal Club), `max-w-6xl` for grids (People, Outreach, Research, Publications). Apply across all 8 page wrappers.
+- [x] **SPACE-02:** Codify vertical-rhythm scale: section `py-12`, page wrapper `py-16`, hero `py-20` when applicable. Apply consistently.
+- [x] **SPACE-03:** Audit card padding across `PersonCard` / `ResearchCard` / `OutreachCard` / `SessionRow` — document intent for `p-4` vs `p-8` delta or converge if the delta carries no meaning.
+- [x] **SPACE-04:** Document container widths + vertical rhythm in `design-system/cosmology-group-uba/MASTER.md` "Layout" subsection.
 
 ### Media Sizing (MEDIA)
 
@@ -88,12 +88,12 @@ Explicit exclusions with reasoning.
 
 | REQ-ID | Phase | Plan | Status |
 |--------|-------|------|--------|
-| TYPO-01..05 | 13 | TBD | Pending |
-| SPACE-01..04 | 13 | TBD | Pending |
+| TYPO-01..05 | 13 | 13-01, 13-02, 13-04 | Complete |
+| SPACE-01..04 | 13 | 13-02, 13-03, 13-04 | Complete |
 | MEDIA-01..05 | 14 | TBD | Pending |
 | BTN-01..06 | 15 | TBD | Pending |
 | MICRO-01..05 | 15 | TBD | Pending |
 | DOC-01..02 | 15 | TBD | Pending |
 
 ---
-*Last updated: 2026-04-19 — v1.2 milestone requirements defined.*
+*Last updated: 2026-04-19 — Phase 13 complete: TYPO-01..05 + SPACE-01..04 shipped & verified.*
