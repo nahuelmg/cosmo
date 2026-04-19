@@ -11,11 +11,11 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 Phase: 13 of ? (13-design-tokens-layout-rhythm)
 Plan: 03 of ? in phase
-Status: In progress — Phase 13 Wave 2 (13-03 complete; 13-02 may be concurrent)
-Last activity: 2026-04-19 — Completed 13-03-PLAN.md (ResearchCard p-8→p-6, SPACE-03 card audit)
+Status: In progress — Phase 13 Wave 2 (13-02 + 13-03 both complete)
+Last activity: 2026-04-19 — Completed 13-02-PLAN.md (H1 migration, container widths, nav sizing) + 13-03-PLAN.md
 
-Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started (plans 01 + 03 complete)
-░░░░░░░░░░ Phase 13: 2+/? plans complete
+Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started (plans 01 + 02 + 03 complete)
+░░░░░░░░░░ Phase 13: 3/? plans complete
 
 ## Shipped Milestones
 
@@ -46,8 +46,8 @@ Progress: v1.1 SHIPPED (13/13 plans across Phases 7–12); v1.2 Phase 13 started
 
 ## Session Continuity
 
-Last session: 2026-04-19T22:30:00Z — 13-03 card padding audit complete.
-Stopped at: Completed 13-03-PLAN.md
+Last session: 2026-04-19T22:45:00Z — 13-02 H1/container/nav migration complete.
+Stopped at: Completed 13-02-PLAN.md (and 13-03-PLAN.md also complete)
 Resume file: None
 
 ## Accumulated Decisions (v1.2)
@@ -58,3 +58,5 @@ Resume file: None
 | `--text-5xl: 2.5rem` caps hero H1 at 40px (not Tailwind default 48px) | HeroCarousel only; inner page H1s use text-4xl (36px) | 13-01 |
 | SPACE-03 two-tier rule: dense = p-4 (grid cards), spacious = p-6 (feature cards), flat across breakpoints | No CSS abstraction, no responsive variants per CONTEXT.md | 13-03 |
 | ResearchCard p-8 was out-of-spec; reduced to p-6 | Only card using p-8; now uniform with OutreachCard spacious tier | 13-03 |
+| tracking-tight removed from all inner-page H1s; @layer base -0.01em governs | Consistent letter-spacing; tracking-tight (-0.025em) was overriding the base rule | 13-02 |
+| research/page.tsx promoted to max-w-6xl (grid classification) | Research has card grid content; prose header at 6xl width is acceptable | 13-02 |
