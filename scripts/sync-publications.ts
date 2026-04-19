@@ -474,7 +474,66 @@ export function mergePublications(
 }
 
 // ---------------------------------------------------------------------------
-// J. main()
+// J. Per-member sync worker
+// ---------------------------------------------------------------------------
+
+type MemberSyncResult = {
+  slug: string;
+  name: string;
+  inspirePubs: Publication[];
+  arxivPubs: Publication[];
+  warnings: string[];
+};
+
+async function syncMember(
+  person: PersonWithSyncIds,
+  runInspire: boolean,
+  runArxiv: boolean,
+): Promise<MemberSyncResult> {
+  const result: MemberSyncResult = {
+    slug: person.slug,
+    name: person.name,
+    inspirePubs: [],
+    arxivPubs: [],
+    warnings: [],
+  };
+
+  if (!person.inspirehep_id && !person.orcid_id) {
+    result.warnings.push(`skipped ${person.slug}: no sync IDs`);
+    return result;
+  }
+
+  if (runInspire) {
+    if (person.inspirehep_id) {
+      const hits = await fetchInspireHEP(person.inspirehep_id);
+      if (hits.length === 0) {
+        result.warnings.push(
+          `No InspireHEP results for ${person.name} (${person.inspirehep_id})`,
+        );
+      }
+      result.inspirePubs = hits.map(inspireHitToPublication);
+    } else {
+      result.warnings.push(`skipping InspireHEP for ${person.name}: no inspirehep_id`);
+    }
+  }
+
+  if (runArxiv) {
+    if (person.orcid_id) {
+      const entries = await fetchArXiv(person.orcid_id);
+      if (entries.length === 0) {
+        result.warnings.push(`No arXiv results for ${person.name} (${person.orcid_id})`);
+      }
+      result.arxivPubs = entries.map(arxivEntryToPublication);
+    } else {
+      result.warnings.push(`skipping arXiv for ${person.name}: no orcid_id`);
+    }
+  }
+
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// K. main()
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
@@ -493,37 +552,53 @@ async function main(): Promise<void> {
   const runInspire = !flags["no-inspire"];
   const runArxiv = !flags["no-arxiv"];
 
-  // Filter to --member if specified
+  // Filter to --member if specified; otherwise sync all members with at least one ID
   const targetPeople = flags.member
     ? people.filter((p) => p.slug === flags.member)
-    : people;
+    : people.filter((p) => p.inspirehep_id || p.orcid_id);
 
   if (flags.member && targetPeople.length === 0) {
     process.stderr.write(`--member "${flags.member}" not found in content/people.json\n`);
     process.exit(1);
   }
 
-  // PLACEHOLDER — 09-02 wires extraction, 09-03 wires write gate
-  process.stderr.write(
-    `[scaffold] would sync ${targetPeople.length} member(s) ` +
-      `(inspire=${runInspire}, arxiv=${runArxiv}, dry-run=${flags["dry-run"]})\n`,
+  process.stdout.write(`Syncing ${targetPeople.length} member(s)...\n`);
+
+  // Run per-member fetch + extraction via runBatched (5 parallel, 2s inter-batch pause)
+  const tasks = targetPeople.map((p) => () => syncMember(p, runInspire, runArxiv));
+  const memberResults = await runBatched(tasks);
+
+  // Emit per-member progress lines (stdout) and drain warnings (stderr)
+  const allWarnings: string[] = [];
+  for (const r of memberResults) {
+    const inspireCell = runInspire ? String(r.inspirePubs.length) : "skipped";
+    const arxivCell = runArxiv ? String(r.arxivPubs.length) : "skipped";
+    process.stdout.write(`${r.slug} — InspireHEP: ${inspireCell}, arXiv: ${arxivCell}\n`);
+    for (const w of r.warnings) {
+      process.stderr.write(`Warning: ${w}\n`);
+      allWarnings.push(w);
+    }
+  }
+
+  // Concatenate per-source across all members, then dedup intra-source by arXiv ID (SYNC-09)
+  const allInspire = dedupByArxivId(memberResults.flatMap((r) => r.inspirePubs));
+  const allArxiv = dedupByArxivId(memberResults.flatMap((r) => r.arxivPubs));
+  const manualEntries = readManualEntries();
+
+  const merged = mergePublications(manualEntries, allInspire, allArxiv);
+
+  // Summary line — 09-03 will replace this tail with schema validation + writeFileSync
+  process.stdout.write(
+    `Extracted ${merged.length} publications` +
+      ` (manual=${manualEntries.length},` +
+      ` inspirehep=${allInspire.length},` +
+      ` arxiv=${allArxiv.length})\n`,
   );
 
-  // For 09-01 verification: exercise real fetch paths when --verbose + --member
-  // are both set and the member has IDs. Avoids slow fetches in CI.
-  if (flags.verbose && flags.member && targetPeople[0]?.inspirehep_id && runInspire) {
-    const member = targetPeople[0];
-    process.stderr.write(`[scaffold] fetching InspireHEP for ${member.slug}...\n`);
-    const hits = await fetchInspireHEP(member.inspirehep_id!);
-    process.stderr.write(`[scaffold] InspireHEP returned ${hits.length} hits\n`);
-  }
-
-  if (flags.verbose && flags.member && targetPeople[0]?.orcid_id && runArxiv) {
-    const member = targetPeople[0];
-    process.stderr.write(`[scaffold] fetching arXiv for ${member.slug}...\n`);
-    const entries = await fetchArXiv(member.orcid_id!);
-    process.stderr.write(`[scaffold] arXiv returned ${entries.length} entries\n`);
-  }
+  // `merged` and `allWarnings` remain in scope for 09-03's write gate to consume.
+  // 09-03 replaces the summary line above with PublicationsFileSchema validation + writeFileSync.
+  void merged;
+  void allWarnings;
 }
 
 // Guard: only run main() when executed directly (not when imported by Vitest or other modules)
