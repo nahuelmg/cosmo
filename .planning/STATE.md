@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 ## Current Position
 
-Phase: 17 complete → 18 next (Display Layer)
-Plan: —
-Status: Ready for `/gsd:discuss-phase 18` or `/gsd:plan-phase 18`
-Last activity: 2026-04-20 — Phase 17 verified (4/4 must-haves passed). 7 ORCID requirements (ORCID-01..07) marked Complete. 15 ORCID-only publications live in content/publications.json including SiPM paper with 11 authors.
+Phase: 18 complete → 19 next (Docs & Verification)
+Plan: 18-01 complete (1/1 plans in phase)
+Status: Ready for `/gsd:execute-phase 18` verifier step OR `/gsd:discuss-phase 19`
+Last activity: 2026-04-20 — Phase 18 plan 18-01 executed end-to-end; ORCID filter pill + source badge + author-link ORCID pill added post-checkpoint per user request; 9-person people.json reconciliation flagged in 18-01-SUMMARY.md.
 
-Progress: [█████░░░░░] 50% (v1.3 — 2/4 phases complete)
+Progress: [███████░░░] 75% (v1.3 — 3/4 phases complete)
 
 ## Shipped Milestones
 
@@ -51,9 +51,11 @@ Progress: [█████░░░░░] 50% (v1.3 — 2/4 phases complete)
 | 17-03 | Enrichment runs AFTER dedupByDoi (Option B from 17-RESEARCH.md) | Avoids per-work detail calls on dedup-losers; efficiency critical given ORCID rate limits |
 | 17-03 | lookupByPubId first-seen-wins over memberResults | When two members share an ORCID-only paper, first member's putCode used; both would produce same detail |
 | 17-03 | 404 from per-work detail endpoint → placeholder preserved (no throw) | Profile may change between works-list and detail fetch; placeholder is safer than aborting sync |
+| 18-01 | ORCID pill extended to appear on non-ORCID-source papers with member-author having contact.orcid | User requested post-checkpoint: "orcid pill should appear on any pub with orcid link ALSO" |
+| 18-01 | contact.orcid chosen as canonical display field (vs orcid_id) | Matches PersonDetail.tsx convention; people.json backfill deferred pending 9-person data reconciliation flagged in 18-01-SUMMARY.md |
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 17 executed end-to-end. Waves 1→2→3 sequential (all autonomous, no checkpoints). Verifier passed 4/4 must-haves. 7 ORCID requirements marked Complete. Live three-source sync wrote content/publications.json with 15 ORCID-only entries (36 deduped) and the SiPM paper with full 11-author list.
-Stopped at: Phase 17 sealed; awaiting `/gsd:discuss-phase 18` or `/gsd:plan-phase 18`.
+Last session: 2026-04-20 — Phase 18 plan 18-01 executed end-to-end. ORCID filter pill (Task 1), ORCID source badge + footnote (Task 2), human-verify checkpoint (Task 3 — approved), author-ORCID resolution helpers (Task 4), author-link pill + component threading (Task 5). Smoke check confirmed Calzetta/Lopez Nacir/Landau papers show new ORCID link pill. 104 tests pass. 9-person people.json reconciliation flagged.
+Stopped at: Phase 18 plan 01 sealed; awaiting verifier or `/gsd:discuss-phase 19`.
 Resume file: None
