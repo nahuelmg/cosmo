@@ -10,13 +10,13 @@
 
 ### ORCID Fetcher
 
-- [ ] **ORCID-01**: `scripts/sync-publications.ts` fetches works from `https://pub.orcid.org/v3.0/{orcid}/works` for every person in `content/people.json` with `orcid_id` set
-- [ ] **ORCID-02**: ORCID fetch reuses the existing `fetchWithRetry` wrapper: `AbortSignal.timeout(10_000)`, `User-Agent` header, exponential backoff on HTTP 429 (2s → 4s → 8s, capped 30s)
-- [ ] **ORCID-03**: ORCID HTTP 404 produces a warning (`ORCID profile not public or empty: {orcid}`) and returns `[]`, mirroring existing arXiv 404 behaviour
-- [ ] **ORCID-04**: ORCID works filtered to `type ∈ {"journal-article", "conference-paper"}`; datasets, software, posters, talks, and other work types are dropped
-- [ ] **ORCID-05**: ORCID entry extraction: `id` preferred from DOI, then arXiv ID, then `orcid-{put-code}`; title from `work-summary.title.title.value`; year from `work-summary.publication-date.year.value`; journal from `work-summary.journal-title.value` or `"Preprint"`; DOI from `external-ids.external-id[type=doi].value`; arXiv ID from `external-ids.external-id[type=arxiv].value` when present
-- [ ] **ORCID-06**: For every ORCID-only entry (no DOI match to an InspireHEP or arXiv entry), `sync-publications.ts` fetches `/v3.0/{orcid}/work/{put-code}` to populate the full author list from `contributors.contributor[].credit-name.value`
-- [ ] **ORCID-07**: ORCID fetches reuse the existing `runBatched` concurrency pattern (≤5 in flight, 2s batch pause) — no separate rate-limit scheme
+- [x] **ORCID-01**: `scripts/sync-publications.ts` fetches works from `https://pub.orcid.org/v3.0/{orcid}/works` for every person in `content/people.json` with `orcid_id` set
+- [x] **ORCID-02**: ORCID fetch reuses the existing `fetchWithRetry` wrapper: `AbortSignal.timeout(10_000)`, `User-Agent` header, exponential backoff on HTTP 429 (2s → 4s → 8s, capped 30s)
+- [x] **ORCID-03**: ORCID HTTP 404 produces a warning (`ORCID profile not public or empty: {orcid}`) and returns `[]`, mirroring existing arXiv 404 behaviour
+- [x] **ORCID-04**: ORCID works filtered to `type ∈ {"journal-article", "conference-paper"}`; datasets, software, posters, talks, and other work types are dropped
+- [x] **ORCID-05**: ORCID entry extraction: `id` preferred from DOI, then arXiv ID, then `orcid-{put-code}`; title from `work-summary.title.title.value`; year from `work-summary.publication-date.year.value`; journal from `work-summary.journal-title.value` or `"Preprint"`; DOI from `external-ids.external-id[type=doi].value`; arXiv ID from `external-ids.external-id[type=arxiv].value` when present
+- [x] **ORCID-06**: For every ORCID-only entry (no DOI match to an InspireHEP or arXiv entry), `sync-publications.ts` fetches `/v3.0/{orcid}/work/{put-code}` to populate the full author list from `contributors.contributor[].credit-name.value`
+- [x] **ORCID-07**: ORCID fetches reuse the existing `runBatched` concurrency pattern (≤5 in flight, 2s batch pause) — no separate rate-limit scheme
 
 ### Cross-Source DOI Dedup
 
@@ -110,13 +110,13 @@
 | CLI-03 | Phase 16 | Complete |
 | CLI-04 | Phase 16 | Complete |
 | CI-01 | Phase 16 | Complete |
-| ORCID-01 | Phase 17 | Pending |
-| ORCID-02 | Phase 17 | Pending |
-| ORCID-03 | Phase 17 | Pending |
-| ORCID-04 | Phase 17 | Pending |
-| ORCID-05 | Phase 17 | Pending |
-| ORCID-06 | Phase 17 | Pending |
-| ORCID-07 | Phase 17 | Pending |
+| ORCID-01 | Phase 17 | Complete |
+| ORCID-02 | Phase 17 | Complete |
+| ORCID-03 | Phase 17 | Complete |
+| ORCID-04 | Phase 17 | Complete |
+| ORCID-05 | Phase 17 | Complete |
+| ORCID-06 | Phase 17 | Complete |
+| ORCID-07 | Phase 17 | Complete |
 | UI-01 | Phase 18 | Pending |
 | UI-02 | Phase 18 | Pending |
 | UI-03 | Phase 18 | Pending |

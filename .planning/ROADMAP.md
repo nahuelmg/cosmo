@@ -137,9 +137,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 17-01-fixtures-and-503-retry-PLAN.md — Copy ORCID fixtures into `scripts/fixtures/`; extend `fetchWithRetry` to retry on HTTP 503 (ORCID burst-exceed) in addition to 429
-- [ ] 17-02-fetch-orcid-and-extraction-PLAN.md — Real `fetchOrcid` + `orcidGroupToPublication` (ORCID-01..05, -07); group-level external-ids union extraction; side-map lookup; unit tests + fixture SiPM extraction
-- [ ] 17-03-author-enrichment-and-verify-PLAN.md — `fetchOrcidWorkDetail` + `enrichOrcidAuthors` post-dedup pass (ORCID-06); unit tests with SiPM detail fixture; live three-source sync run; commit updated `content/publications.json`
+- [x] 17-01-fixtures-and-503-retry-PLAN.md — Copy ORCID fixtures into `scripts/fixtures/`; extend `fetchWithRetry` to retry on HTTP 503 (ORCID burst-exceed) in addition to 429
+- [x] 17-02-fetch-orcid-and-extraction-PLAN.md — Real `fetchOrcid` + `orcidGroupToPublication` (ORCID-01..05, -07); group-level external-ids union extraction; side-map lookup; unit tests + fixture SiPM extraction
+- [x] 17-03-author-enrichment-and-verify-PLAN.md — `fetchOrcidWorkDetail` + `enrichOrcidAuthors` post-dedup pass (ORCID-06); unit tests with SiPM detail fixture; live three-source sync run; commit updated `content/publications.json`
 
 ### Phase 18: Display Layer
 
@@ -189,6 +189,6 @@ Plans:
 | 14. Media Sizing | v1.2 | 3/3 | Complete | 2026-04-20 |
 | 15. Interactive Polish & Documentation | v1.2 | 6/6 | Complete | 2026-04-20 |
 | 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
-| 17. ORCID Fetcher | v1.3 | 0/3 | Planned | — |
+| 17. ORCID Fetcher | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 18. Display Layer | v1.3 | — | Not started | — |
 | 19. Docs & Verification | v1.3 | — | Not started | — |

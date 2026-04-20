@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phase 16 complete; Phase 17 (ORCID Fetcher) in progress.
+**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phases 16 + 17 complete; Phase 18 (Display Layer) is next.
 
 ## Current Position
 
 Phase: 17 complete → 18 next (Display Layer)
 Plan: —
-Status: Ready for phase verification
-Last activity: 2026-04-20 — Completed 17-03-PLAN.md (fetchOrcidWorkDetail + enrichOrcidAuthors; 15 ORCID entries + SiPM paper live; 91→98 tests)
+Status: Ready for `/gsd:discuss-phase 18` or `/gsd:plan-phase 18`
+Last activity: 2026-04-20 — Phase 17 verified (4/4 must-haves passed). 7 ORCID requirements (ORCID-01..07) marked Complete. 15 ORCID-only publications live in content/publications.json including SiPM paper with 11 authors.
 
-Progress: [████░░░░░░] 50% (v1.3 — 1/4 phases complete, Phase 17 done, Phase 18 next)
+Progress: [█████░░░░░] 50% (v1.3 — 2/4 phases complete)
 
 ## Shipped Milestones
 
@@ -54,6 +54,6 @@ Progress: [████░░░░░░] 50% (v1.3 — 1/4 phases complete, Ph
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 17 plan 03 executed. fetchOrcidWorkDetail + enrichOrcidAuthors landed; 98 tests green (91→98); 15 ORCID-only publications live; SiPM paper with 11 authors confirmed; all 4 Phase 17 SC verified.
-Stopped at: Completed 17-03-PLAN.md; all 3 plans in Phase 17 done. Ready for /gsd:verify-phase 17 then Phase 18.
+Last session: 2026-04-20 — Phase 17 executed end-to-end. Waves 1→2→3 sequential (all autonomous, no checkpoints). Verifier passed 4/4 must-haves. 7 ORCID requirements marked Complete. Live three-source sync wrote content/publications.json with 15 ORCID-only entries (36 deduped) and the SiPM paper with full 11-author list.
+Stopped at: Phase 17 sealed; awaiting `/gsd:discuss-phase 18` or `/gsd:plan-phase 18`.
 Resume file: None
