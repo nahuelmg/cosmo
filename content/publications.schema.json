@@ -16,7 +16,8 @@
             "type": "string",
             "enum": [
               "inspirehep",
-              "arxiv"
+              "arxiv",
+              "orcid"
             ]
           }
         },
@@ -37,12 +38,24 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 9007199254740991
+            },
+            "orcid": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "deduped": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
             }
           },
           "required": [
             "inspirehep",
             "arxiv",
-            "manual"
+            "manual",
+            "orcid",
+            "deduped"
           ],
           "additionalProperties": false
         },
@@ -113,7 +126,8 @@
             "enum": [
               "manual",
               "inspirehep",
-              "arxiv"
+              "arxiv",
+              "orcid"
             ]
           },
           "abstract": {
