@@ -10,6 +10,8 @@ import {
   arxivEntryToPublication,
   dedupByArxivId,
   mergePublications,
+  normalizeDoi,
+  dedupByDoi,
 } from "./sync-publications";
 import type { InspireHit, ArXivEntry } from "./sync-publications";
 import type { Publication } from "../src/content/schemas/publications.schema";
@@ -213,7 +215,8 @@ describe("mergePublications sort order", () => {
       make("b", 2024, "1.1"),
     ];
 
-    const result = mergePublications([], entries, []);
+    // Single pre-concatenated array (Option A refactor)
+    const result = mergePublications(entries);
     expect(result[0].id).toBe("a"); // 2024/9.9 — highest year, highest arxiv
     expect(result[1].id).toBe("b"); // 2024/1.1
     expect(result[2].id).toBe("c"); // 2023/9.9
@@ -231,9 +234,93 @@ describe("mergePublications sort order", () => {
       source: "manual",
     };
     const inspire = make("inspire-1", 2022, "1.1");
-    const result = mergePublications([manual], [inspire], []);
-    // manual-1 is 2025, inspire-1 is 2022 — manual comes first
+    // Pre-concat in priority order: manual first, then inspire
+    const result = mergePublications([manual, inspire]);
+    // manual-1 is 2025, inspire-1 is 2022 — manual comes first after sort
     expect(result[0].id).toBe("manual-1");
     expect(result[0].source).toBe("manual");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// normalizeDoi
+// ---------------------------------------------------------------------------
+
+describe("normalizeDoi", () => {
+  it("lowercases DOIs", () => {
+    expect(normalizeDoi("10.1103/PhysRevD.108.103512")).toBe("10.1103/physrevd.108.103512");
+  });
+
+  it("strips https://doi.org/ prefix", () => {
+    expect(normalizeDoi("https://doi.org/10.1234/ABC")).toBe("10.1234/abc");
+  });
+
+  it("strips http://dx.doi.org/ prefix", () => {
+    expect(normalizeDoi("http://dx.doi.org/10.1234/ABC")).toBe("10.1234/abc");
+  });
+
+  it("trims whitespace", () => {
+    expect(normalizeDoi("  10.1234/abc  ")).toBe("10.1234/abc");
+  });
+
+  it("handles already-normalised DOIs", () => {
+    expect(normalizeDoi("10.1016/j.nima.2020.164490")).toBe("10.1016/j.nima.2020.164490");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// dedupByDoi
+// ---------------------------------------------------------------------------
+
+describe("dedupByDoi", () => {
+  const basePub = (overrides: Partial<Publication>): Publication => ({
+    id: "x",
+    authors: ["A"],
+    title: "T",
+    journal: "J",
+    year: 2024,
+    topic_tags: [],
+    source: "manual",
+    ...overrides,
+  });
+
+  it("keeps InspireHEP over ORCID over arXiv when DOIs match (DEDUP-02)", () => {
+    // Input must be in priority order: inspire → orcid → arxiv
+    const inspire = basePub({ id: "i", source: "inspirehep", doi: "10.1234/test" });
+    const orcid   = basePub({ id: "o", source: "orcid",      doi: "10.1234/test" });
+    const arxiv   = basePub({ id: "a", source: "arxiv",      doi: "10.1234/test" });
+    const [deduped, dropped] = dedupByDoi([inspire, orcid, arxiv]);
+    expect(deduped.length).toBe(1);
+    expect(deduped[0].source).toBe("inspirehep");
+    expect(dropped).toBe(2);
+  });
+
+  it("normalises DOIs before comparison (DEDUP-03)", () => {
+    const a = basePub({ id: "a", source: "inspirehep", doi: "10.1234/TEST" });
+    const b = basePub({ id: "b", source: "orcid",      doi: "https://doi.org/10.1234/test" });
+    const [deduped, dropped] = dedupByDoi([a, b]);
+    expect(deduped.length).toBe(1);
+    expect(deduped[0].id).toBe("a");
+    expect(dropped).toBe(1);
+  });
+
+  it("passes entries without DOI through unchanged (DEDUP-04)", () => {
+    const a = basePub({ id: "a", source: "arxiv" /* no doi */ });
+    const b = basePub({ id: "b", source: "arxiv" /* no doi */ });
+    const [deduped, dropped] = dedupByDoi([a, b]);
+    expect(deduped.length).toBe(2);
+    expect(dropped).toBe(0);
+  });
+
+  it("reports dedupedCount accurately (DEDUP-05)", () => {
+    const list = [
+      basePub({ id: "1", source: "inspirehep", doi: "10.1/a" }),
+      basePub({ id: "2", source: "orcid",      doi: "10.1/a" }), // dup
+      basePub({ id: "3", source: "inspirehep", doi: "10.1/b" }),
+      basePub({ id: "4", source: "arxiv",      doi: "10.1/b" }), // dup
+      basePub({ id: "5", source: "inspirehep", doi: "10.1/c" }),
+    ];
+    const [, dropped] = dedupByDoi(list);
+    expect(dropped).toBe(2);
   });
 });
