@@ -1,5 +1,46 @@
 # Project Milestones: Cosmology Group Website (UBA / FCEN)
 
+## v1.2 Aesthetic Polish (Shipped: 2026-04-20)
+
+**Delivered:** Thorough aesthetic polish across all 45 routes — typography rhythm, interactive-element sizing, spacing cadence, member-photo proportions, and micro-interactions — preserving the warm-academic direction from v1.0 with zero visual redesign.
+
+**Phases completed:** 13–15 (13 plans total)
+
+**Key accomplishments:**
+
+- **Design-system tokens versioned** — added `--text-5xl` (40 px) and bumped `--text-4xl` 32 → 36 px in `globals.css` `@theme`; 7 inner-page H1s migrated to `text-3xl md:text-4xl font-semibold` (no `tracking-tight`, `@layer base -0.01em` governs); nav consolidated to `text-sm`; MASTER.md Type Scale gained v1.0 supersession note + Line-Height Convention subsection.
+- **Layout rhythm codified** — page wrappers standardised on `max-w-5xl` (prose) / `max-w-6xl` (grids) with zero `max-w-4xl` in codebase; vertical rhythm `py-16` page / `py-12` sub-section; card padding rule two-tiered (dense `p-4` PersonCard / spacious `p-6` ResearchCard + OutreachCard); SessionRow `py-5` dense-row equivalent; ResearchCard's outlier `p-8` reduced to `p-6`.
+- **Member photos no longer dominate** — PersonCard self-caps at `max-w-[240px] w-full mx-auto` with `aspect-[4/5]` portrait + PeopleSection `xl:grid-cols-4`; PersonDetail hero resized 240 → 180 px (`aspect-[4/5]` + `md:grid-cols-[180px_1fr]` + mobile cap); `next/image` `sizes` attributes tightened (`"(min-width: 640px) 240px, 100vw"` cards, `"(min-width: 768px) 180px, 180px"` hero) so Next serves the correct srcset without oversized downloads; LCP preload triple preserved on PersonDetail hero.
+- **Interactive elements hit the 44×44 bar** — HeroCarousel pause/play `w-11 h-11` + dot `p-[17px]` padding-inside (17+10+17=44 px exactly); MobileNav trigger/close 44×44; NavLink `py-1.5` + `transition-colors duration-150`; LocaleToggle `py-1.5`; SourceFilter pill `px-3.5 py-1.5` (≥ 36 px per BTN-04 spec) + hoisted base const preventing active/inactive drift. Inline-text links exempted per WCAG 2.5.5 AAA.
+- **Focus rings unified** — 18 `focus-visible:ring-*` sites all on `ring-accent-ring` with explicit `ring-offset-2`; `ring-offset-surface` on light backgrounds, `ring-offset-black/40` on HeroCarousel image background; PersonCard photo gains `motion-safe:group-hover:scale-[1.02]` zoom (respects `prefers-reduced-motion`); SkipLink's `focus:` pattern deliberately preserved.
+- **CI guard + docs landed** — `pnpm axe` script (`@axe-core/cli@4` against 8 Spanish pages, 0 violations confirmed); `.github/workflows/lint-rings.yml` drift gate with PCRE lookahead blocks any future stray ring variants on push/PR; MASTER.md `## Component Specs` rewritten as 6 inline Tailwind recipes (raw `.btn-primary` blocks replaced wholesale — zero codebase analogues); OVERRIDES.md v1.2 table appended (15 rows) while v1.0 list preserved verbatim; manual visual sweep APPROVED at 375/1024/1440 px.
+
+**Stats:**
+
+- 13 plans across 3 phases (13:4, 14:3, 15:6)
+- 45 static routes preserved (SSG guarantee held through all polish)
+- 77 files changed, +7,879 / −507 LOC since v1.1
+- 59 commits from v1.1 tag to ship
+- Timeline: 2026-04-19 → 2026-04-20 (~1 day)
+- **26/26 v1.2 requirements complete** (TYPO-01..05, SPACE-01..04, MEDIA-01..05, BTN-01..06, MICRO-01..05, DOC-01..02)
+- Cross-phase integration: 11/11 wiring checks passed; 5/5 E2E flows; `pnpm build` + `tsc --noEmit` clean
+
+**Git range:** `feat(13-01): bump --text-4xl to 2.25rem + add --text-5xl` → `docs(15): complete interactive-polish-documentation phase`
+
+**Deferred to v1.3:**
+
+- Post-milestone doc drift — commit `1cf9cf8` (after Phase 15 seal) reverted desktop NavLink to `text-lg` and widened SiteHeader to `max-w-6xl`; MASTER.md and OVERRIDES.md need a v1.3 amendment recording the override.
+- Desktop NavLink explicit focus ring (currently inherits UA default — acceptable under BTN-02 scope; revisit if judged insufficient on live site).
+- All v1.1 code-cleanup deferrals carried forward (orphaned accessors, dead i18n key, `publications_selected` field, REQUIREMENTS PR-flow description).
+- DATA-09/10 content task (4 remaining sync-scoped member IDs).
+- v1.0 production re-measurement (PERF-04/05 Vercel LCP + CLS, NAV-04 live-deploy check, hero title contrast on starfield).
+
+**Technical debt:** Documentation drift from 2 post-milestone intentional commits (recorded above). No execution debt — every polish change followed the plan.
+
+**What's next:** v1.3 — open (candidates: carried-forward v1.1 code cleanup, v1.0 production re-measurement campaign, or new capability milestone TBD).
+
+---
+
 ## v1.1 arXiv + InspireHEP Publication Sync (Shipped: 2026-04-19)
 
 **Delivered:** Auto-populated `/publications` archive + per-member last-10-years publication section, refreshed weekly via GitHub Actions from InspireHEP (BAI) + arXiv (ORCID), source-tagged and preserving v1.0's fully-static SSG guarantee.

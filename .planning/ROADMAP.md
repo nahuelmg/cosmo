@@ -2,9 +2,10 @@
 
 ## Milestones
 
-- ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-04-18)
-- ✅ **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (shipped 2026-04-19)
-- ✅ **v1.2 Aesthetic Polish** — Phases 13–15 (shipped 2026-04-20)
+- ✅ **v1.0 MVP** — Phases 1–6 (shipped 2026-04-18) · archive: `milestones/v1.0-ROADMAP.md`
+- ✅ **v1.1 arXiv + InspireHEP Sync** — Phases 7–12 (shipped 2026-04-19) · archive: `milestones/v1.1-ROADMAP.md`
+- ✅ **v1.2 Aesthetic Polish** — Phases 13–15 (shipped 2026-04-20) · archive: `milestones/v1.2-ROADMAP.md`
+- 📋 **v1.3 TBD** — next milestone to be scoped via `/gsd:new-milestone`
 
 ---
 
@@ -72,55 +73,24 @@ See `.planning/milestones/v1.1-ROADMAP.md` for full phase details.
 
 </details>
 
----
+<details>
+<summary>✅ v1.2 Aesthetic Polish (Phases 13–15) — SHIPPED 2026-04-20</summary>
 
-## v1.2 Aesthetic Polish (Phases 13–15)
+See `.planning/milestones/v1.2-ROADMAP.md` for full phase details.
 
 ### Phase 13: Design Tokens & Layout Rhythm
-**Goal:** The type scale, page-container widths, and vertical rhythm reflect the audited polish targets — `text-5xl` token exists, `text-4xl` bumped to 36 px, page widths standardised, vertical spacing codified. All other v1.2 phases depend on these tokens.
-**Requirements:** TYPO-01, TYPO-02, TYPO-03, TYPO-04, TYPO-05, SPACE-01, SPACE-02, SPACE-03, SPACE-04
-**Plans:** 4 plans in 3 waves — all complete
-Plans:
-- [x] 13-01-PLAN.md — globals.css `@theme` token update (`--text-4xl` → 2.25rem, add `--text-5xl`) + `@layer base` h1 leading-tight
-- [x] 13-02-PLAN.md — H1 responsive migration + container widths (SPACE-01) + nav sizing consolidation (TYPO-03/04, SPACE-01/02)
-- [x] 13-03-PLAN.md — ResearchCard padding `p-8` → `p-6` + audit PersonCard/OutreachCard/SessionRow (SPACE-03)
-- [x] 13-04-PLAN.md — MASTER.md documentation of v1.2 type scale + Layout section (TYPO-05, SPACE-04)
-**Success criteria:**
-1. `--text-5xl` token is defined and H1 elements use the new 36 px size
-2. Every page wrapper uses `max-w-5xl` (prose) or `max-w-6xl` (grids) per the codified rule
-3. Every section / page wrapper uses `py-12` / `py-16` per the codified rhythm
-4. `pnpm build` passes; visually, heading hierarchy reads distinctly on People / Research / Contact
+**Goal:** Type scale, page-container widths, and vertical rhythm reflect the audited polish targets — `--text-5xl` token exists, `--text-4xl` bumped to 36 px, page widths standardised, vertical spacing codified.
+**Plans:** 4 — all complete
 
 ### Phase 14: Media Sizing
-**Goal:** Member photos no longer dominate their pages — `PersonCard` cards cap at ≤ 280 px wide, `PersonDetail` hero photo reduced to 180–200 px, `next/image` `sizes` attributes updated so Next serves the correct srcset.
-**Requirements:** MEDIA-01, MEDIA-02, MEDIA-03, MEDIA-04, MEDIA-05
-**Plans:** 3 plans in 2 waves — all complete
-Plans:
-- [x] 14-01-PLAN.md — PersonCard resize to max-w-[240px] + aspect-[4/5] + PeopleSection xl:grid-cols-4 + sizes="(min-width: 640px) 240px, 100vw" (MEDIA-01, MEDIA-05 PersonCard)
-- [x] 14-02-PLAN.md — PersonDetail hero resize to 180 px + aspect-[4/5] + mobile cap + sizes="(min-width: 768px) 180px, 180px" (preserves LCP preload triple) (MEDIA-02, MEDIA-05 PersonDetail)
-- [x] 14-03-PLAN.md — HeroCarousel + OutreachCard + homepage imagery audit at 5 viewports + axe/CLS/srcset regression sweep (MEDIA-03, MEDIA-04)
-**Success criteria:**
-1. `/people` renders `PersonCard` at ≤ 280 px card width on `lg+` (visual check + CSS inspection)
-2. `/people/[slug]` hero photo renders at 180–200 px on desktop
-3. No layout shift introduced; Hero carousel and outreach imagery verified at 375 / 768 / 1024 / 1440 px
-4. Next.js image srcset loads appropriate sizes (no oversized downloads)
+**Goal:** Member photos no longer dominate their pages — PersonCard caps at 240 px, PersonDetail hero reduced to 180 px, `sizes` attributes tuned so Next serves the correct srcset.
+**Plans:** 3 — all complete
 
 ### Phase 15: Interactive Polish & Documentation
-**Goal:** Every interactive element meets the 44 × 44 tap-target bar, all focus rings unify on `accent-ring`, subtle motion is added where it clarifies state, and the design system docs reflect the v1.2 token + component deltas.
-**Requirements:** BTN-01, BTN-02, BTN-03, BTN-04, BTN-05, BTN-06, MICRO-01, MICRO-02, MICRO-03, MICRO-04, MICRO-05, DOC-01, DOC-02
-**Plans:** 6 plans in 2 waves — all complete
-Plans:
-- [x] 15-01-PLAN.md — HeroCarousel pause/play 44×44 + dot 44×44 hit area (padding-inside) + ring-accent-ring + ring-offset-black/40 (BTN-02, BTN-03, MICRO-05 partial)
-- [x] 15-02-PLAN.md — NavLink py-1.5 + duration-150, LocaleToggle py-1.5, MobileNav trigger/close 44×44, ring-offset-surface added (BTN-05, MICRO-01)
-- [x] 15-03-PLAN.md — SourceFilter px-3.5 py-1.5 + transition-colors duration-150 (hoisted base), PublicationEntry ring-offset-surface (BTN-04, MICRO-02)
-- [x] 15-04-PLAN.md — PersonCard photo motion-safe:scale-[1.02] duration-200 group-hover + ring-offset-surface (MICRO-03)
-- [x] 15-05-PLAN.md — ring-offset-2 ring-offset-surface across remaining 8 focus-ring sites (PartnerStrip, ContactDetails, MapEmbed, SessionRow, SiteFooter ×2, SiteHeader, OutreachCard)
-- [x] 15-06-PLAN.md — pnpm axe script + lint-rings.yml CI gate + MASTER.md Component Specs Tailwind recipes + OVERRIDES.md v1.2 table + manual visual sweep (BTN-06, MICRO-04, DOC-01, DOC-02)
-**Success criteria:**
-1. Every interactive element (buttons, nav links, pills, dots) has an effective ≥ 44 × 44 tap area
-2. Every `focus-visible:ring-*` uses `ring-accent-ring` (grep confirms zero `ring-surface/70` or stray variants)
-3. `pnpm axe` reports zero violations on all 8 Spanish pages
-4. `design-system/cosmology-group-uba/MASTER.md` + OVERRIDES.md reflect v1.2 adjustments
+**Goal:** Every interactive element meets the 44×44 tap-target bar, all focus rings unify on `accent-ring`, subtle motion added, and design-system docs reflect the v1.2 deltas.
+**Plans:** 6 — all complete
+
+</details>
 
 ---
 

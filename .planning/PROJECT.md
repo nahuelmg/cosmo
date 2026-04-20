@@ -8,22 +8,9 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
-## Current State: v1.1 Shipped — v1.2 Aesthetic Polish in planning
+## Current State: v1.2 Shipped — next milestone TBD
 
-**Latest shipped:** v1.1 arXiv + InspireHEP Publication Sync (2026-04-19) — auto-populated `/publications` + per-member last-10-years section via weekly GitHub Actions from InspireHEP (BAI) + arXiv (ORCID), with `jq` payload diff-guard preventing spurious commits and last-good preservation on upstream failure. 45 static routes preserved, 321 real publications from 9 current members, 10/10 cross-phase wiring verified.
-
-## Current Milestone: v1.2 Aesthetic Polish
-
-**Goal:** Thorough aesthetic polish across the whole site using ui-ux-pro-max consultations, preserving the warm-academic direction from v1.0 while tightening the details that still feel rough.
-
-**Target areas:**
-- Typography rhythm & scale — recalibrate type scale, line-height, letter-spacing across headings, body, captions, metadata
-- Buttons & interactive elements — consistency pass on sizes, padding, hover/active/focus states (buttons, nav links, locale toggle, filter pills, carousel dots)
-- Spacing rhythm & layout density — vertical rhythm, section spacing, card padding, page margins across all 8 page types
-- Media sizing — specifically member photos on `/people` and `/people/[slug]` (currently read oversized); hero carousel and outreach/activity imagery reviewed in the same pass
-- Micro-interactions & polish — transitions, focus rings, hover treatments, loading/empty states (respecting "no flashy animations" constraint)
-
-**Design direction:** Keep the academic-journal aesthetic. No visual overhaul — polish the details, don't redesign.
+**Latest shipped:** v1.2 Aesthetic Polish (2026-04-20) — 26/26 requirements across Typography, Spacing, Media, Buttons, Micro-interactions, and Documentation categories. 18 focus-ring sites unified on `ring-accent-ring` with explicit `ring-offset-2`; PersonCard + PersonDetail photos right-sized (240 px / 180 px with `aspect-[4/5]`); HeroCarousel + Nav + SourceFilter interactive elements hit the 44×44 WCAG 2.5.5 AAA bar; `pnpm axe` 0 violations across 8 Spanish pages; CI drift gate (`lint-rings.yml`) installed; MASTER.md + OVERRIDES.md fully updated. 45 static routes preserved, 11/11 cross-phase wiring + 5/5 E2E flows verified.
 
 ## Requirements
 
@@ -72,11 +59,33 @@ A credible, professional academic presence that makes it easy for visitors to fi
 - ✓ Sync failure preserves last-good JSON; site deploys unchanged content — v1.1
 - ✓ Maintainer documentation in `content/SYNC.md` (BAI lookup + ORCID lookup + paste-ready example + Operational Troubleshooting) — v1.1
 
+**Aesthetic Polish** — all shipped v1.2
+- ✓ `--text-5xl` (40 px) token added + `--text-4xl` bumped 32 → 36 px; 7 inner-page H1s migrated to `text-3xl md:text-4xl font-semibold` (TYPO-01..03) — v1.2
+- ✓ Body-text and nav consolidated to `text-sm`; `tracking-tight` removed from inner H1s (TYPO-04) — v1.2
+- ✓ MASTER.md Type Scale versioned with v1.0 supersession note + Line-Height Convention subsection (TYPO-05) — v1.2
+- ✓ Page-container widths codified: `max-w-5xl` prose / `max-w-6xl` grids; zero `max-w-4xl` (SPACE-01) — v1.2
+- ✓ Vertical rhythm codified: `py-16` page / `py-12` sub-section; card padding two-tiered (dense `p-4` / spacious `p-6`; SessionRow `py-5`) (SPACE-02/03) — v1.2
+- ✓ MASTER.md `## Layout` section documents container widths + rhythm + card tiers with SPACE-01/02/03 cross-refs (SPACE-04) — v1.2
+- ✓ PersonCard caps at 240 px wide, `aspect-[4/5]` portrait, PeopleSection `xl:grid-cols-4`, tuned `sizes` hint (MEDIA-01, MEDIA-05) — v1.2
+- ✓ PersonDetail hero reduced 240 → 180 px, `aspect-[4/5]`, mobile cap, narrow-constant `sizes`, LCP triple preserved (MEDIA-02, MEDIA-05) — v1.2
+- ✓ HeroCarousel 5×6 audit all PASS; homepage 1-image inventory confirmed; OutreachCard image wrapper dormant (MEDIA-03/04) — v1.2
+- ✓ Every interactive element ≥ 44 × 44 px; inline-text links exempted per WCAG 2.5.5 AAA (BTN-01) — v1.2
+- ✓ 18 `focus-visible:ring-*` sites unified on `ring-accent-ring` with explicit `ring-offset-2` (BTN-02) — v1.2
+- ✓ HeroCarousel pause/play `w-11 h-11` + dots `p-[17px]` padding-inside (BTN-03) — v1.2
+- ✓ SourceFilter pills `px-3.5 py-1.5` + hoisted base const (BTN-04) — v1.2
+- ✓ NavLink `py-1.5`, LocaleToggle `py-1.5`, MobileNav trigger/close 44×44 (BTN-05) — v1.2
+- ✓ MASTER.md `## Component Specs` 6 Tailwind recipes (raw-CSS blocks replaced wholesale) (BTN-06) — v1.2
+- ✓ NavLink `transition-colors duration-150`; SourceFilter crossfade; PersonCard `motion-safe:group-hover:scale-[1.02]` (MICRO-01/02/03) — v1.2
+- ✓ `pnpm axe` 0 violations on 8 Spanish pages (MICRO-04) — v1.2
+- ✓ Focus rings contrast-safe on light (`ring-offset-surface`) + image (`ring-offset-black/40`) backgrounds (MICRO-05) — v1.2
+- ✓ OVERRIDES.md v1.2 table (15 rows) appended; v1.0 list preserved (DOC-01/02) — v1.2
+- ✓ `.github/workflows/lint-rings.yml` CI drift gate blocks stray focus-ring variants on push/PR — v1.2
+
 ### Active
 
-<!-- Current scope. No active milestone yet — run /gsd:new-milestone to scope v1.2. -->
+<!-- Current scope. No active milestone yet — run /gsd:new-milestone to scope v1.3. -->
 
-(None — v1.1 shipped; planning next milestone)
+(None — v1.2 shipped; planning next milestone)
 
 ### Out of Scope
 
@@ -118,25 +127,27 @@ Previously out of scope, now revisited:
 - Facultad de Ciencias Exactas y Naturales (FCEN)
 - CONICET
 
-**Shipped state (post-v1.1)**
+**Shipped state (post-v1.2)**
 - Tech stack: Next.js 16 App Router + TypeScript strict + Tailwind v4 (CSS-first `@theme`) + next-intl 4.9 + Zod v4 + Radix Dialog + lucide-react + fast-xml-parser 5.7 (arXiv Atom)
-- Design system: warm-academic OKLCH tokens + Source Serif 4 + Source Sans 3 with Greek subset
-- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 24-symbol `@/content` barrel; `content/publications.json` now auto-populated (321 entries, `_meta { synced_at, sources, counts, warnings }`)
+- Design system: warm-academic OKLCH tokens + Source Serif 4 + Source Sans 3 with Greek subset; v1.2 versioned Type Scale (`--text-4xl` 36 px / `--text-5xl` 40 px) with v1.0 supersession note; two-tier card padding rule (dense `p-4` / spacious `p-6`); 18 focus-ring sites unified on `ring-accent-ring` + `ring-offset-2`; `lint-rings.yml` CI drift gate enforces going forward
+- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 24-symbol `@/content` barrel; `content/publications.json` auto-populated (321 entries, `_meta { synced_at, sources, counts, warnings }`)
 - Sync: `scripts/sync-publications.ts` + `.github/workflows/sync-publications.yml` (weekly cron + workflow_dispatch + `jq` payload diff-guard); `content/SYNC.md` maintainer + operational guide
-- 45 fully-static routes, 247 commits total (158 v1.0 + 89 v1.1), 3-day total span (2026-04-17 → 2026-04-19)
-- Audited: 0 axe-core violations, v1.0 73/75 requirements satisfied, v1.1 45/48 complete + 2 softened + 2 partial (9/13 DATA-09/10), 10/10 cross-phase wiring verified in both milestone audits
+- 45 fully-static routes, 306 commits total (158 v1.0 + 89 v1.1 + 59 v1.2), 4-day total span (2026-04-17 → 2026-04-20)
+- Audited: 0 axe-core violations across 8 Spanish pages (re-verified v1.2); v1.0 73/75 requirements + v1.1 45/48 complete + 2 softened + 2 partial + **v1.2 26/26 complete**; 11/11 cross-phase wiring + 5/5 E2E flows verified in v1.2 audit
 - Deferred to production re-measurement: PERF-02 / PERF-04 / PERF-05 (Vercel prod LCP + CLS)
 
-**Known issues / tech debt carried forward to v1.2**
-- NAV-04 mobile drawer 375px runtime check against live deploy (structural verification complete)
+**Known issues / tech debt carried forward to v1.3**
+- Post-v1.2-seal doc drift: commit `1cf9cf8 feat(header): enlarge nav tabs to text-lg and widen chrome to max-w-6xl` — MASTER.md Component Specs "Nav Link" and OVERRIDES.md v1.2 row 11 still describe `text-sm + py-1.5`; needs a v1.3 amendment
+- Desktop NavLink deliberately has no `focus-visible:ring-*` of its own — inherits browser UA focus ring; flagged as observation in 15-VERIFICATION. Revisit if judged insufficient on live site
+- NAV-04 mobile drawer 375 px runtime check against live deploy (structural verification complete)
 - HeroCarousel pause / reduced-motion / MapEmbed IntersectionObserver runtime verification (deferred from 04-02 human-verify)
 - `MobileNav.tsx:87` `focus:outline-none` (box-shadow ring provides visible focus; lint flag only)
 - PUBS-03 / PUBS-04 deferred beyond v1 scope during Phase 4 planning; revisit when maintainers ask for filters
 - DATA-09/10: 4 remaining sync-scoped members need IDs (juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia) — content task
-- Legacy Zod field `publications_selected` still marked `@deprecated` — remove in v1.2
-- Orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`) — legacy v1.0 APIs retained to avoid breaking change; v1.2 cleanup
-- Dead `people.selectedPublications` i18n key in both locales — v1.2 cleanup
-- REQUIREMENTS.md PR-flow description (implementation pushes direct-to-main per Phase 10 decision) — update in v1.2
+- Legacy Zod field `publications_selected` still marked `@deprecated` — v1.3 cleanup candidate
+- Orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`) — legacy v1.0 APIs retained to avoid breaking change; v1.3 cleanup candidate
+- Dead `people.selectedPublications` i18n key in both locales — v1.3 cleanup candidate
+- REQUIREMENTS.md PR-flow description (implementation pushes direct-to-main per Phase 10 decision) — update in v1.3
 
 **Content policy**
 - Placeholder names / bios / photos remain where real content not yet provided (13/15 current members carry photos + bios; publications now real via v1.1 sync)
@@ -190,7 +201,19 @@ Previously out of scope, now revisited:
 | Drop member-author bold highlighting (PUBS-12 softened) in Phase 12 | User feedback: bold weight read as visually confusing against serif body type | ✓ Good — member-visibility invariant (PUBS-11 author-list truncation) still honored via `buildMemberSurnameSet` |
 | Drop count subtitle on `/people/[slug]` (PEOP-14 softened) in 11-CONTEXT | Heading is bare "Publicaciones" / "Publications" — list length self-communicates | ✓ Good — less chrome, cleaner reading |
 | Matias Leizerovich rename to authoritative InspireHEP BAI `M.Leizerovich.1` (drops "t") | Canonical identifier from InspireHEP, not legacy slug | ✓ Good — zero dangling `leizerovitch` refs; surname-match links his 3 first-author papers |
-| Intra-source arXiv-ID dedup only (no cross-source) | Source-tagged separate entries is v1.1's explicit design; InspireHEP/arXiv dupes are a feature, not a bug | ⚠️ Revisit — v1.2 if maintainer reports duplication as annoying |
+| Intra-source arXiv-ID dedup only (no cross-source) | Source-tagged separate entries is v1.1's explicit design; InspireHEP/arXiv dupes are a feature, not a bug | ⚠️ Revisit — v1.3 if maintainer reports duplication as annoying |
+| v1.2 `--text-5xl: 2.5rem` caps hero H1 at 40 px (not Tailwind default 48 px); inner H1s use `text-3xl md:text-4xl` | Hero-only 40 px sizing; token makes the decision explicit and prevents falling through to Tailwind default | ✓ Good — HeroCarousel H1 preserved; 7 inner page H1s consistent |
+| SPACE-03 two-tier card padding rule (dense p-4 / spacious p-6), flat across breakpoints | No CSS abstractions, no responsive variants; one-line intent per card | ✓ Good — SessionRow py-5 documented as dense-row equivalent |
+| PersonCard self-caps at `max-w-[240px] w-full mx-auto` (not grid-cell constraint) | Lets grid cell be wider at xl (258 px) while card centers; encyclopedic whitespace feel | ✓ Good — composes cleanly with PeopleSection xl:grid-cols-4 |
+| Aspect-ratio via wrapper `aspect-[4/5]` (not fixed w/h on `<Image>`) on LCP photos | Preserves Phase 6 `fill`+parent-aspect pattern so `link rel=preload imagesrcset` hint stays stable | ✓ Good — LCP triple on PersonDetail hero intact |
+| `sizes="(min-width: 768px) 180px, 180px"` narrow-constant on mobile-capped hero | Flat hint accurate everywhere when cap equals desktop width; tightens preload srcset pool to 256w / 384w | ✓ Good — observed srcset matches |
+| HeroCarousel dot tap area via `p-[17px]` arbitrary value | 17+10+17=44 px exactly; `p-3` gives only 34 px; only 2 uses → below tokenize threshold | ✓ Good — WCAG 2.5.5 AAA met without CSS abstraction |
+| 18 focus-ring sites unified on `ring-accent-ring` + explicit `ring-offset-2`; `.github/workflows/lint-rings.yml` PCRE drift gate | Prevents reintroduction of stray variants (e.g. `ring-surface/70`); CI blocks on push/PR | ✓ Good — dry-run against current src/ returns 0 matches |
+| Inline-text links exempted from BTN-01 44×44 rule (WCAG 2.5.5 AAA exception) | Inline links in prose shouldn't inflate to 44 px tap targets — breaks line-height rhythm | ✓ Good — documented in OVERRIDES.md v1.2 table + MASTER.md Universal Rules |
+| SkipLink uses `focus:` not `focus-visible:` — deliberately NOT rewritten in sweep | Sr-only chip is keyboard-only by definition; CI gate's `focus-visible:` anchor excludes it naturally | ✓ Good — Phase 3 pattern preserved |
+| MASTER.md `## Component Specs` rewritten as Tailwind recipes (raw `.btn-primary` CSS blocks replaced wholesale) | Codebase has zero CSS class analogues — utility-only Tailwind; raw blocks were load-bearing on nothing | ✓ Good — 6 components documented with inline recipes |
+| OVERRIDES.md v1.2 overrides APPENDED as table (v1.0 numbered list preserved verbatim) | Historical readability of v1.0 list + structured format for v1.3+ overrides | ✓ Good — pattern established for future milestones |
+| Desktop NavLink deliberately has no `focus-visible:ring-*` — inherits browser UA default | BTN-02 governs color where ring exists, not presence everywhere; browser default is a valid choice | — Pending — re-evaluate on live site |
 
 ---
-*Last updated: 2026-04-19 — v1.1 shipped (arXiv + InspireHEP publication sync)*
+*Last updated: 2026-04-20 — v1.2 shipped (Aesthetic Polish: typography, spacing, media, interactive, docs)*
