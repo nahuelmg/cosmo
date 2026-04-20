@@ -156,7 +156,7 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
  * fetch wrapper with:
  *  - AbortSignal.timeout(10_000) on every request (SYNC-14)
  *  - User-Agent header
- *  - Exponential backoff on HTTP 429 (2s → 4s → 8s, capped at 30s)
+ *  - Exponential backoff on HTTP 429 or 503 (2s → 4s → 8s, capped at 30s)
  */
 async function fetchWithRetry(
   url: string,
@@ -171,10 +171,10 @@ async function fetchWithRetry(
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       headers: { "User-Agent": USER_AGENT, ...(init?.headers ?? {}) },
     });
-    if (response.status === 429 && attempt < maxRetries) {
+    if ((response.status === 429 || response.status === 503) && attempt < maxRetries) {
       const delay = Math.min(baseDelayMs * 2 ** attempt, 30_000);
       if (isVerbose) {
-        process.stderr.write(`  429 — retry ${attempt + 1}/${maxRetries} in ${delay}ms\n`);
+        process.stderr.write(`  ${response.status} — retry ${attempt + 1}/${maxRetries} in ${delay}ms\n`);
       }
       await sleep(delay);
       attempt++;
