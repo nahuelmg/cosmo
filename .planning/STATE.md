@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 ## Current Position
 
-Phase: 17 of 4 (ORCID Fetcher)
-Plan: 2 of 3 complete
-Status: In progress
-Last activity: 2026-04-20 — Completed 17-02-PLAN.md (fetchOrcid + orcidGroupToPublication + 13 new tests; live dry-run: tomas-ferreira-chase ORCID: 5)
+Phase: 17 complete → 18 next (Display Layer)
+Plan: —
+Status: Ready for phase verification
+Last activity: 2026-04-20 — Completed 17-03-PLAN.md (fetchOrcidWorkDetail + enrichOrcidAuthors; 15 ORCID entries + SiPM paper live; 91→98 tests)
 
-Progress: [███░░░░░░░] 33% (v1.3 — 1/4 phases, 2/3 plans in phase 17 complete)
+Progress: [████░░░░░░] 50% (v1.3 — 1/4 phases complete, Phase 17 done, Phase 18 next)
 
 ## Shipped Milestones
 
@@ -48,9 +48,12 @@ Progress: [███░░░░░░░] 33% (v1.3 — 1/4 phases, 2/3 plans i
 | 17-02 | OrcidGroup not exported; tests use Parameters<typeof fn>[0] type alias | Keeps export surface minimal; OrcidGroup is an internal API contract detail |
 | 17-02 | JSON fixture loaded via JSON.parse(readFileSync(...)) in tests | Avoids TypeScript isolatedModules + Vitest transform edge cases with import ... with { type: "json" } |
 | 17-02 | HTTP 200 empty group[] is silent (Pitfall 7); only 404 emits warning inside fetchOrcid | Calzetta's public profile returns 200 empty; warning-on-empty would produce noise every sync run |
+| 17-03 | Enrichment runs AFTER dedupByDoi (Option B from 17-RESEARCH.md) | Avoids per-work detail calls on dedup-losers; efficiency critical given ORCID rate limits |
+| 17-03 | lookupByPubId first-seen-wins over memberResults | When two members share an ORCID-only paper, first member's putCode used; both would produce same detail |
+| 17-03 | 404 from per-work detail endpoint → placeholder preserved (no throw) | Profile may change between works-list and detail fetch; placeholder is safer than aborting sync |
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 17 plan 02 executed. Real fetchOrcid + orcidGroupToPublication landed; 91 tests green (78→91); live dry-run shows tomas-ferreira-chase ORCID: 5.
-Stopped at: Completed 17-02-PLAN.md; 17-03 (author enrichment via per-work detail fetch) is next.
+Last session: 2026-04-20 — Phase 17 plan 03 executed. fetchOrcidWorkDetail + enrichOrcidAuthors landed; 98 tests green (91→98); 15 ORCID-only publications live; SiPM paper with 11 authors confirmed; all 4 Phase 17 SC verified.
+Stopped at: Completed 17-03-PLAN.md; all 3 plans in Phase 17 done. Ready for /gsd:verify-phase 17 then Phase 18.
 Resume file: None
