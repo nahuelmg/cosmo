@@ -83,7 +83,7 @@ export const PublicationSchema = z.strictObject({
    * @default "manual"
    * @see content/SYNC.md
    */
-  source: z.enum(["manual", "inspirehep", "arxiv"]).default("manual"),
+  source: z.enum(["manual", "inspirehep", "arxiv", "orcid"]).default("manual"),
 
   /**
    * Raw abstract if the maintainer cared to include it.
@@ -135,11 +135,13 @@ export type Publications = z.infer<typeof PublicationsSchema>;
  */
 export const PublicationsMetaSchema = z.object({
   synced_at: z.string().datetime({ offset: true }), // ISO-8601 UTC, e.g. "2026-04-19T06:00:00Z"
-  sources:   z.array(z.enum(["inspirehep", "arxiv"])),
+  sources:   z.array(z.enum(["inspirehep", "arxiv", "orcid"])),
   counts: z.object({
     inspirehep: z.number().int().min(0),
     arxiv:      z.number().int().min(0),
     manual:     z.number().int().min(0),
+    orcid:      z.number().int().min(0),
+    deduped:    z.number().int().min(0),
   }),
   warnings: z.array(z.string()),
 });

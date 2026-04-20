@@ -8,7 +8,9 @@
     "counts": {
       "inspirehep": 317,
       "arxiv": 73,
-      "manual": 0
+      "manual": 0,
+      "orcid": 0,
+      "deduped": 0
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",

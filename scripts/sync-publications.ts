@@ -631,6 +631,8 @@ async function main(): Promise<void> {
       inspirehep: allInspire.length,
       arxiv:      allArxiv.length,
       manual:     manualEntries.length,
+      orcid:      0,
+      deduped:    0,
     },
     warnings: allWarnings,
   };
