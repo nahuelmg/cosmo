@@ -108,6 +108,14 @@ Plans:
 ### Phase 15: Interactive Polish & Documentation
 **Goal:** Every interactive element meets the 44 × 44 tap-target bar, all focus rings unify on `accent-ring`, subtle motion is added where it clarifies state, and the design system docs reflect the v1.2 token + component deltas.
 **Requirements:** BTN-01, BTN-02, BTN-03, BTN-04, BTN-05, BTN-06, MICRO-01, MICRO-02, MICRO-03, MICRO-04, MICRO-05, DOC-01, DOC-02
+**Plans:** 6 plans in 2 waves
+Plans:
+- [ ] 15-01-PLAN.md — HeroCarousel pause/play 44×44 + dot 44×44 hit area (padding-inside) + ring-accent-ring + ring-offset-black/40 (BTN-02, BTN-03, MICRO-05 partial)
+- [ ] 15-02-PLAN.md — NavLink py-1.5 + duration-150, LocaleToggle py-1.5, MobileNav trigger/close 44×44, ring-offset-surface added (BTN-05, MICRO-01)
+- [ ] 15-03-PLAN.md — SourceFilter px-3.5 py-1.5 + transition-colors duration-150 (hoisted base), PublicationEntry ring-offset-surface (BTN-04, MICRO-02)
+- [ ] 15-04-PLAN.md — PersonCard photo motion-safe:scale-[1.02] duration-200 group-hover + ring-offset-surface (MICRO-03)
+- [ ] 15-05-PLAN.md — ring-offset-2 ring-offset-surface across remaining 8 focus-ring sites (PartnerStrip, ContactDetails, MapEmbed, SessionRow, SiteFooter ×2, SiteHeader, OutreachCard)
+- [ ] 15-06-PLAN.md — pnpm axe script + lint-rings.yml CI gate + MASTER.md Component Specs Tailwind recipes + OVERRIDES.md v1.2 table + manual visual sweep (BTN-06, MICRO-04, DOC-01, DOC-02)
 **Success criteria:**
 1. Every interactive element (buttons, nav links, pills, dots) has an effective ≥ 44 × 44 tap area
 2. Every `focus-visible:ring-*` uses `ring-accent-ring` (grep confirms zero `ring-surface/70` or stray variants)
@@ -134,4 +142,4 @@ Plans:
 | 12. Polish & Docs | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 13. Design Tokens & Layout Rhythm | v1.2 | 4/4 | Complete | 2026-04-19 |
 | 14. Media Sizing | v1.2 | 3/3 | Complete | 2026-04-20 |
-| 15. Interactive Polish & Documentation | v1.2 | 0/TBD | Not started | — |
+| 15. Interactive Polish & Documentation | v1.2 | 0/6 | Planned | — |
