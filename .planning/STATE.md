@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 ## Current Position
 
-Phase: 18 complete → 19 next (Docs & Verification)
-Plan: 18-01 complete (1/1 plans in phase)
-Status: Ready for `/gsd:execute-phase 18` verifier step OR `/gsd:discuss-phase 19`
-Last activity: 2026-04-20 — Phase 18 plan 18-01 executed end-to-end; ORCID filter pill + source badge + author-link ORCID pill added post-checkpoint per user request; 9-person people.json reconciliation flagged in 18-01-SUMMARY.md.
+Phase: 19 (Docs & Verification) — in progress
+Plan: 19-01 complete (1/2 plans in phase)
+Status: 19-01 sealed; ready for 19-02 (post-deploy verify, human-verify checkpoint)
+Last activity: 2026-04-20 — Phase 19 plan 19-01 executed; content/SYNC.md extended with 5 ORCID sections closing DOC-01 (a)–(e).
 
-Progress: [███████░░░] 75% (v1.3 — 3/4 phases complete)
+Progress: [████████░░] 80% (v1.3 — Phase 19 in progress, 1 plan remaining)
 
 ## Shipped Milestones
 
@@ -56,6 +56,6 @@ Progress: [███████░░░] 75% (v1.3 — 3/4 phases complete)
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 18 plan 18-01 executed end-to-end. ORCID filter pill (Task 1), ORCID source badge + footnote (Task 2), human-verify checkpoint (Task 3 — approved), author-ORCID resolution helpers (Task 4), author-link pill + component threading (Task 5). Smoke check confirmed Calzetta/Lopez Nacir/Landau papers show new ORCID link pill. 104 tests pass. 9-person people.json reconciliation flagged.
-Stopped at: Phase 18 plan 01 sealed; awaiting verifier or `/gsd:discuss-phase 19`.
+Last session: 2026-04-20 — Phase 19 plan 19-01 executed. Extended content/SYNC.md with ORCID Works API endpoints, orcid_id vs contact.orcid guidance, DOI precedence rule, three-source _meta JSON example, and ORCID troubleshooting table (5 rows). All DOC-01 (a)–(e) sub-requirements satisfied. validate-content passes.
+Stopped at: Phase 19 plan 01 sealed; ready for plan 19-02 (post-deploy verify).
 Resume file: None
