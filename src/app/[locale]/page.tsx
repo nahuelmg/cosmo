@@ -38,7 +38,6 @@ export default async function HomePage({ params }: Props) {
     { src: '/Portadas/portada_3.jpg', alt: '', width: 1920, height: 820 },
   ];
 
-  const tagline = localize(siteConfig.tagline, locale);
   const affiliation = siteConfig.affiliations
     .map(a => localize(a.name, locale))
     .join(' · ');
@@ -57,7 +56,6 @@ export default async function HomePage({ params }: Props) {
       <HeroCarousel
         slides={slides}
         groupName={siteConfig.groupName}
-        tagline={tagline}
         affiliation={affiliation}
       />
 

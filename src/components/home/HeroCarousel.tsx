@@ -15,7 +15,6 @@ interface Slide {
 interface HeroCarouselProps {
   slides: Slide[];
   groupName: string;
-  tagline: string;
   affiliation: string;
 }
 
@@ -25,7 +24,6 @@ const TRANSITION_MS = 1000;
 export default function HeroCarousel({
   slides,
   groupName,
-  tagline,
   affiliation,
 }: HeroCarouselProps) {
   const t = useTranslations('carousel');
@@ -145,7 +143,6 @@ export default function HeroCarousel({
         <h1 className="font-serif font-bold text-4xl md:text-5xl text-stone-200 [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.9),_0_2px_8px_rgb(0_0_0_/_0.7)]">
           {groupName}
         </h1>
-        <p className="text-stone-200 [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{tagline}</p>
         <p className="text-stone-200/90 text-sm [text-shadow:_0_1px_2px_rgb(0_0_0_/_0.85),_0_1px_6px_rgb(0_0_0_/_0.55)]">{affiliation}</p>
       </div>
 
