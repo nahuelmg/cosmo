@@ -94,6 +94,11 @@ Plans:
 ### Phase 14: Media Sizing
 **Goal:** Member photos no longer dominate their pages — `PersonCard` cards cap at ≤ 280 px wide, `PersonDetail` hero photo reduced to 180–200 px, `next/image` `sizes` attributes updated so Next serves the correct srcset.
 **Requirements:** MEDIA-01, MEDIA-02, MEDIA-03, MEDIA-04, MEDIA-05
+**Plans:** 3 plans in 2 waves
+Plans:
+- [ ] 14-01-PLAN.md — PersonCard resize to max-w-[240px] + aspect-[4/5] + PeopleSection xl:grid-cols-4 + sizes="(min-width: 640px) 240px, 100vw" (MEDIA-01, MEDIA-05 PersonCard)
+- [ ] 14-02-PLAN.md — PersonDetail hero resize to 180 px + aspect-[4/5] + mobile cap + sizes="(min-width: 768px) 180px, 180px" (preserves LCP preload triple) (MEDIA-02, MEDIA-05 PersonDetail)
+- [ ] 14-03-PLAN.md — HeroCarousel + OutreachCard + homepage imagery audit at 5 viewports + axe/CLS/srcset regression sweep (MEDIA-03, MEDIA-04)
 **Success criteria:**
 1. `/people` renders `PersonCard` at ≤ 280 px card width on `lg+` (visual check + CSS inspection)
 2. `/people/[slug]` hero photo renders at 180–200 px on desktop
@@ -128,5 +133,5 @@ Plans:
 | 11. Display Layer | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 12. Polish & Docs | v1.1 | 3/3 | Complete | 2026-04-19 |
 | 13. Design Tokens & Layout Rhythm | v1.2 | 4/4 | Complete | 2026-04-19 |
-| 14. Media Sizing | v1.2 | 0/TBD | Not started | — |
+| 14. Media Sizing | v1.2 | 0/3 | Not started | — |
 | 15. Interactive Polish & Documentation | v1.2 | 0/TBD | Not started | — |
