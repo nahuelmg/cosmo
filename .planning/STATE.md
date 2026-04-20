@@ -9,14 +9,15 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 ## Current Position
 
-Phase: 14 of 15 — SHIPPED & VERIFIED (media sizing; user-approved 2026-04-20; next up /gsd:discuss-phase 15 or /gsd:plan-phase 15)
-Plan: — (phase 14 shipped; ready to plan Phase 15 Interactive Polish)
-Status: Phase 14 verified (status: passed after human approval). 11/11 structural must-haves green; 6 browser-verified items user-approved. MEDIA-01..05 all closed.
-Last activity: 2026-04-20 — Phase 14 shipped & verified: 3 plans, 5/5 requirements complete (MEDIA-01..05). Three follow-ups filed and routed: FU-HERO-01 (control tap-target → Phase 15), FU-OUTR-01 (outreach image balance → editorial when first image ships), FU-AXE-01 (live axe scan → folds into PERF-04/05).
+Phase: 15 of 15 — SHIPPED & VERIFIED (interactive polish + docs; user-approved visual sweep 2026-04-20)
+Plan: — (phase 15 shipped; v1.2 milestone complete pending /gsd:audit-milestone)
+Status: Phase 15 verified (status: passed). 5/5 must-haves confirmed against codebase. 18 focus-ring sites unified, 0 axe violations across 8 Spanish pages, CI drift-gate installed, MASTER.md + OVERRIDES.md reflect v1.2. All 13 requirements (BTN-01..06, MICRO-01..05, DOC-01..02) closed.
+Last activity: 2026-04-20 — Phase 15 shipped & verified: 6 plans in 2 waves. Wave 1 (15-01..05) in parallel batches (3+2) under max_parallel_agents=3; Wave 2 (15-06) checkpoint plan with user-approved visual sweep at 375/1024/1440 px. v1.2 milestone now content-complete (26/26 requirements). Follow-up observation: desktop NavLink uses browser UA focus ring (plan deliberately documented as "inherits from parent"); may warrant explicit ring in a future polish pass.
 
-Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phases 13–14 shipped (7/7 plans); Phase 15 pending
+Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phases 13–15 shipped (13/13 plans); v1.2 milestone ready for audit
 ██████████ Phase 13: 4/4 plans complete ✓
-██████████ Phase 14: 3/3 plans complete ✓ (14-01 ✓, 14-02 ✓, 14-03 ✓)
+██████████ Phase 14: 3/3 plans complete ✓
+██████████ Phase 15: 6/6 plans complete ✓ (15-01..06)
 
 ## Shipped Milestones
 
@@ -47,8 +48,8 @@ Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phases 13–14 shipped (7/7 plans); P
 
 ## Session Continuity
 
-Last session: 2026-04-20T04:12:37Z — 14-03 audit + regression sweep complete. Phase 14 ready for /gsd:verify-phase 14.
-Stopped at: Completed 14-03-PLAN.md (HeroCarousel 5×6 audit all PASS; homepage inventory reconfirmed; 14-01/14-02 regression-verified from rendered HTML; build gate green; MEDIA-01..05 ledger closed)
+Last session: 2026-04-20 — Phase 15 executed end-to-end: 6 plans, 13 atomic feat commits + 6 plan-metadata docs commits + verifier + 1 human-verify checkpoint approved. v1.2 milestone (Phases 13–15) complete pending audit.
+Stopped at: Phase 15 verified passed; ready for /gsd:audit-milestone to close v1.2 and archive.
 Resume file: None
 
 ## Accumulated Decisions (v1.2)
@@ -79,3 +80,14 @@ Resume file: None
 | OutreachCard image wrapper is dormant in current content (zero of four activities has `image` field) | Balance audit trivially PASS because no photo renders; filed FU-OUTR-01 to re-audit when first image ships | 14-03 |
 | Axe-equivalent check used (markup-delta vs Phase 6/13 0-violation baseline) when no browser driver available | Documented explicitly in SUMMARY; same approach 14-01/14-02 used for CLS + srcset; live scan deferred to PERF-04/05 production re-measurement | 14-03 |
 | HeroCarousel control tap-target undersize (24×24 button, 10×10 dots) is pre-existing (Phase 6), routes to Phase 15 as FU-HERO-01 | Flagged during MEDIA-03 audit check #4; BTN-01 is Phase 15 scope per plan; no Phase 14 fix owed | 14-03 |
+| HeroCarousel dots use `p-[17px]` (arbitrary) over Tailwind `p-3`+spacer because 17+10+17=44 px exactly; `gap-0` edge-to-edge | `p-3` gives only 34 px total; only 2 uses of 17 px value → below tokenize threshold; arbitrary value accepted | 15-01 |
+| Tailwind classList source-order cascade used to keep mobile NavLink at `py-3` despite base const growing to `py-1.5` | `combined` concatenates `base` first, `className` (mobile `py-3`) last — later class wins; no twMerge needed; mobile stays ~50 px | 15-02 |
+| Hoisted `base` const in SourceFilter for shared `rounded-full px-3.5 py-1.5 transition-colors duration-150 focus-ring…` | Prevents active/inactive drift when future contributors edit one branch; snapshot test updated to match | 15-03 |
+| Inline-text links exempted from 44×44 rule: PartnerStrip, OutreachCard learn-more, SiteFooter EmailLink, ContactDetails social, SessionRow paper-link, PublicationEntry arXiv/DOI/source-pill | WCAG 2.5.5 AAA inline-text exception; documented in OVERRIDES.md v1.2 table + MASTER.md Universal Rules | 15-03, 15-05 |
+| SkipLink (`focus:` not `focus-visible:`) NOT rewritten in the focus-ring sweep | Phase 3 deliberate pattern — sr-only chip is keyboard-only by definition; CI drift gate regex excludes it via the `focus-visible:` anchor | 15-05 |
+| PersonCard image zoom uses `motion-safe:` prefix on every transform utility; card-lift on outer Link uses bare `hover:` (pre-existing, not in scope) | Explicit MICRO-03 scope is the image only; lift-without-motion-safe is a carryover, flagged in STATE as observation | 15-04 |
+| `CHROME_TEST_PATH=~/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome` workaround required for `pnpm axe` | Phase 6 precedent; axe-core/cli bundled headless Chrome lookup fails on this machine — playwright-installed Chromium is the fallback | 15-06 |
+| CI drift gate at `.github/workflows/lint-rings.yml` uses `grep -rEnP 'focus-visible:ring-(?!2(\|\s\|"\|'\|/\|\\)\|accent-ring\|offset-)'` lookahead | Allows `ring-2` (size), `ring-accent-ring` (color), `ring-offset-*`; fails build on anything else; confirmed 0 matches against current src/ | 15-06 |
+| MASTER.md `## Component Specs` raw-CSS `.btn-primary` blocks replaced wholesale (no preservation) | Codebase has zero `.btn-primary` usages — utility-only Tailwind; raw CSS blocks were load-bearing on nothing | 15-06 |
+| OVERRIDES.md v1.2 deltas appended as TABLE (new `## v1.2 Overrides` section) while v1.0 numbered list is preserved verbatim | Matches CONTEXT.md append-not-replace decision; table format codifies the v1.3+ override style while v1.0 list remains historically readable | 15-06 |
+| Desktop NavLink deliberately has no `focus-visible:ring-*` of its own — inherits from parent container | Plan documented this; verifier flagged as observational but not blocking; consider explicit ring in future polish if UA default is judged insufficient on live site | 15-02 |

@@ -19,12 +19,12 @@
 
 ### Buttons & Interactive Elements (BTN)
 
-- [ ] **BTN-01:** Every interactive element has an effective tap target ≥ 44 × 44 px (WCAG 2.5.5 AAA / iOS HIG). Visible chrome may be smaller; padding compensates (e.g. carousel dots stay 10 px but sit inside a `p-3` tap area).
-- [ ] **BTN-02:** Unify every `focus-visible:ring-*` ring colour on `ring-accent-ring`. Remove the `ring-surface/70` variant used inside HeroCarousel controls; pick a contrast-safe dark-on-image alternative if needed (halo or outline offset).
-- [ ] **BTN-03:** Standardise carousel controls: dots wrapper grows to 44 × 44 tap area, pause/play button bumps to `w-10 h-10` with a centred 14 × 14 glyph.
-- [ ] **BTN-04:** Standardise `SourceFilter` pills: `px-3.5 py-1.5` (≥ 36 px visual height) + unified focus ring; keep current active/inactive tone logic.
-- [ ] **BTN-05:** Add consistent vertical padding to `NavLink` (`py-1.5`) and match `LocaleToggle` padding so they read as a single interactive row at 44 px.
-- [ ] **BTN-06:** Document the button/pill/link sizing recipes in `design-system/cosmology-group-uba/MASTER.md` "Component Specs" section.
+- [x] **BTN-01:** Every interactive element has an effective tap target ≥ 44 × 44 px (WCAG 2.5.5 AAA / iOS HIG). Visible chrome may be smaller; padding compensates (e.g. carousel dots stay 10 px but sit inside a `p-3` tap area).
+- [x] **BTN-02:** Unify every `focus-visible:ring-*` ring colour on `ring-accent-ring`. Remove the `ring-surface/70` variant used inside HeroCarousel controls; pick a contrast-safe dark-on-image alternative if needed (halo or outline offset).
+- [x] **BTN-03:** Standardise carousel controls: dots wrapper grows to 44 × 44 tap area, pause/play button bumps to `w-10 h-10` with a centred 14 × 14 glyph.
+- [x] **BTN-04:** Standardise `SourceFilter` pills: `px-3.5 py-1.5` (≥ 36 px visual height) + unified focus ring; keep current active/inactive tone logic.
+- [x] **BTN-05:** Add consistent vertical padding to `NavLink` (`py-1.5`) and match `LocaleToggle` padding so they read as a single interactive row at 44 px.
+- [x] **BTN-06:** Document the button/pill/link sizing recipes in `design-system/cosmology-group-uba/MASTER.md` "Component Specs" section.
 
 ### Spacing & Layout Density (SPACE)
 
@@ -43,16 +43,16 @@
 
 ### Micro-interactions & Polish (MICRO)
 
-- [ ] **MICRO-01:** Add subtle transition on `NavLink` active-state change (`transition-colors duration-150`).
-- [ ] **MICRO-02:** `SourceFilter` pill toggle crossfades tone (colour transition already has `transition-colors`; add `duration-150` if missing).
-- [ ] **MICRO-03:** Optional photo zoom-on-hover on `PersonCard` (1.02 scale, 200 ms ease-out); respect `prefers-reduced-motion` via `motion-safe:`.
-- [ ] **MICRO-04:** `pnpm axe` passes with zero violations across all 8 Spanish pages after the polish is applied (non-regression on WCAG AA bar).
-- [ ] **MICRO-05:** All `focus-visible` rings render against both light and image backgrounds with sufficient contrast (check Hero carousel, Publications pills, People cards).
+- [x] **MICRO-01:** Add subtle transition on `NavLink` active-state change (`transition-colors duration-150`).
+- [x] **MICRO-02:** `SourceFilter` pill toggle crossfades tone (colour transition already has `transition-colors`; add `duration-150` if missing).
+- [x] **MICRO-03:** Optional photo zoom-on-hover on `PersonCard` (1.02 scale, 200 ms ease-out); respect `prefers-reduced-motion` via `motion-safe:`.
+- [x] **MICRO-04:** `pnpm axe` passes with zero violations across all 8 Spanish pages after the polish is applied (non-regression on WCAG AA bar).
+- [x] **MICRO-05:** All `focus-visible` rings render against both light and image backgrounds with sufficient contrast (check Hero carousel, Publications pills, People cards).
 
 ### Documentation (DOC)
 
-- [ ] **DOC-01:** `design-system/cosmology-group-uba/MASTER.md` updated end-to-end (type scale, component specs, layout, spacing) to reflect the v1.2 adjustments.
-- [ ] **DOC-02:** `design-system/cosmology-group-uba/OVERRIDES.md` (or equivalent) logs each token delta vs v1.0 with short rationale for future contributors.
+- [x] **DOC-01:** `design-system/cosmology-group-uba/MASTER.md` updated end-to-end (type scale, component specs, layout, spacing) to reflect the v1.2 adjustments.
+- [x] **DOC-02:** `design-system/cosmology-group-uba/OVERRIDES.md` (or equivalent) logs each token delta vs v1.0 with short rationale for future contributors.
 
 **Total:** 26 requirements across 6 categories.
 
@@ -91,9 +91,9 @@ Explicit exclusions with reasoning.
 | TYPO-01..05 | 13 | 13-01, 13-02, 13-04 | Complete |
 | SPACE-01..04 | 13 | 13-02, 13-03, 13-04 | Complete |
 | MEDIA-01..05 | 14 | 14-01, 14-02, 14-03 | Complete |
-| BTN-01..06 | 15 | TBD | Pending |
-| MICRO-01..05 | 15 | TBD | Pending |
-| DOC-01..02 | 15 | TBD | Pending |
+| BTN-01..06 | 15 | 15-01, 15-02, 15-03, 15-05, 15-06 | Complete |
+| MICRO-01..05 | 15 | 15-02, 15-03, 15-04, 15-06 | Complete |
+| DOC-01..02 | 15 | 15-06 | Complete |
 
 ---
-*Last updated: 2026-04-19 — Phase 13 complete: TYPO-01..05 + SPACE-01..04 shipped & verified.*
+*Last updated: 2026-04-20 — Phase 15 complete: BTN-01..06 + MICRO-01..05 + DOC-01..02 shipped & verified. All 26 v1.2 requirements closed.*
