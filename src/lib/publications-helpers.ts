@@ -184,3 +184,52 @@ export function getSourcePillHref(pub: Publication): string | null {
   }
   return null;
 }
+
+// ---------------------------------------------------------------------------
+// Member ORCID map construction
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a Map<surname, orcid> for members whose `contact.orcid` is set.
+ * Uses the same surname extraction rule as buildMemberSurnameSet (last word
+ * of display_name_normalized, ≥ 3 chars). Skips members without contact.orcid.
+ */
+export function buildMemberOrcidMap(
+  people: Pick<Person, "display_name_normalized" | "contact">[],
+): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const p of people) {
+    const orcid = p.contact.orcid;
+    if (!orcid) continue;
+    const words = p.display_name_normalized.split(/\s+/).filter(Boolean);
+    if (words.length === 0) continue;
+    const last = words[words.length - 1];
+    if (last.length < 3) continue;
+    map.set(last, orcid);
+  }
+  return map;
+}
+
+// ---------------------------------------------------------------------------
+// Author ORCID URL resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Return the ORCID profile URL for the first author string whose normalized
+ * form contains a surname key in the member ORCID map. Null when no author
+ * matches. First match wins.
+ */
+export function getAuthorOrcidUrl(
+  authors: string[],
+  memberOrcidMap: Map<string, string>,
+): string | null {
+  for (const authorStr of authors) {
+    const norm = normalizeName(authorStr);
+    for (const [surname, orcid] of memberOrcidMap) {
+      if (norm.includes(surname)) {
+        return `https://orcid.org/${orcid}`;
+      }
+    }
+  }
+  return null;
+}

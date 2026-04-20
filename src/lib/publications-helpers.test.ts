@@ -18,6 +18,8 @@ import {
   isMember,
   formatAuthors,
   getSourcePillHref,
+  buildMemberOrcidMap,
+  getAuthorOrcidUrl,
 } from "./publications-helpers";
 import type { Publication } from "@/content";
 
@@ -262,5 +264,74 @@ describe("getSourcePillHref", () => {
       doi: "10.1016/j.nima.2020.164490",
     });
     expect(getSourcePillHref(pub)).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildMemberOrcidMap
+// ---------------------------------------------------------------------------
+
+describe("buildMemberOrcidMap", () => {
+  it("maps surname to contact.orcid for members with ORCID set", () => {
+    const people = [
+      {
+        display_name_normalized: "esteban calzetta",
+        contact: { orcid: "0000-0001-7842-3105" },
+      },
+      {
+        display_name_normalized: "juan perez",
+        contact: { orcid: undefined },
+      },
+    ] as unknown as Parameters<typeof buildMemberOrcidMap>[0];
+    const map = buildMemberOrcidMap(people);
+    expect(map.get("calzetta")).toBe("0000-0001-7842-3105");
+    expect(map.has("perez")).toBe(false);
+    expect(map.size).toBe(1);
+  });
+
+  it("handles compound surname by using last word only", () => {
+    const people = [
+      {
+        display_name_normalized: "diana lopez nacir",
+        contact: { orcid: "0000-0001-5533-9821" },
+      },
+    ] as unknown as Parameters<typeof buildMemberOrcidMap>[0];
+    const map = buildMemberOrcidMap(people);
+    expect(map.get("nacir")).toBe("0000-0001-5533-9821");
+    expect(map.size).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getAuthorOrcidUrl
+// ---------------------------------------------------------------------------
+
+describe("getAuthorOrcidUrl", () => {
+  it("returns ORCID URL when an author surname matches the map", () => {
+    const map = new Map([["calzetta", "0000-0001-7842-3105"]]);
+    const url = getAuthorOrcidUrl(
+      ["Calzetta, Esteban", "Smith, John"],
+      map,
+    );
+    expect(url).toBe("https://orcid.org/0000-0001-7842-3105");
+  });
+
+  it("returns null when no author matches", () => {
+    const map = new Map([["calzetta", "0000-0001-7842-3105"]]);
+    const url = getAuthorOrcidUrl(["Smith, John", "Doe, Jane"], map);
+    expect(url).toBeNull();
+  });
+
+  it("first author match wins when multiple authors match", () => {
+    const map = new Map([
+      ["calzetta", "0000-0001-7842-3105"],
+      ["nacir", "0000-0001-5533-9821"],
+    ]);
+    const url = getAuthorOrcidUrl(
+      ["Nacir, Diana Lopez", "Calzetta, Esteban"],
+      map,
+    );
+    // Nacir appears first in the author list → her ORCID wins
+    expect(url).toBe("https://orcid.org/0000-0001-5533-9821");
   });
 });
