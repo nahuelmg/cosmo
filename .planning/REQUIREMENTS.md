@@ -94,24 +94,42 @@
 
 ## Traceability
 
-*(populated during roadmap creation by `gsd-roadmapper`)*
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ORCID-01..07 | Phase TBD | Pending |
-| DEDUP-01..05 | Phase TBD | Pending |
-| SCHEMA-01..04 | Phase TBD | Pending |
-| CLI-01..04 | Phase TBD | Pending |
-| CI-01 | Phase TBD | Pending |
-| UI-01..05 | Phase TBD | Pending |
-| DOC-01 | Phase TBD | Pending |
-| VERIFY-01 | Phase TBD | Pending |
+| SCHEMA-01 | Phase 16 | Pending |
+| SCHEMA-02 | Phase 16 | Pending |
+| SCHEMA-03 | Phase 16 | Pending |
+| SCHEMA-04 | Phase 16 | Pending |
+| DEDUP-01 | Phase 16 | Pending |
+| DEDUP-02 | Phase 16 | Pending |
+| DEDUP-03 | Phase 16 | Pending |
+| DEDUP-04 | Phase 16 | Pending |
+| DEDUP-05 | Phase 16 | Pending |
+| CLI-01 | Phase 16 | Pending |
+| CLI-02 | Phase 16 | Pending |
+| CLI-03 | Phase 16 | Pending |
+| CLI-04 | Phase 16 | Pending |
+| CI-01 | Phase 16 | Pending |
+| ORCID-01 | Phase 17 | Pending |
+| ORCID-02 | Phase 17 | Pending |
+| ORCID-03 | Phase 17 | Pending |
+| ORCID-04 | Phase 17 | Pending |
+| ORCID-05 | Phase 17 | Pending |
+| ORCID-06 | Phase 17 | Pending |
+| ORCID-07 | Phase 17 | Pending |
+| UI-01 | Phase 18 | Pending |
+| UI-02 | Phase 18 | Pending |
+| UI-03 | Phase 18 | Pending |
+| UI-04 | Phase 18 | Pending |
+| UI-05 | Phase 18 | Pending |
+| DOC-01 | Phase 19 | Pending |
+| VERIFY-01 | Phase 19 | Pending |
 
 **Coverage:**
-- v1.3 requirements: 27 total
-- Mapped to phases: 0 ⚠️ (roadmap not yet created)
-- Unmapped: 27
+- v1.3 requirements: 28 total (note: header previously said 27; recount from enumerated IDs gives 28)
+- Mapped to phases: 28 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 after initial definition*
+*Last updated: 2026-04-20 — traceability populated after roadmap creation*
