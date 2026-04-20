@@ -202,7 +202,7 @@ describe("getPublicationsByAuthor", () => {
       // forward-compatibility with manually-curated future entries.
       const results = getPublicationsByAuthor(["landau"]);
       expect(results.length).toBeGreaterThan(0);
-      const validSources = new Set(["manual", "inspirehep", "arxiv"]);
+      const validSources = new Set(["manual", "inspirehep", "arxiv", "orcid"]);
       for (const pub of results) {
         expect(validSources.has(pub.source)).toBe(true);
       }

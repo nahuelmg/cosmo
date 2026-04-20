@@ -1,16 +1,17 @@
 {
   "_meta": {
-    "synced_at": "2026-04-19T20:55:06.820Z",
+    "synced_at": "2026-04-20T20:45:58.468Z",
     "sources": [
       "inspirehep",
+      "orcid",
       "arxiv"
     ],
     "counts": {
       "inspirehep": 317,
       "arxiv": 73,
       "manual": 0,
-      "orcid": 0,
-      "deduped": 0
+      "orcid": 87,
+      "deduped": 36
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
@@ -257,6 +258,24 @@
       "topic_tags": [],
       "source": "inspirehep",
       "abstract": "En este trabajo se realiza un estudio teórico de agujeros negros no rotantescomo lentes gravitatorias en el marco de la gravedad de Horndeski. Luego de unabreve introducción a la relatividad general y las soluciones de agujeros negros, semuestra el formalismo general para calcular trayectorias de la luz alrededor de unobjeto esférico. Este formalismo se puede especializar a los límites de deflexióndébil y de deflexión fuerte. Es en este último donde se centra el análisis; se en-cuentra de manera general que en el caso de que la lente sea un agujero negro, elángulo de deflexión de la luz diverge a medida que la misma se acerca a la esferade fotones del mismo. Como consecuencia, se generan dos secuencias infinitas delas llamadas imágenes relativistas, una a cada lado de la lente. Ambos límites sonaplicados a la solución de agujero negro proveniente de un caso particular de lagravedad de Horndeski, una clase de teorías escalar-tensoriales alternativas a la re-latividad general. Se obtienen las posiciones y las magnificaciones de las imágenes.Se consideran como posibles lentes a los agujeros negros supermasivos ubicados enel centro de nuestra galaxia y de la galaxia M87, y se discuten las posibilidades deobservación de estos efectos ópticos en el entorno de los mismos."
+    },
+    {
+      "id": "10.1051/0004-6361/202555861",
+      "authors": [
+        "L. Biaus",
+        "S. E. Nuza",
+        "C. Scannapieco",
+        "P. Richter",
+        "M. Damle",
+        "N. I. Libeskind",
+        "M. Vogelsberger"
+      ],
+      "title": "Probing the kinematics of the Local Group with chemically enriched gas in the HESTIA simulations",
+      "journal": "Astronomy & Astrophysics",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1051/0004-6361/202555861"
     },
     {
       "id": "2512.06086",
@@ -1018,6 +1037,61 @@
       "abstract": "The ultra-light dark matter (ULDM) model is a compelling candidate for cosmological dark matter. If ULDM exists and interacts directly with ordinary matter, it leaves a distinct signature in pulsar timing data. Even in the absence of a detected signal, such data can impose stringent constraints on the ULDM parameter space. We present recent advances in using two independent methods—Bayesian analysis and machine learning—to assess the sensitivity of binary pulsars to ULDM. With these approaches, we extend the existing literature and further establish pulsars as detectors of ULDM. For simplicity, we focus solely on spin-0 ULDM model with linear dilatonic coupling to ordinary matter, but our methods can be straightforwardly extended to other types of ULDM."
     },
     {
+      "id": "10.1051/0004-6361/202554860",
+      "authors": [
+        "E. Lozano",
+        "C. Scannapieco",
+        "S. E. Nuza",
+        "Y. Ascasibar",
+        "V. Springel"
+      ],
+      "title": "From atoms to stars: Modelling H2 formation and its impact on galactic evolution",
+      "journal": "Astronomy & Astrophysics",
+      "year": 2025,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1051/0004-6361/202554860"
+    },
+    {
+      "id": "10.1051/0004-6361/202554810",
+      "authors": [
+        "F. G. Iza",
+        "C. Scannapieco",
+        "S. E. Nuza",
+        "R. Pakmor",
+        "R. J. J. Grand",
+        "F. A. Gómez",
+        "V. Springel",
+        "F. Marinacci",
+        "F. Fragkoudi"
+      ],
+      "title": "The distribution and origin of metals in simulated Milky Way-like galaxies",
+      "journal": "Astronomy & Astrophysics",
+      "year": 2025,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1051/0004-6361/202554810"
+    },
+    {
+      "id": "10.1093/mnras/staf818",
+      "authors": [
+        "Paula D López",
+        "Francesca Fragkoudi",
+        "Sofía A Cora",
+        "Cecilia Scannapieco",
+        "Rüdiger Pakmor",
+        "Robert J J Grand",
+        "Facundo Gómez",
+        "Federico Marinacci"
+      ],
+      "title": "Formation and evolution of boxy/peanut bulges in the Auriga cosmological simulations",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2025,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/staf818"
+    },
+    {
       "id": "2411.13848",
       "authors": [
         "Chantada, Augusto T.",
@@ -1441,6 +1515,57 @@
       "source": "inspirehep",
       "doi": "10.22323/1.454.0049",
       "abstract": "Binary pulsars can serve as natural dark matter detectors. We consider an ultralight scalar dark matter, which interacts directly with the binary pulsar components via a universal effective interaction, characterized by one coupling constant. This causes a perturbation of the dynamics of the binary system. The perturbation is manifested by a change in the arrival time of pulses from the pulsar on Earth. The aim of our work is to determine the limiting value of the coupling constant, enabling the measurement of this effect. In other words, time residuals can serve as a proxy for ULDM. In this proceedings, a simple approach to sensitivity curve construction (i.e., a plot of the coupling constant versus particle mass) is presented. Further details and a comprehensive analysis can be found in [1]."
+    },
+    {
+      "id": "10.1093/mnras/stae576",
+      "authors": [
+        "Paula D López",
+        "Cecilia Scannapieco",
+        "Sofía A Cora",
+        "Ignacio D Gargiulo"
+      ],
+      "title": "Unveiling the origins of galactic bars: insights from barred and unbarred galaxies",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2024,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/stae576"
+    },
+    {
+      "id": "10.1093/mnras/stae110",
+      "authors": [
+        "Federico G Iza",
+        "Sebastián E Nuza",
+        "Cecilia Scannapieco",
+        "Robert J J Grand",
+        "Facundo A Gómez",
+        "Volker Springel",
+        "Rüdiger Pakmor",
+        "Federico Marinacci",
+        "Francesca Fragkoudi"
+      ],
+      "title": "Cosmological gas accretion history on to the stellar discs of Milky Way-like galaxies in the Auriga simulations – II. The inside–out growth of discs",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2024,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/stae110"
+    },
+    {
+      "id": "10.48550/ARXIV.2411.13848",
+      "authors": [
+        "Augusto T. Chantada",
+        "Pavlos Protopapas",
+        "Luca Gomez Bachar",
+        "Susana J. Landau",
+        "Claudia G. Scóccola"
+      ],
+      "title": "Exact and approximate error bounds for physics-informed neural networks",
+      "journal": "Machine Learning and the Physical Sciences Workshop at the 38th conference on Neural Information Processing Systems (NeurIPS) 2024",
+      "year": 2024,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.48550/ARXIV.2411.13848"
     },
     {
       "id": "2211.07424",
@@ -2288,6 +2413,39 @@
       "abstract": "Bolometric interferometry is a novel technique that has the ability to perform spectral imaging. A bolometric interferometer observes the sky in a wide frequency band and can reconstruct sky maps in several sub-bands within the physical band in post-processing of the data. This provides a powerful spectral method to discriminate between the cosmic microwave background (CMB) and astrophysical foregrounds. In this paper, the methodology is illustrated with examples based on the Q & U Bolometric Interferometer for Cosmology (QUBIC) which is a ground-based instrument designed to measure the B-mode polarization of the sky at millimeter wavelengths. We consider the specific cases of point source reconstruction and Galactic dust mapping and we characterize the point spread function as a function of frequency. We study the noise properties of spectral imaging, especially the correlations between sub-bands, using end-to-end simulations together with a fast noise simulator. We conclude showing that spectral imaging performance are nearly optimal up to five sub-bands in the case of QUBIC."
     },
     {
+      "id": "10.1093/mnras/stac2709",
+      "authors": [
+        "Federico G Iza",
+        "Cecilia Scannapieco",
+        "Sebastián E Nuza",
+        "Robert J J Grand",
+        "Facundo A Gómez",
+        "Volker Springel",
+        "Rüdiger Pakmor",
+        "Federico Marinacci"
+      ],
+      "title": "Cosmological gas accretion history onto the stellar discs of Milky Way-like galaxies in the Auriga simulations – (I) Temporal dependency",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2022,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/stac2709"
+    },
+    {
+      "id": "10.1093/mnras/stac2581",
+      "authors": [
+        "Cecilia Scannapieco",
+        "Gabriele Cescutti",
+        "Cristina Chiappini"
+      ],
+      "title": "The neutron-capture and α-elements abundance ratios scatter in old stellar populations: cosmological simulations of the stellar halo",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2022,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/stac2581"
+    },
+    {
       "id": "2108.01114",
       "authors": [
         "Perna, Guillermo",
@@ -2474,6 +2632,20 @@
       "topic_tags": [],
       "source": "inspirehep",
       "doi": "10.2172/1827394"
+    },
+    {
+      "id": "10.1093/mnras/stab1873",
+      "authors": [
+        "Pablo Corcho-Caballero",
+        "Yago Ascasibar",
+        "Cecilia Scannapieco"
+      ],
+      "title": "Do galaxies die? Different views from simulations and observations in the local Universe",
+      "journal": "Monthly Notices of the Royal Astronomical Society",
+      "year": 2021,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1093/mnras/stab1873"
     },
     {
       "id": "2005.03731",
@@ -2682,6 +2854,61 @@
       "arxiv": "1907.02118",
       "doi": "10.1088/1475-7516/2020/06/036",
       "abstract": "The possibility of variation of the fundamental constants of nature has been a long-standing question, with important consequences for fundamental physics and cosmology. In particular, it has been shown that variations in the fine-structure constant, α, are directly related to violation of the distance duality relation (DDR), which holds true as long as photons travel on unique null geodesics and their number is conserved. In this paper we use the currently available measurements of Δ α/α to impose the most stringent constraints on departures of the DDR to date, here quantified by the parameter η0. From the observational data we obtain constraints on η0 of the order of 10−7, the most stringent constraints on a possible violation of the DDR to date."
+    },
+    {
+      "id": "orcid-118302459",
+      "authors": [
+        "Aihara, Hiroaki",
+        "Aranda, Alfredo",
+        "Camacho Toro, Reina ",
+        "Cambiaso, Mauro",
+        "Carena, Marcela",
+        "Carrera, Edgar",
+        "D'Olivo, Juan Carlos",
+        "Gago, Alberto",
+        "Goncalves, Thiago",
+        "Herrera, Gerardo",
+        "López Nacir, Diana ",
+        "Losada, Marta",
+        "Molina, Jorge",
+        "Mulders, Martijn",
+        "Restrepo, Diego",
+        "Rosenfeld, Rogerio",
+        "Sánchez, Arturo",
+        "Sánchez, Federico",
+        "Soares-Santos, Marcelle",
+        "Subieta, Martin",
+        "Wahlberg, Hernán",
+        "Yepes Ramirez, Harold ",
+        "Zerwekh, Alfonso"
+      ],
+      "title": "Latin American Strategy Forum for Research Infrastructures for High Energy, Cosmology, Astroparticle Physics  LASF4RI for HECAP",
+      "journal": "Preprint",
+      "year": 2020,
+      "topic_tags": [],
+      "source": "orcid"
+    },
+    {
+      "id": "10.1016/j.nima.2020.164490",
+      "authors": [
+        "Mariano Barella",
+        "Tomás Ignacio Burroni",
+        "Irina Carsen",
+        "Mónica Far",
+        "Tomás Ferreira Chase",
+        "Lucas Finazzi",
+        "Federico Golmar",
+        "Fernando Gomez Marlasca",
+        "Federico Izraelevitch",
+        "Pablo Levy",
+        "Gabriel Sanca"
+      ],
+      "title": "Silicon photomultiplier characterization on board a satellite in Low Earth Orbit",
+      "journal": "Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment",
+      "year": 2020,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1016/j.nima.2020.164490"
     },
     {
       "id": "2002.00095",
@@ -3133,6 +3360,18 @@
       "abstract": "We propose a new method to probe a possible time evolution of the fine structure constant α from X-ray and Sunyaev-Zel'dovich measurements of the gas mass fraction (f(gas)) in galaxy clusters. Taking into account a direct relation between variations of α and violations of the distance-duality relation, we discuss constraints on α for a class of dilaton runaway models. Although not yet competitive with bounds from high-z quasar absorption systems, our constraints, considering a sample of 29 measurements of f(gas), in the redshift interval 0.14 < z < 0.89, provide an independent estimate of α variation at low and intermediate redshifts. Furthermore, current and planned surveys will provide a larger amount of data and thus allow to improve the limits on α variation obtained in the present analysis."
     },
     {
+      "id": "10.1364/OL.41.003010",
+      "authors": [
+        "Nahuel Miron Granese"
+      ],
+      "title": "Extreme events and crises observed in an all-solid-state laser with modulation of losses",
+      "journal": "Opt. Lett.",
+      "year": 2016,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1364/OL.41.003010"
+    },
+    {
       "id": "1509.08399",
       "authors": [
         "León, Gabriel",
@@ -3364,6 +3603,40 @@
       "year": 2015,
       "topic_tags": [],
       "source": "inspirehep"
+    },
+    {
+      "id": "10.1088/2041-8205/804/1/L9",
+      "authors": [
+        "I. Minchev",
+        "M. Martig",
+        "D. Streich",
+        "C. Scannapieco",
+        "R. S. de Jong",
+        "M. Steinmetz"
+      ],
+      "title": "ON THE FORMATION OF GALACTIC THICK DISKS",
+      "journal": "The Astrophysical Journal",
+      "year": 2015,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1088/2041-8205/804/1/L9"
+    },
+    {
+      "id": "10.1088/2041-8205/800/1/L4",
+      "authors": [
+        "Peter Creasey",
+        "Cecilia Scannapieco",
+        "Sebastián E. Nuza",
+        "Gustavo Yepes",
+        "Stefan Gottlöber",
+        "Matthias Steinmetz"
+      ],
+      "title": "THE EFFECT OF ENVIRONMENT ON MILKY-WAY-MASS GALAXIES IN A CONSTRAINED SIMULATION OF THE LOCAL GROUP",
+      "journal": "The Astrophysical Journal",
+      "year": 2015,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1088/2041-8205/800/1/L4"
     },
     {
       "id": "1410.1562",
