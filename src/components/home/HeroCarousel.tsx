@@ -153,7 +153,7 @@ export default function HeroCarousel({
       <div
         role="group"
         aria-label={t('controls')}
-        className="absolute bottom-4 right-4 flex items-center gap-2"
+        className="absolute bottom-4 right-4 flex items-center gap-0"
       >
         {/* Pause/play button — dynamic aria-label (NOT aria-pressed) per WAI-ARIA APG Pitfall #2.
             aria-controls links to the live region so assistive tech can associate the button
@@ -184,12 +184,19 @@ export default function HeroCarousel({
             aria-pressed={i === index}
             onClick={() => setIndex(i)}
             className={[
-              'w-2.5 h-2.5 rounded-full',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface/70',
-              'active:scale-95 transition-[background-color,transform] duration-75',
-              i === index ? 'bg-surface' : 'bg-surface/50',
+              'p-[17px] rounded-full flex items-center justify-center',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-black/40',
             ].join(' ')}
-          />
+          >
+            <span
+              aria-hidden
+              className={[
+                'block w-2.5 h-2.5 rounded-full',
+                'active:scale-95 transition-[background-color,transform] duration-75',
+                i === index ? 'bg-surface' : 'bg-surface/50',
+              ].join(' ')}
+            />
+          </button>
         ))}
       </div>
     </div>
