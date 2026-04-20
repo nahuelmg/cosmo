@@ -118,12 +118,24 @@ export interface AuthorToken {
  *
  * Requirements: PUBS-11, PUBS-12.
  */
+// InspireHEP records compound surnames incorrectly for some members
+// (e.g. "Chase, Tomás Ferreira" treats "Chase" as surname). Rewrite to the
+// correct "Surname, Given" form at display time; matching still works because
+// `isMember` uses substring checks on normalized text.
+const AUTHOR_DISPLAY_OVERRIDES: Record<string, string> = {
+  "Chase, Tomás Ferreira": "Ferreira Chase, Tomás",
+};
+
+function canonicalizeAuthor(raw: string): string {
+  return AUTHOR_DISPLAY_OVERRIDES[raw] ?? raw;
+}
+
 export function formatAuthors(
   authors: string[],
   memberSurnameSet: Set<string>,
 ): { tokens: AuthorToken[]; etAl: boolean } {
   const annotated: AuthorToken[] = authors.map((a) => ({
-    display: a,
+    display: canonicalizeAuthor(a),
     isMember: isMember(a, memberSurnameSet),
   }));
 

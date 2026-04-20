@@ -13,8 +13,8 @@ import {MobileNav} from './MobileNav';
  * Sticky top header — the chrome every page wears.
  *
  * Layout:
- *   - Desktop (>= md / 768px): logo (left) + 7 NavLinks (centre-right) +
- *     LocaleToggle (far right via `ml-auto`).
+ *   - Desktop (>= md / 768px): three-column flex — logo (left), NavLinks
+ *     (centred via equal-width flex-1 gutters), LocaleToggle (right).
  *   - Mobile (< md): logo (left) + MobileNav hamburger trigger (right).
  *     The inline nav and desktop LocaleToggle are hidden; both live inside
  *     the drawer that MobileNav opens.
@@ -61,34 +61,36 @@ export function SiteHeader() {
         className={[
           'mx-auto max-w-6xl',
           'h-full px-6',
-          'flex items-center gap-6',
+          'flex items-center',
         ].join(' ')}
       >
-        {/* Brand mark — logo links to locale-prefixed home. */}
-        <Link
-          href="/"
-          aria-label={siteConfig.groupName}
-          className={[
-            'inline-flex items-center shrink-0',
-            'focus-visible:outline-none',
-            'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded',
-          ].join(' ')}
-        >
-          <Image
-            src="/logo_cosmo.png"
-            alt={siteConfig.groupName}
-            width={80}
-            height={80}
-            loading="eager"
-            fetchPriority="high"
-            className="h-16 w-auto"
-          />
-        </Link>
+        {/* Left column — brand mark links to locale-prefixed home. */}
+        <div className="flex-1 flex items-center justify-start">
+          <Link
+            href="/"
+            aria-label={siteConfig.groupName}
+            className={[
+              'inline-flex items-center shrink-0',
+              'focus-visible:outline-none',
+              'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded',
+            ].join(' ')}
+          >
+            <Image
+              src="/logo_cosmo.png"
+              alt={siteConfig.groupName}
+              width={80}
+              height={80}
+              loading="eager"
+              fetchPriority="high"
+              className="h-16 w-auto"
+            />
+          </Link>
+        </div>
 
-        {/* Desktop nav — hidden below md. */}
+        {/* Centre column — desktop nav (hidden below md). */}
         <nav
           aria-label="Primary"
-          className="hidden md:flex items-center gap-5 ml-2"
+          className="hidden md:flex items-center gap-5"
         >
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.href} href={item.href} className="text-lg">
@@ -97,14 +99,14 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        {/* Desktop-only locale toggle pushed to the far right. */}
-        <div className="hidden md:flex ml-auto items-center">
-          <LocaleToggle />
-        </div>
-
-        {/* Mobile nav trigger — MobileNav's trigger is internally md:hidden. */}
-        <div className="md:hidden ml-auto">
-          <MobileNav />
+        {/* Right column — locale toggle (desktop) or mobile nav trigger. */}
+        <div className="flex-1 flex items-center justify-end">
+          <div className="hidden md:flex items-center">
+            <LocaleToggle />
+          </div>
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
         </div>
       </div>
     </header>

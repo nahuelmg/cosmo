@@ -25,7 +25,7 @@ export function PublicationEntry({
         <span className="text-ink">
           {tokens.map((token, i) => (
             <span key={i}>
-              {i > 0 && ", "}
+              {i > 0 && "; "}
               {token.display}
             </span>
           ))}
