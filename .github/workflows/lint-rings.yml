@@ -1,0 +1,23 @@
+name: Lint Focus Rings
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-rings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check focus-visible:ring-* uses ring-accent-ring exclusively
+        run: |
+          # Permitted patterns: ring-2 (size), ring-accent-ring (color), ring-offset-* (offset utilities).
+          # Anything else (e.g. ring-surface/70, ring-blue-500) fails the build.
+          violations=$(grep -rEnP 'focus-visible:ring-(?!2($|\s|"|'"'"'|/|\\)|accent-ring|offset-)' src/ || true)
+          if [ -n "$violations" ]; then
+            echo "::error::Found focus-visible:ring-* uses outside ring-accent-ring + ring-offset-*:"
+            echo "$violations"
+            exit 1
+          fi
+          echo "OK: all focus-visible:ring-* sites use ring-accent-ring (with optional offset)"
