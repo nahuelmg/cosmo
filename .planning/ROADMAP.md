@@ -155,6 +155,11 @@ Plans:
 3. The footnote below the publication list reads as a three-source description in both Spanish and English, and includes a plain-language note about the DOI precedence rule.
 4. On `/people/tomas-ferreira-chase`, the SiPM paper appears in the "Publicaciones recientes" section with its full author list, rendered identically in structure to InspireHEP- and arXiv-sourced papers (DOI link, year, journal string).
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 18-01-orcid-source-parity-PLAN.md — Extend SourceFilter pill, PublicationEntry badge, bilingual i18n (filter.orcid + three-source footnote with DOI precedence), helper test; verify Schema.org JSON-LD on /publications and SiPM paper on /people/tomas-ferreira-chase
+
 ### Phase 19: Docs & Verification
 
 **Goal:** `content/SYNC.md` fully documents the three-source model so a maintainer can configure ORCID IDs, understand dedup behaviour, and troubleshoot sync failures — and a post-deploy sync confirms the SiPM paper is live on the deployed site.
@@ -190,5 +195,5 @@ Plans:
 | 15. Interactive Polish & Documentation | v1.2 | 6/6 | Complete | 2026-04-20 |
 | 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 17. ORCID Fetcher | v1.3 | 3/3 | Complete | 2026-04-20 |
-| 18. Display Layer | v1.3 | — | Not started | — |
+| 18. Display Layer | v1.3 | 0/1 | Planned | — |
 | 19. Docs & Verification | v1.3 | — | Not started | — |
