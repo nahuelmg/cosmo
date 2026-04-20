@@ -172,6 +172,12 @@ Plans:
 1. `content/SYNC.md` contains: (a) the ORCID works API endpoint and how it's queried, (b) step-by-step guidance for a member to find and add their ORCID iD to `content/people.json`, (c) an explicit table or paragraph stating the DOI precedence rule (InspireHEP > ORCID > arXiv), (d) a three-source `_meta` JSON example, and (e) an ORCID troubleshooting section covering 404 / private profile / missing work types.
 2. After the first post-deploy `workflow_dispatch` sync run completes, Tomas Ferreira Chase's SiPM paper (`10.1016/j.nima.2020.164490`) is visible on the live `/people/tomas-ferreira-chase` page with title, year, journal, and full author list — confirming the end-to-end ORCID pipeline works in production.
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 19-01-sync-md-orcid-extensions-PLAN.md — Extend content/SYNC.md with ORCID API endpoint mechanics, orcid_id vs contact.orcid clarification, DOI precedence rule, three-source _meta example, and ORCID troubleshooting table (DOC-01 a–e)
+- [ ] 19-02-post-deploy-verify-PLAN.md — Trigger post-deploy workflow_dispatch smoke test, human-verify SiPM paper visible on live /people/tomas-ferreira-chase with full author list, record result in 19-02-VERIFY-RESULT.md (VERIFY-01)
+
 ---
 
 ## Progress
@@ -196,4 +202,4 @@ Plans:
 | 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 17. ORCID Fetcher | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 18. Display Layer | v1.3 | 1/1 | Complete | 2026-04-20 |
-| 19. Docs & Verification | v1.3 | — | Not started | — |
+| 19. Docs & Verification | v1.3 | 0/2 | Planned | — |
