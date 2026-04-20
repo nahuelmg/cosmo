@@ -164,9 +164,9 @@ export default function HeroCarousel({
           aria-controls="carousel-slides"
           onClick={() => setIsPaused((p) => !p)}
           className={[
-            'w-6 h-6 flex items-center justify-center rounded',
+            'w-11 h-11 flex items-center justify-center rounded',
             'text-surface/90 hover:text-surface',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface/70',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-black/40',
             'transition-colors',
           ].join(' ')}
         >
