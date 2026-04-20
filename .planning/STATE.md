@@ -10,13 +10,13 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 ## Current Position
 
 Phase: 14 of 15 — In progress (media sizing)
-Plan: 02 of 3 planned — COMPLETE (PersonDetail hero 180×225 4:5 portrait; LCP preserved)
-Status: 14-02 shipped; 14-01 (PersonCard 240px 4:5) landed on main; 14-03 pending
-Last activity: 2026-04-20 — Completed 14-02-PLAN.md: PersonDetail hero resized to 180×225 (4:5) + sizes tightened to "(min-width: 768px) 180px, 180px"; LCP triple (preload/eager/fetchPriority) preserved verbatim
+Plan: 01 of 3 planned — COMPLETE (PersonCard 240px 4:5 + PeopleSection xl:grid-cols-4 + sizes tightened)
+Status: 14-01 shipped this session; 14-02 previously shipped (PersonDetail hero 180×225 4:5 + LCP preserved); 14-03 pending
+Last activity: 2026-04-20 — Completed 14-01-PLAN.md: PersonCard capped at max-w-[240px] portrait (4:5), PeopleSection grid extended with xl:grid-cols-4, sizes flattened to "(min-width: 640px) 240px, 100vw" (srcset browser-pick now ?w=640 at all realistic viewport×DPR combos, no ?w≥1080)
 
 Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phase 14 in progress (2/3 plans complete)
 ██████████ Phase 13: 4/4 plans complete ✓
-██████░░░░ Phase 14: 2/3 plans complete
+██████░░░░ Phase 14: 2/3 plans complete (14-01 ✓, 14-02 ✓, 14-03 pending)
 
 ## Shipped Milestones
 
@@ -47,8 +47,8 @@ Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phase 1
 
 ## Session Continuity
 
-Last session: 2026-04-20T04:06:00Z — 14-02 PersonDetail hero resize complete.
-Stopped at: Completed 14-02-PLAN.md (PersonDetail hero 180×225 4:5 + tightened sizes + mobile cap; LCP preserved)
+Last session: 2026-04-20T04:04:37Z — 14-01 PersonCard resize complete.
+Stopped at: Completed 14-01-PLAN.md (PersonCard max-w-[240px] + aspect-[4/5] + flat sizes hint; PeopleSection xl:grid-cols-4)
 Resume file: None
 
 ## Accumulated Decisions (v1.2)
@@ -67,3 +67,10 @@ Resume file: None
 | Mobile PersonDetail layout: stacked + centered 180 px cap (not inline at 375 px) | Inline at 375 leaves ~147 px for bio — breaks line length; stacked preserves reading flow | 14-02 |
 | sizes="(min-width: 768px) 180px, 180px" over `…, 100vw` on capped-mobile images | When mobile cap equals desktop width, narrow-constant sizes tightens preload srcset (256w 1x / 384w 2x) | 14-02 |
 | Aspect-ratio via wrapper `aspect-[4/5]` (not fixed w/h on Image) on LCP images | Preserves Phase 6 `fill`+parent-aspect pattern so LCP preload hint stays stable | 14-02 |
+| PersonCard caps at max-w-[240px] w-full mx-auto (self-capping card, not grid-cell constraint) | Keeps grid cell free to be wider at xl (258 px); card centers via mx-auto for encyclopedic whitespace target | 14-01 |
+| PersonCard aspect-[4/5] portrait wrapper reused for both photo and initials-placeholder branches | Consistency across member cards beats tile-type consistency (CONTEXT open-question #2 resolution) | 14-01 |
+| Flat sizes hint `"(min-width: 640px) 240px, 100vw"` — no per-breakpoint band | Card caps at 240 px from sm upward, so a flat hint is accurate everywhere and avoids per-breakpoint lies | 14-01 |
+| No `--card-width` theme token for 240 px | Appears in only 2 places (PersonCard, PersonDetail) — below project's >2-places threshold for tokenization | 14-01 |
+| No `priority`/`preload`/`fetchPriority` on PersonCard | Below-fold on mobile; H1 is LCP on /people per Phase 6 | 14-01 |
+| `fill` + `object-cover` preserved on PersonCard (not converted to fixed w/h) | Preserves project pattern (HeroCarousel, PersonDetail, OutreachCard); switching would break srcset generation | 14-01 |
+| Next.js `fill`-mode srcset pool starts at 640w (deviceSizes only, no imageSizes) | Framework observation: browser picks ?w=640 for 240 CSS-px slot at ≤2× DPR; satisfies "no ?w≥1080" success criterion but expected `?w=256`/`?w=384` entries do not materialise under `fill` | 14-01 |
