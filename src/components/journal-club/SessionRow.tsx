@@ -44,7 +44,7 @@ export function SessionRow({ session, locale, paperLinkLabel }: SessionRowProps)
             href={session.paper_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded self-start"
+            className="text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded self-start"
           >
             {paperLinkLabel} →
           </a>

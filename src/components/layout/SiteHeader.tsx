@@ -71,7 +71,7 @@ export function SiteHeader() {
           className={[
             'inline-flex items-center shrink-0',
             'focus-visible:outline-none',
-            'focus-visible:ring-2 focus-visible:ring-accent-ring rounded',
+            'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded',
           ].join(' ')}
         >
           <Image

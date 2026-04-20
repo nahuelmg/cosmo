@@ -45,7 +45,7 @@ export default function MapEmbed({ query, fallbackHref, title }: MapEmbedProps) 
         href={fallbackHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute inset-0 flex items-center justify-center text-accent text-sm underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+        className="absolute inset-0 flex items-center justify-center text-accent text-sm underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
       >
         {title}
       </a>

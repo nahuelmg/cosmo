@@ -83,7 +83,7 @@ export async function SiteFooter({locale}: SiteFooterProps) {
             className={[
               'text-sm text-ink-muted hover:text-accent transition-colors',
               'focus-visible:outline-none',
-              'focus-visible:ring-2 focus-visible:ring-accent-ring rounded',
+              'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded',
             ].join(' ')}
           />
 
@@ -99,7 +99,7 @@ export async function SiteFooter({locale}: SiteFooterProps) {
                     className={[
                       'hover:text-accent transition-colors',
                       'focus-visible:outline-none',
-                      'focus-visible:ring-2 focus-visible:ring-accent-ring rounded',
+                      'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded',
                     ].join(' ')}
                   >
                     {link.label}

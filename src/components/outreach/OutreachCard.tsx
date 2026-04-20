@@ -45,7 +45,7 @@ export function OutreachCard({ activity, locale, learnMoreLabel }: OutreachCardP
             href={activity.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 self-start text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
+            className="mt-4 self-start text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
           >
             {learnMoreLabel} →
           </a>

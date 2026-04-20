@@ -18,7 +18,7 @@ export function PartnerStrip({ title, partners }: PartnerStripProps) {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+                  className="rounded hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                 >
                   {p.name}
                 </a>

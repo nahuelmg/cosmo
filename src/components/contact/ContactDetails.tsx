@@ -59,7 +59,7 @@ export function ContactDetails({
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
+                  className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
                 >
                   {s.label || s.platform}
                 </a>
