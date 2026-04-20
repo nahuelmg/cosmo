@@ -19,6 +19,8 @@ export function SourceFilter({ value, onChange }: SourceFilterProps) {
     { key: 'manual', label: t('filter.manual') },
   ];
 
+  const base = 'rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface';
+
   return (
     <div
       role="group"
@@ -40,8 +42,8 @@ export function SourceFilter({ value, onChange }: SourceFilterProps) {
             }}
             className={
               active
-                ? 'rounded-full bg-accent px-3 py-1 text-sm font-medium text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring'
-                : 'rounded-full bg-surface-alt px-3 py-1 text-sm font-medium text-ink-muted hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring'
+                ? `${base} bg-accent text-white`
+                : `${base} bg-surface-alt text-ink-muted hover:text-ink`
             }
           >
             {opt.label}
