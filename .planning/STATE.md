@@ -33,8 +33,15 @@ Progress: [██░░░░░░░░] ~10% (v1.3 — Phase 16 plans 01+02 c
 - Remove `publications_selected` Zod field, orphaned accessor exports, dead `people.selectedPublications` i18n key
 - Update REQUIREMENTS.md PR-flow description (pushes direct-to-main per Phase 10 decision)
 
+## Accumulated Decisions (v1.3)
+
+| Plan  | Decision | Rationale |
+|-------|----------|-----------|
+| 16-01 | orcid and deduped counts are REQUIRED fields in PublicationsMetaSchema | Defensive optionals would mask sync script bugs; the script always writes these values |
+| 16-01 | Schema change + content/publications.json patch bundled in one commit | Avoids validate-content regression window between schema update and data patch |
+
 ## Session Continuity
 
-Last session: 2026-04-20 — Executed 16-02-PLAN.md (CI workflow audit). CI-01 traceability comment added to sync-publications.yml.
-Stopped at: Completed 16-02-PLAN.md.
+Last session: 2026-04-20 — Executed 16-01-schema-extension-PLAN.md. Zod schema extended with orcid source + deduped counts; JSON Schema regenerated; pnpm build passes cleanly.
+Stopped at: Completed 16-01-SUMMARY.md.
 Resume file: None
