@@ -175,8 +175,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 19-01-sync-md-orcid-extensions-PLAN.md — Extend content/SYNC.md with ORCID API endpoint mechanics, orcid_id vs contact.orcid clarification, DOI precedence rule, three-source _meta example, and ORCID troubleshooting table (DOC-01 a–e)
-- [ ] 19-02-post-deploy-verify-PLAN.md — Trigger post-deploy workflow_dispatch smoke test, human-verify SiPM paper visible on live /people/tomas-ferreira-chase with full author list, record result in 19-02-VERIFY-RESULT.md (VERIFY-01)
+- [x] 19-01-sync-md-orcid-extensions-PLAN.md — Extend content/SYNC.md with ORCID API endpoint mechanics, orcid_id vs contact.orcid clarification, DOI precedence rule, three-source _meta example, and ORCID troubleshooting table (DOC-01 a–e)
+- [x] 19-02-post-deploy-verify-PLAN.md — Trigger post-deploy workflow_dispatch smoke test, human-verify SiPM paper visible on live /people/tomas-ferreira-chase with full author list, record result in 19-02-VERIFY-RESULT.md (VERIFY-01)
 
 ---
 
@@ -202,4 +202,4 @@ Plans:
 | 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 17. ORCID Fetcher | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 18. Display Layer | v1.3 | 1/1 | Complete | 2026-04-20 |
-| 19. Docs & Verification | v1.3 | 0/2 | Planned | — |
+| 19. Docs & Verification | v1.3 | 2/2 | Complete | 2026-04-20 |

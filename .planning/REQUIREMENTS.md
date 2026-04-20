@@ -51,8 +51,8 @@
 
 ### Docs & Verification
 
-- [ ] **DOC-01**: `content/SYNC.md` extended with: ORCID works API endpoint, ORCID profile setup guidance for members, DOI-dedup precedence rule (InspireHEP > ORCID > arXiv), three-source `_meta` example, ORCID troubleshooting section
-- [ ] **VERIFY-01**: After first post-deploy sync run, Tomas Ferreira Chase's 2020 SiPM paper (`10.1016/j.nima.2020.164490`) appears on `/people/tomas-ferreira-chase` with its full author list (not just his name)
+- [x] **DOC-01**: `content/SYNC.md` extended with: ORCID works API endpoint, ORCID profile setup guidance for members, DOI-dedup precedence rule (InspireHEP > ORCID > arXiv), three-source `_meta` example, ORCID troubleshooting section
+- [x] **VERIFY-01**: After first post-deploy sync run, Tomas Ferreira Chase's 2020 SiPM paper (`10.1016/j.nima.2020.164490`) appears on `/people/tomas-ferreira-chase` with its full author list (not just his name)
 
 ## Future (deferred)
 
@@ -122,8 +122,8 @@
 | UI-03 | Phase 18 | Complete |
 | UI-04 | Phase 18 | Complete |
 | UI-05 | Phase 18 | Complete |
-| DOC-01 | Phase 19 | Pending |
-| VERIFY-01 | Phase 19 | Pending |
+| DOC-01 | Phase 19 | Complete |
+| VERIFY-01 | Phase 19 | Complete |
 
 **Coverage:**
 - v1.3 requirements: 28 total (note: header previously said 27; recount from enumerated IDs gives 28)
@@ -132,4 +132,4 @@
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 — Phase 16 complete (SCHEMA-01..04, DEDUP-01..05, CLI-01..04, CI-01 marked Complete)*
+*Last updated: 2026-04-20 — Phase 19 complete (DOC-01, VERIFY-01 marked Complete); all 28 v1.3 requirements Complete*
