@@ -129,3 +129,31 @@ The following raw output fields were already acceptable and required no change:
 
 - Plan 01-02 Task 2 checkpoint (2026-04-17)
 - Accepted by user: `approve-overrides` (all 17 proposed overrides)
+
+---
+
+## v1.2 Overrides (Phases 13–15)
+
+| Token / Component | v1.0 | v1.2 | Rationale |
+|-------------------|------|------|-----------|
+| `--text-4xl` | `2rem` (32 px) | `2.25rem` (36 px) | Inner-page H1 ≥1.2× above H2 (Phase 13-01) |
+| `--text-5xl` | (n/a) | `2.5rem` (40 px) | Hero H1 cap; HomePage only (Phase 13-01) |
+| `--color-ink-subtle` | `oklch(0.62 0.010 60)` | `oklch(0.45 0.012 60)` | WCAG AA 4.5:1 contrast on warm-cream (Phase 6-03) |
+| Container widths | ad-hoc | max-w-3xl/5xl/6xl tiers | SPACE-01 layout rhythm (Phase 13-02) |
+| Vertical rhythm | mixed | py-12 / py-16 / py-20 tiers | SPACE-02 (Phase 13-02) |
+| Card padding | mixed | p-4 dense / p-6 spacious | SPACE-03 two-tier (Phase 13-03) |
+| PersonCard width | flex-fill | max-w-[240px] w-full mx-auto | MEDIA-01 240 px cap (Phase 14-01) |
+| PersonDetail hero | uncapped | 180 px × 225 px (4:5 portrait) | MEDIA-02 hero resize (Phase 14-02) |
+| HeroCarousel pause/play focus ring | `ring-surface/70` | `ring-accent-ring + ring-offset-2 ring-offset-black/40` | BTN-02 unification + image-bg contrast (Phase 15-01) |
+| HeroCarousel pause/play tap target | `w-6 h-6` (24×24) | `w-11 h-11` (44×44) | BTN-03 ≥44 (Phase 15-01) |
+| HeroCarousel dot tap target | `w-2.5 h-2.5` + `gap-2` (~18 px center-to-center) | 10×10 visible inside `p-[17px]` button + `gap-0` (44 px center-to-center) | BTN-03 padding-inside pattern (Phase 15-01) |
+| MobileNav trigger / close | `w-10 h-10` (40×40) | `w-11 h-11` (44×44) | BTN-01 sweep (Phase 15-02) |
+| NavLink hit row | (no padding) | `py-1.5` + explicit `transition-colors duration-150` | BTN-05 + MICRO-01 (Phase 15-02) |
+| LocaleToggle hit row | `px-2 py-1` | `px-2 py-1.5` | BTN-05 (Phase 15-02) |
+| SourceFilter pill | `px-3 py-1` (~30 px) + no transition | `px-3.5 py-1.5` (~36 px) + `transition-colors duration-150` | BTN-04 + MICRO-02 (Phase 15-03) |
+| PersonCard photo hover | (no transform on image) | `motion-safe:scale-[1.02] duration-200 group-hover` | MICRO-03 (Phase 15-04) |
+| Focus ring offset | (no offset utility used) | `ring-offset-2 ring-offset-{surface\|black/40}` everywhere | MICRO-05 macOS-style halo (Phase 15-01..05) |
+
+**Inline-text link exemption:** WCAG 2.5.5 AAA inline-text exception applied to PartnerStrip, OutreachCard learn-more, SiteFooter EmailLink, ContactDetails social, SessionRow paper-link, PublicationEntry arXiv/DOI links, and PublicationEntry source-pill metadata chips. These deliberately do NOT receive 44×44 padding (per Phase 15 planner decision, RESEARCH open-question #1 + #3).
+
+**Drift gate:** `.github/workflows/lint-rings.yml` runs `grep -EnP 'focus-visible:ring-(?!2($|\s|"|'"'"'|/|\\)|accent-ring|offset-)' src/` on push/PR to prevent reintroduction of stray ring colors.
