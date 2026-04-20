@@ -158,7 +158,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 18-01-orcid-source-parity-PLAN.md — Extend SourceFilter pill, PublicationEntry badge, bilingual i18n (filter.orcid + three-source footnote with DOI precedence), helper test; verify Schema.org JSON-LD on /publications and SiPM paper on /people/tomas-ferreira-chase
+- [x] 18-01-orcid-source-parity-PLAN.md — Extend SourceFilter pill, PublicationEntry badge, bilingual i18n (filter.orcid + three-source footnote with DOI precedence), helper test; verify Schema.org JSON-LD on /publications and SiPM paper on /people/tomas-ferreira-chase
 
 ### Phase 19: Docs & Verification
 
@@ -195,5 +195,5 @@ Plans:
 | 15. Interactive Polish & Documentation | v1.2 | 6/6 | Complete | 2026-04-20 |
 | 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 17. ORCID Fetcher | v1.3 | 3/3 | Complete | 2026-04-20 |
-| 18. Display Layer | v1.3 | 0/1 | Planned | — |
+| 18. Display Layer | v1.3 | 1/1 | Complete | 2026-04-20 |
 | 19. Docs & Verification | v1.3 | — | Not started | — |

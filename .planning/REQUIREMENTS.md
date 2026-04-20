@@ -43,11 +43,11 @@
 
 ### Display Layer
 
-- [ ] **UI-01**: `/publications` SourceFilter pill set includes `orcid` alongside `inspirehep` and `arxiv`; selecting the ORCID pill shows only ORCID-sourced entries
-- [ ] **UI-02**: Publication entry source badge renders ORCID entries with an `ORCID` label visually distinct from `InspireHEP` and `arXiv` badges (same component, new source variant)
-- [ ] **UI-03**: Bilingual UI strings added to `messages/es.json` and `messages/en.json`: `publications.source.orcid` and any ORCID-specific helper copy (filter label, badge tooltip)
-- [ ] **UI-04**: `/publications` footnote updated from "two sources" wording to three-source wording in both locales (and reflects the new DOI precedence rule in plain language)
-- [ ] **UI-05**: Schema.org `ScholarlyArticle` JSON-LD on `/people/[slug]` continues to emit correctly for ORCID-only entries — DOI, title, authors, year all present; Schema.org shape unchanged
+- [x] **UI-01**: `/publications` SourceFilter pill set includes `orcid` alongside `inspirehep` and `arxiv`; selecting the ORCID pill shows only ORCID-sourced entries
+- [x] **UI-02**: Publication entry source badge renders ORCID entries with an `ORCID` label visually distinct from `InspireHEP` and `arXiv` badges (same component, new source variant)
+- [x] **UI-03**: Bilingual UI strings added to `messages/es.json` and `messages/en.json`: `publications.filter.orcid` key shipped with value `"ORCID"` in both locales (proper noun — identical across). Badge label + filter pill read from these; no separate `publications.source.orcid` namespace needed
+- [x] **UI-04**: `/publications` footnote updated from "two sources" wording to three-source wording in both locales (and reflects the new DOI precedence rule in plain language)
+- [x] **UI-05**: Schema.org `ScholarlyArticle` JSON-LD on `/publications` emits correctly for ORCID-only entries — DOI, title, authors, year all present; `buildScholarlyArticleSchema` reads source-agnostic fields so no code change was required (verified via page source on /en/publications for the SiPM paper)
 
 ### Docs & Verification
 
@@ -117,11 +117,11 @@
 | ORCID-05 | Phase 17 | Complete |
 | ORCID-06 | Phase 17 | Complete |
 | ORCID-07 | Phase 17 | Complete |
-| UI-01 | Phase 18 | Pending |
-| UI-02 | Phase 18 | Pending |
-| UI-03 | Phase 18 | Pending |
-| UI-04 | Phase 18 | Pending |
-| UI-05 | Phase 18 | Pending |
+| UI-01 | Phase 18 | Complete |
+| UI-02 | Phase 18 | Complete |
+| UI-03 | Phase 18 | Complete |
+| UI-04 | Phase 18 | Complete |
+| UI-05 | Phase 18 | Complete |
 | DOC-01 | Phase 19 | Pending |
 | VERIFY-01 | Phase 19 | Pending |
 

@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phases 16 + 17 complete; Phase 18 (Display Layer) is next.
+**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phases 16 + 17 + 18 complete; Phase 19 (Docs & Verification) is next and final for v1.3.
 
 ## Current Position
 
