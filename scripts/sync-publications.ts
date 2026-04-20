@@ -439,6 +439,45 @@ export function dedupByArxivId(entries: Publication[]): Publication[] {
 }
 
 /**
+ * DEDUP-03: Normalize a DOI for comparison. Lowercases, strips
+ * https?://(dx.)?doi.org/ prefix variants, trims whitespace.
+ * Existing stored DOIs are "bare" (no prefix) per shared.ts doiId regex,
+ * but normalisation is defensive for future ORCID data.
+ */
+export function normalizeDoi(doi: string): string {
+  return doi
+    .toLowerCase()
+    .replace(/^https?:\/\/(dx\.)?doi\.org\//, "")
+    .trim();
+}
+
+/**
+ * DEDUP-01/02/04/05: Cross-source DOI dedup.
+ * Input MUST be ordered by source priority (high → low): manual, inspire, orcid, arxiv.
+ * First-seen wins. Entries without a DOI pass through unchanged.
+ * Returns [deduped, droppedCount].
+ */
+export function dedupByDoi(entries: Publication[]): [Publication[], number] {
+  const seen = new Map<string, Publication>();
+  const out: Publication[] = [];
+  let dropped = 0;
+  for (const p of entries) {
+    if (!p.doi) {
+      out.push(p);
+      continue;
+    }
+    const key = normalizeDoi(p.doi);
+    if (seen.has(key)) {
+      dropped++;
+      continue;
+    }
+    seen.set(key, p);
+    out.push(p);
+  }
+  return [out, dropped];
+}
+
+/**
  * Read existing content/publications.json and extract manual entries.
  *
  * Handles three file shapes:
@@ -476,22 +515,18 @@ export function readAllExistingEntries(cwd: string = process.cwd()): Publication
 }
 
 /**
- * Merge publications from all sources and sort deterministically (SYNC-10, SYNC-13).
+ * Sort publications deterministically (SYNC-10, SYNC-13).
  *
  * Sort order matches getPublicationsByAuthor in src/content/accessors/publications.ts:
  *   1. year desc
  *   2. arXiv ID desc (localeCompare) — within same year, for entries with arXiv IDs
  *   3. no-arXiv entries last within a year bucket
  *
- * No cross-source dedup (locked v1.1 decision).
- * Dedup is applied per-source at the call site before mergePublications is called.
+ * Dedup is applied at the call site BEFORE mergePublications — see main() pipeline.
+ * Accepts a single pre-concatenated array (priority order already established by caller).
  */
-export function mergePublications(
-  manualEntries: Publication[],
-  inspireEntries: Publication[],
-  arxivEntries: Publication[],
-): Publication[] {
-  const merged = [...manualEntries, ...inspireEntries, ...arxivEntries];
+export function mergePublications(entries: Publication[]): Publication[] {
+  const merged = [...entries];
   merged.sort((a, b) => {
     if (b.year !== a.year) return b.year - a.year;
     if (a.arxiv && b.arxiv) return b.arxiv.localeCompare(a.arxiv);
@@ -578,11 +613,9 @@ async function syncMember(
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
-  // Guard: cannot skip both sources
-  if (flags["no-arxiv"] && flags["no-inspire"]) {
-    process.stderr.write(
-      "No sources enabled — pass only one of --no-arxiv / --no-inspire\n",
-    );
+  // Guard: cannot skip all sources
+  if (flags["no-arxiv"] && flags["no-inspire"] && flags["no-orcid"]) {
+    process.stderr.write("No sources enabled\n");
     process.exit(1);
   }
 
@@ -591,7 +624,8 @@ async function main(): Promise<void> {
   validateBAIs(people);
 
   const runInspire = !flags["no-inspire"];
-  const runArxiv = !flags["no-arxiv"];
+  const runArxiv   = !flags["no-arxiv"];
+  const runOrcid   = !flags["no-orcid"];
 
   // Capture existing file state BEFORE any writes (for added/removed/unchanged counts)
   const existingAll = readAllExistingEntries();
@@ -612,49 +646,60 @@ async function main(): Promise<void> {
   // NOTE: runBatched uses Promise.all, so any per-member fetch error propagates here
   // and aborts the whole sync BEFORE the write-gate is reached. This enforces
   // Pitfall 2 / CONTEXT.md "file-level atomicity" — last-good JSON is preserved.
-  const tasks = targetPeople.map((p) => () => syncMember(p, runInspire, runArxiv));
+  const tasks = targetPeople.map((p) => () => syncMember(p, runInspire, runArxiv, runOrcid));
   const memberResults = await runBatched(tasks);
 
   // Emit per-member progress lines (stdout) and drain warnings (stderr)
   const allWarnings: string[] = [];
   for (const r of memberResults) {
     const inspireCell = runInspire ? String(r.inspirePubs.length) : "skipped";
-    const arxivCell = runArxiv ? String(r.arxivPubs.length) : "skipped";
-    process.stdout.write(`${r.slug} — InspireHEP: ${inspireCell}, arXiv: ${arxivCell}\n`);
+    const arxivCell   = runArxiv   ? String(r.arxivPubs.length)   : "skipped";
+    const orcidCell   = runOrcid   ? String(r.orcidPubs.length)   : "skipped";
+    process.stdout.write(
+      `${r.slug} — InspireHEP: ${inspireCell}, arXiv: ${arxivCell}, ORCID: ${orcidCell}\n`,
+    );
     for (const w of r.warnings) {
       process.stderr.write(`Warning: ${w}\n`);
       allWarnings.push(w);
     }
   }
 
-  // Concatenate per-source across all members, then dedup intra-source by arXiv ID (SYNC-09)
+  // Intra-source dedup by arXiv ID (SYNC-09)
   const allInspire = dedupByArxivId(memberResults.flatMap((r) => r.inspirePubs));
-  const allArxiv = dedupByArxivId(memberResults.flatMap((r) => r.arxivPubs));
+  const allOrcid   = dedupByArxivId(memberResults.flatMap((r) => r.orcidPubs));
+  const allArxiv   = dedupByArxivId(memberResults.flatMap((r) => r.arxivPubs));
   const manualEntries = readManualEntries();
 
-  const preMerged = mergePublications(manualEntries, allInspire, allArxiv);
+  // Concat in source-priority order: manual, inspire, orcid, arxiv.
+  // Priority order matters for BOTH arXiv-ID cross-dedup AND DOI cross-dedup
+  // (first-seen-wins). Manual comes first so hand-curated entries are never dropped.
+  const priorityOrdered = [...manualEntries, ...allInspire, ...allOrcid, ...allArxiv];
 
-  // Cross-source dedup by arXiv ID (Rule 1 Bug fix):
-  // A paper appearing in both InspireHEP (with arxiv_eprints[0]) and arXiv (ORCID feed)
-  // gets id = arXiv ID from both extractors, producing duplicate IDs in the merged array.
-  // Apply first-seen-wins dedup across the full merged set — since mergePublications puts
-  // manualEntries first, then inspireEntries, then arxivEntries, InspireHEP entries (which
-  // have structured journal info) win over arXiv-only duplicates of the same paper.
-  const merged = dedupByArxivId(preMerged);
+  // Cross-source dedup by arXiv ID (existing behaviour — catches inspire+arxiv dupes).
+  const postArxivDedup = dedupByArxivId(priorityOrdered);
+
+  // Cross-source dedup by DOI (new — catches inspire+orcid and orcid+arxiv DOI matches).
+  // CRITICAL: must run BEFORE the sort in mergePublications; the sort scrambles
+  // source order and would break first-seen-wins precedence.
+  const [postDoiDedup, dedupedCount] = dedupByDoi(postArxivDedup);
+
+  // Final sort (year desc, arxiv desc, no-arxiv last). Dedup is complete at this point.
+  const merged = mergePublications(postDoiDedup);
 
   // Build _meta block (CONTEXT.md §_meta block shape)
   const meta: PublicationsMeta = {
     synced_at: new Date().toISOString(),
     sources: [
       ...(runInspire ? (["inspirehep"] as const) : []),
-      ...(runArxiv   ? (["arxiv"]     as const) : []),
+      ...(runOrcid   ? (["orcid"]      as const) : []),
+      ...(runArxiv   ? (["arxiv"]      as const) : []),
     ],
     counts: {
       inspirehep: allInspire.length,
       arxiv:      allArxiv.length,
       manual:     manualEntries.length,
-      orcid:      0,
-      deduped:    0,
+      orcid:      allOrcid.length,
+      deduped:    dedupedCount,
     },
     warnings: allWarnings,
   };
@@ -692,7 +737,7 @@ async function main(): Promise<void> {
   if (flags["dry-run"]) {
     process.stdout.write(
       `Sync complete (dry-run): ${merged.length} publications` +
-        ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${allWarnings.length} warnings)\n` +
+        ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${dedupedCount} deduped, ${allWarnings.length} warnings)\n` +
         `Would write ${json.length} bytes to ${outputPath}\n`,
     );
     return;
@@ -703,7 +748,7 @@ async function main(): Promise<void> {
   // SYNC-15: final summary line captured by GitHub Action step summary (Phase 10)
   process.stdout.write(
     `Sync complete: ${merged.length} publications` +
-      ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${allWarnings.length} warnings)\n`,
+      ` (${added} added, ${removed} removed, ${unchanged} unchanged, ${dedupedCount} deduped, ${allWarnings.length} warnings)\n`,
   );
   if (flags.member) {
     process.stdout.write(`Wrote per-member output to ${outputPath} (git-ignored)\n`);
@@ -726,5 +771,5 @@ if (require.main === module) {
 export { fetchInspireHEP, fetchArXiv, fetchWithRetry, runBatched, xmlParser, BAI_REGEX };
 // 09-02 extraction layer (inline-exported on their declarations above)
 // stripBibTeX, inspireHitToPublication, arxivEntryToPublication,
-// dedupByArxivId, readManualEntries, mergePublications
+// dedupByArxivId, normalizeDoi, dedupByDoi, readManualEntries, mergePublications
 export type { InspireHit, ArXivEntry, PersonWithSyncIds };
