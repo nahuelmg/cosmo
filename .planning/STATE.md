@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 ## Current Position
 
-Phase: 14 of 15 — COMPLETE (media sizing; ready for /gsd:verify-phase 14)
-Plan: 03 of 3 planned — COMPLETE (HeroCarousel + OutreachCard + homepage audit; 5×6 all PASS; MEDIA-01..05 all closed)
-Status: All three Phase 14 plans shipped. MEDIA-03 closed via 5-viewport × 6-check audit (all PASS). MEDIA-04 closed — homepage has only one image surface (HeroCarousel) and OutreachCard image branch is dormant in current content. Zero src/ edits in 14-03 (audit-only invariant honoured).
-Last activity: 2026-04-20 — Completed 14-03-PLAN.md (audit + regression sweep). Phase 14 close ledger: MEDIA-01 (14-01), MEDIA-02 (14-02), MEDIA-03 (14-03 Task 1), MEDIA-04 (14-03 Task 2), MEDIA-05 (14-01 + 14-02). Three follow-ups filed and routed: FU-HERO-01 (control tap-target → Phase 15), FU-OUTR-01 (outreach image balance → editorial when first image ships), FU-AXE-01 (live axe scan → folds into PERF-04/05).
+Phase: 14 of 15 — SHIPPED & VERIFIED (media sizing; user-approved 2026-04-20; next up /gsd:discuss-phase 15 or /gsd:plan-phase 15)
+Plan: — (phase 14 shipped; ready to plan Phase 15 Interactive Polish)
+Status: Phase 14 verified (status: passed after human approval). 11/11 structural must-haves green; 6 browser-verified items user-approved. MEDIA-01..05 all closed.
+Last activity: 2026-04-20 — Phase 14 shipped & verified: 3 plans, 5/5 requirements complete (MEDIA-01..05). Three follow-ups filed and routed: FU-HERO-01 (control tap-target → Phase 15), FU-OUTR-01 (outreach image balance → editorial when first image ships), FU-AXE-01 (live axe scan → folds into PERF-04/05).
 
-Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phase 14 COMPLETE (3/3 plans)
+Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phases 13–14 shipped (7/7 plans); Phase 15 pending
 ██████████ Phase 13: 4/4 plans complete ✓
 ██████████ Phase 14: 3/3 plans complete ✓ (14-01 ✓, 14-02 ✓, 14-03 ✓)
 

@@ -35,11 +35,11 @@
 
 ### Media Sizing (MEDIA)
 
-- [ ] **MEDIA-01:** `PersonCard` on `/people` sized down ~35 %. Target: card caps at 240–280 px wide OR grid shifts to 4-col at `lg` so each card is ≤ 280 px. Photo remains square; aspect ratio preserved.
-- [ ] **MEDIA-02:** `PersonDetail` hero photo on `/people/[slug]` reduced from 240 px to 180–200 px; typography fills recovered space proportionally.
-- [ ] **MEDIA-03:** Hero carousel aspect ratio and min-height re-checked against the new scale — no visual regression at 375 / 768 / 1024 / 1440 px viewports.
-- [ ] **MEDIA-04:** Outreach and home-page highlight imagery reviewed for proportion against the new grid; resize or recrop if over-dominant.
-- [ ] **MEDIA-05:** `PersonCard` `sizes` attribute on `next/image` updated to match the new column width so Next.js serves the correct srcset.
+- [x] **MEDIA-01:** `PersonCard` on `/people` sized down ~35 %. Target: card caps at 240–280 px wide OR grid shifts to 4-col at `lg` so each card is ≤ 280 px. Photo remains square; aspect ratio preserved.
+- [x] **MEDIA-02:** `PersonDetail` hero photo on `/people/[slug]` reduced from 240 px to 180–200 px; typography fills recovered space proportionally.
+- [x] **MEDIA-03:** Hero carousel aspect ratio and min-height re-checked against the new scale — no visual regression at 375 / 768 / 1024 / 1440 px viewports.
+- [x] **MEDIA-04:** Outreach and home-page highlight imagery reviewed for proportion against the new grid; resize or recrop if over-dominant.
+- [x] **MEDIA-05:** `PersonCard` `sizes` attribute on `next/image` updated to match the new column width so Next.js serves the correct srcset.
 
 ### Micro-interactions & Polish (MICRO)
 
@@ -90,7 +90,7 @@ Explicit exclusions with reasoning.
 |--------|-------|------|--------|
 | TYPO-01..05 | 13 | 13-01, 13-02, 13-04 | Complete |
 | SPACE-01..04 | 13 | 13-02, 13-03, 13-04 | Complete |
-| MEDIA-01..05 | 14 | TBD | Pending |
+| MEDIA-01..05 | 14 | 14-01, 14-02, 14-03 | Complete |
 | BTN-01..06 | 15 | TBD | Pending |
 | MICRO-01..05 | 15 | TBD | Pending |
 | DOC-01..02 | 15 | TBD | Pending |
