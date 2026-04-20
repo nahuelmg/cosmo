@@ -9,13 +9,14 @@ See: .planning/PROJECT.md (updated 2026-04-19 after v1.1 milestone)
 
 ## Current Position
 
-Phase: 13 of 15 — COMPLETE (design tokens + layout rhythm)
-Plan: — (phase 13 shipped; next up: /gsd:discuss-phase 14 or /gsd:plan-phase 14)
-Status: Phase 13 verified (status: passed); ready to plan Phase 14 (Media Sizing)
-Last activity: 2026-04-19 — Phase 13 shipped & verified: 4 plans, 9/9 requirements complete (TYPO-01..05, SPACE-01..04)
+Phase: 14 of 15 — In progress (media sizing)
+Plan: 02 of 3 planned — COMPLETE (PersonDetail hero 180×225 4:5 portrait; LCP preserved)
+Status: 14-02 shipped; 14-01 (PersonCard 240px 4:5) landed on main; 14-03 pending
+Last activity: 2026-04-20 — Completed 14-02-PLAN.md: PersonDetail hero resized to 180×225 (4:5) + sizes tightened to "(min-width: 768px) 180px, 180px"; LCP triple (preload/eager/fetchPriority) preserved verbatim
 
-Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phases 14–15 pending
+Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phase 14 in progress (2/3 plans complete)
 ██████████ Phase 13: 4/4 plans complete ✓
+██████░░░░ Phase 14: 2/3 plans complete
 
 ## Shipped Milestones
 
@@ -46,8 +47,8 @@ Progress: v1.1 SHIPPED (13/13 plans); v1.2 Phase 13 shipped (4/4 plans); Phases 
 
 ## Session Continuity
 
-Last session: 2026-04-19T22:36:00Z — 13-04 MASTER.md documentation complete.
-Stopped at: Completed 13-04-PLAN.md (MASTER.md v1.2 type scale + layout section)
+Last session: 2026-04-20T04:06:00Z — 14-02 PersonDetail hero resize complete.
+Stopped at: Completed 14-02-PLAN.md (PersonDetail hero 180×225 4:5 + tightened sizes + mobile cap; LCP preserved)
 Resume file: None
 
 ## Accumulated Decisions (v1.2)
@@ -62,3 +63,7 @@ Resume file: None
 | research/page.tsx promoted to max-w-6xl (grid classification) | Research has card grid content; prose header at 6xl width is acceptable | 13-02 |
 | MASTER.md Layout section: Hero py-20 retained as reserved convention | HeroCarousel v1.2 doesn't use a wrapper py-20; kept for future full-bleed variants | 13-04 |
 | SessionRow documented as py-5 (dense-row equivalent) in MASTER.md | List rows with dividers use vertical-only padding; not a deviation from p-4 dense tier | 13-04 |
+| PersonDetail hero = 180 px × 225 px (4:5 portrait), matching PersonCard shape | Detail reads as card zoom-in; 44% footprint reduction; bio column auto-widens by 60 px | 14-02 |
+| Mobile PersonDetail layout: stacked + centered 180 px cap (not inline at 375 px) | Inline at 375 leaves ~147 px for bio — breaks line length; stacked preserves reading flow | 14-02 |
+| sizes="(min-width: 768px) 180px, 180px" over `…, 100vw` on capped-mobile images | When mobile cap equals desktop width, narrow-constant sizes tightens preload srcset (256w 1x / 384w 2x) | 14-02 |
+| Aspect-ratio via wrapper `aspect-[4/5]` (not fixed w/h on Image) on LCP images | Preserves Phase 6 `fill`+parent-aspect pattern so LCP preload hint stays stable | 14-02 |
