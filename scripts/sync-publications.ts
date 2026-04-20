@@ -129,6 +129,39 @@ interface ArXivEntry {
 }
 
 // ---------------------------------------------------------------------------
+// ORCID response types (Phase 17) — minimal: only fields we read
+// ---------------------------------------------------------------------------
+
+export interface OrcidExternalId {
+  "external-id-type": string; // "doi" | "arxiv" | "issn" | "other-id" | ...
+  "external-id-value": string;
+}
+
+interface OrcidWorkSummary {
+  "put-code": number;
+  title: { title: { value: string } };
+  "external-ids": { "external-id": OrcidExternalId[] };
+  type: string; // "journal-article" | "conference-paper" | ...
+  "publication-date"?: { year?: { value: string } | null } | null;
+  "journal-title"?: { value: string } | null;
+}
+
+interface OrcidGroup {
+  "external-ids": { "external-id": OrcidExternalId[] }; // UNION across sibling summaries
+  "work-summary": OrcidWorkSummary[]; // 1..N
+}
+
+interface OrcidWorksResponse {
+  group: OrcidGroup[];
+}
+
+export interface OrcidLookupEntry {
+  publicationId: string;
+  orcid: string;
+  putCode: number;
+}
+
+// ---------------------------------------------------------------------------
 // D. fast-xml-parser config (RESEARCH.md §C — jpath dot-notation verified)
 // ---------------------------------------------------------------------------
 
@@ -306,12 +339,40 @@ async function fetchArXiv(orcid: string): Promise<ArXivEntry[]> {
 }
 
 /**
- * Phase 16 stub — returns []. Phase 17 replaces the body with a real
- * https://pub.orcid.org/v3.0/{orcid}/works fetch + per-work detail expansion.
- * Signature frozen per 16-RESEARCH.md so Phase 17 is a body-only swap.
+ * Fetch an ORCID works list and extract Publication[] + a put-code side-map.
+ *
+ * - Anonymous Public API endpoint (no OAuth required).
+ * - MUST send Accept: application/json (Pitfall 1 — default is XML).
+ * - HTTP 404 → warning + empty result (ORCID-03).
+ * - Empty `group: []` (HTTP 200) is silent — legitimate empty profile (Pitfall 7).
+ * - The returned `lookup` gives plan 17-03 the (orcid, put-code) needed to fetch
+ *   per-work details for rows that survive DOI dedup.
  */
-async function fetchOrcid(_orcid: string): Promise<Publication[]> {
-  return [];
+async function fetchOrcid(
+  orcid: string,
+  ownerName: string,
+): Promise<{ publications: Publication[]; lookup: OrcidLookupEntry[] }> {
+  const url = `https://pub.orcid.org/v3.0/${orcid}/works`;
+  if (isVerbose) process.stderr.write(`  GET ${url}\n`);
+  const res = await fetchWithRetry(url, { headers: { Accept: "application/json" } });
+  if (res.status === 404) {
+    process.stderr.write(`  Warning: ORCID profile not public or empty: ${orcid}\n`);
+    return { publications: [], lookup: [] };
+  }
+  if (!res.ok) throw new Error(`ORCID ${res.status} for ${orcid}`);
+
+  const data = (await res.json()) as OrcidWorksResponse;
+  const publications: Publication[] = [];
+  const lookup: OrcidLookupEntry[] = [];
+
+  for (const group of data.group ?? []) {
+    const extracted = orcidGroupToPublication(group, ownerName);
+    if (!extracted) continue;
+    publications.push(extracted.publication);
+    lookup.push({ publicationId: extracted.publication.id, orcid, putCode: extracted.putCode });
+  }
+
+  return { publications, lookup };
 }
 
 // ---------------------------------------------------------------------------
@@ -418,6 +479,65 @@ export function arxivEntryToPublication(entry: ArXivEntry): Publication {
     source: "arxiv",
     ...(entry.summary ? { abstract: entry.summary.normalize("NFC") } : {}),
   };
+}
+
+/**
+ * Convert a single ORCID works-list group into a Publication, or return null if
+ * the group should be dropped (non-publication type, no work-summary, missing title).
+ *
+ * Extraction follows ORCID-05:
+ *   - id preference: DOI → arXiv → `orcid-{put-code}`
+ *   - title from work-summary[0].title.title.value
+ *   - year from work-summary[0].publication-date.year.value, else current year
+ *   - journal from work-summary[0].journal-title.value, else "Preprint"
+ *   - doi/arxiv extracted from GROUP-level external-ids (Pattern 2: union)
+ *
+ * authors is seeded with [ownerName] as a placeholder; the caller or a later
+ * enrichment pass replaces it with the real contributor list.
+ */
+function orcidGroupToPublication(
+  group: OrcidGroup,
+  ownerName: string,
+): { publication: Publication; putCode: number } | null {
+  const ws = group["work-summary"]?.[0];
+  if (!ws) return null;
+
+  // ORCID-04: filter work types
+  if (ws.type !== "journal-article" && ws.type !== "conference-paper") return null;
+
+  // Pattern 2: use GROUP-level external-ids (union), NOT work-summary[0]
+  const groupIds = group["external-ids"]?.["external-id"] ?? [];
+  const doi = groupIds.find((e) => e["external-id-type"] === "doi")?.["external-id-value"];
+  const arxiv = groupIds.find((e) => e["external-id-type"] === "arxiv")?.["external-id-value"];
+
+  const putCode = ws["put-code"];
+  if (typeof putCode !== "number") return null; // malformed response
+
+  const id = doi ?? arxiv ?? `orcid-${putCode}`;
+
+  const yearStr = ws["publication-date"]?.year?.value;
+  const parsedYear = yearStr ? parseInt(yearStr, 10) : NaN;
+  const year = Number.isFinite(parsedYear) ? parsedYear : new Date().getFullYear();
+
+  const journal = ws["journal-title"]?.value?.normalize("NFC") ?? "Preprint";
+
+  const rawTitle = ws.title?.title?.value;
+  if (!rawTitle) return null; // schema requires title
+  const title = rawTitle.normalize("NFC");
+
+  const publication: Publication = {
+    id,
+    authors: [ownerName], // placeholder; enrichment pass (17-03) replaces for ORCID-only rows
+    title,
+    journal,
+    year,
+    topic_tags: [],
+    source: "orcid" as const,
+    ...(arxiv ? { arxiv } : {}),
+    ...(doi ? { doi } : {}),
+  };
+
+  return { publication, putCode };
 }
 
 /**
@@ -547,6 +667,7 @@ type MemberSyncResult = {
   inspirePubs: Publication[];
   arxivPubs: Publication[];
   orcidPubs: Publication[];
+  orcidLookup: OrcidLookupEntry[]; // side-map for 17-03 enrichment pass
   warnings: string[];
 };
 
@@ -562,6 +683,7 @@ async function syncMember(
     inspirePubs: [],
     arxivPubs: [],
     orcidPubs: [],
+    orcidLookup: [],
     warnings: [],
   };
 
@@ -598,8 +720,11 @@ async function syncMember(
 
   if (runOrcid) {
     if (person.orcid_id) {
-      // Phase 16 stub — returns []. Phase 17 wires the real fetch.
-      result.orcidPubs = await fetchOrcid(person.orcid_id);
+      // HTTP 200 with empty group: no warning (research Pitfall 7 / STATE.md 16-03 contextual warnings).
+      // The 404 warning is emitted inside fetchOrcid (ORCID-03).
+      const { publications, lookup } = await fetchOrcid(person.orcid_id, person.name);
+      result.orcidPubs = publications;
+      result.orcidLookup = lookup;
     } else {
       result.warnings.push(`skipping ORCID for ${person.name}: no orcid_id`);
     }
@@ -768,7 +893,7 @@ if (require.main === module) {
 // ---------------------------------------------------------------------------
 
 // 09-01 primitives (not inline-exported — exported here)
-export { fetchInspireHEP, fetchArXiv, fetchWithRetry, runBatched, xmlParser, BAI_REGEX };
+export { fetchInspireHEP, fetchArXiv, fetchWithRetry, fetchOrcid, orcidGroupToPublication, runBatched, xmlParser, BAI_REGEX };
 // 09-02 extraction layer (inline-exported on their declarations above)
 // stripBibTeX, inspireHitToPublication, arxivEntryToPublication,
 // dedupByArxivId, normalizeDoi, dedupByDoi, readManualEntries, mergePublications
