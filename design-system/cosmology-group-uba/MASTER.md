@@ -129,89 +129,115 @@ No named utility wrapper (e.g., `.card-dense`, `.card-spacious`) — components 
 
 ## Component Specs
 
+All components use Tailwind utility classes inline (no `.btn-primary` etc. abstractions). The recipes below are copy-pasteable starting points for new components.
+
+### Universal Rules
+
+**Focus ring pattern (BTN-02, MICRO-05):**
+- Color: `ring-accent-ring` everywhere (no exceptions in `focus-visible:` — SkipLink uses `focus:` deliberately).
+- Offset: `ring-offset-2` always; offset color per surface:
+  - Light backgrounds (cream `--color-surface`): `ring-offset-surface`
+  - Dark/image backgrounds (Hero JWST starfield): `ring-offset-black/40`
+- Full pattern: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-{surface|black/40}`
+
+**Tap-target rule (BTN-01..05):**
+- Every interactive button or non-inline link has an effective ≥44×44 px hit area.
+- Visible chrome may be smaller; padding-inside compensates (e.g., 10×10 carousel dots inside 44×44 `p-[17px]` buttons).
+- **Inline-text links exempted** per WCAG 2.5.5 AAA inline exception: links inside paragraph text (PartnerStrip, OutreachCard learn-more, SiteFooter EmailLink, ContactDetails social, SessionRow paper-link, PublicationEntry arXiv/DOI/source-pill metadata) deliberately do NOT receive padding bumps.
+
+**Motion (MICRO-01..03):** strictly limited to 3 surfaces — NavLink active-state, SourceFilter pill toggle, PersonCard photo zoom. All transitions wrap in `motion-safe:` to respect `prefers-reduced-motion`. Default duration `duration-150`; PersonCard zoom uses `duration-200` (per-spec exception).
+
 ### Buttons
 
-```css
-/* Primary Button */
-.btn-primary {
-  background: oklch(0.52 0.12 45);
-  color: oklch(0.995 0.003 85);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: oklch(0.52 0.12 45);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+**Carousel pause/play (HeroCarousel):**
+```html
+<button class="w-11 h-11 flex items-center justify-center rounded
+  text-surface/90 hover:text-surface
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-black/40
+  transition-colors">
+  <Icon class="w-3.5 h-3.5" aria-hidden />
+</button>
 ```
+- Visible chrome: 44×44 (was 24×24 in v1.0).
+- Hit area: 44×44.
+- Focus ring: dark/image-bg pattern.
 
-### Cards
-
-```css
-.card {
-  background: oklch(0.978 0.008 80);
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
+**MobileNav trigger / close:**
+```html
+<button class="w-11 h-11 ... focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface">
+  <Icon ... />
+</button>
 ```
+- Visible chrome + hit area: 44×44 (was 40×40 in v1.0).
 
-### Inputs
+### Pills
 
-```css
-.input {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  background: oklch(0.978 0.008 80);
-  transition: box-shadow 200ms ease;
-}
-
-.input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px oklch(0.52 0.12 45 / 0.20);
-}
+**SourceFilter pill (publications page filter):**
+```html
+<button class="rounded-full px-3.5 py-1.5 text-sm font-medium
+  transition-colors duration-150
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface
+  {active ? 'bg-accent text-white' : 'bg-surface-alt text-ink-muted hover:text-ink'}">
+  {label}
+</button>
 ```
+- Visible height: ≥36 px (px-3.5 py-1.5).
+- Hit area: ≥36 × content-width (within 44 px tolerance for short labels).
+- Tone toggle: `transition-colors duration-150` (MICRO-02).
 
-### Modals
+### Carousel Dots
 
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.modal {
-  background: oklch(0.995 0.003 85);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-md);
-  max-width: 500px;
-  width: 90%;
-}
+**HeroCarousel dot (padding-inside pattern):**
+```html
+<button class="p-[17px] rounded-full flex items-center justify-center
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-black/40">
+  <span aria-hidden class="block w-2.5 h-2.5 rounded-full
+    active:scale-95 transition-[background-color,transform] duration-75
+    {active ? 'bg-surface' : 'bg-surface/50'}" />
+</button>
 ```
+- Visible chrome: 10×10 dot (preserved from v1.0).
+- Hit area: 44×44 via `p-[17px]` (17 + 10 + 17 = 44).
+- Wrapper uses `gap-0` so adjacent dots tile edge-to-edge with no overlap.
+
+### Nav Link
+
+**Desktop NavLink (header):**
+```html
+<a class="transition-colors duration-150 py-1.5
+  text-ink-muted hover:text-ink
+  {active && 'text-accent font-semibold'}">
+  {children}
+</a>
+```
+- Hit row: 44 px (py-1.5 inside h-24 header flex-center).
+- Visible chrome: text-sm + py-1.5 (~32 px text row).
+- Active-state crossfade: `transition-colors duration-150` (MICRO-01, explicit per spec).
+
+### Locale Toggle
+
+```html
+<button class="text-sm font-semibold tracking-wide
+  text-ink-muted hover:text-ink
+  px-2 py-1.5
+  transition-[color,transform] duration-75 active:scale-95
+  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:rounded">
+  {ES|EN}
+</button>
+```
+- Hit row: 44 px (py-1.5 inside h-24 header flex-center, paired with NavLink).
+- Pre-existing `transition-[color,transform] duration-75` preserved (NOT in MICRO-01..03 motion scope).
+
+### PersonCard (image zoom on hover)
+
+The Image inside the card adds:
+```html
+<Image class="object-cover
+  motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-[1.02]" />
+```
+- Card hover: 1.02 zoom on photo (motion-safe, MICRO-03).
+- Card lift (`hover:-translate-y-0.5`) on the outer Link is a separate, pre-existing transition.
+- Initials placeholder branch does NOT zoom (no Image to scale).
 
 ---
 
