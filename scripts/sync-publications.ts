@@ -1,7 +1,7 @@
 /**
  * sync-publications.ts
  *
- * CLI: pnpm sync-publications [--dry-run] [--member <slug>] [--no-arxiv] [--no-inspire] [--verbose]
+ * CLI: pnpm sync-publications [--dry-run] [--member <slug>] [--no-arxiv] [--no-inspire] [--no-orcid] [--verbose]
  *
  * Phase 9 scaffold — fetches raw API data from InspireHEP (BAI query) and arXiv
  * (ORCID atom2 feed). Extraction, dedup, merge, and write gate are wired in 09-02/09-03.
@@ -39,6 +39,7 @@ const { values: flags } = parseArgs({
     "member":     { type: "string"                  },
     "no-arxiv":   { type: "boolean", default: false },
     "no-inspire": { type: "boolean", default: false },
+    "no-orcid":   { type: "boolean", default: false },
     "verbose":    { type: "boolean", default: false },
   },
   strict: true,
@@ -304,6 +305,15 @@ async function fetchArXiv(orcid: string): Promise<ArXivEntry[]> {
   return parsed?.feed?.entry ?? [];
 }
 
+/**
+ * Phase 16 stub — returns []. Phase 17 replaces the body with a real
+ * https://pub.orcid.org/v3.0/{orcid}/works fetch + per-work detail expansion.
+ * Signature frozen per 16-RESEARCH.md so Phase 17 is a body-only swap.
+ */
+async function fetchOrcid(_orcid: string): Promise<Publication[]> {
+  return [];
+}
+
 // ---------------------------------------------------------------------------
 // I. Extraction helpers — pure functions (exported for tests)
 // ---------------------------------------------------------------------------
@@ -501,6 +511,7 @@ type MemberSyncResult = {
   name: string;
   inspirePubs: Publication[];
   arxivPubs: Publication[];
+  orcidPubs: Publication[];
   warnings: string[];
 };
 
@@ -508,12 +519,14 @@ async function syncMember(
   person: PersonWithSyncIds,
   runInspire: boolean,
   runArxiv: boolean,
+  runOrcid: boolean,
 ): Promise<MemberSyncResult> {
   const result: MemberSyncResult = {
     slug: person.slug,
     name: person.name,
     inspirePubs: [],
     arxivPubs: [],
+    orcidPubs: [],
     warnings: [],
   };
 
@@ -545,6 +558,15 @@ async function syncMember(
       result.arxivPubs = entries.map(arxivEntryToPublication);
     } else {
       result.warnings.push(`skipping arXiv for ${person.name}: no orcid_id`);
+    }
+  }
+
+  if (runOrcid) {
+    if (person.orcid_id) {
+      // Phase 16 stub — returns []. Phase 17 wires the real fetch.
+      result.orcidPubs = await fetchOrcid(person.orcid_id);
+    } else {
+      result.warnings.push(`skipping ORCID for ${person.name}: no orcid_id`);
     }
   }
 
