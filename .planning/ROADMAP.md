@@ -113,6 +113,13 @@ See `.planning/milestones/v1.2-ROADMAP.md` for full phase details.
 4. A unit test (or manual dry-run) demonstrates that when two entries share the same normalized DOI, the one with higher-precedence source (InspireHEP > ORCID > arXiv) survives and the duplicate is dropped, with `_meta.counts.deduped` reflecting the drop count.
 5. `.github/workflows/sync-publications.yml` runs all three sources by default (the ORCID fetch function is a stub at this point; the workflow flag wiring is real).
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 16-01-schema-extension-PLAN.md — Extend Zod schema for `"orcid"` source + `orcid`/`deduped` counts, regenerate JSON schema, patch `content/publications.json`
+- [ ] 16-02-ci-workflow-audit-PLAN.md — Add CI-01 traceability comment to `.github/workflows/sync-publications.yml`
+- [ ] 16-03-sync-pipeline-PLAN.md — `--no-orcid` flag, `fetchOrcid` stub, `normalizeDoi` + `dedupByDoi`, pipeline rewire, progress/summary/_meta updates, Vitest coverage
+
 ### Phase 17: ORCID Fetcher
 
 **Goal:** `sync-publications.ts` fetches real ORCID works for every person with `orcid_id` set, filters to `journal-article` + `conference-paper`, extracts per-work metadata, fetches full author lists for ORCID-only entries, and produces `source: "orcid"` Publication objects that flow through the Phase 16 dedup pipeline into `content/publications.json`.
