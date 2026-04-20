@@ -73,7 +73,7 @@
       "manual": "Manual"
     },
     "updatedAt": "Last updated {date}",
-    "footnote": "Publications are sourced from InspireHEP and arXiv. The same paper may appear twice if indexed by both sources."
+    "footnote": "Publications are sourced from InspireHEP, arXiv, and ORCID. When the same paper is indexed by more than one source, entries are merged by DOI into a single record (precedence: InspireHEP, then ORCID, then arXiv)."
   },
   "journalClub": {
     "title": "Journal Club",

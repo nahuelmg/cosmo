@@ -49,13 +49,17 @@ export function PublicationEntry({
               ? "bg-[oklch(0.95_0.04_235)] text-[oklch(0.38_0.10_235)]"
               : publication.source === "arxiv"
                 ? "bg-[oklch(0.95_0.05_30)] text-[oklch(0.42_0.12_30)]"
-                : "bg-surface-alt text-ink-muted";
+                : publication.source === "orcid"
+                  ? "bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)]"
+                  : "bg-surface-alt text-ink-muted";
           const label =
             publication.source === "inspirehep"
               ? "InspireHEP"
               : publication.source === "arxiv"
                 ? "arXiv"
-                : "Manual";
+                : publication.source === "orcid"
+                  ? "ORCID"
+                  : "Manual";
           return href ? (
             <a
               href={href}

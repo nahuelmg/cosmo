@@ -73,7 +73,7 @@
       "manual": "Manual"
     },
     "updatedAt": "Actualizado el {date}",
-    "footnote": "Las publicaciones provienen de InspireHEP y arXiv. Un mismo trabajo puede aparecer duplicado si fue indexado por ambas fuentes."
+    "footnote": "Las publicaciones provienen de InspireHEP, arXiv y ORCID. Cuando un mismo trabajo aparece en más de una fuente, las entradas se fusionan por DOI en un único registro (precedencia: InspireHEP, luego ORCID, luego arXiv)."
   },
   "journalClub": {
     "title": "Journal Club",

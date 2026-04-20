@@ -255,4 +255,12 @@ describe("getSourcePillHref", () => {
     const pub = makePub({ source: "inspirehep", id: "some-custom-id" });
     expect(getSourcePillHref(pub)).toBeNull();
   });
+
+  it("branch — orcid → null (non-link badge, DOI link row handles discoverability)", () => {
+    const pub = makePub({
+      source: "orcid",
+      doi: "10.1016/j.nima.2020.164490",
+    });
+    expect(getSourcePillHref(pub)).toBeNull();
+  });
 });
