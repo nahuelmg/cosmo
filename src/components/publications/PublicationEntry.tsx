@@ -61,7 +61,7 @@ export function PublicationEntry({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${pillBase} ${tone} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring`}
+              className={`${pillBase} ${tone} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface`}
             >
               {label}
             </a>
@@ -84,7 +84,7 @@ export function PublicationEntry({
               href={`https://arxiv.org/abs/${publication.arxiv}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
+              className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
             >
               {labels.arxiv}:{publication.arxiv}
             </a>
@@ -94,7 +94,7 @@ export function PublicationEntry({
               href={`https://doi.org/${publication.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[oklch(0.38_0.10_235)] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring rounded"
+              className="text-[oklch(0.38_0.10_235)] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
             >
               {labels.doi}:{publication.doi}
             </a>
