@@ -59,7 +59,7 @@ export function SiteHeader() {
     >
       <div
         className={[
-          'mx-auto max-w-5xl',
+          'mx-auto max-w-6xl',
           'h-full px-6',
           'flex items-center gap-6',
         ].join(' ')}
@@ -91,7 +91,7 @@ export function SiteHeader() {
           className="hidden md:flex items-center gap-5 ml-2"
         >
           {NAV_ITEMS.map((item) => (
-            <NavLink key={item.href} href={item.href} className="text-sm">
+            <NavLink key={item.href} href={item.href} className="text-lg">
               {tNav(item.labelKey)}
             </NavLink>
           ))}
