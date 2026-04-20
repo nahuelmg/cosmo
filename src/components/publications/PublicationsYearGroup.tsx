@@ -5,6 +5,7 @@ interface PublicationsYearGroupProps {
   year: number;
   publications: Publication[];
   memberSurnameSet: Set<string>;
+  memberOrcidMap: Map<string, string>;
   labels: {
     arxiv: string;
     doi: string;
@@ -17,6 +18,7 @@ export function PublicationsYearGroup({
   year,
   publications,
   memberSurnameSet,
+  memberOrcidMap,
   labels,
 }: PublicationsYearGroupProps) {
   return (
@@ -30,6 +32,7 @@ export function PublicationsYearGroup({
             key={pub.id}
             publication={pub}
             memberSurnameSet={memberSurnameSet}
+            memberOrcidMap={memberOrcidMap}
             labels={labels}
           />
         ))}

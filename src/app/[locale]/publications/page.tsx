@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getAllYears, getPublicationsByYear, getPublicationsMeta, getPeople } from '@/content';
-import { buildMemberSurnameSet } from '@/lib/publications-helpers';
+import { buildMemberSurnameSet, buildMemberOrcidMap } from '@/lib/publications-helpers';
 import { buildPageMetadata } from '@/lib/metadata';
 import { buildScholarlyArticleSchema } from '@/lib/schemas';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -39,6 +39,10 @@ export default async function PublicationsPage({ params }: Props) {
   // Convert Set<string> to string[] for RSC → client boundary serialization.
   // Set is not JSON-serializable; PublicationsClientShell rebuilds the Set via useMemo.
   const memberSurnameList = [...memberSurnameSet];
+  // Convert Map<string,string> to [string,string][] for RSC → client boundary serialization.
+  // Map is not JSON-serializable; PublicationsClientShell rebuilds the Map via useMemo.
+  const memberOrcidMap = buildMemberOrcidMap(people);
+  const memberOrcidList = [...memberOrcidMap] as [string, string][];
   const groups = years.map((year) => ({
     year,
     publications: getPublicationsByYear(year),
@@ -73,6 +77,7 @@ export default async function PublicationsPage({ params }: Props) {
         <PublicationsClientShell
           groups={groups}
           memberSurnameList={memberSurnameList}
+          memberOrcidList={memberOrcidList}
           labels={labels}
         />
         <p className="mt-12 text-sm text-ink-subtle">

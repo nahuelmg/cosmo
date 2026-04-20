@@ -13,6 +13,7 @@ interface YearGroup {
 interface PublicationsClientShellProps {
   groups: YearGroup[];
   memberSurnameList: string[];
+  memberOrcidList: [string, string][];
   labels: {
     arxiv: string;
     doi: string;
@@ -24,6 +25,7 @@ interface PublicationsClientShellProps {
 export function PublicationsClientShell({
   groups,
   memberSurnameList,
+  memberOrcidList,
   labels,
 }: PublicationsClientShellProps) {
   const [source, setSource] = useState<SourceFilterValue>('all');
@@ -34,6 +36,13 @@ export function PublicationsClientShell({
   const memberSurnameSet = useMemo(
     () => new Set(memberSurnameList),
     [memberSurnameList],
+  );
+
+  // Rebuild Map from serializable [string, string][] — Map does not survive
+  // the RSC → client boundary. Pass entries array from the server page, rebuild once here.
+  const memberOrcidMap = useMemo(
+    () => new Map(memberOrcidList),
+    [memberOrcidList],
   );
 
   const filteredGroups = useMemo(() => {
@@ -55,6 +64,7 @@ export function PublicationsClientShell({
           year={g.year}
           publications={g.publications}
           memberSurnameSet={memberSurnameSet}
+          memberOrcidMap={memberOrcidMap}
           labels={labels}
         />
       ))}

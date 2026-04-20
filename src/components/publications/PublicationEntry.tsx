@@ -1,9 +1,10 @@
 import type { Publication } from "@/content";
-import { formatAuthors, getSourcePillHref } from "@/lib/publications-helpers";
+import { formatAuthors, getSourcePillHref, getAuthorOrcidUrl } from "@/lib/publications-helpers";
 
 interface PublicationEntryProps {
   publication: Publication;
   memberSurnameSet: Set<string>;
+  memberOrcidMap: Map<string, string>;
   labels: {
     arxiv: string;      // "arXiv" — from messages/publications.arxiv
     doi: string;        // "DOI"   — from messages/publications.doi
@@ -15,9 +16,11 @@ interface PublicationEntryProps {
 export function PublicationEntry({
   publication,
   memberSurnameSet,
+  memberOrcidMap,
   labels,
 }: PublicationEntryProps) {
   const { tokens, etAl } = formatAuthors(publication.authors, memberSurnameSet);
+  const authorOrcidUrl = getAuthorOrcidUrl(publication.authors, memberOrcidMap);
 
   return (
     <li id={`pub-${publication.id}`} className="py-5 border-b border-ink/5 last:border-b-0">
@@ -73,6 +76,18 @@ export function PublicationEntry({
             <span className={`${pillBase} ${tone}`}>{label}</span>
           );
         })()}
+
+        {/* Author-ORCID link pill — appears when a member-author has contact.orcid set; suppressed when the source pill is already ORCID */}
+        {authorOrcidUrl && publication.source !== "orcid" && (
+          <a
+            href={authorOrcidUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center rounded-full px-2 py-0.5 font-medium bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+          >
+            ORCID
+          </a>
+        )}
 
         {/* Preprint / published chip — always neutral, never a link */}
         <span className="inline-flex items-center rounded-full bg-surface-alt px-2 py-0.5 font-medium text-ink-subtle">

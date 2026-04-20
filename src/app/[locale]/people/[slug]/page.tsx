@@ -11,7 +11,7 @@ import {
   getPublicationsByAuthor,
   siteConfig,
 } from '@/content';
-import { deriveNameVariants, buildMemberSurnameSet } from '@/lib/publications-helpers';
+import { deriveNameVariants, buildMemberSurnameSet, buildMemberOrcidMap } from '@/lib/publications-helpers';
 import { PersonDetail } from '@/components/people/PersonDetail';
 import { buildPageMetadata } from '@/lib/metadata';
 import { buildPersonSchema } from '@/lib/schemas';
@@ -79,7 +79,9 @@ export default async function PersonDetailPage({ params }: Props) {
     deriveNameVariants(rawPerson),
     { lastNYears: 10 },
   );
-  const memberSurnameSet = buildMemberSurnameSet(getPeople());
+  const allPeople = getPeople();
+  const memberSurnameSet = buildMemberSurnameSet(allPeople);
+  const memberOrcidMap = buildMemberOrcidMap(allPeople);
   const pubLabels = {
     arxiv: tPubs('arxiv'),
     doi: tPubs('doi'),
@@ -94,6 +96,7 @@ export default async function PersonDetailPage({ params }: Props) {
         person={person}
         memberPubs={memberPubs}
         memberSurnameSet={memberSurnameSet}
+        memberOrcidMap={memberOrcidMap}
         pubLabels={pubLabels}
         publicationsHeading={tPubs('title')}
         labels={{

@@ -41,6 +41,7 @@ interface PersonDetailProps {
   labels: Labels;
   memberPubs: Publication[];
   memberSurnameSet: Set<string>;
+  memberOrcidMap: Map<string, string>;
   pubLabels: {
     arxiv: string;
     doi: string;
@@ -55,6 +56,7 @@ export function PersonDetail({
   labels,
   memberPubs,
   memberSurnameSet,
+  memberOrcidMap,
   pubLabels,
   publicationsHeading,
 }: PersonDetailProps) {
@@ -144,6 +146,7 @@ export function PersonDetail({
                 key={pub.id}
                 publication={pub}
                 memberSurnameSet={memberSurnameSet}
+                memberOrcidMap={memberOrcidMap}
                 labels={pubLabels}
               />
             ))}
