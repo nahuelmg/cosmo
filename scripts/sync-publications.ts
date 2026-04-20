@@ -161,6 +161,16 @@ export interface OrcidLookupEntry {
   putCode: number;
 }
 
+interface OrcidContributor {
+  "credit-name"?: { value: string } | null;
+  // NOTE: contributor-orcid / contributor-attributes exist but we don't read them.
+}
+
+interface OrcidWorkDetail {
+  contributors?: { contributor?: OrcidContributor[] | null } | null;
+  // Detail endpoint also returns everything the summary has; we only use contributors.
+}
+
 // ---------------------------------------------------------------------------
 // D. fast-xml-parser config (RESEARCH.md §C — jpath dot-notation verified)
 // ---------------------------------------------------------------------------
@@ -373,6 +383,26 @@ async function fetchOrcid(
   }
 
   return { publications, lookup };
+}
+
+/**
+ * Fetch a single ORCID work's full detail, keyed by (orcid, put-code).
+ * Used by enrichOrcidAuthors to populate the full author list on ORCID-only
+ * publications (ORCID-06).
+ *
+ * Returns null on HTTP 404 — possible if the profile changed between the
+ * works-list fetch and this detail fetch; we keep the placeholder authors.
+ */
+async function fetchOrcidWorkDetail(
+  orcid: string,
+  putCode: number,
+): Promise<OrcidWorkDetail | null> {
+  const url = `https://pub.orcid.org/v3.0/${orcid}/work/${putCode}`;
+  if (isVerbose) process.stderr.write(`  GET ${url}\n`);
+  const res = await fetchWithRetry(url, { headers: { Accept: "application/json" } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`ORCID work detail ${res.status} for ${orcid}/${putCode}`);
+  return (await res.json()) as OrcidWorkDetail;
 }
 
 // ---------------------------------------------------------------------------
@@ -657,6 +687,48 @@ export function mergePublications(entries: Publication[]): Publication[] {
   return merged;
 }
 
+/**
+ * For every ORCID-only survivor of cross-source dedup, replace the placeholder
+ * author list with the full credit-name list from the ORCID per-work detail
+ * endpoint (ORCID-06).
+ *
+ * Concurrency matches ORCID-07 (runBatched defaults: ≤5 in flight, 2s pause).
+ *
+ * Non-ORCID survivors pass through unchanged. ORCID rows whose put-code is not in
+ * the lookup map (e.g. because they came from a prior cached run — should not happen
+ * in the current pipeline, but defensive) also pass through unchanged.
+ *
+ * If the detail endpoint returns null or the contributors list is empty/unnamed,
+ * the placeholder authors are preserved (schema requires authors.length >= 1).
+ */
+export async function enrichOrcidAuthors(
+  survivors: Publication[],
+  lookupByPubId: Map<string, { orcid: string; putCode: number }>,
+): Promise<Publication[]> {
+  const toEnrich = survivors.filter(
+    (p) => p.source === "orcid" && lookupByPubId.has(p.id),
+  );
+  if (toEnrich.length === 0) return survivors;
+
+  const tasks = toEnrich.map((p) => async (): Promise<[string, Publication]> => {
+    const entry = lookupByPubId.get(p.id)!;
+    const detail = await fetchOrcidWorkDetail(entry.orcid, entry.putCode);
+    if (!detail) return [p.id, p];
+
+    const authors =
+      detail.contributors?.contributor
+        ?.map((c) => c["credit-name"]?.value?.normalize("NFC"))
+        .filter((n): n is string => !!n && n.length > 0) ?? [];
+
+    if (authors.length === 0) return [p.id, p]; // keep placeholder
+    return [p.id, { ...p, authors }];
+  });
+
+  const enriched = await runBatched(tasks);
+  const byId = new Map(enriched);
+  return survivors.map((p) => byId.get(p.id) ?? p);
+}
+
 // ---------------------------------------------------------------------------
 // J. Per-member sync worker
 // ---------------------------------------------------------------------------
@@ -808,8 +880,22 @@ async function main(): Promise<void> {
   // source order and would break first-seen-wins precedence.
   const [postDoiDedup, dedupedCount] = dedupByDoi(postArxivDedup);
 
-  // Final sort (year desc, arxiv desc, no-arxiv last). Dedup is complete at this point.
-  const merged = mergePublications(postDoiDedup);
+  // ORCID-06: enrich full author lists on ORCID-only survivors (runs AFTER dedup
+  // so we never waste detail calls on rows that lost to InspireHEP/arXiv).
+  // Build the lookup from every member's orcidLookup; first-seen wins on duplicate
+  // publication ids (if two members share an ORCID-only paper via their profiles).
+  const lookupByPubId = new Map<string, { orcid: string; putCode: number }>();
+  for (const r of memberResults) {
+    for (const entry of r.orcidLookup) {
+      if (!lookupByPubId.has(entry.publicationId)) {
+        lookupByPubId.set(entry.publicationId, { orcid: entry.orcid, putCode: entry.putCode });
+      }
+    }
+  }
+  const enriched = await enrichOrcidAuthors(postDoiDedup, lookupByPubId);
+
+  // Final sort (year desc, arxiv desc, no-arxiv last). Dedup + enrichment complete.
+  const merged = mergePublications(enriched);
 
   // Build _meta block (CONTEXT.md §_meta block shape)
   const meta: PublicationsMeta = {
