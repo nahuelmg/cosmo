@@ -3,7 +3,7 @@
  * Run with: pnpm vitest run scripts/sync-publications.test.ts
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import {
   stripBibTeX,
   inspireHitToPublication,
@@ -12,6 +12,7 @@ import {
   mergePublications,
   normalizeDoi,
   dedupByDoi,
+  fetchWithRetry,
 } from "./sync-publications";
 import type { InspireHit, ArXivEntry } from "./sync-publications";
 import type { Publication } from "../src/content/schemas/publications.schema";
@@ -41,6 +42,40 @@ describe("stripBibTeX", () => {
 
   it("handles \\textbf{text} removal", () => {
     expect(stripBibTeX("A \\textbf{bold} title")).toBe("A bold title");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// fetchWithRetry — 503 retry behaviour
+// ---------------------------------------------------------------------------
+
+describe("fetchWithRetry", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("retries on 503 and returns the 200 on the second attempt", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockResolvedValueOnce(new Response("{}", { status: 200 }));
+
+    const res = await fetchWithRetry("https://example.test/any", undefined, 2, 1);
+
+    expect(res.status).toBe(200);
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("returns the final 503 response when retries are exhausted", async () => {
+    const maxRetries = 2;
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(null, { status: 503 }));
+
+    const res = await fetchWithRetry("https://example.test/any", undefined, maxRetries, 1);
+
+    expect(res.status).toBe(503);
+    expect(fetchSpy).toHaveBeenCalledTimes(maxRetries + 1);
   });
 });
 
