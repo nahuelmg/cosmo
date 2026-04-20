@@ -8,7 +8,19 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
-## Current State: v1.2 Shipped — next milestone TBD
+## Current Milestone: v1.3 ORCID Sync & Cross-Source Dedup
+
+**Goal:** Add ORCID works API as a third publication source, dedup across sources by DOI, and surface `orcid` as a first-class source in the UI — resolving the visible gap where author-curated papers that aren't on InspireHEP or arXiv (e.g. Tomas Ferreira Chase's 2020 SiPM paper, DOI `10.1016/j.nima.2020.164490`) don't appear on the site.
+
+**Target features:**
+- ORCID works API (`https://pub.orcid.org/v3.0/{orcid}/works`) as 3rd source alongside InspireHEP (BAI) + arXiv (ORCID atom)
+- ORCID work-type filter: `journal-article` + `conference-paper` only
+- Cross-source DOI dedup with precedence **InspireHEP > ORCID > arXiv**
+- Third source badge + filter pill (full parity with `inspirehep` / `arxiv`)
+- `source` enum extended to include `"orcid"` (non-breaking)
+- `_meta.sources` and `_meta.counts` extended to include `orcid`
+- `--no-orcid` CLI flag; weekly CI cron extended (no schedule change)
+- Bilingual source label; `content/SYNC.md` maintainer guidance updated
 
 **Latest shipped:** v1.2 Aesthetic Polish (2026-04-20) — 26/26 requirements across Typography, Spacing, Media, Buttons, Micro-interactions, and Documentation categories. 18 focus-ring sites unified on `ring-accent-ring` with explicit `ring-offset-2`; PersonCard + PersonDetail photos right-sized (240 px / 180 px with `aspect-[4/5]`); HeroCarousel + Nav + SourceFilter interactive elements hit the 44×44 WCAG 2.5.5 AAA bar; `pnpm axe` 0 violations across 8 Spanish pages; CI drift gate (`lint-rings.yml`) installed; MASTER.md + OVERRIDES.md fully updated. 45 static routes preserved, 11/11 cross-phase wiring + 5/5 E2E flows verified.
 
@@ -83,9 +95,18 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 ### Active
 
-<!-- Current scope. No active milestone yet — run /gsd:new-milestone to scope v1.3. -->
+<!-- Current scope. v1.3 milestone started 2026-04-20. -->
 
-(None — v1.2 shipped; planning next milestone)
+- [ ] ORCID works API fetcher integrated into `scripts/sync-publications.ts`
+- [ ] ORCID work-type filter limits pulls to `journal-article` + `conference-paper`
+- [ ] Cross-source DOI dedup with precedence InspireHEP > ORCID > arXiv
+- [ ] `PublicationSchema.source` enum extended to `"manual" | "inspirehep" | "arxiv" | "orcid"`
+- [ ] `_meta` block reports `orcid` in `sources` and `counts`
+- [ ] `--no-orcid` CLI flag + weekly cron runs all three sources
+- [ ] Third source badge + filter pill render on `/publications` in both locales
+- [ ] Schema.org ScholarlyArticle JSON-LD covers ORCID-only entries
+- [ ] Tomas Ferreira Chase's 2020 SiPM paper visible on `/people/tomas-ferreira-chase` after sync
+- [ ] `content/SYNC.md` documents the three-source model + DOI precedence rule
 
 ### Out of Scope
 
@@ -216,4 +237,4 @@ Previously out of scope, now revisited:
 | Desktop NavLink deliberately has no `focus-visible:ring-*` — inherits browser UA default | BTN-02 governs color where ring exists, not presence everywhere; browser default is a valid choice | — Pending — re-evaluate on live site |
 
 ---
-*Last updated: 2026-04-20 — v1.2 shipped (Aesthetic Polish: typography, spacing, media, interactive, docs)*
+*Last updated: 2026-04-20 — v1.3 started (ORCID Sync & Cross-Source Dedup)*

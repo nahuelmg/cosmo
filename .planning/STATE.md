@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-04-20 after v1.2 milestone)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** Planning next milestone (v1.3) — open candidates: carried-forward v1.1 code cleanup, v1.0 production re-measurement campaign, or new capability milestone.
+**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Scope locked: ORCID works API as 3rd source, DOI-based cross-source dedup (InspireHEP > ORCID > arXiv precedence), filter to journal-article + conference-paper, third source badge/pill.
 
 ## Current Position
 
-Phase: — (between milestones)
+Phase: Not started (defining requirements)
 Plan: —
-Status: v1.2 shipped & archived. Ready for `/gsd:new-milestone`.
-Last activity: 2026-04-20 — v1.2 Aesthetic Polish milestone complete: 13 plans across 3 phases, 26/26 requirements, 45 static routes preserved, `pnpm axe` 0 violations.
+Status: Defining requirements for v1.3
+Last activity: 2026-04-20 — v1.3 milestone started. Trigger: Tomas Ferreira Chase's 2020 SiPM paper (`10.1016/j.nima.2020.164490`) visible on ORCID but invisible to InspireHEP and arXiv, so absent from `/publications`.
 
 ## Shipped Milestones
 
@@ -49,6 +49,6 @@ Last activity: 2026-04-20 — v1.2 Aesthetic Polish milestone complete: 13 plans
 
 ## Session Continuity
 
-Last session: 2026-04-20 — v1.2 milestone completed: audit (`v1.2-MILESTONE-AUDIT.md` archived) + MILESTONES.md entry + PROJECT.md evolved + ROADMAP.md collapsed + REQUIREMENTS.md archived & deleted + git tag.
-Stopped at: Between milestones — `/gsd:new-milestone` ready.
+Last session: 2026-04-20 — v1.3 milestone started via `/gsd:new-milestone`. Scope locked to ORCID-focused: 3rd source, DOI dedup, filter pill. Next step: research decision → REQUIREMENTS.md → ROADMAP.md.
+Stopped at: After milestone scoping, before research decision.
 Resume file: None
