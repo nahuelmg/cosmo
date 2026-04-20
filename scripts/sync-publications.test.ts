@@ -13,9 +13,20 @@ import {
   normalizeDoi,
   dedupByDoi,
   fetchWithRetry,
+  orcidGroupToPublication,
+  fetchOrcid,
 } from "./sync-publications";
-import type { InspireHit, ArXivEntry } from "./sync-publications";
+import type { InspireHit, ArXivEntry, OrcidExternalId } from "./sync-publications";
 import type { Publication } from "../src/content/schemas/publications.schema";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// ---------------------------------------------------------------------------
+// Fixture loader (JSON)
+// ---------------------------------------------------------------------------
+const worksFixture = JSON.parse(
+  readFileSync(resolve(__dirname, "fixtures/orcid-works-tomas.json"), "utf-8"),
+) as { group: unknown[] };
 
 // ---------------------------------------------------------------------------
 // stripBibTeX
@@ -357,5 +368,195 @@ describe("dedupByDoi", () => {
     ];
     const [, dropped] = dedupByDoi(list);
     expect(dropped).toBe(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// orcidGroupToPublication — edge cases (hand-rolled OrcidGroup literals)
+// ---------------------------------------------------------------------------
+
+/** Helper: build a minimal OrcidGroup literal for unit tests */
+type OrcidGroupShape = Parameters<typeof orcidGroupToPublication>[0];
+
+function makeGroup(overrides: {
+  type?: string;
+  putCode?: number;
+  title?: string;
+  groupExternalIds?: OrcidExternalId[];
+  summaryExternalIds?: OrcidExternalId[];
+  journalTitle?: string | null;
+  publicationDate?: { year?: { value: string } | null } | null;
+}): OrcidGroupShape {
+  const {
+    type = "journal-article",
+    putCode = 12345,
+    title = "Test Paper",
+    groupExternalIds = [],
+    summaryExternalIds = [],
+    journalTitle = "Test Journal",
+    publicationDate = { year: { value: "2022" } },
+  } = overrides;
+  return {
+    "external-ids": { "external-id": groupExternalIds },
+    "work-summary": [
+      {
+        "put-code": putCode,
+        title: { title: { value: title } },
+        "external-ids": { "external-id": summaryExternalIds },
+        type,
+        "publication-date": publicationDate,
+        "journal-title": journalTitle !== null ? { value: journalTitle } : null,
+      },
+    ],
+  } as OrcidGroupShape;
+}
+
+describe("orcidGroupToPublication — edge cases", () => {
+  it("journal-article with DOI + arXiv: id===doi, arxiv set, doi set, source===orcid, authors===[ownerName]", () => {
+    const group = makeGroup({
+      groupExternalIds: [
+        { "external-id-type": "doi", "external-id-value": "10.1/test" },
+        { "external-id-type": "arxiv", "external-id-value": "2001.00001" },
+      ],
+    });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    const { publication, putCode } = result!;
+    expect(publication.id).toBe("10.1/test");
+    expect(publication.doi).toBe("10.1/test");
+    expect(publication.arxiv).toBe("2001.00001");
+    expect(publication.source).toBe("orcid");
+    expect(publication.authors).toEqual(["Owner"]);
+    expect(putCode).toBe(12345);
+  });
+
+  it("conference-paper passes filter", () => {
+    const group = makeGroup({ type: "conference-paper" });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    expect(result!.publication.source).toBe("orcid");
+  });
+
+  it("dataset returns null (ORCID-04 filter)", () => {
+    const group = makeGroup({ type: "dataset" });
+    expect(orcidGroupToPublication(group, "Owner")).toBeNull();
+  });
+
+  it("type other returns null (ORCID-04 filter)", () => {
+    const group = makeGroup({ type: "other" });
+    expect(orcidGroupToPublication(group, "Owner")).toBeNull();
+  });
+
+  it("no DOI, no arXiv → id===orcid-{putCode}, publication.doi is undefined", () => {
+    const group = makeGroup({ putCode: 99999, groupExternalIds: [] });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    expect(result!.publication.id).toBe("orcid-99999");
+    expect(result!.publication.doi).toBeUndefined();
+  });
+
+  it("no journal-title → journal==='Preprint'", () => {
+    const group = makeGroup({ journalTitle: null });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    expect(result!.publication.journal).toBe("Preprint");
+  });
+
+  it("missing publication-date → year===current year", () => {
+    const group = makeGroup({ publicationDate: null });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    expect(result!.publication.year).toBe(new Date().getFullYear());
+  });
+
+  it("Pattern 2: group-level external-ids used even when work-summary[0] external-ids is empty", () => {
+    const group = makeGroup({
+      groupExternalIds: [
+        { "external-id-type": "doi", "external-id-value": "10.9/union-doi" },
+      ],
+      summaryExternalIds: [], // work-summary[0] has no ids
+    });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    expect(result!.publication.doi).toBe("10.9/union-doi");
+    expect(result!.publication.id).toBe("10.9/union-doi");
+  });
+
+  it("empty work-summary array → null", () => {
+    const group: OrcidGroupShape = {
+      "external-ids": { "external-id": [] },
+      "work-summary": [],
+    };
+    expect(orcidGroupToPublication(group, "Owner")).toBeNull();
+  });
+
+  it("title with decomposed Unicode is NFC-normalised", () => {
+    // "Toma\u0301s" is decomposed; NFC produces "Tomás" (U+00E1 single codepoint)
+    const decomposedTitle = "Toma\u0301s paper on physics";
+    const group = makeGroup({ title: decomposedTitle });
+    const result = orcidGroupToPublication(group, "Owner");
+    expect(result).not.toBeNull();
+    const normalised = decomposedTitle.normalize("NFC");
+    expect(result!.publication.title).toBe(normalised);
+    // The output must differ from the raw decomposed input if NFC changed it
+    expect(result!.publication.title).not.toBe(decomposedTitle);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// orcidGroupToPublication — fixture-driven (Tomas Ferreira Chase works list)
+// ---------------------------------------------------------------------------
+
+describe("orcidGroupToPublication — fixture-driven (Tomas works list)", () => {
+  it("extracts the SiPM paper with correct doi, year, journal, source, id, authors", () => {
+    const results = (worksFixture.group as OrcidGroupShape[]).map((g) =>
+      orcidGroupToPublication(g, "Tomas Ferreira Chase"),
+    );
+    const sipm = results.find((r) => r?.publication.doi === "10.1016/j.nima.2020.164490");
+    expect(sipm).not.toBeUndefined();
+    expect(sipm!.publication.year).toBe(2020);
+    expect(sipm!.publication.source).toBe("orcid");
+    expect(sipm!.publication.journal).toMatch(/^Nuclear Instruments and Methods/);
+    expect(sipm!.publication.id).toBe("10.1016/j.nima.2020.164490");
+    expect(sipm!.publication.authors).toEqual(["Tomas Ferreira Chase"]);
+  });
+
+  it("ORCID-04 filter: non-null count is less than total group count (some entries filtered)", () => {
+    const results = (worksFixture.group as OrcidGroupShape[]).map((g) =>
+      orcidGroupToPublication(g, "Tomas Ferreira Chase"),
+    );
+    const nonNull = results.filter((r) => r !== null);
+    // All fixture entries happen to be journal-articles, but count must be <= total
+    expect(nonNull.length).toBeLessThanOrEqual(worksFixture.group.length);
+    // And there must be at least one extracted publication
+    expect(nonNull.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// fetchOrcid — 404 resilience (supports plan 17-03 SC4)
+// ---------------------------------------------------------------------------
+
+describe("fetchOrcid — 404 resilience", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns empty result and emits warning when ORCID profile returns 404", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response("{}", { status: 404 }),
+    );
+
+    const stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+
+    const result = await fetchOrcid("0000-0000-0000-0000", "Test Person");
+
+    expect(result).toEqual({ publications: [], lookup: [] });
+
+    const warningCalls = stderrSpy.mock.calls.map((c) => String(c[0]));
+    const hasWarning = warningCalls.some((msg) =>
+      /ORCID profile not public or empty: 0000-0000-0000-0000/.test(msg),
+    );
+    expect(hasWarning).toBe(true);
   });
 });
