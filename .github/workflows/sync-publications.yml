@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # CI-01: no --no-* flags passed → InspireHEP + arXiv + ORCID all run by default.
+      # To skip a source in a workflow_dispatch run, add --no-inspire / --no-arxiv / --no-orcid.
+      # ORCID is a Phase 16 stub returning []; Phase 17 wires the real ORCID fetch.
       - name: Run sync script
         run: |
           pnpm sync-publications > /tmp/sync-stdout.txt 2>/tmp/sync-stderr.txt
