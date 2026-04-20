@@ -69,6 +69,7 @@
       "all": "Todos",
       "inspirehep": "InspireHEP",
       "arxiv": "arXiv",
+      "orcid": "ORCID",
       "manual": "Manual"
     },
     "updatedAt": "Actualizado el {date}",

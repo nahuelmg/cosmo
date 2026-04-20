@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 
-export type SourceFilterValue = 'all' | 'inspirehep' | 'arxiv' | 'manual';
+export type SourceFilterValue = 'all' | 'inspirehep' | 'arxiv' | 'orcid' | 'manual';
 
 interface SourceFilterProps {
   value: SourceFilterValue;
@@ -16,6 +16,7 @@ export function SourceFilter({ value, onChange }: SourceFilterProps) {
     { key: 'all', label: t('filter.all') },
     { key: 'inspirehep', label: t('filter.inspirehep') },
     { key: 'arxiv', label: t('filter.arxiv') },
+    { key: 'orcid', label: t('filter.orcid') },
     { key: 'manual', label: t('filter.manual') },
   ];
 
