@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 **Core value:** A credible, professional academic presence where group members can update content (people, publications, journal club, outreach) without touching code.
-**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phase 16: Schema & Sync Infrastructure.
+**Current focus:** v1.3 — ORCID Sync & Cross-Source Dedup. Phase 16 complete; Phase 17 (ORCID Fetcher) is next.
 
 ## Current Position
 
-Phase: 16 of 19 (16-schema-sync-infrastructure)
-Plan: 03 of N (sync-pipeline complete)
-Status: In progress
-Last activity: 2026-04-20 — Completed 16-03-PLAN.md (sync pipeline wired)
+Phase: 16 complete → 17 next (ORCID Fetcher)
+Plan: —
+Status: Ready for `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`
+Last activity: 2026-04-20 — Phase 16 verified (5/5 must-haves passed). 14 requirements (SCHEMA-01..04, DEDUP-01..05, CLI-01..04, CI-01) marked Complete.
 
-Progress: [██░░░░░░░░] ~12% (v1.3 — Phase 16 plans 01+02+03 complete)
+Progress: [██░░░░░░░░] 25% (v1.3 — 1/4 phases complete)
 
 ## Shipped Milestones
 
@@ -45,6 +45,6 @@ Progress: [██░░░░░░░░] ~12% (v1.3 — Phase 16 plans 01+02+0
 
 ## Session Continuity
 
-Last session: 2026-04-20T17:04:11Z — Executed 16-03-sync-pipeline-PLAN.md. Three-source sync pipeline wired: --no-orcid flag, fetchOrcid stub, normalizeDoi + dedupByDoi, rewired main() pipeline, 9 new tests; all gates green.
-Stopped at: Completed 16-03-SUMMARY.md.
+Last session: 2026-04-20 — Phase 16 executed end-to-end. Waves: (16-01, 16-02) parallel, then 16-03. Verifier passed 5/5 must-haves. 14 requirements marked Complete.
+Stopped at: Phase 16 sealed; awaiting `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`.
 Resume file: None

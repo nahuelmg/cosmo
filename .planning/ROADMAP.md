@@ -116,9 +116,9 @@ See `.planning/milestones/v1.2-ROADMAP.md` for full phase details.
 **Plans:** 3 plans
 
 Plans:
-- [ ] 16-01-schema-extension-PLAN.md — Extend Zod schema for `"orcid"` source + `orcid`/`deduped` counts, regenerate JSON schema, patch `content/publications.json`
-- [ ] 16-02-ci-workflow-audit-PLAN.md — Add CI-01 traceability comment to `.github/workflows/sync-publications.yml`
-- [ ] 16-03-sync-pipeline-PLAN.md — `--no-orcid` flag, `fetchOrcid` stub, `normalizeDoi` + `dedupByDoi`, pipeline rewire, progress/summary/_meta updates, Vitest coverage
+- [x] 16-01-schema-extension-PLAN.md — Extend Zod schema for `"orcid"` source + `orcid`/`deduped` counts, regenerate JSON schema, patch `content/publications.json`
+- [x] 16-02-ci-workflow-audit-PLAN.md — Add CI-01 traceability comment to `.github/workflows/sync-publications.yml`
+- [x] 16-03-sync-pipeline-PLAN.md — `--no-orcid` flag, `fetchOrcid` stub, `normalizeDoi` + `dedupByDoi`, pipeline rewire, progress/summary/_meta updates, Vitest coverage
 
 ### Phase 17: ORCID Fetcher
 
@@ -181,7 +181,7 @@ Plans:
 | 13. Design Tokens & Layout Rhythm | v1.2 | 4/4 | Complete | 2026-04-19 |
 | 14. Media Sizing | v1.2 | 3/3 | Complete | 2026-04-20 |
 | 15. Interactive Polish & Documentation | v1.2 | 6/6 | Complete | 2026-04-20 |
-| 16. Schema & Sync Infrastructure | v1.3 | — | Not started | — |
+| 16. Schema & Sync Infrastructure | v1.3 | 3/3 | Complete | 2026-04-20 |
 | 17. ORCID Fetcher | v1.3 | — | Not started | — |
 | 18. Display Layer | v1.3 | — | Not started | — |
 | 19. Docs & Verification | v1.3 | — | Not started | — |

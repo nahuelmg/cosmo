@@ -20,26 +20,26 @@
 
 ### Cross-Source DOI Dedup
 
-- [ ] **DEDUP-01**: Cross-source dedup runs after intra-source dedup (arXiv-ID), keyed on DOI
-- [ ] **DEDUP-02**: When the same DOI appears in more than one source, precedence is **InspireHEP > ORCID > arXiv**; the winning entry's metadata is kept, losing entries are dropped
-- [ ] **DEDUP-03**: DOIs are normalised before comparison: lowercased, any `https://doi.org/` or `http://dx.doi.org/` prefix stripped, leading/trailing whitespace trimmed
-- [ ] **DEDUP-04**: Entries without a DOI fall through to the existing arXiv-ID dedup pass; entries with neither DOI nor arXiv ID use the `id` field for dedup
-- [ ] **DEDUP-05**: `_meta.counts` gains a `deduped` field reporting how many duplicate entries were dropped by cross-source DOI dedup in the current run
+- [x] **DEDUP-01**: Cross-source dedup runs after intra-source dedup (arXiv-ID), keyed on DOI
+- [x] **DEDUP-02**: When the same DOI appears in more than one source, precedence is **InspireHEP > ORCID > arXiv**; the winning entry's metadata is kept, losing entries are dropped
+- [x] **DEDUP-03**: DOIs are normalised before comparison: lowercased, any `https://doi.org/` or `http://dx.doi.org/` prefix stripped, leading/trailing whitespace trimmed
+- [x] **DEDUP-04**: Entries without a DOI fall through to the existing arXiv-ID dedup pass; entries with neither DOI nor arXiv ID use the `id` field for dedup
+- [x] **DEDUP-05**: `_meta.counts` gains a `deduped` field reporting how many duplicate entries were dropped by cross-source DOI dedup in the current run
 
 ### Schema & _meta
 
-- [ ] **SCHEMA-01**: `PublicationSchema.source` enum extended from `"manual" | "inspirehep" | "arxiv"` to `"manual" | "inspirehep" | "arxiv" | "orcid"`; existing v1.1 `content/publications.json` entries parse unchanged
-- [ ] **SCHEMA-02**: `content/publications.schema.json` regenerated so VS Code IntelliSense reflects the new enum value
-- [ ] **SCHEMA-03**: `PublicationsMeta.sources` accepts `"orcid"` as a valid value (extend `sourcesSchema` in `src/content/schemas/publications.schema.ts`)
-- [ ] **SCHEMA-04**: `PublicationsMeta.counts` includes an `orcid` field alongside `inspirehep`, `arxiv`, `manual`
+- [x] **SCHEMA-01**: `PublicationSchema.source` enum extended from `"manual" | "inspirehep" | "arxiv"` to `"manual" | "inspirehep" | "arxiv" | "orcid"`; existing v1.1 `content/publications.json` entries parse unchanged
+- [x] **SCHEMA-02**: `content/publications.schema.json` regenerated so VS Code IntelliSense reflects the new enum value
+- [x] **SCHEMA-03**: `PublicationsMeta.sources` accepts `"orcid"` as a valid value (extend `sourcesSchema` in `src/content/schemas/publications.schema.ts`)
+- [x] **SCHEMA-04**: `PublicationsMeta.counts` includes an `orcid` field alongside `inspirehep`, `arxiv`, `manual`
 
 ### CLI & CI
 
-- [ ] **CLI-01**: `pnpm sync-publications` accepts a `--no-orcid` flag that skips ORCID fetches entirely, mirroring `--no-inspire` and `--no-arxiv`
-- [ ] **CLI-02**: All-sources-skipped guard extended: if `--no-arxiv --no-inspire --no-orcid` are all passed, the script exits 1 with the existing "No sources enabled" error
-- [ ] **CLI-03**: Per-member progress line includes an ORCID cell: `{slug} — InspireHEP: N, arXiv: N, ORCID: N`
-- [ ] **CLI-04**: SYNC-15 final summary line extended to include the `deduped` count from DEDUP-05 (e.g. `Sync complete: 321 publications (3 added, 0 removed, 318 unchanged, 7 deduped, 0 warnings)`)
-- [ ] **CI-01**: `.github/workflows/sync-publications.yml` runs all three sources by default; `jq -cS '.publications'` payload diff-guard continues to suppress spurious commits
+- [x] **CLI-01**: `pnpm sync-publications` accepts a `--no-orcid` flag that skips ORCID fetches entirely, mirroring `--no-inspire` and `--no-arxiv`
+- [x] **CLI-02**: All-sources-skipped guard extended: if `--no-arxiv --no-inspire --no-orcid` are all passed, the script exits 1 with the existing "No sources enabled" error
+- [x] **CLI-03**: Per-member progress line includes an ORCID cell: `{slug} — InspireHEP: N, arXiv: N, ORCID: N`
+- [x] **CLI-04**: SYNC-15 final summary line extended to include the `deduped` count from DEDUP-05 (e.g. `Sync complete: 321 publications (3 added, 0 removed, 318 unchanged, 7 deduped, 0 warnings)`)
+- [x] **CI-01**: `.github/workflows/sync-publications.yml` runs all three sources by default; `jq -cS '.publications'` payload diff-guard continues to suppress spurious commits
 
 ### Display Layer
 
@@ -96,20 +96,20 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SCHEMA-01 | Phase 16 | Pending |
-| SCHEMA-02 | Phase 16 | Pending |
-| SCHEMA-03 | Phase 16 | Pending |
-| SCHEMA-04 | Phase 16 | Pending |
-| DEDUP-01 | Phase 16 | Pending |
-| DEDUP-02 | Phase 16 | Pending |
-| DEDUP-03 | Phase 16 | Pending |
-| DEDUP-04 | Phase 16 | Pending |
-| DEDUP-05 | Phase 16 | Pending |
-| CLI-01 | Phase 16 | Pending |
-| CLI-02 | Phase 16 | Pending |
-| CLI-03 | Phase 16 | Pending |
-| CLI-04 | Phase 16 | Pending |
-| CI-01 | Phase 16 | Pending |
+| SCHEMA-01 | Phase 16 | Complete |
+| SCHEMA-02 | Phase 16 | Complete |
+| SCHEMA-03 | Phase 16 | Complete |
+| SCHEMA-04 | Phase 16 | Complete |
+| DEDUP-01 | Phase 16 | Complete |
+| DEDUP-02 | Phase 16 | Complete |
+| DEDUP-03 | Phase 16 | Complete |
+| DEDUP-04 | Phase 16 | Complete |
+| DEDUP-05 | Phase 16 | Complete |
+| CLI-01 | Phase 16 | Complete |
+| CLI-02 | Phase 16 | Complete |
+| CLI-03 | Phase 16 | Complete |
+| CLI-04 | Phase 16 | Complete |
+| CI-01 | Phase 16 | Complete |
 | ORCID-01 | Phase 17 | Pending |
 | ORCID-02 | Phase 17 | Pending |
 | ORCID-03 | Phase 17 | Pending |
@@ -132,4 +132,4 @@
 
 ---
 *Requirements defined: 2026-04-20*
-*Last updated: 2026-04-20 — traceability populated after roadmap creation*
+*Last updated: 2026-04-20 — Phase 16 complete (SCHEMA-01..04, DEDUP-01..05, CLI-01..04, CI-01 marked Complete)*
