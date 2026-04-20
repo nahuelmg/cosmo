@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 ## Current Position
 
 Phase: 16 of 19 (16-schema-sync-infrastructure)
-Plan: 02 of N (ci-workflow-audit complete)
+Plan: 03 of N (sync-pipeline complete)
 Status: In progress
-Last activity: 2026-04-20 — Completed 16-02-PLAN.md (CI-01 traceability comment)
+Last activity: 2026-04-20 — Completed 16-03-PLAN.md (sync pipeline wired)
 
-Progress: [██░░░░░░░░] ~10% (v1.3 — Phase 16 plans 01+02 complete)
+Progress: [██░░░░░░░░] ~12% (v1.3 — Phase 16 plans 01+02+03 complete)
 
 ## Shipped Milestones
 
@@ -39,9 +39,12 @@ Progress: [██░░░░░░░░] ~10% (v1.3 — Phase 16 plans 01+02 c
 |-------|----------|-----------|
 | 16-01 | orcid and deduped counts are REQUIRED fields in PublicationsMetaSchema | Defensive optionals would mask sync script bugs; the script always writes these values |
 | 16-01 | Schema change + content/publications.json patch bundled in one commit | Avoids validate-content regression window between schema update and data patch |
+| 16-03 | mergePublications refactored to single-arg signature | 3-arg shape would require pre-concat anyway for DOI dedup; single-arg removes vestigial parameters |
+| 16-03 | DOI dedup runs before final sort | Sort scrambles source-priority order; dedup must preserve first-seen-wins before ordering is lost |
+| 16-03 | No empty-ORCID warning in Phase 16 stub | Stub always returns []; Phase 17 handles real no-results warnings contextually |
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Executed 16-01-schema-extension-PLAN.md. Zod schema extended with orcid source + deduped counts; JSON Schema regenerated; pnpm build passes cleanly.
-Stopped at: Completed 16-01-SUMMARY.md.
+Last session: 2026-04-20T17:04:11Z — Executed 16-03-sync-pipeline-PLAN.md. Three-source sync pipeline wired: --no-orcid flag, fetchOrcid stub, normalizeDoi + dedupByDoi, rewired main() pipeline, 9 new tests; all gates green.
+Stopped at: Completed 16-03-SUMMARY.md.
 Resume file: None
