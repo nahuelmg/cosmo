@@ -17,17 +17,17 @@ must_haves:
     - "Per-work detail fetches use runBatched (≤5 in flight, 2s pause) — ORCID-07"
     - "Running pnpm sync-publications writes content/publications.json with ≥1 entry where source === 'orcid'"
     - "Tomas Ferreira Chase's SiPM paper (DOI 10.1016/j.nima.2020.164490) is in content/publications.json with source: 'orcid', full 11-author list, year 2020, correct journal"
-    - "Running pnpm sync-publications --no-orcid produces output with no 'orcid' in _meta.sources and no source:'orcid' entries"
-    - "ORCID 404 for a person does not abort the sync — warning logged, other sources still write"
+    - "Running pnpm sync-publications --no-orcid produces output with no 'orcid' in _meta.sources, zero source:'orcid' entries, and _meta.counts.orcid === 0"
+    - "ORCID 404 resilience is proved by the vitest case added in 17-02 Task 2 (fetchOrcid returns empty + emits warning on 404) — no live mutation of content/people.json"
   artifacts:
     - path: "scripts/sync-publications.ts"
       provides: "fetchOrcidWorkDetail network wrapper, enrichOrcidAuthors pure-ish async pass, main() pipeline wire-in between dedupByDoi and mergePublications"
       contains: "enrichOrcidAuthors"
     - path: "scripts/sync-publications.test.ts"
-      provides: "Vitest suites for enrichOrcidAuthors (author merge, placeholder fallback, non-ORCID passthrough, fixture-driven SiPM 11-author case)"
+      provides: "Vitest suites for enrichOrcidAuthors (author merge, placeholder fallback, non-ORCID passthrough, fixture-driven SiPM 11-author case). The fetchOrcid 404 unit test lives in this file but is added by plan 17-02 Task 2."
       contains: "enrichOrcidAuthors"
     - path: "content/publications.json"
-      provides: "Post-Phase-17 snapshot including the SiPM paper from ORCID and real _meta.counts.orcid / _meta.counts.deduped values"
+      provides: "Post-Phase-17 snapshot including the SiPM paper from ORCID and real _meta.counts.orcid / _meta.counts.deduped values; _meta.sources excludes 'orcid' when --no-orcid is used and _meta.counts.orcid is 0"
       contains: '"source": "orcid"'
   key_links:
     - from: "scripts/sync-publications.ts:enrichOrcidAuthors"
@@ -53,8 +53,9 @@ list, and re-insert the enriched entry into the pipeline before the final sort.
 
 Then run the full three-source sync against the live API, verify that Tomas's SiPM
 paper appears in `content/publications.json` with `source: "orcid"` and 11 authors,
-verify `--no-orcid` produces a pre-v1.3-identical output shape, and commit the
-updated `content/publications.json`.
+verify `--no-orcid` produces a pre-v1.3-compatible output shape via three concrete jq
+assertions (no snapshot backup + diff — upstream drift in InspireHEP/arXiv indexing
+would give that a false positive), and commit the updated `content/publications.json`.
 
 Purpose: Deliver ORCID-06 (per-work detail fetch for ORCID-only entries) and all
 four Phase 17 Success Criteria. This is the last functional plan in Phase 17 — after
@@ -352,32 +353,36 @@ Output:
     Run the full three-source sync against the live API, verify the four Phase 17
     success criteria physically hold, and commit the resulting `content/publications.json`.
 
-    **Step 3a: Pre-flight verification of the --no-orcid path (Success Criterion 3)**
-
-    Make a quick backup of the current `content/publications.json`:
-    ```bash
-    cp content/publications.json /tmp/pubs-pre-phase17.json
-    ```
+    **Step 3a: Verify the --no-orcid path (Success Criterion 3)**
 
     Run `pnpm sync-publications --no-orcid` and wait for it to finish.
 
-    Inspect the resulting `content/publications.json`:
-    - Confirm `_meta.sources` does NOT contain `"orcid"` — expected
-      `["inspirehep","arxiv"]` (or whichever subset matches the current flag state).
-    - Confirm there are zero entries with `source: "orcid"` in `publications[]`:
-      ```bash
-      jq '[.publications[] | select(.source == "orcid")] | length' content/publications.json
-      ```
-      must print `0`.
-    - Confirm `_meta.counts.orcid` is `0`.
-    - Confirm the publication ID set is IDENTICAL to `/tmp/pubs-pre-phase17.json`:
-      ```bash
-      diff <(jq -S '.publications | map(.id) | sort' content/publications.json) \
-           <(jq -S '.publications | map(.id) | sort' /tmp/pubs-pre-phase17.json)
-      ```
-      must produce no output (empty diff).
+    Then run three concrete jq assertions against the resulting `content/publications.json`:
 
-    If anything fails here, STOP and diagnose before proceeding — Success Criterion 3
+    1. `_meta.sources` must NOT include `"orcid"`:
+       ```bash
+       jq '._meta.sources | any(. == "orcid")' content/publications.json
+       ```
+       must print `false`.
+
+    2. Zero `publications[]` entries with `source: "orcid"`:
+       ```bash
+       jq '[.publications[] | select(.source == "orcid")] | length' content/publications.json
+       ```
+       must print `0`.
+
+    3. `_meta.counts.orcid` is zero:
+       ```bash
+       jq '._meta.counts.orcid' content/publications.json
+       ```
+       must print `0`.
+
+    These three assertions are exactly what ROADMAP SC3 requires. Do NOT back up
+    `content/publications.json` and diff ID sets against a pre-phase snapshot — upstream
+    drift in InspireHEP/arXiv indexing between the Phase 16 snapshot and this run would
+    fail an ID-set diff even when the ORCID code path is silent.
+
+    If any of the three assertions fails, STOP and diagnose before proceeding — SC3
     is blocking.
 
     **Step 3b: Full three-source sync (Success Criteria 1, 2)**
@@ -416,28 +421,31 @@ Output:
 
     **Step 3c: 404 resilience (Success Criterion 4)**
 
-    Pick one person in `content/people.json` and temporarily change their `orcid_id`
-    to `"0000-0000-0000-0000"` (a guaranteed-404 ORCID). Do NOT commit this change.
+    404 resilience is verified by `scripts/sync-publications.test.ts` case
+    `fetchOrcid returns empty on 404` (added in plan 17-02 Task 2, describe block 3).
+    That test mocks `fetch` to return HTTP 404, calls `fetchOrcid` directly, and asserts
+    (a) the function returns the empty shape without throwing, and (b) a warning
+    matching `/ORCID profile not public or empty: .../` is written to stderr.
 
-    Run `pnpm sync-publications --dry-run` (`--dry-run` keeps the on-disk JSON clean).
+    No live mutation of `content/people.json` is required. Do NOT inject a fake ORCID
+    id into `content/people.json` — any intermediate failure would leave the file
+    corrupted, and the fake id `0000-0000-0000-0000` satisfies the existing orcidId
+    regex (`/^\d{4}-\d{4}-\d{4}-(\d{4}|\d{3}X)$/`) so `pnpm validate-content` would not
+    catch it.
 
-    Confirm:
-    - The sync completes successfully (exit 0, no fatal error).
-    - stderr contains: `Warning: ORCID profile not public or empty: 0000-0000-0000-0000`
-    - The per-member progress line for that person shows `ORCID: 0` (not an error).
-    - The `Sync complete (dry-run): ...` summary line is emitted.
-
-    Revert the `content/people.json` change immediately (restore the original
-    `orcid_id`). Re-run the full `pnpm sync-publications` one more time to regenerate
-    the real publications.json (in case the 404 test subtly affected it — it shouldn't
-    have in dry-run mode, but regenerate for safety).
+    To confirm SC4 here, just re-run the existing vitest suite (gate below) and
+    confirm the 404 test passes:
+    ```bash
+    pnpm vitest run scripts/sync-publications.test.ts -t 'ORCID profile not public or empty'
+    ```
+    must exit 0 with the 17-02 404 case green.
 
     **Step 3d: Gates**
 
     Run in order:
     - `pnpm validate-content` — must pass (Zod validation of the new publications.json).
     - `pnpm tsc --noEmit` — zero errors.
-    - `pnpm vitest run` — entire test suite green.
+    - `pnpm vitest run` — entire test suite green (includes the 17-02 fetchOrcid 404 case).
     - `pnpm build` — 45 static routes (or whatever the current count is); no errors.
 
     If any gate fails, STOP and fix before committing. Do NOT commit a broken
@@ -462,9 +470,9 @@ Output:
     `content/publications.json` goes in the SAME commit as the code + tests so the
     snapshot and the code that produced it move together atomically.
 
-    **Do NOT** skip the `--no-orcid` verification step — it is Success Criterion 3 and
-    it's easy to get wrong (e.g., if a code path accidentally writes `"orcid"` to
-    `_meta.sources` when `runOrcid` is false, the test fails loudly here).
+    **Do NOT** skip the Step 3a --no-orcid jq checks — they are Success Criterion 3 and
+    easy to get wrong (e.g., if a code path accidentally writes `"orcid"` to
+    `_meta.sources` when `runOrcid` is false, the first assertion fails loudly).
   </action>
   <verify>
     All four Success Criteria physically hold:
@@ -475,12 +483,16 @@ Output:
     2. `jq '.publications[] | select(.doi == "10.1016/j.nima.2020.164490") | {source, year, authorsCount: (.authors | length), journal: (.journal[:30])}' content/publications.json`
        prints `{"source":"orcid","year":2020,"authorsCount":11,"journal":"Nuclear Instruments and Methods"}`.
 
-    3. `pnpm sync-publications --no-orcid` (quick re-run) + `jq '._meta.sources' content/publications.json`
-       does NOT contain `"orcid"` AND `jq '[.publications[] | select(.source == "orcid")] | length' content/publications.json`
-       returns `0`. After verification, re-run full `pnpm sync-publications` to restore
-       the three-source output.
+    3. After running `pnpm sync-publications --no-orcid`:
+       - `jq '._meta.sources | any(. == "orcid")' content/publications.json` → `false`
+       - `jq '[.publications[] | select(.source == "orcid")] | length' content/publications.json` → `0`
+       - `jq '._meta.counts.orcid' content/publications.json` → `0`
 
-    4. Temporary-404 dry-run completed with a warning and no abort.
+       After verification, re-run full `pnpm sync-publications` to restore the
+       three-source output before committing.
+
+    4. `pnpm vitest run scripts/sync-publications.test.ts -t 'ORCID profile not public or empty'`
+       exits 0 (the 17-02 Task 2 describe-block-3 case proves the 404 contract).
 
     All build gates pass:
     - `pnpm validate-content`
@@ -495,9 +507,9 @@ Output:
   </verify>
   <done>
     `content/publications.json` contains real ORCID data including Tomas's SiPM paper
-    with `source: "orcid"` and 11 authors; `--no-orcid` produces pre-v1.3-equivalent
-    output; ORCID 404s are non-fatal; all build gates pass; the updated JSON is
-    committed atomically with the code that produced it.
+    with `source: "orcid"` and 11 authors; `--no-orcid` passes the three jq SC3 gates;
+    the 404 resilience contract is locked in by the 17-02 vitest case; all build gates
+    pass; the updated JSON is committed atomically with the code that produced it.
   </done>
 </task>
 
@@ -509,8 +521,12 @@ End-of-plan gates (all must pass before declaring Phase 17 complete):
 1. **SC1 — ORCID entries present:** `jq '[.publications[] | select(.source == "orcid")] | length' content/publications.json` ≥ 1
 2. **SC2 — SiPM paper live:** `jq '.publications[] | select(.doi == "10.1016/j.nima.2020.164490")' content/publications.json` shows
    source: "orcid", year: 2020, authors.length = 11, journal startsWith "Nuclear Instruments and Methods"
-3. **SC3 — --no-orcid parity:** ran `--no-orcid`, _meta.sources excludes "orcid", zero source:"orcid" entries; publication ID set equals pre-Phase-17 snapshot
-4. **SC4 — 404 resilience:** dry-run with fake ORCID produced a warning and no abort
+3. **SC3 — --no-orcid parity via three jq assertions:** after running `--no-orcid`:
+   `jq '._meta.sources | any(. == "orcid")'` → `false`;
+   `jq '[.publications[] | select(.source == "orcid")] | length'` → `0`;
+   `jq '._meta.counts.orcid'` → `0`.
+4. **SC4 — 404 resilience via vitest:** `pnpm vitest run scripts/sync-publications.test.ts -t 'ORCID profile not public or empty'` green
+   (case added by plan 17-02 Task 2 describe block 3 — no live mutation of content/people.json).
 5. **Typechecks:** `pnpm tsc --noEmit` green
 6. **Tests:** `pnpm vitest run` green; count rose by ~7 vs end of 17-02
 7. **Content validation:** `pnpm validate-content` green
@@ -526,11 +542,13 @@ All four Phase 17 ROADMAP success criteria are physically satisfied:
 2. Tomas Ferreira Chase's SiPM paper (DOI `10.1016/j.nima.2020.164490`) appears with
    `source: "orcid"`, full 11-contributor author list, year 2020, and the correct
    Nuclear Instruments journal string.
-3. Running `pnpm sync-publications --no-orcid` produces output with no `"orcid"` in
-   `_meta.sources` and zero `source: "orcid"` entries — structurally identical to
-   pre-v1.3 sync.
-4. A 404 from ORCID for one person emits a warning and does not abort the sync;
-   `content/publications.json` is still written with the remaining sources' data.
+3. Running `pnpm sync-publications --no-orcid` produces output that satisfies three
+   jq assertions: no `"orcid"` in `_meta.sources`, zero `source: "orcid"` entries, and
+   `_meta.counts.orcid === 0`. (No pre-phase snapshot ID-set diff — that would false-
+   positive on upstream InspireHEP/arXiv drift.)
+4. A 404 from ORCID emits a warning and returns an empty result (verified by vitest
+   case in `scripts/sync-publications.test.ts` that mocks `globalThis.fetch` → 404 and
+   asserts the warning + empty return shape). No `content/people.json` mutation used.
 
 All seven ORCID requirements (ORCID-01 through ORCID-07) are complete and exercised
 by live API calls in Task 3.
@@ -544,8 +562,9 @@ summarising:
 - Test coverage delta (N new cases)
 - Live sync statistics: N ORCID entries added, M deduped, W warnings
 - SiPM paper confirmation (line/index in content/publications.json, author list check)
-- Any deviations (e.g., if a person's 404 surfaced during the real sync and needed
-  handling)
+- SC3 jq assertion outputs (all three should be `false`/`0`/`0`)
+- SC4 confirmation (which vitest case proved it and its pass output)
+- Any deviations
 - Final state: Phase 17 is DONE; all 7 ORCID requirements complete; ready for
   `/gsd:verify-phase 17` and then Phase 18 (Display Layer).
 

@@ -15,18 +15,18 @@ must_haves:
     - "Works are filtered to type ∈ {journal-article, conference-paper} (ORCID-04)"
     - "DOI and arXiv IDs are extracted from GROUP-level external-ids (union), not from work-summary[0] (Pattern 2)"
     - "HTTP 404 produces warning 'ORCID profile not public or empty: {orcid}' and returns an empty result set (ORCID-03)"
+    - "HTTP 200 with empty group[] is silent — no warning (Pitfall 7 / STATE.md 16-03 contextual warnings)"
     - "id preference is DOI → arXiv → orcid-{put-code} (ORCID-05)"
     - "journal-title falls back to 'Preprint'; missing publication-date falls back to current year"
     - "syncMember stores the put-code lookup alongside orcidPubs so 17-03 can enrich author lists"
     - "orcidPubs authors are seeded with [person.name] in syncMember (placeholder until 17-03 enrichment)"
     - "Per-member progress line shows the real ORCID count once the stub is replaced"
-    - "runBatched is reused for ORCID fetches (ORCID-07 — ≤5 in flight, 2s pause)"
   artifacts:
     - path: "scripts/sync-publications.ts"
       provides: "fetchOrcid real implementation, orcidGroupToPublication extractor, OrcidWorksResponse/OrcidGroup/OrcidWorkSummary/OrcidExternalId type interfaces, OrcidLookupEntry type, extended MemberSyncResult with orcidLookup"
       contains: "https://pub.orcid.org/v3.0/"
     - path: "scripts/sync-publications.test.ts"
-      provides: "Vitest suites for orcidGroupToPublication extraction edge cases + fetchOrcid end-to-end against Tomas fixture"
+      provides: "Vitest suites for orcidGroupToPublication extraction against Tomas fixture (no direct fetchOrcid mock)"
       contains: "orcidGroupToPublication"
   key_links:
     - from: "scripts/sync-publications.ts:fetchOrcid"
@@ -150,7 +150,7 @@ Output:
      * authors is seeded with [ownerName] as a placeholder; the caller or a later
      * enrichment pass replaces it with the real contributor list.
      */
-    export function orcidGroupToPublication(
+    function orcidGroupToPublication(
       group: OrcidGroup,
       ownerName: string,
     ): { publication: Publication; putCode: number } | null {
@@ -195,6 +195,10 @@ Output:
       return { publication, putCode };
     }
     ```
+
+    Note: declare `orcidGroupToPublication` WITHOUT the `export` keyword — the
+    single export surface is the trailing `export { ... }` list (matches the
+    Phase 16 pattern used by `fetchInspireHEP`, `fetchArXiv`, etc.).
 
     **Network wrapper (replace the current stub body at ~line 313):**
 
@@ -256,38 +260,35 @@ Output:
     ```typescript
     if (runOrcid) {
       if (person.orcid_id) {
+        // HTTP 200 with empty group: no warning (research Pitfall 7 / STATE.md 16-03 contextual warnings).
+        // The 404 warning is emitted inside fetchOrcid (ORCID-03).
         const { publications, lookup } = await fetchOrcid(person.orcid_id, person.name);
         result.orcidPubs = publications;
         result.orcidLookup = lookup;
-        if (publications.length === 0) {
-          result.warnings.push(`No ORCID results for ${person.name} (${person.orcid_id})`);
-        }
       } else {
         result.warnings.push(`skipping ORCID for ${person.name}: no orcid_id`);
       }
     }
     ```
-    (This replaces the Phase 16 stub call. The empty-results warning matches the pattern
-    established by `fetchInspireHEP` on line 577 and satisfies the 16-03 deferred-warning
-    note. HTTP 200 with `group: []` falls through here silently only when the caller
-    would otherwise never see it — but we DO want a warning for "account exists, no
-    sync IDs" which is exactly this path.)
+    (This replaces the Phase 16 stub call. Do NOT add a warning when `publications.length === 0` —
+    that contradicts Pitfall 7: a public-but-empty profile like Calzetta's
+    `0000-0002-3083-3420` returns HTTP 200 with `group: []` and would otherwise produce
+    noise every sync run. The only ORCID warning path is 404, already handled inside
+    `fetchOrcid`.)
 
-    Wait — re-read Pitfall 7: for a PUBLIC profile with `group: []` (Calzetta's case),
-    ORCID returns HTTP 200. The research recommendation is to warn *contextually* here
-    (distinguish from 404). The code above does produce the "No ORCID results" warning
-    in that case, which is the correct behaviour per STATE.md 16-03 decision
-    ("Phase 17 handles real no-results warnings contextually").
+    **Update the trailing `export { ... }` line at the bottom of the file (line 771)**
+    Add `fetchOrcid` and `orcidGroupToPublication` to the existing `export { ... }` block
+    so downstream tests can import them. The final export line should look like:
 
-    **Update the `export {}` line at the bottom of the file (line 771) to include
-    `orcidGroupToPublication` so the unit tests can import it:**
     ```typescript
-    export { fetchInspireHEP, fetchArXiv, fetchWithRetry, runBatched, xmlParser, BAI_REGEX };
-    // existing line 774 comment block mentions exports — keep it in sync
+    export { fetchInspireHEP, fetchArXiv, fetchWithRetry, fetchOrcid, orcidGroupToPublication, runBatched, xmlParser, BAI_REGEX };
     ```
-    Actually — `orcidGroupToPublication` is already declared with `export function` in
-    the extractor block above, so no change to the trailing `export { ... }` list is
-    needed. Just verify it's exported at declaration.
+
+    (Preserve whatever order the existing file has — just add `fetchOrcid` and
+    `orcidGroupToPublication` alongside the other fetchers. Also ensure the
+    `orcidGroupToPublication` function declaration above has NO `export` keyword
+    so the trailing list is the single export surface for it, matching the
+    Phase 16 pattern.)
 
     **Do NOT touch** `dedupByDoi`, `mergePublications`, `main()`'s pipeline ordering, or
     the `_meta` block — that's 17-03's territory (and most of it is already correct from
@@ -316,8 +317,19 @@ Output:
     `grep -n "orcidLookup: OrcidLookupEntry\[\]" scripts/sync-publications.ts` returns
     a match inside `MemberSyncResult`.
 
-    `grep -n "export function orcidGroupToPublication" scripts/sync-publications.ts`
-    returns exactly one match.
+    `grep -n "export {.*fetchOrcid" scripts/sync-publications.ts` returns exactly one
+    matching line. If zero matches, Task 1 is incomplete — `fetchOrcid` MUST be listed
+    in the trailing `export { ... }` block so Task 2's 404 test can import it.
+
+    `grep -n "export {.*orcidGroupToPublication" scripts/sync-publications.ts` returns
+    exactly one matching line (same trailing export block).
+
+    `grep -n "^function orcidGroupToPublication\|^    function orcidGroupToPublication" scripts/sync-publications.ts`
+    returns the declaration WITHOUT a leading `export` keyword (single export surface is
+    the trailing list).
+
+    `grep -n "No ORCID results for" scripts/sync-publications.ts` returns NO matches
+    (the Pitfall-7-violating warning must not exist in the syncMember ORCID branch).
 
     The stub body at old line 313 (`return [];`) is gone — replaced by the real
     implementation. `grep -c "return \[\];" scripts/sync-publications.ts` returns fewer
@@ -334,23 +346,27 @@ Output:
   <done>
     `fetchOrcid` issues a real HTTP GET against the ORCID v3.0 works endpoint, extracts
     Publications via `orcidGroupToPublication`, emits a put-code side-map, and is wired
-    through `syncMember` into `MemberSyncResult.orcidLookup`. Typechecks and existing
-    tests still green. A live dry-run against Tomas returns non-zero ORCID works.
+    through `syncMember` into `MemberSyncResult.orcidLookup`. Both `fetchOrcid` and
+    `orcidGroupToPublication` are listed in the trailing `export { ... }` block so
+    Task 2 can import them. HTTP 200 with empty group produces no warning (Pitfall 7).
+    Typechecks and existing tests still green. A live dry-run against Tomas returns
+    non-zero ORCID works.
   </done>
 </task>
 
 <task type="auto">
-  <name>Task 2: Vitest coverage for orcidGroupToPublication + fetchOrcid (fixture-driven)</name>
+  <name>Task 2: Vitest coverage for orcidGroupToPublication + fetchOrcid 404 (fixture-driven)</name>
   <files>scripts/sync-publications.test.ts</files>
   <action>
-    Add two new describe blocks to `scripts/sync-publications.test.ts`, grouped at the
+    Add new describe blocks to `scripts/sync-publications.test.ts`, grouped at the
     end of the file after the existing test blocks.
 
-    Update the import at the top of the file to add `orcidGroupToPublication` and
-    `OrcidGroup`/`OrcidExternalId` types. `fetchOrcid` is NOT exported (intentional —
-    it's an internal network wrapper); the fixture-driven test mocks `globalThis.fetch`
-    instead and calls the sync pipeline entry, or exercises `orcidGroupToPublication`
-    directly.
+    Update the import at the top of the file to add `orcidGroupToPublication`,
+    `fetchOrcid`, and `OrcidGroup`/`OrcidExternalId` types. Both `fetchOrcid` and
+    `orcidGroupToPublication` are exported from `scripts/sync-publications.ts` via
+    the trailing `export { ... }` list (see Task 1). This test exercises `fetchOrcid`
+    directly for the 404 case — see Describe block 3 below — and locks in the SC4
+    404 contract that plan 17-03 depends on.
 
     **Describe block 1: `orcidGroupToPublication` pure-function edge cases**
 
@@ -388,19 +404,27 @@ Output:
     - Assert `non-journal-article/conference-paper` groups are dropped (count the
       returned publications, assert the filter held).
 
-    **Do NOT** add a test for `fetchOrcid` itself — mocking `globalThis.fetch` in this
-    phase adds complexity for little value. The `orcidGroupToPublication` fixture test
-    already proves extraction works against real API shapes, and the live dry-run in
-    Task 1's verify step proves the network layer works. A full `fetchOrcid` mock test
-    becomes worthwhile in 17-03 when we're also testing the two-stage flow.
+    **Describe block 3: `fetchOrcid` 404 resilience (supports plan 17-03 SC4)**
+
+    - Use `vi.spyOn(globalThis, 'fetch')` and return `new Response('{}', { status: 404 })`.
+    - Call `fetchOrcid("0000-0000-0000-0000", "Test Person")` directly.
+    - Assert return shape: `{ publications: [], lookup: [] }` (or whatever the agreed
+      empty shape is — match Task 1's actual implementation).
+    - Assert `process.stderr.write` was called with a message matching
+      `/ORCID profile not public or empty: 0000-0000-0000-0000/` (use `vi.spyOn` on
+      `process.stderr.write`, or capture via `vi.fn()` replacement).
+    - Restore spies in `afterEach`.
+
+    This test replaces plan 17-03's live-mutation Step 3c. It is deterministic, offline,
+    and proves the SC4 404 contract without touching `content/people.json`.
 
     **Sanity:** run the new tests with `pnpm vitest run scripts/sync-publications.test.ts`
-    and confirm all pass. Total test count should rise by ~10 (nine extraction cases +
-    one fixture case).
+    and confirm all pass. Total test count should rise by ~11 (nine extraction cases +
+    one fixture case + one 404 case).
   </action>
   <verify>
     `pnpm vitest run scripts/sync-publications.test.ts` passes; test count rose by
-    ~10 vs end of 17-01.
+    ~11 vs end of 17-01.
 
     Every new case shows up in test output with a clear name.
 
@@ -408,12 +432,16 @@ Output:
 
     One of the new cases explicitly asserts group-level external-ids extraction
     (dropping ids from work-summary[0] and proving the group-level union is still read).
+
+    `grep -n 'fetchOrcid returns empty on 404\|ORCID profile not public or empty' scripts/sync-publications.test.ts`
+    returns at least one match inside a test case (proves the 404 contract is locked in).
   </verify>
   <done>
     `orcidGroupToPublication` has unit coverage for ORCID-04 filtering, ORCID-05 id
     preference + journal/year fallbacks, Pattern 2 group-level ID extraction, and
     Unicode handling. A fixture-driven test proves the real Tomas works-list response
-    produces the SiPM paper with the correct DOI, year, journal, and source. Suite is
+    produces the SiPM paper with the correct DOI, year, journal, and source. A mocked
+    `fetchOrcid` 404 test locks in the SC4 contract (empty return + warning). Suite is
     green.
   </done>
 </task>
@@ -423,13 +451,15 @@ Output:
 <verification>
 End-of-plan gates:
 1. `pnpm tsc --noEmit` — zero errors.
-2. `pnpm vitest run scripts/sync-publications.test.ts` — green; test count ≥ 88 (78 from 17-01 + ~10 new).
+2. `pnpm vitest run scripts/sync-publications.test.ts` — green; test count ≥ 89 (78 from 17-01 + ~11 new).
 3. `pnpm sync-publications --dry-run --member tomas-ferreira-chase` — exits 0 and
    progress line shows `ORCID: N` with N > 0 (proves real fetch works end-to-end).
 4. `grep 'pub.orcid.org/v3.0' scripts/sync-publications.ts` — at least one match.
-5. Two atomic commits landed:
+5. `grep 'No ORCID results for' scripts/sync-publications.ts` — zero matches
+   (Pitfall 7 compliance).
+6. Two atomic commits landed:
    1. `feat(17-02): implement fetchOrcid + orcidGroupToPublication + OrcidLookupEntry`
-   2. `test(17-02): cover orcidGroupToPublication + fixture-driven SiPM extraction`
+   2. `test(17-02): cover orcidGroupToPublication + fixture-driven SiPM extraction + fetchOrcid 404`
 </verification>
 
 <success_criteria>
@@ -441,7 +471,11 @@ End-of-plan gates:
   and Pitfall 5 (missing journal/date) cases.
 - `MemberSyncResult.orcidLookup` carries the (publicationId, orcid, putCode) side-map
   needed by 17-03's enrichment pass.
-- Existing 78 tests still pass; suite grew to ≥88.
+- `fetchOrcid` 404 path (empty return + warning) is unit-tested against a mocked
+  `globalThis.fetch` — locks in SC4 for plan 17-03.
+- HTTP 200 with empty `group[]` produces NO warning (Pitfall 7 compliance verified
+  by `grep 'No ORCID results for'` returning zero matches).
+- Existing 78 tests still pass; suite grew to ≥89.
 - No changes to the dedup pipeline, `_meta` block, or CLI flags — those are already
   correct from Phase 16 and 17-03 owns the enrichment-layer wiring.
 </success_criteria>
@@ -452,7 +486,8 @@ After completion, create `.planning/phases/17-orcid-fetcher/17-02-SUMMARY.md` su
 - `orcidGroupToPublication` coverage summary (cases + fixture)
 - `MemberSyncResult` shape change
 - Live dry-run result for Tomas (N works extracted, Y non-journal-article filtered)
-- Any deviations (e.g., if `fetchOrcid` also needed to be exported for testing after all)
+- Whether `fetchOrcid` needed to be exported for the 404 unit test (Task 2 describe block 3)
+- Any deviations
 
 Use the template at `/home/tomas/.claude/get-shit-done/templates/summary.md`.
 </output>
