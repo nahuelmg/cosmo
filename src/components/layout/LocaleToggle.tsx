@@ -101,8 +101,8 @@ function LocaleToggleInner({className = ''}: LocaleToggleProps) {
         'active:scale-95',
         'disabled:opacity-60 disabled:cursor-wait',
         'focus-visible:outline-none',
-        'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:rounded',
-        'px-2 py-1',
+        'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:rounded',
+        'px-2 py-1.5',
         className,
       ]
         .filter(Boolean)
