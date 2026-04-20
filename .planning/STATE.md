@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 ## Current Position
 
-Phase: 19 (Docs & Verification) — in progress
-Plan: 19-01 complete (1/2 plans in phase)
-Status: 19-01 sealed; ready for 19-02 (post-deploy verify, human-verify checkpoint)
-Last activity: 2026-04-20 — Phase 19 plan 19-01 executed; content/SYNC.md extended with 5 ORCID sections closing DOC-01 (a)–(e).
+Phase: 19 (Docs & Verification) — complete
+Plan: 19-02 complete (2/2 plans in phase)
+Status: Phase 19 complete; v1.3 milestone fully verified — ready for /gsd:audit-milestone
+Last activity: 2026-04-20 — Phase 19 plan 19-02 checkpoint verified; VERIFY-01 satisfied on cosmouba.vercel.app; v1.3 milestone ready for audit
 
-Progress: [████████░░] 80% (v1.3 — Phase 19 in progress, 1 plan remaining)
+Progress: [██████████] 100% (v1.3 — 4/4 phases complete)
 
 ## Shipped Milestones
 
@@ -53,9 +53,10 @@ Progress: [████████░░] 80% (v1.3 — Phase 19 in progress, 1
 | 17-03 | 404 from per-work detail endpoint → placeholder preserved (no throw) | Profile may change between works-list and detail fetch; placeholder is safer than aborting sync |
 | 18-01 | ORCID pill extended to appear on non-ORCID-source papers with member-author having contact.orcid | User requested post-checkpoint: "orcid pill should appear on any pub with orcid link ALSO" |
 | 18-01 | contact.orcid chosen as canonical display field (vs orcid_id) | Matches PersonDetail.tsx convention; people.json backfill deferred pending 9-person data reconciliation flagged in 18-01-SUMMARY.md |
+| 19-02 | VERIFY-01 satisfied via live-site check on cosmouba.vercel.app | All five browser checks passed (SiPM paper, 11-author list, ORCID badge, filter pill, three-source footnote); no gaps; no gap-closure plan needed |
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 19 plan 19-01 executed. Extended content/SYNC.md with ORCID Works API endpoints, orcid_id vs contact.orcid guidance, DOI precedence rule, three-source _meta JSON example, and ORCID troubleshooting table (5 rows). All DOC-01 (a)–(e) sub-requirements satisfied. validate-content passes.
-Stopped at: Phase 19 plan 01 sealed; ready for plan 19-02 (post-deploy verify).
+Last session: 2026-04-20 — Phase 19 plan 19-02 checkpoint verified; VERIFY-01 satisfied on cosmouba.vercel.app; all five browser checks passed; v1.3 milestone complete.
+Stopped at: Phase 19 complete; v1.3 ready for /gsd:audit-milestone then /gsd:complete-milestone.
 Resume file: None
