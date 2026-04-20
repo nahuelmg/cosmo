@@ -73,14 +73,14 @@ export function PersonDetail({
         ← {labels.backToPeople}
       </Link>
 
-      <header className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr] md:items-start">
-        <div className="relative w-full aspect-square rounded-md overflow-hidden bg-surface-alt">
+      <header className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-[180px_1fr] md:items-start">
+        <div className="relative w-full aspect-[4/5] rounded-md overflow-hidden bg-surface-alt max-w-[180px] mx-auto md:mx-0">
           {person.photo ? (
             <Image
               src={`/${person.photo}`}
               alt=""
               fill
-              sizes="(min-width: 768px) 240px, 100vw"
+              sizes="(min-width: 768px) 180px, 180px"
               className="object-cover"
               preload={true}
               loading="eager"
