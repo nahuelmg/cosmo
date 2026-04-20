@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 roadmap creation)
 
 ## Current Position
 
-Phase: 16 complete → 17 next (ORCID Fetcher)
-Plan: —
-Status: Ready for `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`
-Last activity: 2026-04-20 — Phase 16 verified (5/5 must-haves passed). 14 requirements (SCHEMA-01..04, DEDUP-01..05, CLI-01..04, CI-01) marked Complete.
+Phase: 17 of 4 (ORCID Fetcher)
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-04-20 — Completed 17-01-PLAN.md (fixtures + 503 retry)
 
-Progress: [██░░░░░░░░] 25% (v1.3 — 1/4 phases complete)
+Progress: [██░░░░░░░░] 25% (v1.3 — 1/4 phases, 1/3 plans in phase 17 complete)
 
 ## Shipped Milestones
 
@@ -42,9 +42,11 @@ Progress: [██░░░░░░░░] 25% (v1.3 — 1/4 phases complete)
 | 16-03 | mergePublications refactored to single-arg signature | 3-arg shape would require pre-concat anyway for DOI dedup; single-arg removes vestigial parameters |
 | 16-03 | DOI dedup runs before final sort | Sort scrambles source-priority order; dedup must preserve first-seen-wins before ordering is lost |
 | 16-03 | No empty-ORCID warning in Phase 16 stub | Stub always returns []; Phase 17 handles real no-results warnings contextually |
+| 17-01 | 503 retry added to shared fetchWithRetry wrapper (not per-service config) | ORCID returns 503 on burst-exceed; arXiv/InspireHEP also benefit from brief 503 retry on downtime |
+| 17-01 | Fixtures copied verbatim with cp (not Read/Write tools) | Preserves byte-exact encoding including UTF-8 accented chars in contributor names |
 
 ## Session Continuity
 
-Last session: 2026-04-20 — Phase 16 executed end-to-end. Waves: (16-01, 16-02) parallel, then 16-03. Verifier passed 5/5 must-haves. 14 requirements marked Complete.
-Stopped at: Phase 16 sealed; awaiting `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`.
+Last session: 2026-04-20 — Phase 17 plan 01 executed. Fixtures copied, 503 retry landed, 76→78 tests green.
+Stopped at: Completed 17-01-PLAN.md; 17-02 (extraction) and 17-03 (enrichment) are next.
 Resume file: None
