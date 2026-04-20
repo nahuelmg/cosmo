@@ -12,15 +12,15 @@ export function PersonCard({ slug, name, role, photo }: PersonCardProps) {
   return (
     <Link
       href={{ pathname: '/people/[slug]', params: { slug } }}
-      className="group block rounded-md bg-surface-alt overflow-hidden transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring"
+      className="group block rounded-md bg-surface-alt overflow-hidden transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring max-w-[240px] w-full mx-auto"
     >
-      <div className="relative w-full aspect-square bg-surface">
+      <div className="relative w-full aspect-[4/5] bg-surface">
         {photo ? (
           <Image
             src={`/${photo}`}
             alt=""
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 640px) 240px, 100vw"
             className="object-cover"
           />
         ) : (
