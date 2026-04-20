@@ -15,6 +15,7 @@ import {
   fetchWithRetry,
   orcidGroupToPublication,
   fetchOrcid,
+  enrichOrcidAuthors,
 } from "./sync-publications";
 import type { InspireHit, ArXivEntry, OrcidExternalId } from "./sync-publications";
 import type { Publication } from "../src/content/schemas/publications.schema";
@@ -558,5 +559,160 @@ describe("fetchOrcid — 404 resilience", () => {
       /ORCID profile not public or empty: 0000-0000-0000-0000/.test(msg),
     );
     expect(hasWarning).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// enrichOrcidAuthors — unit coverage (plan 17-03 Task 2)
+// ---------------------------------------------------------------------------
+
+const sipmDetailFixture = JSON.parse(
+  readFileSync(resolve(__dirname, "fixtures/orcid-work-sipm.json"), "utf-8"),
+);
+
+/** Helper: build a minimal Publication for enrichOrcidAuthors tests */
+function makeOrcidPub(overrides: Partial<Publication> & { id: string }): Publication {
+  return {
+    authors: ["Owner"],
+    title: "Test Paper",
+    journal: "Test Journal",
+    year: 2020,
+    topic_tags: [],
+    source: "orcid",
+    ...overrides,
+  };
+}
+
+describe("enrichOrcidAuthors", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("fixture-driven: SiPM enrichment yields 11 authors", async () => {
+    const pub = makeOrcidPub({
+      id: "10.1016/j.nima.2020.164490",
+      doi: "10.1016/j.nima.2020.164490",
+      authors: ["Tomas Ferreira Chase"],
+    });
+    const lookup = new Map([
+      ["10.1016/j.nima.2020.164490", { orcid: "0009-0001-0286-2136", putCode: 156875914 }],
+    ]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify(sipmDetailFixture), { status: 200 }),
+    );
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].authors.length).toBe(11);
+    expect(result[0].authors).toContain("Tomás Ferreira Chase");
+    expect(result[0].authors).toContain("Mariano Barella");
+  });
+
+  it("empty contributors list falls back to placeholder", async () => {
+    const pub = makeOrcidPub({ id: "orcid-001" });
+    const lookup = new Map([["orcid-001", { orcid: "0000-0001-0000-0001", putCode: 1 }]]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(JSON.stringify({ contributors: { contributor: [] } }), { status: 200 }),
+    );
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(result[0].authors).toEqual(["Owner"]);
+  });
+
+  it("contributors with null credit-name are filtered, placeholder preserved if all null", async () => {
+    const pub = makeOrcidPub({ id: "orcid-002" });
+    const lookup = new Map([["orcid-002", { orcid: "0000-0001-0000-0002", putCode: 2 }]]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          contributors: {
+            contributor: [
+              { "credit-name": null },
+              { "credit-name": null },
+            ],
+          },
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(result[0].authors).toEqual(["Owner"]);
+  });
+
+  it("partial null credit-names are skipped, valid names kept in order", async () => {
+    const pub = makeOrcidPub({ id: "orcid-003" });
+    const lookup = new Map([["orcid-003", { orcid: "0000-0001-0000-0003", putCode: 3 }]]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          contributors: {
+            contributor: [
+              { "credit-name": { value: "Alice" } },
+              { "credit-name": null },
+              { "credit-name": { value: "Bob" } },
+            ],
+          },
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(result[0].authors).toEqual(["Alice", "Bob"]);
+  });
+
+  it("non-ORCID survivors pass through unchanged; ORCID row is enriched", async () => {
+    const inspirePub: Publication = {
+      id: "arxiv-foo",
+      authors: ["X"],
+      title: "Inspire Paper",
+      journal: "J",
+      year: 2021,
+      topic_tags: [],
+      source: "inspirehep",
+    };
+    const orcidPub = makeOrcidPub({ id: "orcid-only", authors: ["Owner"] });
+    const lookup = new Map([["orcid-only", { orcid: "0000-0001-0000-0004", putCode: 4 }]]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          contributors: { contributor: [{ "credit-name": { value: "Real" } }] },
+        }),
+        { status: 200 },
+      ),
+    );
+
+    const result = await enrichOrcidAuthors([inspirePub, orcidPub], lookup);
+
+    expect(result[0]).toEqual(inspirePub);
+    expect(result[1].authors).toEqual(["Real"]);
+  });
+
+  it("ORCID survivor not in lookup passes through unchanged; fetch never called", async () => {
+    const pub = makeOrcidPub({ id: "orcid-orphan" });
+    const lookup = new Map<string, { orcid: string; putCode: number }>();
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(result[0]).toEqual(pub);
+  });
+
+  it("detail 404 falls back to placeholder without throwing", async () => {
+    const pub = makeOrcidPub({ id: "orcid-404" });
+    const lookup = new Map([["orcid-404", { orcid: "0000-0001-0000-0099", putCode: 99 }]]);
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(
+      new Response("{}", { status: 404 }),
+    );
+
+    const result = await enrichOrcidAuthors([pub], lookup);
+
+    expect(result[0].authors).toEqual(["Owner"]);
   });
 });
