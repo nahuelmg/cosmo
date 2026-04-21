@@ -9,9 +9,9 @@ import { PeoplePlainSection } from '@/components/people/PeoplePlainSection';
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
 
-const CATEGORIES = ['pi', 'postdoc', 'phd', 'undergrad', 'past'] as const;
+const CATEGORIES = ['pi', 'postdoc', 'phd', 'external', 'undergrad', 'past'] as const;
 type Category = (typeof CATEGORIES)[number];
-const CLICKABLE: readonly Category[] = ['pi', 'postdoc', 'phd'] as const;
+const CLICKABLE: readonly Category[] = ['pi', 'postdoc', 'phd', 'external'] as const;
 
 export async function generateMetadata({
   params,

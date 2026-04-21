@@ -57,7 +57,7 @@ export const PersonSchema = z.strictObject({
   role: bilingualString("role"),
 
   /** Determines which section of the People page this person appears in */
-  category: z.enum(["pi", "postdoc", "phd", "undergrad", "past"]),
+  category: z.enum(["pi", "postdoc", "phd", "external", "undergrad", "past"]),
 
   /** Path relative to public/ — e.g. "people/Esteban_C.png". No leading slash. */
   photo: optionalPhoto,

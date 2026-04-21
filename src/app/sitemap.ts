@@ -73,7 +73,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const people = getPeople().filter(
-    (p) => p.category === "pi" || p.category === "postdoc" || p.category === "phd"
+    (p) =>
+      p.category === "pi" ||
+      p.category === "postdoc" ||
+      p.category === "phd" ||
+      p.category === "external"
   );
 
   return [
