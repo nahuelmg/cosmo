@@ -95,14 +95,16 @@ function LocaleToggleInner({className = ''}: LocaleToggleProps) {
       className={[
         'text-sm font-semibold tracking-wide',
         'text-ink-muted hover:text-ink',
-        // Animate both color and transform in one shorthand so the active:
-        // press-scale doesn't clobber the hover:text color transition.
-        'transition-[color,transform] duration-75',
+        // Subtle button affordance — bg-surface-alt on header's bg-surface gives
+        // a faint chip without violating the "no borders" rule. shadow-sm on
+        // hover lifts it a half-step, distinguishing from flat nav links.
+        'bg-surface-alt hover:shadow-sm rounded',
+        'transition-[color,transform,box-shadow] duration-75',
         'active:scale-95',
         'disabled:opacity-60 disabled:cursor-wait',
         'focus-visible:outline-none',
-        'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface focus-visible:rounded',
-        'px-2 py-1.5',
+        'focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
+        'px-2.5 py-1.5',
         className,
       ]
         .filter(Boolean)

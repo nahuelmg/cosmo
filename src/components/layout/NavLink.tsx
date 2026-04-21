@@ -43,7 +43,7 @@ export function NavLink({
   const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   const base = 'transition-colors duration-150 py-1.5';
-  const inactive = 'text-ink-muted hover:text-ink';
+  const inactive = 'text-ink hover:text-accent';
   const active = 'text-accent font-semibold';
 
   const combined = [

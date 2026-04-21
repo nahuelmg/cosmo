@@ -24,6 +24,13 @@
   --color-accent-hover: oklch(0.44 0.13 45);
   --color-accent-ring:  oklch(0.52 0.12 45 / 0.45);
 
+  /* ── Supporting accents — "library bindings" palette, non-dominant.
+     Use for tags/categories, chart series, illustrative fills. NOT for primary
+     links, buttons, or focus rings (terracotta accent owns those). Hover/ring
+     variants intentionally absent — add when actual interactive use appears. */
+  --color-accent-sage:     oklch(0.55 0.05 145);  /* muted olive — old book cloth */
+  --color-accent-ink-blue: oklch(0.40 0.08 250);  /* deep desaturated navy — academic crest */
+
   /* ── Type scale — restrained 1.2 ratio, dense body ── */
   --text-xs:   0.8125rem;
   --text-sm:   0.9375rem;
@@ -82,4 +89,11 @@ body {
 #main-content {
   scroll-margin-top: var(--header-height);
   outline: none;
+}
+
+/* Smooth scroll for in-page anchor jumps (respects prefers-reduced-motion). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
