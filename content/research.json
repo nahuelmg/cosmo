@@ -66,5 +66,39 @@
     },
     "icon": "cpu",
     "order": 3
+  },
+  {
+    "id": "large-scale-structure",
+    "title": {
+      "es": "Estructura a Gran Escala",
+      "en": "Large-Scale Structure"
+    },
+    "short_description": {
+      "es": "Formacion y evolucion de la red cosmica, funciones de correlacion de galaxias y analisis estadistico de relevamientos modernos.",
+      "en": "Formation and evolution of the cosmic web, galaxy correlation functions, and statistical analysis of modern surveys."
+    },
+    "full_description": {
+      "es": "La distribucion a gran escala de galaxias traza la evolucion no lineal de las perturbaciones primordiales y codifica informacion sobre los parametros cosmologicos fundamentales, la naturaleza de la energia oscura y la masa de los neutrinos. Nuestro grupo estudia la dinamica de la red cosmica mediante teoria de perturbaciones de orden superior, modelos de sesgo de galaxias y simulaciones hidrodinamicas a gran volumen.\n\nAnalizamos la funcion de correlacion de dos puntos y el espectro de potencias en el espacio de corrimiento al rojo, con especial enfasis en las oscilaciones acusticas de bariones (BAO) como regla estandar cosmologica y en las distorsiones de Kaiser como prueba del crecimiento de estructura. Estos observables permiten contrastar Lambda-CDM frente a modelos alternativos de gravedad modificada y energia oscura dinamica.\n\nColaboramos con equipos de los relevamientos DESI, Euclid y Rubin LSST, aportando modelos teoricos y pipelines de analisis para la proxima generacion de restricciones cosmologicas. Una linea en desarrollo combina estadisticos de orden superior — bispectrum y topologia de Minkowski — para capturar informacion no gaussiana que escapa a los analisis de dos puntos tradicionales.",
+      "en": "The large-scale distribution of galaxies traces the non-linear evolution of primordial perturbations and encodes information on fundamental cosmological parameters, the nature of dark energy, and the neutrino mass. Our group studies the dynamics of the cosmic web through higher-order perturbation theory, galaxy bias models, and large-volume hydrodynamic simulations.\n\nWe analyse the two-point correlation function and the power spectrum in redshift space, with particular emphasis on baryon acoustic oscillations (BAO) as a cosmological standard ruler and on Kaiser distortions as a probe of structure growth. These observables allow Lambda-CDM to be tested against alternative modified-gravity and dynamical dark-energy scenarios.\n\nWe collaborate with teams from the DESI, Euclid, and Rubin LSST surveys, contributing theoretical models and analysis pipelines for the next generation of cosmological constraints. One active line combines higher-order statistics — the bispectrum and Minkowski topology — to capture non-Gaussian information that escapes traditional two-point analyses."
+    },
+    "icon": "network",
+    "order": 4
+  },
+  {
+    "id": "binary-pulsars",
+    "title": {
+      "es": "Pulsares Binarios",
+      "en": "Binary Pulsars"
+    },
+    "short_description": {
+      "es": "Pulsares binarios como laboratorios de gravedad de campo fuerte: pruebas de relatividad general y deteccion de ondas gravitacionales mediante cronometraje de pulsos.",
+      "en": "Binary pulsars as strong-field gravity laboratories: tests of general relativity and gravitational-wave detection via pulse timing."
+    },
+    "full_description": {
+      "es": "Los pulsares binarios — estrellas de neutrones con periodos de rotacion extraordinariamente estables orbitando una companera compacta — constituyen uno de los laboratorios mas precisos para la fisica gravitacional de campo fuerte. El cronometraje de la llegada de sus pulsos permite medir efectos post-keplerianos con una exactitud que ha confirmado la relatividad general a nivel porcentual, empezando con el sistema Hulse-Taylor y culminando con el pulsar doble J0737-3039.\n\nNuestro grupo trabaja en el modelado teorico de los parametros post-newtonianos y en la derivacion de restricciones a teorias alternativas de gravedad — relatividad escalar-tensorial, TeVeS y modelos con violacion de la invariancia de Lorentz — a partir de las observaciones de cronometraje acumuladas durante decadas. La contribucion de radiacion gravitacional al decaimiento orbital provee la evidencia indirecta mas precisa de la existencia de ondas gravitacionales.\n\nA escalas cosmologicas, colaboramos con el esfuerzo internacional de Pulsar Timing Arrays (NANOGrav, EPTA, PPTA e IPTA) para la deteccion del fondo estocastico de ondas gravitacionales a frecuencias de nanohercio, una ventana unica hacia fusiones de agujeros negros supermasivos y posibles senales del universo temprano complementarias a los interferometros terrestres.",
+      "en": "Binary pulsars — neutron stars with extraordinarily stable rotation periods orbiting a compact companion — constitute one of the most precise laboratories for strong-field gravitational physics. Timing the arrival of their pulses allows post-Keplerian effects to be measured with accuracy that has confirmed general relativity at the percent level, starting with the Hulse-Taylor system and culminating with the double pulsar J0737-3039.\n\nOur group works on the theoretical modelling of post-Newtonian parameters and on deriving constraints on alternative theories of gravity — scalar-tensor relativity, TeVeS, and Lorentz-violating models — from timing observations accumulated over decades. The gravitational-radiation contribution to orbital decay provides the most precise indirect evidence for the existence of gravitational waves.\n\nAt cosmological scales, we collaborate with the international Pulsar Timing Array effort (NANOGrav, EPTA, PPTA, and IPTA) for the detection of the stochastic gravitational-wave background at nanohertz frequencies — a unique window onto supermassive black-hole mergers and possible early-universe signals that complements ground-based interferometers."
+    },
+    "icon": "radio",
+    "order": 5
   }
 ]
