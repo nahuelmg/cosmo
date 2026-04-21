@@ -129,7 +129,7 @@ export function buildScholarlyArticleSchema(pub: Publication) {
     schema.identifier = {
       "@type": "PropertyValue",
       propertyID: "DOI",
-      value: pub.doi,
+      value: `https://doi.org/${pub.doi}`,
     };
   }
   return schema;
