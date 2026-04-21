@@ -11,9 +11,9 @@
 
 export interface NavItem {
   /** Internal pathname key — must exist as a key in routing.pathnames. */
-  href: '/' | '/people' | '/research' | '/publications' | '/journal-club' | '/outreach' | '/contact';
+  href: '/' | '/people' | '/research' | '/publications' | '/journal-club' | '/resources' | '/outreach' | '/contact';
   /** Translation key under the `nav` namespace. */
-  labelKey: 'home' | 'people' | 'research' | 'publications' | 'journalClub' | 'outreach' | 'contact';
+  labelKey: 'home' | 'people' | 'research' | 'publications' | 'journalClub' | 'resources' | 'outreach' | 'contact';
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
@@ -22,6 +22,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { href: '/research',     labelKey: 'research' },
   { href: '/publications', labelKey: 'publications' },
   { href: '/journal-club', labelKey: 'journalClub' },
+  { href: '/resources',    labelKey: 'resources' },
   { href: '/outreach',     labelKey: 'outreach' },
   { href: '/contact',      labelKey: 'contact' },
 ] as const;

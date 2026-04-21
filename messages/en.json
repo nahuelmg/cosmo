@@ -9,6 +9,7 @@
     "research": "Research",
     "publications": "Publications",
     "journalClub": "Journal Club",
+    "resources": "Resources",
     "outreach": "Outreach",
     "contact": "Contact"
   },
@@ -87,6 +88,11 @@
     "intro": "We believe in the importance of bringing science closer to society. We participate in talks, workshops, and outreach publications aimed at broad audiences and the educational community.",
     "learnMore": "Learn more"
   },
+  "resources": {
+    "title": "Resources",
+    "intro": "Useful material from the group: notes, books, code, and repositories.",
+    "empty": "Resources will be published here soon."
+  },
   "contact": {
     "title": "Contact",
     "addressLabel": "Address",
@@ -128,6 +134,10 @@
     "outreach": {
       "title": "Outreach",
       "description": "Public-science communication activities of the Cosmology Group: talks, workshops, and outreach publications."
+    },
+    "resources": {
+      "title": "Resources",
+      "description": "Useful material from the Cosmology Group: notes, books, code, and repositories."
     },
     "contact": {
       "title": "Contact",

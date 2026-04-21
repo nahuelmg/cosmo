@@ -9,6 +9,7 @@
     "research": "Investigación",
     "publications": "Publicaciones",
     "journalClub": "Journal Club",
+    "resources": "Recursos",
     "outreach": "Divulgación",
     "contact": "Contacto"
   },
@@ -87,6 +88,11 @@
     "intro": "Creemos en la importancia de acercar la ciencia a la sociedad. Participamos en charlas, talleres y publicaciones de divulgación orientadas a públicos amplios y a la comunidad educativa.",
     "learnMore": "Más información"
   },
+  "resources": {
+    "title": "Recursos",
+    "intro": "Material útil del grupo: apuntes, libros, código y repositorios.",
+    "empty": "Próximamente publicaremos recursos aquí."
+  },
   "contact": {
     "title": "Contacto",
     "addressLabel": "Dirección",
@@ -128,6 +134,10 @@
     "outreach": {
       "title": "Divulgación",
       "description": "Actividades de comunicación pública de la ciencia del Grupo de Cosmología: charlas, talleres y publicaciones de divulgación."
+    },
+    "resources": {
+      "title": "Recursos",
+      "description": "Material útil del Grupo de Cosmología: apuntes, libros, código y repositorios."
     },
     "contact": {
       "title": "Contacto",

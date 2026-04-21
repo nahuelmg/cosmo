@@ -13,6 +13,7 @@ type StaticHref =
   | "/research"
   | "/publications"
   | "/journal-club"
+  | "/resources"
   | "/outreach"
   | "/contact";
 
@@ -66,6 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/research",
     "/publications",
     "/journal-club",
+    "/resources",
     "/outreach",
     "/contact",
   ];

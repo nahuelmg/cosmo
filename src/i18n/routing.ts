@@ -12,6 +12,7 @@ export const routing = defineRouting({
     "/research": { es: "/investigacion", en: "/research" },
     "/publications": { es: "/publicaciones", en: "/publications" },
     "/journal-club": { es: "/journal-club", en: "/journal-club" },
+    "/resources": { es: "/recursos", en: "/resources" },
     "/outreach": { es: "/divulgacion", en: "/outreach" },
     "/contact": { es: "/contacto", en: "/contact" },
   },
