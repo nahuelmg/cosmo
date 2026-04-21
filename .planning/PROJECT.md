@@ -8,21 +8,16 @@ A bilingual (Spanish primary, English toggle) institutional website for the Cosm
 
 A credible, professional academic presence that makes it easy for visitors to find who's in the group, what they work on, and what they've published — with group members able to update content (people, publications, journal club, outreach) without touching code.
 
-## Current Milestone: v1.3 ORCID Sync & Cross-Source Dedup
+## Current Milestone: Open (next milestone TBD)
 
-**Goal:** Add ORCID works API as a third publication source, dedup across sources by DOI, and surface `orcid` as a first-class source in the UI — resolving the visible gap where author-curated papers that aren't on InspireHEP or arXiv (e.g. Tomas Ferreira Chase's 2020 SiPM paper, DOI `10.1016/j.nima.2020.164490`) don't appear on the site.
+**Latest shipped:** v1.3 ORCID Sync & Cross-Source Dedup (2026-04-20) — 28/28 requirements across SCHEMA, DEDUP, CLI, CI, ORCID, UI, DOC, and VERIFY categories. ORCID works API wired as a third publication source; cross-source DOI dedup with precedence InspireHEP > ORCID > arXiv; first-class UI surface (olive-green badge, filter pill, three-source bilingual footnote with DOI precedence rule); `buildScholarlyArticleSchema` source-agnostic for JSON-LD parity; 408-line `content/SYNC.md` three-source maintainer guide; live-site `workflow_dispatch` smoke test on `cosmouba.vercel.app` confirmed SiPM paper (DOI `10.1016/j.nima.2020.164490`) visible on `/people/tomas-ferreira-chase` with full 11-author list. 336 publications in `content/publications.json` (317 InspireHEP + 73 arXiv + 15 ORCID-only; 36 cross-source dedupes). 45 static routes preserved, 104 Vitest tests pass, 8/8 cross-phase wiring + 5/5 E2E flows verified.
 
-**Target features:**
-- ORCID works API (`https://pub.orcid.org/v3.0/{orcid}/works`) as 3rd source alongside InspireHEP (BAI) + arXiv (ORCID atom)
-- ORCID work-type filter: `journal-article` + `conference-paper` only
-- Cross-source DOI dedup with precedence **InspireHEP > ORCID > arXiv**
-- Third source badge + filter pill (full parity with `inspirehep` / `arxiv`)
-- `source` enum extended to include `"orcid"` (non-breaking)
-- `_meta.sources` and `_meta.counts` extended to include `orcid`
-- `--no-orcid` CLI flag; weekly CI cron extended (no schedule change)
-- Bilingual source label; `content/SYNC.md` maintainer guidance updated
-
-**Latest shipped:** v1.2 Aesthetic Polish (2026-04-20) — 26/26 requirements across Typography, Spacing, Media, Buttons, Micro-interactions, and Documentation categories. 18 focus-ring sites unified on `ring-accent-ring` with explicit `ring-offset-2`; PersonCard + PersonDetail photos right-sized (240 px / 180 px with `aspect-[4/5]`); HeroCarousel + Nav + SourceFilter interactive elements hit the 44×44 WCAG 2.5.5 AAA bar; `pnpm axe` 0 violations across 8 Spanish pages; CI drift gate (`lint-rings.yml`) installed; MASTER.md + OVERRIDES.md fully updated. 45 static routes preserved, 11/11 cross-phase wiring + 5/5 E2E flows verified.
+**Next milestone candidates:**
+- Code cleanup sweep (orphaned accessors + `publications_selected` field + dead i18n keys + REQUIREMENTS PR-flow + v1.2 post-seal MASTER.md drift)
+- v1.0 production re-measurement (Vercel LCP + CLS; NAV-04 mobile drawer live-deploy; hero contrast on starfield)
+- NASA ADS as 4th source (astrophysics breadth beyond HEP cosmology)
+- Content reconciliation (9-person `contact.orcid` backfill; DATA-09/10 remaining 4 member IDs)
+- New capability milestone TBD
 
 ## Requirements
 
@@ -71,6 +66,18 @@ A credible, professional academic presence that makes it easy for visitors to fi
 - ✓ Sync failure preserves last-good JSON; site deploys unchanged content — v1.1
 - ✓ Maintainer documentation in `content/SYNC.md` (BAI lookup + ORCID lookup + paste-ready example + Operational Troubleshooting) — v1.1
 
+**ORCID Sync & Cross-Source Dedup** — all shipped v1.3
+- ✓ `PublicationSchema.source` enum extended `"manual" | "inspirehep" | "arxiv" | "orcid"`; `PublicationsMeta.counts` gained required `orcid` + `deduped` fields; `content/publications.schema.json` regenerated (SCHEMA-01..04) — v1.3
+- ✓ `normalizeDoi` (lowercase + strip `https://doi.org/` / `http://dx.doi.org/` + trim) + `dedupByDoi` (first-seen-wins) helpers; priority concat `manual → inspire → orcid → arxiv` encodes precedence `InspireHEP > ORCID > arXiv`; DOI dedup runs before final sort; 9 new Vitest tests (DEDUP-01..05) — v1.3
+- ✓ `fetchOrcid` + `orcidGroupToPublication` + `enrichOrcidAuthors` in `scripts/sync-publications.ts`; group-level `external-ids` extraction (Pattern 2); 404 resilience + HTTP 200 empty-group silence; runBatched concurrency reuse; enrichment runs AFTER dedup to avoid per-work detail calls on dedup-losers (ORCID-01..07) — v1.3
+- ✓ `fetchWithRetry` extended to retry on HTTP 503 (ORCID burst-exceed) in addition to 429 — v1.3
+- ✓ `--no-orcid` CLI flag + three-flag "no sources enabled" exit-1 guard; per-member progress `{slug} — InspireHEP: N, arXiv: N, ORCID: N` (or `skipped`); summary line includes `(W deduped)`; `_meta.counts.orcid` + `counts.deduped` populated (CLI-01..04) — v1.3
+- ✓ `.github/workflows/sync-publications.yml` runs all three sources by default; CI-01 traceability comment added; `jq -cS '.publications'` diff-guard unchanged (CI-01) — v1.3
+- ✓ `/publications` ORCID filter pill + olive-green ORCID badge (`bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)]`, non-link `<span>`); bilingual `publications.filter.orcid` key + three-source footnote with DOI precedence rule in both locales; `buildScholarlyArticleSchema` source-agnostic (UI-01..05) — v1.3
+- ✓ Author-ORCID link pill bonus — `buildMemberOrcidMap` + `getAuthorOrcidUrl` helpers; pill displays on any paper where member-author has `contact.orcid`, suppressed when paper itself is `source: "orcid"`; 3 members wired (Calzetta, Lopez Nacir, Landau) — v1.3
+- ✓ `content/SYNC.md` extended to 408 lines — ORCID works-list + per-work-detail endpoints, `orcid_id` vs `contact.orcid` dual-field setup, DOI precedence rule stated verbatim, annotated three-source `_meta` JSON block, 5-row ORCID troubleshooting table (DOC-01) — v1.3
+- ✓ Live-site verification on `cosmouba.vercel.app` — SiPM paper (`10.1016/j.nima.2020.164490`) visible on `/people/tomas-ferreira-chase` with full 11-author list + ORCID badge; all 5 browser checks passed (VERIFY-01) — v1.3
+
 **Aesthetic Polish** — all shipped v1.2
 - ✓ `--text-5xl` (40 px) token added + `--text-4xl` bumped 32 → 36 px; 7 inner-page H1s migrated to `text-3xl md:text-4xl font-semibold` (TYPO-01..03) — v1.2
 - ✓ Body-text and nav consolidated to `text-sm`; `tracking-tight` removed from inner H1s (TYPO-04) — v1.2
@@ -95,18 +102,9 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 ### Active
 
-<!-- Current scope. v1.3 milestone started 2026-04-20. -->
+<!-- No active milestone. Next milestone will be defined via /gsd:new-milestone. -->
 
-- [ ] ORCID works API fetcher integrated into `scripts/sync-publications.ts`
-- [ ] ORCID work-type filter limits pulls to `journal-article` + `conference-paper`
-- [ ] Cross-source DOI dedup with precedence InspireHEP > ORCID > arXiv
-- [ ] `PublicationSchema.source` enum extended to `"manual" | "inspirehep" | "arxiv" | "orcid"`
-- [ ] `_meta` block reports `orcid` in `sources` and `counts`
-- [ ] `--no-orcid` CLI flag + weekly cron runs all three sources
-- [ ] Third source badge + filter pill render on `/publications` in both locales
-- [ ] Schema.org ScholarlyArticle JSON-LD covers ORCID-only entries
-- [ ] Tomas Ferreira Chase's 2020 SiPM paper visible on `/people/tomas-ferreira-chase` after sync
-- [ ] `content/SYNC.md` documents the three-source model + DOI precedence rule
+_(None — v1.3 shipped 2026-04-20; next milestone TBD.)_
 
 ### Out of Scope
 
@@ -124,16 +122,18 @@ A credible, professional academic presence that makes it easy for visitors to fi
 
 <!--
 Previously out of scope, now revisited:
-- Real publication import — v1.0 deferred the whole thing to v2; v1.1 takes the arXiv + InspireHEP half.
-  ORCID, NASA ADS, and cross-source DOI dedup remain deferred.
+- Real publication import — v1.0 deferred the whole thing to v2; v1.1 took the arXiv + InspireHEP half; v1.3 added ORCID as the 3rd source with cross-source DOI dedup.
+  NASA ADS remains deferred.
 -->
 
-**v1.1 deferrals (revisit later):**
-- ORCID-first author lookup — requires every person to register ORCID; nice-to-have, not blocking
-- NASA ADS API — HEP cosmology largely covered by InspireHEP; ADS adds astrophysics breadth if later needed
-- Cross-source DOI dedup — v1.1 keeps both sources as separate entries; merge logic added when maintainers report the duplication as annoying
-- Runtime ISR — v1.1 sticks with build-time Action; on-demand revalidation is a v2 architecture change
-- PUBS-03 / PUBS-04 filter UI — still deferred from v1.0
+**v1.3 deferrals (revisit later):**
+- NASA ADS API — HEP cosmology largely covered by InspireHEP + ORCID; ADS adds astrophysics breadth if later needed
+- Runtime ISR / on-demand revalidation — build-time Action still holds; architectural change pushed to v2
+- PUBS-03 / PUBS-04 filter UI — still deferred from v1.0; revisit when maintainers ask
+- 6 of 9 members with `orcid_id` lack `contact.orcid` — author-ORCID pill shows on 3 (Calzetta, Lopez Nacir, Landau); content task
+- v1.1 code cleanup — `publications_selected` Zod field, orphaned accessors, dead i18n key, REQUIREMENTS PR-flow description
+- v1.2 post-seal doc drift — MASTER.md Component Specs "Nav Link" (`text-lg + max-w-6xl`), OVERRIDES.md v1.2 row 11
+- v1.0 production re-measurement — PERF-02 / PERF-04 / PERF-05 Vercel LCP + CLS; NAV-04 mobile drawer; hero contrast on starfield
 
 ## Context
 
@@ -148,27 +148,31 @@ Previously out of scope, now revisited:
 - Facultad de Ciencias Exactas y Naturales (FCEN)
 - CONICET
 
-**Shipped state (post-v1.2)**
+**Shipped state (post-v1.3)**
 - Tech stack: Next.js 16 App Router + TypeScript strict + Tailwind v4 (CSS-first `@theme`) + next-intl 4.9 + Zod v4 + Radix Dialog + lucide-react + fast-xml-parser 5.7 (arXiv Atom)
 - Design system: warm-academic OKLCH tokens + Source Serif 4 + Source Sans 3 with Greek subset; v1.2 versioned Type Scale (`--text-4xl` 36 px / `--text-5xl` 40 px) with v1.0 supersession note; two-tier card padding rule (dense `p-4` / spacious `p-6`); 18 focus-ring sites unified on `ring-accent-ring` + `ring-offset-2`; `lint-rings.yml` CI drift gate enforces going forward
-- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 24-symbol `@/content` barrel; `content/publications.json` auto-populated (321 entries, `_meta { synced_at, sources, counts, warnings }`)
-- Sync: `scripts/sync-publications.ts` + `.github/workflows/sync-publications.yml` (weekly cron + workflow_dispatch + `jq` payload diff-guard); `content/SYNC.md` maintainer + operational guide
-- 45 fully-static routes, 306 commits total (158 v1.0 + 89 v1.1 + 59 v1.2), 4-day total span (2026-04-17 → 2026-04-20)
-- Audited: 0 axe-core violations across 8 Spanish pages (re-verified v1.2); v1.0 73/75 requirements + v1.1 45/48 complete + 2 softened + 2 partial + **v1.2 26/26 complete**; 11/11 cross-phase wiring + 5/5 E2E flows verified in v1.2 audit
+- Content: 5 JSON files + 5 Zod schemas + 5 JSON Schema files + 24-symbol `@/content` barrel; `content/publications.json` auto-populated (336 entries, `_meta { synced_at, sources: ["inspirehep","orcid","arxiv"], counts: {inspirehep, arxiv, manual, orcid, deduped}, warnings }`)
+- Sync: `scripts/sync-publications.ts` (986 LOC) + `scripts/sync-publications.test.ts` (718 LOC, 53 tests) + `.github/workflows/sync-publications.yml` (weekly cron + workflow_dispatch + `jq` payload diff-guard); three sources (InspireHEP BAI + arXiv ORCID atom + ORCID works API); cross-source DOI dedup with `normalizeDoi` + `dedupByDoi`; precedence `InspireHEP > ORCID > arXiv`; 408-line `content/SYNC.md` maintainer + operational + troubleshooting guide
+- Display: `SourceFilter` 3-pill with ORCID, `PublicationEntry` source-variant badge (amber InspireHEP + indigo arXiv + olive-green ORCID); bilingual three-source footnote with DOI precedence rule; author-ORCID link pill via `buildMemberOrcidMap` + `getAuthorOrcidUrl` (3 members wired); `buildScholarlyArticleSchema` source-agnostic JSON-LD
+- 45 fully-static routes, 347 commits total (158 v1.0 + 89 v1.1 + 59 v1.2 + 41 v1.3), 4-day total span (2026-04-17 → 2026-04-20)
+- Audited: 0 axe-core violations across 8 Spanish pages (re-verified v1.2); v1.0 73/75 + v1.1 45/48 + 2 softened + 2 partial + v1.2 26/26 + **v1.3 28/28 complete**; 8/8 cross-phase wiring + 5/5 E2E flows verified in v1.3 audit; 104 Vitest tests pass
 - Deferred to production re-measurement: PERF-02 / PERF-04 / PERF-05 (Vercel prod LCP + CLS)
 
-**Known issues / tech debt carried forward to v1.3**
-- Post-v1.2-seal doc drift: commit `1cf9cf8 feat(header): enlarge nav tabs to text-lg and widen chrome to max-w-6xl` — MASTER.md Component Specs "Nav Link" and OVERRIDES.md v1.2 row 11 still describe `text-sm + py-1.5`; needs a v1.3 amendment
+**Known issues / tech debt carried forward to v1.4**
+- 6 of 9 members with `orcid_id` lack `contact.orcid` — author-ORCID link pill wires for only 3 (Calzetta, Lopez Nacir, Landau). Content-only data task. Deferred pending 9-person reconciliation flagged in 18-01-SUMMARY.md
+- Tomás Ferreira Chase's own `contact.orcid` — he has `orcid_id` but no `contact.orcid`; his InspireHEP papers don't link through to his profile. Cosmetic
+- `src/lib/schemas.ts:132` `identifier.value` emits bare DOI; milestone spec asked for URL form. Zero SEO impact (Schema.org `PropertyValue` accepts either with `propertyID: "DOI"`; `sameAs[]` carries URL form). Patch: one line
+- Post-v1.2-seal doc drift: commit `1cf9cf8 feat(header): enlarge nav tabs to text-lg and widen chrome to max-w-6xl` — MASTER.md Component Specs "Nav Link" and OVERRIDES.md v1.2 row 11 still describe `text-sm + py-1.5`; needs a v1.4 amendment
 - Desktop NavLink deliberately has no `focus-visible:ring-*` of its own — inherits browser UA focus ring; flagged as observation in 15-VERIFICATION. Revisit if judged insufficient on live site
 - NAV-04 mobile drawer 375 px runtime check against live deploy (structural verification complete)
 - HeroCarousel pause / reduced-motion / MapEmbed IntersectionObserver runtime verification (deferred from 04-02 human-verify)
 - `MobileNav.tsx:87` `focus:outline-none` (box-shadow ring provides visible focus; lint flag only)
 - PUBS-03 / PUBS-04 deferred beyond v1 scope during Phase 4 planning; revisit when maintainers ask for filters
 - DATA-09/10: 4 remaining sync-scoped members need IDs (juan-manuel-armaleo, gonzalo-santa-cruz, guadalupe-ahumada-acuna, juan-pablo-elia) — content task
-- Legacy Zod field `publications_selected` still marked `@deprecated` — v1.3 cleanup candidate
-- Orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`) — legacy v1.0 APIs retained to avoid breaking change; v1.3 cleanup candidate
-- Dead `people.selectedPublications` i18n key in both locales — v1.3 cleanup candidate
-- REQUIREMENTS.md PR-flow description (implementation pushes direct-to-main per Phase 10 decision) — update in v1.3
+- Legacy Zod field `publications_selected` still marked `@deprecated` — v1.4 cleanup candidate
+- Orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`) — legacy v1.0 APIs retained to avoid breaking change; v1.4 cleanup candidate
+- Dead `people.selectedPublications` i18n key in both locales — v1.4 cleanup candidate
+- REQUIREMENTS.md PR-flow description (implementation pushes direct-to-main per Phase 10 decision) — update in v1.4
 
 **Content policy**
 - Placeholder names / bios / photos remain where real content not yet provided (13/15 current members carry photos + bios; publications now real via v1.1 sync)
@@ -235,6 +239,21 @@ Previously out of scope, now revisited:
 | MASTER.md `## Component Specs` rewritten as Tailwind recipes (raw `.btn-primary` CSS blocks replaced wholesale) | Codebase has zero CSS class analogues — utility-only Tailwind; raw blocks were load-bearing on nothing | ✓ Good — 6 components documented with inline recipes |
 | OVERRIDES.md v1.2 overrides APPENDED as table (v1.0 numbered list preserved verbatim) | Historical readability of v1.0 list + structured format for v1.3+ overrides | ✓ Good — pattern established for future milestones |
 | Desktop NavLink deliberately has no `focus-visible:ring-*` — inherits browser UA default | BTN-02 governs color where ring exists, not presence everywhere; browser default is a valid choice | — Pending — re-evaluate on live site |
+| v1.3 schema: `orcid` and `deduped` counts are REQUIRED fields in `PublicationsMetaSchema` (not optional) | Defensive optionals would mask sync-script bugs; the script always writes these values | ✓ Good — schema enforces full `_meta.counts` shape; older JSON is patched in the same commit |
+| v1.3 bundle: schema change + `content/publications.json` patch in a single commit | Avoids a validate-content regression window between schema update and data patch | ✓ Good — prebuild gate never saw a broken state |
+| v1.3 DOI dedup runs BEFORE the final sort | Sort scrambles source-priority order; first-seen-wins in `dedupByDoi` must preserve priority before ordering is lost | ✓ Good — priority concat `manual → inspire → orcid → arxiv` + first-seen-wins encodes precedence directly |
+| v1.3 priority concat order `manual → inspire → orcid → arxiv` (not explicit priority-branch-on-source inside `dedupByDoi`) | First-seen-wins over the pre-sorted list encodes precedence without coupling the dedup function to source enum values | ✓ Good — `dedupByDoi` stays source-agnostic |
+| v1.3 503 retry added to shared `fetchWithRetry` wrapper (not per-service config) | ORCID returns 503 on burst-exceed; arXiv + InspireHEP benefit from brief 503 retry on transient downtime anyway | ✓ Good — one helper, one retry policy |
+| v1.3 ORCID group-level `external-ids` read (Pattern 2), not `work-summary[0].external-ids` | Group view stores DOI/arXiv at group level when same work appears in multiple summaries; summary-level can be empty even when group-level is populated | ✓ Good — unit-tested at `sync-publications.test.ts:473` |
+| v1.3 HTTP 200 empty `group: []` is silent (Pitfall 7); only HTTP 404 emits `ORCID profile not public or empty` warning | Calzetta's public profile returns `200 { group: [] }`; warning on empty would produce noise every sync run | ✓ Good — zero noise observed |
+| v1.3 `enrichOrcidAuthors` runs AFTER `dedupByDoi`, not before (Option B from 17-RESEARCH.md) | Avoids per-work detail calls on dedup-losers; critical given ORCID rate limits. 36 cross-source dedupes × detail call each = 36 API calls saved per run | ✓ Good — live sync confirmed no unnecessary detail fetches |
+| v1.3 ORCID badge is a non-link `<span>` (unlike amber InspireHEP + indigo arXiv which link to external records) | DOI link row already serves discoverability; linking the badge to the member's ORCID profile would misrepresent the paper as authored-solely-by-that-member | ✓ Good — verified in 18-VERIFICATION via built HTML |
+| v1.3 olive-green tone `bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)]` for ORCID badge via arbitrary values (not a new token) | Single-use color pairing; below tokenize threshold (≥3 uses) | ✓ Good — visually distinct from other two source badges |
+| v1.3 author-ORCID link pill extended to non-ORCID-source papers (mid-flight user request) | Surfaces ORCID profile links wherever a member-author is identified, regardless of paper source; redundant display suppressed on `source: "orcid"` papers | ✓ Good — user requested `"orcid pill should appear on any pub with orcid link ALSO"` post-checkpoint |
+| v1.3 `contact.orcid` chosen as canonical display field (not `orcid_id`) | `PersonDetail.tsx` convention uses `contact.*` for presentation; `orcid_id` is a sync-side identifier, `contact.orcid` is a presentation field | ⚠️ Revisit — v1.4 if content-side 9-person backfill surfaces a need to unify |
+| v1.3 `buildScholarlyArticleSchema` left source-agnostic for ORCID JSON-LD parity | `pub.arxiv` + `pub.doi` + `pub.authors` + `pub.title` + `pub.year` + `pub.journal` cover every emit path regardless of source; no code change needed | ✓ Good — verified via built `/en/publications` HTML |
+| v1.3 JSON-LD `identifier.value` emits bare DOI (not URL form); `sameAs[]` carries URL form | Both are valid Schema.org `PropertyValue` representations with `propertyID: "DOI"`; Google rich-results parsers handle both | ⚠️ Revisit — v1.4 if SEO team flags. One-line patch available |
+| v1.3 VERIFY-01 satisfied via live-site check on `cosmouba.vercel.app` (not via separate E2E test harness) | All five browser checks observable via page source + DOM inspection; faster than spinning up Playwright for a one-time deploy smoke | ✓ Good — result recorded in 19-02-VERIFY-RESULT.md with six ticked checklist items |
 
 ---
-*Last updated: 2026-04-20 — v1.3 started (ORCID Sync & Cross-Source Dedup)*
+*Last updated: 2026-04-20 — v1.3 ORCID Sync & Cross-Source Dedup shipped*

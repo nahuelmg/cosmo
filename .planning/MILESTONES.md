@@ -1,5 +1,46 @@
 # Project Milestones: Cosmology Group Website (UBA / FCEN)
 
+## v1.3 ORCID Sync & Cross-Source Dedup (Shipped: 2026-04-20)
+
+**Delivered:** ORCID works API wired in as a third publication source alongside InspireHEP + arXiv, with cross-source DOI deduplication (precedence InspireHEP > ORCID > arXiv) and first-class UI surface — closing the v1.1 gap where author-curated papers absent from HEP indexes (notably Tomas Ferreira Chase's 2020 SiPM paper, DOI `10.1016/j.nima.2020.164490`) did not appear on the site.
+
+**Phases completed:** 16–19 (9 plans total)
+
+**Key accomplishments:**
+
+- **Schema + dedup infrastructure** — `PublicationSchema.source` enum extended to `"manual" | "inspirehep" | "arxiv" | "orcid"`; `PublicationsMetaSchema.counts` gained required `orcid` + `deduped` fields (not optional); `content/publications.schema.json` regenerated for IntelliSense; `normalizeDoi` (lowercase + strip `https://doi.org/` / `http://dx.doi.org/` + trim) and `dedupByDoi` (first-seen-wins) helpers exported from `scripts/sync-publications.ts`; priority concat order `manual → inspire → orcid → arxiv` encodes the precedence rule directly; DOI dedup runs before final sort so first-seen-wins is preserved.
+- **ORCID fetcher end-to-end** — `fetchOrcid` calls `https://pub.orcid.org/v3.0/{orcid}/works` via the shared `fetchWithRetry` wrapper (now retries on HTTP 503 in addition to 429 for ORCID burst-exceed); `orcidGroupToPublication` extracts from group-level `external-ids` (Pattern 2, not `work-summary[0]`) with ID preference DOI → arXiv → `orcid-{putCode}`; works filtered to `journal-article` + `conference-paper`; 404 → silent empty, 200-with-empty-`group[]` silent (Pitfall 7 compliance); `enrichOrcidAuthors` runs AFTER `dedupByDoi` to avoid per-work detail calls on dedup-losers, fetches `/v3.0/{orcid}/work/{putCode}` via `runBatched` (≤5, 2s pause) and unions into `contributors.contributor[].credit-name.value`; live sync produced `_meta.sources: ["inspirehep","orcid","arxiv"]`, `counts: {inspirehep:317, arxiv:73, manual:0, orcid:87, deduped:36}`, 15 ORCID-only survivors incl. SiPM.
+- **CLI + CI parity with two existing sources** — `--no-orcid` flag; three-flag "no sources" exit-1 guard; per-member progress line `{slug} — InspireHEP: N, arXiv: N, ORCID: N` (or `ORCID: skipped` when flag active); summary line extended with `(W deduped)`; `_meta.counts.orcid` + `counts.deduped` populated; `.github/workflows/sync-publications.yml` invokes `pnpm sync-publications` with no flags (three-source by default), `jq -cS '.publications'` diff-guard unchanged, CI-01 traceability comment added.
+- **Display layer parity** — `SourceFilterValue` extended with `'orcid'`; `SourceFilter` pill array adds `{ key: 'orcid', label: t('filter.orcid') }`; `PublicationEntry` `source === "orcid"` branch renders olive-green badge `bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)]` as non-link `<span>` (discoverability via DOI row); three-source footnote in both locales with plain-language DOI precedence rule; `buildScholarlyArticleSchema` verified source-agnostic (no code change); Schema.org JSON-LD for SiPM emits correctly on built `/en/publications` + `/es/publicaciones`.
+- **Author-ORCID link pill (mid-flight bonus)** — `buildMemberOrcidMap` + `getAuthorOrcidUrl` helpers in `publications-helpers.ts`; chip displays author's ORCID profile link on any pub where a member-author has `contact.orcid`, suppressed when the paper itself is `source: "orcid"` (redundant with badge). Wired via `memberOrcidList` prop serialization across RSC→client boundary; 3 members currently enabled (Calzetta, Lopez Nacir, Landau); 6 more pending content-side `contact.orcid` reconciliation.
+- **Three-source maintainer guide + live-site verification** — `content/SYNC.md` extended to 408 lines with ORCID works-list + per-work-detail endpoints, `orcid_id` vs `contact.orcid` dual-field setup guidance with JSON example, DOI precedence rule stated verbatim `Manual > InspireHEP > ORCID > arXiv`, annotated three-source `_meta` JSON block, five-row ORCID troubleshooting table (404 / private profile / missing work types / empty group / rate-limit 503). Post-deploy `workflow_dispatch` smoke test on `cosmouba.vercel.app` confirmed SiPM paper live on `/en/people/tomas-ferreira-chase` with title, year 2020, journal string, ORCID badge, and full 11-author list in NFC-normalized form.
+
+**Stats:**
+
+- 9 plans across 4 phases (16:3, 17:3, 18:1, 19:2)
+- 45 static routes preserved (SSG guarantee held)
+- 51 files changed, +8,393 / −136 LOC since v1.2
+- 41 commits from v1.2 tag to ship
+- Timeline: 2026-04-20 (single day)
+- **28/28 v1.3 requirements complete** (SCHEMA-01..04, DEDUP-01..05, CLI-01..04, CI-01, ORCID-01..07, UI-01..05, DOC-01, VERIFY-01)
+- 104 Vitest tests pass (28 new); `pnpm tsc --noEmit` + `pnpm build` + `pnpm validate-content` all exit 0
+- Cross-phase integration: 8/8 wiring checks passed; 5/5 E2E flows verified; 1 cosmetic deviation (JSON-LD `identifier.value` format — zero SEO impact)
+
+**Git range:** `docs(16): research phase 16 schema & sync infrastructure` → `docs(phase-19): complete docs-verification phase`
+
+**Deferred to v1.4:**
+
+- 6 of 9 members with `orcid_id` have no `contact.orcid` — author-ORCID link pill wires for only 3 members currently (Calzetta, Lopez Nacir, Landau); content-only data task pending reconciliation.
+- Tomás Ferreira Chase's own `contact.orcid` (InspireHEP papers don't link through to his profile).
+- `schemas.ts:132` JSON-LD `identifier.value` emits bare DOI; milestone spec asked for URL form. URL form exists in `sameAs[]`; zero SEO impact. One-line patch available if SEO team flags.
+- All v1.1 + v1.2 carried-forward cleanup (orphaned accessors, dead i18n key, `publications_selected` field, REQUIREMENTS PR-flow description, DATA-09/10, v1.2 post-seal doc drift, v1.0 production re-measurement).
+
+**Technical debt:** None unplanned. All deferrals are explicit scope calls or content tasks.
+
+**What's next:** v1.4 — open (candidates: v1.1+v1.2+v1.3 code cleanup sweep, v1.0 production re-measurement campaign, NASA ADS as 4th source, or new capability milestone TBD).
+
+---
+
 ## v1.2 Aesthetic Polish (Shipped: 2026-04-20)
 
 **Delivered:** Thorough aesthetic polish across all 45 routes — typography rhythm, interactive-element sizing, spacing cadence, member-photo proportions, and micro-interactions — preserving the warm-academic direction from v1.0 with zero visual redesign.
