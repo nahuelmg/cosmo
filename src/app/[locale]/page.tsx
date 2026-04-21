@@ -47,10 +47,6 @@ export default async function HomePage({ params }: Props) {
     url: a.url,
   }));
 
-  // HOME-05: split on `\n\n` so each paragraph renders as a real <p> element.
-  // Do NOT use whitespace-pre-line — semantic paragraphs required (2–3 per spec).
-  const introParagraphs = t('intro').split('\n\n').filter(p => p.trim().length > 0);
-
   return (
     <>
       <HeroCarousel
@@ -58,14 +54,6 @@ export default async function HomePage({ params }: Props) {
         groupName={siteConfig.groupName}
         affiliation={affiliation}
       />
-
-      <section className="mx-auto max-w-3xl space-y-4 px-6 py-16">
-        {introParagraphs.map((para, i) => (
-          <p key={i} className="font-serif text-lg leading-relaxed text-ink-muted">
-            {para}
-          </p>
-        ))}
-      </section>
 
       <Highlights
         sectionTitle={t('highlightsTitle')}

@@ -28,7 +28,6 @@
     "closeMenu": "Close navigation menu"
   },
   "home": {
-    "intro": "We are a theoretical and observational cosmology research group based in the Department of Physics at FCEN, UBA.\n\nOur work connects models of the early universe with data from large-scale surveys, exploring the nature of dark matter, dark energy, and the large-scale structure of the cosmos.",
     "highlightsTitle": "Highlights",
     "highlight1Title": "Perturbation cosmology",
     "highlight1Body": "We study primordial fluctuations and their evolution into the structures we observe today.",
@@ -40,7 +39,7 @@
   },
   "people": {
     "title": "People",
-    "pi": "Principal Investigators",
+    "pi": "Investigators",
     "postdoc": "Postdoctoral Researchers",
     "phd": "PhD Students",
     "undergrad": "Undergraduate Students",

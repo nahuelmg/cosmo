@@ -28,7 +28,6 @@
     "closeMenu": "Cerrar menú de navegación"
   },
   "home": {
-    "intro": "Somos un grupo de investigación en cosmología teórica y observacional radicado en el Departamento de Física de la FCEN, UBA.\n\nNuestro trabajo conecta modelos del universo temprano con datos de relevamientos de gran escala, explorando la naturaleza de la materia oscura, la energía oscura y la estructura a gran escala del cosmos.",
     "highlightsTitle": "Destacados",
     "highlight1Title": "Cosmología de perturbaciones",
     "highlight1Body": "Estudiamos las fluctuaciones primordiales y su evolución hasta las estructuras que observamos hoy.",
@@ -40,7 +39,7 @@
   },
   "people": {
     "title": "Personas",
-    "pi": "Investigadores Principales",
+    "pi": "Investigadores",
     "postdoc": "Investigadores Postdoctorales",
     "phd": "Estudiantes de Doctorado",
     "undergrad": "Estudiantes de Grado",
