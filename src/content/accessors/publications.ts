@@ -10,11 +10,8 @@
  *
  * Phase 4 consumption:
  *   const pubs   = getPublications();          // Publications page, newest first
- *   const topics = getAllTopics();             // filter dropdown options
  *   const years  = getAllYears();              // year filter / grouping
- *   const dark   = getPublicationsByTopic("dark matter");
  *   const y2025  = getPublicationsByYear(2025);
- *   const paper  = getPublicationById("2025-sigma8-cmb-lensing-cross");
  */
 
 import rawFile from "../../../content/publications.json";
@@ -45,32 +42,6 @@ export function getPublications(): Publication[] {
  */
 export function getPublicationsByYear(year: number): Publication[] {
   return publications.filter((p) => p.year === year);
-}
-
-/**
- * Returns publications that include the given tag in their topic_tags array.
- * Case-sensitive — the tag vocabulary is controlled (see getAllTopics()).
- * Phase 4 PUBS-03 filter renders distinct tags directly from getAllTopics().
- */
-export function getPublicationsByTopic(tag: string): Publication[] {
-  return publications.filter((p) => p.topic_tags.includes(tag));
-}
-
-/**
- * Returns a single publication by its stable `id`, or undefined if not found.
- */
-export function getPublicationById(id: string): Publication | undefined {
-  return publications.find((p) => p.id === id);
-}
-
-/**
- * Returns a sorted, deduplicated list of all topic_tags across all publications.
- * Alphabetical order. Phase 4 uses this to populate the topic filter dropdown.
- */
-export function getAllTopics(): string[] {
-  const set = new Set<string>();
-  publications.forEach((p) => p.topic_tags.forEach((t) => set.add(t)));
-  return [...set].sort();
 }
 
 /**

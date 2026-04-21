@@ -101,13 +101,6 @@
           "additionalProperties": false
         }
       },
-      "publications_selected": {
-        "default": [],
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
       "inspirehep_id": {
         "type": "string",
         "pattern": "^[A-Z][A-Za-z-]*(\\.[A-Za-z-]+)+\\.\\d+$"
@@ -237,7 +230,6 @@
       "short_bio",
       "full_bio",
       "research_interests",
-      "publications_selected",
       "display_name_normalized",
       "contact",
       "social_links"

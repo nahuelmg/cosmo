@@ -281,7 +281,6 @@ live alongside the rest of a person entry. Based on the real
   "short_bio": { "es": "...", "en": "..." },
   "full_bio": { "es": "...", "en": "..." },
   "research_interests": [ { "es": "...", "en": "..." } ],
-  "publications_selected": [],
   "inspirehep_id": "D.Lopez.Nacir.1",
   "orcid_id": "0000-0003-4398-1147",
   "display_name_normalized": "diana lopez nacir",

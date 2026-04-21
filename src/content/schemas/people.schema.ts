@@ -72,15 +72,6 @@ export const PersonSchema = z.strictObject({
   research_interests: z.array(bilingualString("research_interest")).min(1),
 
   /**
-   * References to publication IDs from content/publications.json.
-   * Cross-file ID validation is deferred to the Plan 05 prebuild script.
-   * @deprecated v1.1 — field is inert in v1.1; scheduled for removal in v1.2. The
-   *   v1.1 sync pipeline (Phase 9) replaces hand-curated selections with auto-populated
-   *   results from InspireHEP + arXiv queried via `inspirehep_id` / `orcid_id`.
-   */
-  publications_selected: z.array(z.string()).optional().default([]),
-
-  /**
    * InspireHEP BAI identifier (e.g. "E.Calzetta.1").
    * Optional — students may not have one yet.
    * @see content/SYNC.md
