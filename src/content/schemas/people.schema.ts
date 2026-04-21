@@ -53,7 +53,7 @@ export const PersonSchema = z.strictObject({
   /** Person's name in original form (canonical, not bilingual — academic convention) */
   name: canonicalString,
 
-  /** e.g. { es: "Investigadora Principal", en: "Principal Investigator" } */
+  /** e.g. { es: "Investigadora", en: "Investigator" } */
   role: bilingualString("role"),
 
   /** Determines which section of the People page this person appears in */
