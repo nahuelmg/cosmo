@@ -91,7 +91,7 @@ export default function HeroCarousel({
       // WAI-ARIA APG: keyboard focus entering the carousel pauses auto-advance
       // so users navigating by Tab are not interrupted by unexpected slide changes.
       onFocus={() => setIsPaused(true)}
-      className="relative w-full h-[min(85svh,720px)] md:h-auto md:aspect-[21/9] overflow-hidden rounded-md"
+      className="relative w-full h-[min(53.13svh,455.4px)] md:h-auto md:aspect-[420/113.85] overflow-hidden rounded-md"
     >
       {/* Live region wraps the slides map so screen readers announce changes
           only when the user has paused (polite), not during auto-advance (off).
