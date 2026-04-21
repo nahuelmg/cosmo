@@ -88,8 +88,8 @@
   },
   "resources": {
     "title": "Recursos",
-    "intro": "Material útil del grupo: apuntes, libros, código y repositorios.",
-    "empty": "Próximamente publicaremos recursos aquí."
+    "empty": "Próximamente publicaremos recursos aquí.",
+    "groupEmpty": "Próximamente."
   },
   "contact": {
     "title": "Contacto",
