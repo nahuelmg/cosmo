@@ -12,9 +12,15 @@ See: .planning/PROJECT.md (updated 2026-04-20 after v1.3 milestone completion)
 Phase: None active — v1.3 complete
 Plan: Not started
 Status: Ready to plan next milestone
-Last activity: 2026-04-20 — v1.3 milestone archived, tagged, and committed
+Last activity: 2026-04-21 — Completed quick task 001: v1.4 code cleanup sweep
 
-Progress: [ship] v1.3 ✅
+Progress: [ship] v1.3 ✅ · [quick] 001 ✅
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | v1.4 code cleanup sweep — carried-forward deferrals from v1.1/v1.2/v1.3 | 2026-04-21 | 540f2c3 | [001-code-cleanup-sweep](./quick/001-code-cleanup-sweep/) |
 
 ## Shipped Milestones
 
@@ -25,19 +31,11 @@ Progress: [ship] v1.3 ✅
 
 ## Open Items Carried Forward (next milestone+)
 
-**v1.3 surfaced deferrals:**
+<!-- v1.1/v1.2/v1.3 code + doc cleanup resolved via quick-001 on 2026-04-21. -->
+
+**v1.3 surfaced deferrals (content):**
 - 6 of 9 members with `orcid_id` lack `contact.orcid` — author-ORCID link pill only wires for 3 (Calzetta, Lopez Nacir, Landau). Content task.
 - Tomás Ferreira Chase's own `contact.orcid` empty — his InspireHEP papers don't link through to his profile. Cosmetic.
-- `schemas.ts:132` `identifier.value` emits bare DOI; milestone spec asked for URL form (URL form exists in `sameAs[]`). Zero SEO impact; leave unless flagged.
-
-**v1.2 post-milestone doc drift:**
-- Commit `1cf9cf8` (after Phase 15 seal): MASTER.md Component Specs "Nav Link" + OVERRIDES.md v1.2 row 11 still describe `text-sm + py-1.5` — override from `text-lg + max-w-6xl` not recorded
-- Commit `b3f697c` (after Phase 15 seal): verify MASTER.md HeroCarousel recipe still matches tagline-removed state
-- Desktop NavLink explicitly has no `focus-visible:ring-*` — inherits UA default; revisit on live site
-
-**v1.1 code cleanup (deferred):**
-- Remove `publications_selected` Zod field, orphaned accessor exports (`getPublicationById`, `getPublicationsByTopic`, `getAllTopics`), dead `people.selectedPublications` i18n key
-- Update REQUIREMENTS.md PR-flow description (pushes direct-to-main per Phase 10 decision)
 
 **v1.0 production re-measurement (deferred):**
 - PERF-02 / PERF-04 / PERF-05 Vercel production LCP + CLS
