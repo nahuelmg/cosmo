@@ -211,7 +211,7 @@ All components use Tailwind utility classes inline (no `.btn-primary` etc. abstr
 </a>
 ```
 - Hit row: 44 px (py-1.5 inside h-24 header flex-center).
-- Visible chrome: text-sm + py-1.5 (~32 px text row).
+- Visible chrome: text-lg + py-1.5 (~36 px text row) as applied by SiteHeader (post-Phase-15 adjustment, commit 1cf9cf8). The NavLink component itself is size-agnostic; parent passes the text-* class.
 - Active-state crossfade: `transition-colors duration-150` (MICRO-01, explicit per spec).
 
 ### Locale Toggle

@@ -149,6 +149,7 @@ The following raw output fields were already acceptable and required no change:
 | HeroCarousel dot tap target | `w-2.5 h-2.5` + `gap-2` (~18 px center-to-center) | 10×10 visible inside `p-[17px]` button + `gap-0` (44 px center-to-center) | BTN-03 padding-inside pattern (Phase 15-01) |
 | MobileNav trigger / close | `w-10 h-10` (40×40) | `w-11 h-11` (44×44) | BTN-01 sweep (Phase 15-02) |
 | NavLink hit row | (no padding) | `py-1.5` + explicit `transition-colors duration-150` | BTN-05 + MICRO-01 (Phase 15-02) |
+| NavLink visible text (post-seal) | `text-sm` (inherited) | `text-lg` applied by SiteHeader + container `max-w-5xl` → `max-w-6xl` | Post-Phase-15 readability / logo positioning (commit `1cf9cf8`, 2026-04-20) |
 | LocaleToggle hit row | `px-2 py-1` | `px-2 py-1.5` | BTN-05 (Phase 15-02) |
 | SourceFilter pill | `px-3 py-1` (~30 px) + no transition | `px-3.5 py-1.5` (~36 px) + `transition-colors duration-150` | BTN-04 + MICRO-02 (Phase 15-03) |
 | PersonCard photo hover | (no transform on image) | `motion-safe:scale-[1.02] duration-200 group-hover` | MICRO-03 (Phase 15-04) |
@@ -157,3 +158,16 @@ The following raw output fields were already acceptable and required no change:
 **Inline-text link exemption:** WCAG 2.5.5 AAA inline-text exception applied to PartnerStrip, OutreachCard learn-more, SiteFooter EmailLink, ContactDetails social, SessionRow paper-link, PublicationEntry arXiv/DOI links, and PublicationEntry source-pill metadata chips. These deliberately do NOT receive 44×44 padding (per Phase 15 planner decision, RESEARCH open-question #1 + #3).
 
 **Drift gate:** `.github/workflows/lint-rings.yml` runs `grep -EnP 'focus-visible:ring-(?!2($|\s|"|'"'"'|/|\\)|accent-ring|offset-)' src/` on push/PR to prevent reintroduction of stray ring colors.
+
+---
+
+## Post-seal decisions (v1.2 → v1.4)
+
+**Desktop NavLink — intentional UA focus ring (no `focus-visible:ring-*`)**
+The Desktop NavLink in `src/components/layout/NavLink.tsx` deliberately has no `focus-visible:ring-*` classes and inherits the user-agent default focus ring. BTN-02's scope ("focus ring unification") applies to interactive buttons and non-inline links receiving a padding-based hit target; the NavLink's active-state styling already relies on `font-weight` + `color` changes (per 01-02 no-border policy + Phase 15-02 MICRO-01 spec), so a ring would be redundant visual noise in the header chrome row. If a future audit flags it, revisit on the live site before changing — the intentional choice is: rely on UA ring as a fallback for keyboard users while keeping the header chrome minimal.
+
+**MASTER.md Nav Link recipe — text-lg / max-w-6xl (commit `1cf9cf8`)**
+Captured in the v1.2 overrides table row above. SiteHeader caller applies `text-lg` + `max-w-6xl`; NavLink component itself remains size-agnostic.
+
+**HeroCarousel tagline removal (commit `b3f697c`)**
+No MASTER.md update required — the tagline string only existed in live `HeroCarousel.tsx` JSX, never in a MASTER recipe block. `siteConfig.tagline` is retained for SEO `<meta>` description in `src/app/[locale]/layout.tsx`. No design-system drift.
