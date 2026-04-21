@@ -28,6 +28,7 @@ import {
 import { ResearchSchema } from "../src/content/schemas/research.schema.ts";
 import { JournalClubSchema } from "../src/content/schemas/journal-club.schema.ts";
 import { OutreachSchema } from "../src/content/schemas/outreach.schema.ts";
+import { siteConfig } from "../src/config/site.ts";
 
 // ---------------------------------------------------------------------------
 // Path constants
@@ -142,7 +143,19 @@ if (Array.isArray(rawPeople)) {
   });
 }
 
-// 3. Report and exit
+// 3. siteConfig placeholder guard
+//    Catches bracket/angle placeholders like "[insert mail]", "<TBD>" that
+//    would otherwise silently ship to prod via src/config/site.ts.
+const PLACEHOLDER_CHARS = /[[\]<>{}]/;
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const email = siteConfig.contactEmail;
+if (typeof email !== "string" || PLACEHOLDER_CHARS.test(email) || !EMAIL_SHAPE.test(email)) {
+  errors.push(
+    `\n  src/config/site.ts\n  └─ contactEmail\n     Value looks like a placeholder — fill in the real email.\n     Received: ${JSON.stringify(email)}`,
+  );
+}
+
+// 4. Report and exit
 if (errors.length > 0) {
   console.error("\n\u2716 Content validation failed\n");
   for (const e of errors) console.error(e);
@@ -150,5 +163,5 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\u2714 Content validation passed (5 files, all entries parsed, all photos exist)");
+console.log("\u2714 Content validation passed (5 files, all entries parsed, all photos exist, contactEmail well-formed)");
 process.exit(0);
