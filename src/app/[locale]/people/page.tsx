@@ -62,6 +62,8 @@ export default async function PeoplePage({ params }: Props) {
             title={t(cat)}
             people={people}
             category={cat as 'undergrad' | 'past'}
+            thesisLabel={t('thesis')}
+            nowAtLabel={t('nowAt')}
           />
         );
       })}

@@ -7,6 +7,7 @@ type LocalizedPerson = {
   name: string;
   role: string;
   thesis_topic?: string;
+  current_position?: string;
   years?: { start: number; end?: number };
   [key: string]: unknown;
 };
@@ -16,6 +17,8 @@ interface PeoplePlainSectionProps {
   title: string;
   people: LocalizedPerson[];
   category: 'undergrad' | 'past';
+  thesisLabel: string;
+  nowAtLabel: string;
 }
 
 export function PeoplePlainSection({
@@ -23,6 +26,8 @@ export function PeoplePlainSection({
   title,
   people,
   category,
+  thesisLabel,
+  nowAtLabel,
 }: PeoplePlainSectionProps) {
   return (
     <section
@@ -35,7 +40,7 @@ export function PeoplePlainSection({
       >
         {title}
       </h2>
-      <ul className="mt-6">
+      <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {people.map((p) => {
           if (category === 'past') {
             return (
@@ -44,6 +49,8 @@ export function PeoplePlainSection({
                 name={p.name}
                 role={p.role}
                 years={p.years}
+                currentPosition={p.current_position}
+                nowAtLabel={nowAtLabel}
               />
             );
           }
@@ -52,6 +59,7 @@ export function PeoplePlainSection({
               key={p.slug}
               name={p.name}
               thesisTopic={p.thesis_topic}
+              thesisLabel={thesisLabel}
             />
           );
         })}
