@@ -173,6 +173,35 @@
     "social_links": []
   },
   {
+    "slug": "claudio-simeone",
+    "name": "Claudio Simeone",
+    "role": {
+      "es": "Investigador",
+      "en": "Investigator"
+    },
+    "category": "pi",
+    "photo": "people/claudio-simeone.svg",
+    "short_bio": {
+      "es": "Claudio Simeone es investigador del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Claudio Simeone is a researcher in the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "claudio simeone",
+    "contact": {
+      "email": "csimeone@df.uba.ar"
+    },
+    "social_links": []
+  },
+  {
     "slug": "nahuel-miron-granese",
     "name": "Nahuel Miron Granese",
     "role": {
