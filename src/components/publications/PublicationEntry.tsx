@@ -49,11 +49,11 @@ export function PublicationEntry({
             "inline-flex items-center rounded-full px-2 py-0.5 font-medium";
           const tone =
             publication.source === "inspirehep"
-              ? "bg-[oklch(0.95_0.04_235)] text-[oklch(0.38_0.10_235)]"
+              ? "bg-[oklch(0.95_0.04_235)] text-[oklch(0.38_0.10_235)] dark:bg-[oklch(0.25_0.05_235)] dark:text-[oklch(0.80_0.09_235)]"
               : publication.source === "arxiv"
-                ? "bg-[oklch(0.95_0.05_30)] text-[oklch(0.42_0.12_30)]"
+                ? "bg-[oklch(0.95_0.05_30)] text-[oklch(0.42_0.12_30)] dark:bg-[oklch(0.28_0.06_30)] dark:text-[oklch(0.82_0.10_30)]"
                 : publication.source === "orcid"
-                  ? "bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)]"
+                  ? "bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)] dark:bg-[oklch(0.26_0.06_118)] dark:text-[oklch(0.80_0.10_118)]"
                   : "bg-surface-alt text-ink-muted";
           const label =
             publication.source === "inspirehep"
@@ -83,7 +83,7 @@ export function PublicationEntry({
             href={authorOrcidUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center rounded-full px-2 py-0.5 font-medium bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+            className="inline-flex items-center rounded-full px-2 py-0.5 font-medium bg-[oklch(0.95_0.05_118)] text-[oklch(0.40_0.12_118)] dark:bg-[oklch(0.26_0.06_118)] dark:text-[oklch(0.80_0.10_118)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
           >
             ORCID
           </a>
@@ -113,7 +113,7 @@ export function PublicationEntry({
               href={`https://doi.org/${publication.doi}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[oklch(0.38_0.10_235)] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
+              className="text-[oklch(0.38_0.10_235)] dark:text-[oklch(0.80_0.09_235)] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
             >
               {labels.doi}:{publication.doi}
             </a>

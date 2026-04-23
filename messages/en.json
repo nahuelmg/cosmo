@@ -26,7 +26,11 @@
   "layout": {
     "skipToContent": "Skip to main content",
     "openMenu": "Open navigation menu",
-    "closeMenu": "Close navigation menu"
+    "closeMenu": "Close navigation menu",
+    "themeToggle": "Switch to {next} mode",
+    "theme_light": "light",
+    "theme_dark": "dark",
+    "theme_system": "system"
   },
   "home": {
     "highlightsTitle": "Highlights",

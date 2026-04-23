@@ -6,6 +6,7 @@ import {useTranslations} from 'next-intl';
 import {NAV_ITEMS} from './nav-items';
 import {NavLink} from './NavLink';
 import {LocaleToggle} from './LocaleToggle';
+import {ThemeToggle} from './ThemeToggle';
 
 /**
  * Mobile-only navigation drawer.
@@ -72,7 +73,7 @@ export function MobileNav() {
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/20" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-ink/20 dark:bg-black/60" />
         <Dialog.Content
           aria-label={t('openMenu')}
           className={[
@@ -142,10 +143,11 @@ export function MobileNav() {
             replace, and setOpen(false) would race the navigation commit.
           */}
           <div
-            className="mt-auto pt-6"
+            className="mt-auto pt-6 flex items-center gap-3"
             onClickCapture={() => setOpen(false)}
           >
-            <LocaleToggle className="w-full text-left px-2 py-3 text-sm" />
+            <ThemeToggle />
+            <LocaleToggle className="flex-1 text-left px-2 py-3 text-sm" />
           </div>
         </Dialog.Content>
       </Dialog.Portal>

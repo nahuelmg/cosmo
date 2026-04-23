@@ -27,6 +27,46 @@
 
 **Color Notes:** Warm-academic: ivory surfaces, warm near-black ink, muted terracotta accent. No cool blues, no neons, no gradients. Accent surfaces on links, focus ring, active-nav underline, and at most one additional chrome element. Not on body prose, not as background fills.
 
+### Dark Mode (optional toggle)
+
+Opt-in dark palette applied when `.dark` sits on `<html>`. Light mode remains
+the canonical warm-academic identity; dark is a user preference honoured via
+cookie + `prefers-color-scheme`. Tokens adapted per
+`skills/domains/dark-mode/SKILL.md`:
+
+| Role | Light (baseline) | Dark (override) |
+|------|------------------|-----------------|
+| `--color-surface` | `oklch(0.995 0.003 85)` | `oklch(0.22 0.005 60)` |
+| `--color-surface-alt` | `oklch(0.978 0.008 80)` | `oklch(0.26 0.008 60)` |
+| `--color-ink` | `oklch(0.22 0.015 60)` | `oklch(0.93 0.012 75)` |
+| `--color-ink-muted` | `oklch(0.48 0.012 60)` | `oklch(0.75 0.015 65)` |
+| `--color-ink-subtle` | `oklch(0.62 0.010 60)` | `oklch(0.65 0.012 65)` |
+| `--color-accent` | `oklch(0.52 0.12 45)` | `oklch(0.70 0.14 45)` |
+| `--color-accent-hover` | `oklch(0.44 0.13 45)` | `oklch(0.78 0.15 45)` |
+| `--color-accent-ring` | `oklch(0.52 0.12 45 / 0.45)` | `oklch(0.70 0.14 45 / 0.55)` |
+| `--color-accent-sage` | `oklch(0.55 0.05 145)` | `oklch(0.72 0.07 145)` |
+| `--color-accent-ink-blue` | `oklch(0.40 0.08 250)` | `oklch(0.72 0.10 250)` |
+| `--shadow-sm` | `0 1px 2px oklch(ink/0.04)` | `0 1px 2px oklch(0 0 0 / 0.4)` |
+| `--shadow-md` | `0 2px 8px oklch(ink/0.06)` | `0 2px 8px oklch(0 0 0 / 0.55)` |
+
+**Rules:**
+- Surfaces carry only a residual warm hue (chroma ≤ 0.008). No strong tinting —
+  the #1 dark-mode mistake is tinting surfaces with brand hue; keep hue on
+  accent only.
+- Accent lightness + chroma are *raised* so terracotta pops against dark
+  surfaces (L 0.52 → 0.70, C 0.12 → 0.14).
+- Text uses L 0.93 (not pure white) for primary and L 0.75 (not L 0.60) for
+  muted — dark-mode muted text at L < 0.65 becomes unreadable.
+- Shadows re-authored as near-black; light-mode shadows tinted with warm ink
+  wash out on dark surfaces.
+- `ring-offset-surface` automatically flips with the theme; no ring-offset
+  overrides needed on light-bg components.
+
+**Source-pill dark variants** (PublicationEntry only — the site's one "category
+chip" cluster): invert L between bg and text, preserve hue, moderate chroma.
+Applied inline via Tailwind `dark:` arbitrary values, not tokens — a token
+would over-promise reuse for a single component's palette.
+
 ### Typography
 
 - **Heading Font:** Source Serif 4 (variable, SIL OFL; subsets: Latin, Latin-Extended, Greek)
@@ -267,7 +307,8 @@ The Image inside the card adds:
 
 - Ornate or decorative design elements
 - Gradient fills or coloured image overlays
-- Dark-mode-first palettes or cosmic/space aesthetics
+- Dark-mode-first palettes or cosmic/space aesthetics (an *opt-in* dark toggle
+  is supported — see Dark Mode above — but the canonical identity is light)
 - Cool institutional blues or neon accents
 - Third surface colour tier (use only surface + surface-alt)
 - Border tokens or hairline card/section dividers

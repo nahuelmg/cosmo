@@ -26,7 +26,11 @@
   "layout": {
     "skipToContent": "Saltar al contenido principal",
     "openMenu": "Abrir menú de navegación",
-    "closeMenu": "Cerrar menú de navegación"
+    "closeMenu": "Cerrar menú de navegación",
+    "themeToggle": "Cambiar a modo {next}",
+    "theme_light": "claro",
+    "theme_dark": "oscuro",
+    "theme_system": "del sistema"
   },
   "home": {
     "highlightsTitle": "Destacados",

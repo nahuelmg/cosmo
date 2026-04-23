@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Enable `dark:` utility variant in Tailwind v4 — matches `.dark` applied to
+   <html> by the no-flash inline script + ThemeProvider. */
+@custom-variant dark (&:is(.dark *));
+
 /* Map next/font CSS variables to Tailwind font utilities (font-serif, font-sans).
    @theme inline is required — without it Tailwind compiles the literal font name
    and bypasses the next/font subsetting. See RESEARCH.md Pitfall #5. */
@@ -56,6 +60,32 @@
 
   /* ── Layout — sticky header height, matches Tailwind h-24 (96px) ── */
   --header-height: 96px;
+}
+
+/* ── Dark mode — warm-academic night palette ──
+   Applies when `.dark` sits on <html>. Surfaces are near-neutral with a tiny
+   warm hue (60°, chroma ≤0.008) to preserve the warm-academic feel without
+   the "sickly tinted" look called out in skills/domains/dark-mode/SKILL.md.
+   Accent bumped in lightness + chroma so terracotta still pops against dark.
+   Shadow tokens re-authored as near-black since the light-mode ink tint would
+   wash out on dark surfaces. */
+.dark {
+  --color-surface:     oklch(0.22 0.005 60);
+  --color-surface-alt: oklch(0.26 0.008 60);
+
+  --color-ink:        oklch(0.93 0.012 75);
+  --color-ink-muted:  oklch(0.75 0.015 65);
+  --color-ink-subtle: oklch(0.65 0.012 65);
+
+  --color-accent:       oklch(0.70 0.14 45);
+  --color-accent-hover: oklch(0.78 0.15 45);
+  --color-accent-ring:  oklch(0.70 0.14 45 / 0.55);
+
+  --color-accent-sage:     oklch(0.72 0.07 145);
+  --color-accent-ink-blue: oklch(0.72 0.10 250);
+
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.4);
+  --shadow-md: 0 2px 8px 0 oklch(0 0 0 / 0.55);
 }
 
 /* ── Base styles ── */

@@ -8,6 +8,7 @@ import {NAV_ITEMS} from './nav-items';
 import {NavLink} from './NavLink';
 import {LocaleToggle} from './LocaleToggle';
 import {MobileNav} from './MobileNav';
+import {ThemeToggle} from './ThemeToggle';
 
 /**
  * Sticky top header — the chrome every page wears.
@@ -99,9 +100,10 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        {/* Right column — locale toggle (desktop) or mobile nav trigger. */}
+        {/* Right column — theme + locale toggles (desktop) or mobile nav trigger. */}
         <div className="flex-1 flex items-center justify-end">
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             <LocaleToggle />
           </div>
           <div className="md:hidden">
