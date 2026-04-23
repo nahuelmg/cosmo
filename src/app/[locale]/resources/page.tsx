@@ -112,7 +112,7 @@ export default async function ResourcesPage({ params }: Props) {
             }
             return (
               <section key={group.title.en}>
-                <details open className="group">
+                <details className="group">
                   <summary
                     className={[
                       'flex items-center gap-3 py-1',
