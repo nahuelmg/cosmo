@@ -44,6 +44,15 @@ const RESOURCE_GROUPS: ResourceGroup[] = [
           es: 'Extensión del código de Boltzmann CLASS que implementa las perturbaciones cosmológicas con materia oscura ultraliviana de spin-0.',
         },
       },
+      {
+        title: { es: 'pgw-evolution', en: 'pgw-evolution' },
+        url: 'https://github.com/nahuelmg/pgw-evolution',
+        description: {
+          en: 'Numerical code for the evolution of the primordial gravitational-wave spectrum through a viscous primordial plasma, within a second-order relativistic hydrodynamic framework.',
+          es: 'Código numérico para la evolución del espectro de ondas gravitacionales primordiales a través de un plasma primordial viscoso, en un marco hidrodinámico relativista de segundo orden.',
+        },
+        doi: '10.1088/1475-7516/2021/06/008',
+      },
     ],
   },
   {
