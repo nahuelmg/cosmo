@@ -53,8 +53,8 @@
   {
     "id": "artificial-intelligence",
     "title": {
-      "es": "Inteligencia Artificial",
-      "en": "Artificial Intelligence"
+      "es": "Inteligencia Artificial y Cosmologia",
+      "en": "Artificial Intelligence and Cosmology"
     },
     "short_description": {
       "es": "Aplicacion de metodos de aprendizaje automatico y redes neuronales a problemas de cosmologia observacional y analisis de datos astronomicos.",
@@ -100,5 +100,39 @@
     },
     "icon": "binary",
     "order": 5
+  },
+  {
+    "id": "modified-gravity",
+    "title": {
+      "es": "Gravedad Modificada",
+      "en": "Modified Gravity"
+    },
+    "short_description": {
+      "es": "Teorias alternativas a la relatividad general: f(R), escalar-tensor y familias DHOST, y sus huellas observacionales en cosmologia y astrofisica.",
+      "en": "Alternative theories to general relativity: f(R), scalar-tensor, and the DHOST family, and their observational signatures in cosmology and astrophysics."
+    },
+    "full_description": {
+      "es": "La expansion acelerada del universo y las tensiones persistentes entre las mediciones locales y cosmologicas de la constante de Hubble motivan la exploracion de extensiones a la relatividad general. Nuestro grupo estudia teorias de gravedad modificada — desde modelos f(R) y escalar-tensoriales hasta las familias DHOST y Horndeski — con el objetivo de identificar firmas observacionales que las distingan del modelo Lambda-CDM estandar.\n\nTrabajamos en el calculo de observables que pueden discriminar entre paradigmas: el crecimiento lineal y no lineal de perturbaciones, el efecto Sachs-Wolfe integrado, la velocidad de propagacion de las ondas gravitacionales y las pruebas de gravedad en escalas de sistemas solares a traves de mecanismos de apantallamiento (chameleon, Vainshtein, simetron). Combinamos calculos analiticos con simulaciones N-cuerpos adaptadas que capturan la fenomenologia no lineal propia de cada teoria.\n\nColaboramos con grupos teoricos del IAFE y del ICTP-SAIFR en el desarrollo de parametrizaciones efectivas — del tipo effective field theory of dark energy — que permiten contrastar familias completas de modelos de manera unificada contra los datos de DESI, Euclid y Rubin LSST. Un objetivo activo es acotar el espacio de teorias viables combinando las restricciones provenientes del crecimiento de estructura, las ondas gravitacionales de fusiones binarias y las anisotropias del fondo de microondas.",
+      "en": "The accelerated expansion of the universe and the persistent tensions between local and cosmological measurements of the Hubble constant motivate the exploration of extensions to general relativity. Our group studies modified-gravity theories — from f(R) and scalar-tensor models to the DHOST and Horndeski families — with the aim of identifying observational signatures that distinguish them from the standard Lambda-CDM model.\n\nWe work on the calculation of observables that can discriminate between paradigms: the linear and non-linear growth of perturbations, the integrated Sachs-Wolfe effect, the propagation speed of gravitational waves, and solar-system gravity tests via screening mechanisms (chameleon, Vainshtein, symmetron). We combine analytical calculations with dedicated N-body simulations that capture the non-linear phenomenology specific to each theory.\n\nWe collaborate with theoretical groups at IAFE and ICTP-SAIFR in the development of effective parameterisations — of the effective-field-theory-of-dark-energy type — that allow entire families of models to be tested in a unified way against DESI, Euclid, and Rubin LSST data. An active goal is to constrain the space of viable theories by combining the bounds from structure growth, gravitational waves from binary mergers, and cosmic microwave background anisotropies."
+    },
+    "icon": "warp",
+    "order": 6
+  },
+  {
+    "id": "data-analysis-and-inference",
+    "title": {
+      "es": "Analisis de Datos e Inferencia",
+      "en": "Data Analysis and Inference"
+    },
+    "short_description": {
+      "es": "Metodos bayesianos, inferencia basada en simulaciones y analisis estadistico de grandes relevamientos cosmologicos.",
+      "en": "Bayesian methods, simulation-based inference, and statistical analysis of large cosmological surveys."
+    },
+    "full_description": {
+      "es": "La cosmologia moderna es, en lo esencial, una disciplina de inferencia estadistica: los parametros fundamentales del universo se extraen comparando predicciones teoricas con datos ruidosos a traves de analisis probabilisticos de alta dimension. Nuestro grupo desarrolla y aplica metodos bayesianos — cadenas de Markov Monte Carlo Hamiltonianas, nested sampling y muestreadores adaptativos — para obtener restricciones robustas sobre los parametros cosmologicos y los modelos fisicos subyacentes.\n\nExploramos ademas metodos emergentes de inferencia basada en simulaciones (simulation-based inference, SBI) que prescinden de funciones de verosimilitud analiticas. Estas tecnicas — estimacion de razon de verosimilitud, flujos normalizantes y estimacion de posteriori amortizada — son particularmente adecuadas para el analisis combinado de sondas cosmologicas, donde la estructura de covariancia es dificil de expresar en forma cerrada y los efectos sistematicos se modelan a traves de simuladores complejos.\n\nAplicamos estos metodos a los datos de Planck, DESI, Rubin LSST y SKA, con especial enfasis en el diagnostico de tensiones cosmologicas — la tension en H0 y la tension en sigma8 — y en el desarrollo de pipelines reproducibles que integren la cuantificacion de incertidumbres sistematicas. Nuestras contribuciones se realizan en colaboracion con el grupo de astroinformatica del IATE (Cordoba) y con equipos internacionales de analisis estadistico de los mencionados relevamientos.",
+      "en": "Modern cosmology is, at its core, a discipline of statistical inference: the fundamental parameters of the universe are extracted by comparing theoretical predictions with noisy data through high-dimensional probabilistic analyses. Our group develops and applies Bayesian methods — Hamiltonian Markov Chain Monte Carlo, nested sampling, and adaptive samplers — to obtain robust constraints on cosmological parameters and the underlying physical models.\n\nWe also explore emerging simulation-based inference (SBI) methods that dispense with analytical likelihood functions. These techniques — likelihood-ratio estimation, normalising flows, and amortised posterior estimation — are particularly well suited to the combined analysis of cosmological probes, where the covariance structure is hard to express in closed form and systematic effects are modelled through complex simulators.\n\nWe apply these methods to data from Planck, DESI, Rubin LSST, and SKA, with particular emphasis on diagnosing cosmological tensions — the H0 tension and the sigma8 tension — and on developing reproducible pipelines that integrate systematic uncertainty quantification. Our contributions are made in collaboration with the astroinformatics group at IATE (Cordoba) and with international statistical-analysis teams of the aforementioned surveys."
+    },
+    "icon": "posterior",
+    "order": 7
   }
 ]

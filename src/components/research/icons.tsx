@@ -50,6 +50,44 @@ function BinarySystem({ strokeWidth = 2, ...props }: IconProps) {
   );
 }
 
+function GravityWell({ strokeWidth = 2, ...props }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="12" cy="12.5" r="2.1" fill="currentColor" stroke="none" />
+      <path d="M 2.5 6 Q 12 11 21.5 6" />
+      <path d="M 2.5 19 Q 12 14 21.5 19" />
+    </svg>
+  );
+}
+
+function Posterior({ strokeWidth = 2, ...props }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <line x1="3" y1="19" x2="21" y2="19" />
+      <path d="M 3 19 C 7 19 9 6 12 6 C 15 6 17 19 21 19" />
+      <line x1="12" y1="6" x2="12" y2="19" strokeDasharray="1 1.6" />
+      <line x1="8" y1="19" x2="8" y2="21.2" />
+      <line x1="16" y1="19" x2="16" y2="21.2" />
+    </svg>
+  );
+}
+
 const ICON_MAP: Record<string, IconComponent> = {
   atom: Atom,
   waves: Waves,
@@ -57,6 +95,8 @@ const ICON_MAP: Record<string, IconComponent> = {
   cpu: Cpu,
   galaxy: Galaxy,
   binary: BinarySystem,
+  warp: GravityWell,
+  posterior: Posterior,
 };
 
 export function getResearchIcon(iconName?: string): IconComponent {
