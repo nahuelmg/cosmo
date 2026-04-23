@@ -26,7 +26,8 @@ export function generateStaticParams() {
       p.category === 'pi' ||
       p.category === 'postdoc' ||
       p.category === 'phd' ||
-      p.category === 'external'
+      p.category === 'external' ||
+      p.category === 'visitors'
   );
   return routing.locales.flatMap((locale) =>
     clickable.map((p) => ({ locale, slug: p.slug }))

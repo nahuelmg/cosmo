@@ -228,7 +228,8 @@
     "orcid_id": "0000-0003-0770-1865",
     "display_name_normalized": "nahuel miron granese",
     "contact": {
-      "email": "nahuel.mirongranese@df.uba.ar"
+      "email": "nahuel.mirongranese@df.uba.ar",
+      "orcid": "0000-0003-0770-1865"
     },
     "social_links": []
   },
@@ -531,6 +532,188 @@
     "contact": {
       "email": "tomas.cicarella@df.uba.ar"
     },
+    "social_links": []
+  },
+  {
+    "slug": "martin-makler",
+    "name": "Martin Makler",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Martin Makler es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Martin Makler is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "martin makler",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "leonardo-trombetta",
+    "name": "Leonardo Trombetta",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Leonardo Trombetta es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Leonardo Trombetta is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "leonardo trombetta",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "matias-zaldarriaga",
+    "name": "Matias Zaldarriaga",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Matias Zaldarriaga es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Matias Zaldarriaga is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "matias zaldarriaga",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "nicolas-yunes",
+    "name": "Nicolas Yunes",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Nicolas Yunes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Nicolas Yunes is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "nicolas yunes",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "lucas-pinol",
+    "name": "Lucas Pinol",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Lucas Pinol es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Lucas Pinol is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "lucas pinol",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "sebastian-cespedes",
+    "name": "Sebastian Cespedes",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Sebastian Cespedes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Sebastian Cespedes is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "sebastian cespedes",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "arttu-rajantie",
+    "name": "Arttu Rajantie",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Arttu Rajantie es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Arttu Rajantie is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "arttu rajantie",
+    "contact": {},
     "social_links": []
   }
 ]
