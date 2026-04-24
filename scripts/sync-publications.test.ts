@@ -165,10 +165,84 @@ describe("inspireHitToPublication", () => {
     expect(pub.year).toBe(2011);
   });
 
-  it("falls back to current year when no publication_info and no preprint_date", () => {
+  it("falls back to thesis_info.defense_date YYYY when no publication_info/preprint_date", () => {
+    const hit = makeInspireHit({
+      thesis_info: { degree_type: "phd", defense_date: "2021-03-19" },
+    });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.year).toBe(2021);
+  });
+
+  it("falls back to earliest_date YYYY when no publication_info/preprint_date/thesis_info", () => {
+    const hit = makeInspireHit({ earliest_date: "2018-07" });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.year).toBe(2018);
+  });
+
+  it("falls back to current year when all year sources are absent", () => {
     const hit = makeInspireHit({});
     const pub = inspireHitToPublication(hit);
     expect(pub.year).toBe(new Date().getFullYear());
+  });
+
+  it("pushes a warning into the provided array when the current-year fallback is used", () => {
+    const warnings: string[] = [];
+    const hit = makeInspireHit({ control_number: 555 });
+    inspireHitToPublication(hit, warnings);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain("Missing year");
+    expect(warnings[0]).toContain("inspire-555");
+  });
+
+  it("does NOT push a warning when year is resolved from thesis_info", () => {
+    const warnings: string[] = [];
+    const hit = makeInspireHit({
+      thesis_info: { degree_type: "phd", defense_date: "2021-03-19" },
+    });
+    inspireHitToPublication(hit, warnings);
+    expect(warnings).toHaveLength(0);
+  });
+
+  it("renders thesis journal as '{Degree} Thesis, {institution}' when no publication_info", () => {
+    const hit = makeInspireHit({
+      thesis_info: {
+        degree_type: "phd",
+        defense_date: "2021-03-19",
+        institutions: [{ name: "U. Buenos Aires" }],
+      },
+    });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.journal).toBe("PhD Thesis, U. Buenos Aires");
+  });
+
+  it("is case-insensitive on degree_type (Inspire returns 'PhD' vs 'phd' depending on endpoint)", () => {
+    const hit = makeInspireHit({
+      thesis_info: {
+        degree_type: "PhD",
+        defense_date: "2021-03-19",
+        institutions: [{ name: "U. Buenos Aires" }],
+      },
+    });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.journal).toBe("PhD Thesis, U. Buenos Aires");
+  });
+
+  it("renders plain 'Thesis' for unknown degree_type", () => {
+    const hit = makeInspireHit({
+      thesis_info: { defense_date: "2020-01-01", institutions: [{ name: "X" }] },
+    });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.journal).toBe("Thesis, X");
+  });
+
+  it("publication_info takes precedence over thesis_info for both year and journal", () => {
+    const hit = makeInspireHit({
+      publication_info: [{ journal_title: "Phys.Rev.D", year: 2022 }],
+      thesis_info: { degree_type: "phd", defense_date: "2021-03-19" },
+    });
+    const pub = inspireHitToPublication(hit);
+    expect(pub.year).toBe(2022);
+    expect(pub.journal).toContain("Phys.Rev.D");
   });
 
   it("uses arxiv ID as publication id when available", () => {

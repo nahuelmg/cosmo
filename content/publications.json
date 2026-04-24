@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-04-24T13:31:53.049Z",
+    "synced_at": "2026-04-24T19:18:18.816Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -202,40 +202,6 @@
       "abstract": "The detection of B-modes in the CMB polarization pattern is a major issue in modern cosmology and must therefore be handled with analytical methods that produce reliable results. We describe a method that uses the frequency dependence of the QUBIC synthesized beam to perform component separation at the map-making stage, to obtain more precise results. We aim to demonstrate the feasibility of component separation during the map-making stage in time domain space. This new technique leads to a more accurate description of the data and reduces the biases in cosmological analyses. The method uses a library for highly parallel computation which facilitates the programming and allows the description of experiments as easily manipulated operators. These operators can be combined to obtain a joint analysis using several experiments to maximize precision. The results show that the method works well and permits end-to-end analysis for the CMB experiments, and in particular, for QUBIC. The method includes astrophysical foregrounds, and also systematic effects like gain variation in the detectors. We developed a software pipeline that produces uncertainties on the tensor-to-scalar ratio at the level of σ(r) ∼ 0.023 using only QUBIC simulated data."
     },
     {
-      "id": "inspire-1847037",
-      "authors": [
-        "Aihara, Hiroaki",
-        "Aranda, Alfredo",
-        "Camacho Toro, Reina ",
-        "Cambiaso, Mauro",
-        "Carena, Marcela",
-        "Carrera, Edgar",
-        "D'Olivo, Juan Carlos",
-        "Gago, Alberto",
-        "Goncalves, Thiago",
-        "Herrera, Gerardo",
-        "López Nacir, Diana ",
-        "Losada, Marta",
-        "Molina, Jorge",
-        "Mulders, Martijn",
-        "Restrepo, Diego",
-        "Rosenfeld, Rogerio",
-        "Sánchez, Arturo",
-        "Sánchez, Federico",
-        "Soares-Santos, Marcelle",
-        "Subieta, Martin",
-        "Wahlberg, Hernán",
-        "Yepes Ramirez, Harold ",
-        "Zerwekh, Alfonso"
-      ],
-      "title": "Latin American Strategy Forum for Research Infrastructures for High Energy, Cosmology, Astroparticle Physics  LASF4RI for HECAP",
-      "journal": "Preprint",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "abstract": "An important effort is currently being forged in Latin America to map a landscape of initiatives\nin High Energy, Cosmology and Astroparticle Physics (HECAP) towards the development of\nstrategic research infrastructures for the region. The process derived from the October 2018\nIberoamerican Science and Technology Ministerial meeting and its corresponding declaration1\n.\n\nThis declaration was then ratified at the end of 2018 by the Heads of State2\n\n. The declaration\ngave the mandate to create a Strategic Forum for Research Infrastructures, both to provide an\nincentive for participation in existing facilities as well as to encourage the development of new\nprojects and initiatives. It is important to note that in the area of HECAP Spain and Portugal\ntake part in the European processes for the development of the corresponding strategy. Thus, a\nnecessary first step was to pursue the HECAP strategy at the Latin American level that would\nthen interface with those of Spain and Portugal. Additionally, the LASF4RI-HECAP initiative\nis aligned with current national efforts aiming at including HECAP in the roadmap of Science\nand Technology (S&T) programs.\nHigh energy, cosmology and astroparticle physics research focuses on new phenomena arising\nfrom the smallest to the largest scales in the Universe. Inspired by the fundamental unknowns\nin cosmology, astroparticle and particle physics, Latin American scientists have come together\nto jointly build the landscape of current efforts and to layout the trajectory in Latin America\nfor future developments of experimental research in these fields. Both regional projects and\nthe participation in key global projects are prioritized. Thus, this document presents the main\nexperimental activities and thrusts in high energy physics, cosmology and astroparticle physics\nfor the short and mid term, at the same time identifying where they should be focused for long\nterm future.\nThe LASF4RI-HECAP process comes about for the first time in Latin America in a similar\ntime frame to analogous reiterative processes occurring in the US and Canada, while Europe has\n\nrecently completed an update to its own process for particle physics. The main goals and mile-\nstones of the Latin American process are described in the next section. Nevertheless, the fun-\ndamental objective is to strengthen regional cooperation, that accompanied with proper funding,\n\nwith allow for more impactful contributions and benefits for the region from the development of\nresearch infrastructures and the participation in global projects. The principal outcome of this process are ten recommendations that aim to foster the develop-\nment, and define the roadmap, for experimental HECAP projects and facilities in the region,\n\n\nfor a sustained and active participation and leadership in global flagship projects, for efforts\nto maintain continuous capacity building in advanced training, technological developments and\ncomputing, as well as for societal engagement. Figure 1.1 summarizes both the landscape and\nthe roadmap, exemplifying the growing community that is engaged and that could continue to thrive with sustained resources3\n. The long term future projects under consideration are identified\n\n\nby the lighter colors.\nIn this document, a scientific roadmap of research infrastructures for HECAP is presented for\n\n\neach of the following areas: astrophysics, multi-messenger astronomy and astroparticles, cos-\nmology, dark matter, collider and neutrinos. The software and computing requirements and\n\n\nstrategy are also discussed. At the same time explicit social and economic benefits are detailed\nthat justify the corresponding recommendations. Outreach and citizen science4\n\n\ninitiatives are\npresented to fully complement the picture of a strategic development of HECAP, relevant for\nscientific discoveries and societal impact. Recognizing that the final stages of this process has\n\n\noccurred against the backdrop of the global pandemic, some highlights of the activities per-\nformed by HECAP scientists to support the national responses to the COVID-19 pandemic are\n\n\nalso presented.\nThe Latin American HECAP Physics Briefing Book is a supporting document which delves into\nthe contributions received from the scientific community during the LASF4RI-HECAP process.\nIt is intended to be useful reference for the community. Additional benefits of this strategic\nprocess is the development of national roadmaps via in-depth discussions of the communities at\nthe national level, and to promote the knowledge, visibility and diffusion of regional expertise raising awareness internationally of this coordinated regional strategy.\nTo finalize, this effort has led to the conclusion that a coordinating body for HECAP at the Latin\nAmerican level is needed and is an important next step that the scientific community should\ndevelop."
-    },
-    {
       "id": "inspire-3129374",
       "authors": [
         "Ferazzoli, Sofia",
@@ -265,42 +231,6 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
-    },
-    {
-      "id": "inspire-2667781",
-      "authors": [
-        "Miron-Granese, Nahuel"
-      ],
-      "title": "Hidrodinámica relativista y cosmología",
-      "journal": "Preprint",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "abstract": "In this thesis we elaborate on the description of real \u001duids in relativistic contexts and its\napplications to cosmology.\nThe \u001crst part is dedicated to introduce the motivations and basic concepts about the suitable in models to describe relativistic real \u001duids. In this opportunity, we choose to work with\nthe framework of the so-called Second Order Theories (SOT) and, in particular, with the Divergence Type Theory (DTT) formalism, which ensures both causality and that the Second Law\nof Thermodynamics is non-perturbatively ful\u001clled. Part of the original work is based on elaborating formal developments that allow to study the non-linear dynamics of the new degrees of\nfreedom introduced by these causal hydrodynamic theories to describe non-ideal e\u001bects. In turn,\nconsidering a generalization of the \u001ductuation-dissipation theorem, we study how the thermal\n\u001ductuations, inherent to dissipation, a\u001bect the tensor sector of the degrees of freedom. We develop a self-consistent scheme to analyze the relevant correlation functions of the system and\ntheir corrections due to non-linear e\u001bects using functional methods like the Martin-Siggia-Rose\nformalism and the Two Particle Irreducible E\u001bective Action. An interesting result of the previous analysis suggests that the tensor modes could sustain an inverse entropy cascade and thus\nsupport, at least in part, the generation of large-scale structures from small-scale \u001ductuations.\nIn the second part we elaborate on a particular application of the relativistic hydrodynamics\nto cosmology related to the primordial gravitational waves (pGW). The main hypothesis lies in\nmodelling the cosmological plasma of the Early Universe as a dissipative \u001duid described by a\nDTT.\nOur contribution is to present a hydrodynamical scheme that allows to study the evolution\nof the pGW in presence of the primordial viscous plasma in the Early Universe, through a selfconsistent interaction which includes the back-reaction of the GW on the plasma. In particular,\nwe study how the spin-2 modes of the \u001duid, which represent part of the non-ideal degrees of\nfreedom, couple to GW to \u001crst order capturing the GW-viscous \u001duid interaction. This interaction\ndeveloped within the SOT scheme is compatible with the description arising from the kinetic\ntheory approach and it is not fully captured by the usual \u001crst order hydrodynamic theories.\nWe consider that all the dissipative e\u001bects of the plasma are due to an e\u001bectively massless,\nminimally coupled and self-interacting extra scalar \u001celd. During In\u001dation it remains in its vacuum\nstate, but towards the end of Reheating the state becomes a highly excited many-particles one, for\nwhich a hydordynamic description is suitable. In the simplest case, non-ideal e\u001bects are included\nthrough a single dimensionful parameter, the relaxation time τ . The initial conditions, for both\nthe gravitons and the \u001duid, are obtained from the quantum \u001ductuations at the end of In\u001dation.\nWe numerically solve the evolution equations and explicitly compute the current GW spectrum consisting of two contributions. On the one hand we \u001cnd the dissipative channel characterized by the absorption of the pGW energy for small scales with wavelengths λ < cτ due to\nthe damping e\u001bect produced by the free-streaming spin-2 modes of the \u001duid and driven by the\nexpansion of the universe. In our case, the relative amplitude decrease of the spectrum compared\nto the ideal one is of about 1 to 10 %. On the other hand we have the GW production channel\ndue to the e\u001bective decay of the initial \u001ductuations of the \u001duid, this contribution is negligible\ncompared to the previous one.\nIt is worth noting the possibility that this e\u001bect may have an impact on the elusive primordial\nB-modes spectrum of the Cosmic Microwave Background polarization. Likewise, our scheme\nto model the relation between GW and dissipation can be useful in other scenarios, such as\nfor describing the production and evolution of GW during a binary neutron star merger or a\ncosmological phase transitions. In turn, incorporating the thermal \u001ductuations in this formalism\nallows to broaden the study of GW production due to the \u001duid hydrodynamic \u001ductuations.\nRelativistic hydrodynamics has proven to be a very fertile ground in describing real \u001duids\nin the well-known Relativistic Heavy Ion Collisions. Perhaps the cosmological context and in\nparticular the Early Universe could be scenarios in which causal hydrodynamics becomes a\npowerful tool that brings out some of its characteristic phenomena and processes. This Thesis\naims to be a small contribution in that direction."
-    },
-    {
-      "id": "inspire-2866157",
-      "authors": [
-        "Badía, Javier"
-      ],
-      "title": "Sombras de agujeros negros rotantes rodeados por medios transparentes",
-      "journal": "Preprint",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "abstract": "En esta Tesis se realiza un estudio teórico acerca de las sombras que producen\nen el cielo de un observador lejano ciertos tipos de agujeros negros rotantes, en\npresencia de un medio transparente. Cuando un agujero negro está iluminado por\nuna fuente extensa o rodeado de un disco de acreción geométricamente grueso y\nópticamente delgado, su apariencia es la de una región oscura en un fondo lumi-\nnoso. Las sombras tienen una forma no trivial debido a la deflexión gravitatoria\nde la luz, que en el caso de un agujero negro rotante da lugar a una asimetría\ncaracterística en la dirección perpendicular al eje de rotación. Para obtener el con-\ntorno de la sombra se utiliza el formalismo de Hamilton-Jacobi en cada una de\nlas métricas consideradas, para así integrar las ecuaciones de movimiento de la\nluz. Las curvas teóricas obtenidas en este trabajo se pueden usar para contrastar\nobservaciones de agujeros negros para diversas teorías de gravedad. En particu-\nlar, se consideran agujeros negros en relatividad general rodeados de un fluido\ntransparente con presión anisótropa. Luego se estudia una familia de métricas que\nincluye ejemplos provenientes de teorías como las cosmologías de mundos brana,\ngravedad de Horndeski y gravedad escalar-tensorial de Einstein-Gauss-Bonnet en\n4 dimensiones. Finalmente, se analiza el caso de la teoría de Einstein-Maxwell\nacoplada a un campo dilatónico. En estos últimos dos casos, se incluye la presencia\nde un medio en estado de plasma, que refracta los rayos de luz en función de su\nfrecuencia. En todos los escenarios, dado el contorno de una sombra se definen\ntres observables geométricos que caracterizan su forma y tamaño, y se estudia su\ndependencia con los parámetros de cada caso."
-    },
-    {
-      "id": "inspire-1766715",
-      "authors": [
-        "Badía, J."
-      ],
-      "title": "Agujeros negros como lentes gravitatorias en teorías alternativas",
-      "journal": "Preprint",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "abstract": "En este trabajo se realiza un estudio teórico de agujeros negros no rotantescomo lentes gravitatorias en el marco de la gravedad de Horndeski. Luego de unabreve introducción a la relatividad general y las soluciones de agujeros negros, semuestra el formalismo general para calcular trayectorias de la luz alrededor de unobjeto esférico. Este formalismo se puede especializar a los límites de deflexióndébil y de deflexión fuerte. Es en este último donde se centra el análisis; se en-cuentra de manera general que en el caso de que la lente sea un agujero negro, elángulo de deflexión de la luz diverge a medida que la misma se acerca a la esferade fotones del mismo. Como consecuencia, se generan dos secuencias infinitas delas llamadas imágenes relativistas, una a cada lado de la lente. Ambos límites sonaplicados a la solución de agujero negro proveniente de un caso particular de lagravedad de Horndeski, una clase de teorías escalar-tensoriales alternativas a la re-latividad general. Se obtienen las posiciones y las magnificaciones de las imágenes.Se consideran como posibles lentes a los agujeros negros supermasivos ubicados enel centro de nuestra galaxia y de la galaxia M87, y se discuten las posibilidades deobservación de estos efectos ópticos en el entorno de los mismos."
     },
     {
       "id": "10.1051/0004-6361/202555861",
@@ -1078,6 +1008,18 @@
       "source": "inspirehep",
       "doi": "10.22323/1.474.0071",
       "abstract": "The ultra-light dark matter (ULDM) model is a compelling candidate for cosmological dark matter. If ULDM exists and interacts directly with ordinary matter, it leaves a distinct signature in pulsar timing data. Even in the absence of a detected signal, such data can impose stringent constraints on the ULDM parameter space. We present recent advances in using two independent methods—Bayesian analysis and machine learning—to assess the sensitivity of binary pulsars to ULDM. With these approaches, we extend the existing literature and further establish pulsars as detectors of ULDM. For simplicity, we focus solely on spin-0 ULDM model with linear dilatonic coupling to ordinary matter, but our methods can be straightforwardly extended to other types of ULDM."
+    },
+    {
+      "id": "inspire-2866157",
+      "authors": [
+        "Badía, Javier"
+      ],
+      "title": "Sombras de agujeros negros rotantes rodeados por medios transparentes",
+      "journal": "Preprint",
+      "year": 2025,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "abstract": "En esta Tesis se realiza un estudio teórico acerca de las sombras que producen\nen el cielo de un observador lejano ciertos tipos de agujeros negros rotantes, en\npresencia de un medio transparente. Cuando un agujero negro está iluminado por\nuna fuente extensa o rodeado de un disco de acreción geométricamente grueso y\nópticamente delgado, su apariencia es la de una región oscura en un fondo lumi-\nnoso. Las sombras tienen una forma no trivial debido a la deflexión gravitatoria\nde la luz, que en el caso de un agujero negro rotante da lugar a una asimetría\ncaracterística en la dirección perpendicular al eje de rotación. Para obtener el con-\ntorno de la sombra se utiliza el formalismo de Hamilton-Jacobi en cada una de\nlas métricas consideradas, para así integrar las ecuaciones de movimiento de la\nluz. Las curvas teóricas obtenidas en este trabajo se pueden usar para contrastar\nobservaciones de agujeros negros para diversas teorías de gravedad. En particu-\nlar, se consideran agujeros negros en relatividad general rodeados de un fluido\ntransparente con presión anisótropa. Luego se estudia una familia de métricas que\nincluye ejemplos provenientes de teorías como las cosmologías de mundos brana,\ngravedad de Horndeski y gravedad escalar-tensorial de Einstein-Gauss-Bonnet en\n4 dimensiones. Finalmente, se analiza el caso de la teoría de Einstein-Maxwell\nacoplada a un campo dilatónico. En estos últimos dos casos, se incluye la presencia\nde un medio en estado de plasma, que refracta los rayos de luz en función de su\nfrecuencia. En todos los escenarios, dado el contorno de una sombra se definen\ntres observables geométricos que caracterizan su forma y tamaño, y se estudia su\ndependencia con los parámetros de cada caso."
     },
     {
       "id": "10.1051/0004-6361/202554860",
@@ -2677,6 +2619,18 @@
       "doi": "10.2172/1827394"
     },
     {
+      "id": "inspire-2667781",
+      "authors": [
+        "Miron-Granese, Nahuel"
+      ],
+      "title": "Hidrodinámica relativista y cosmología",
+      "journal": "PhD Thesis, U. Buenos Aires",
+      "year": 2021,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "abstract": "In this thesis we elaborate on the description of real \u001duids in relativistic contexts and its\napplications to cosmology.\nThe \u001crst part is dedicated to introduce the motivations and basic concepts about the suitable in models to describe relativistic real \u001duids. In this opportunity, we choose to work with\nthe framework of the so-called Second Order Theories (SOT) and, in particular, with the Divergence Type Theory (DTT) formalism, which ensures both causality and that the Second Law\nof Thermodynamics is non-perturbatively ful\u001clled. Part of the original work is based on elaborating formal developments that allow to study the non-linear dynamics of the new degrees of\nfreedom introduced by these causal hydrodynamic theories to describe non-ideal e\u001bects. In turn,\nconsidering a generalization of the \u001ductuation-dissipation theorem, we study how the thermal\n\u001ductuations, inherent to dissipation, a\u001bect the tensor sector of the degrees of freedom. We develop a self-consistent scheme to analyze the relevant correlation functions of the system and\ntheir corrections due to non-linear e\u001bects using functional methods like the Martin-Siggia-Rose\nformalism and the Two Particle Irreducible E\u001bective Action. An interesting result of the previous analysis suggests that the tensor modes could sustain an inverse entropy cascade and thus\nsupport, at least in part, the generation of large-scale structures from small-scale \u001ductuations.\nIn the second part we elaborate on a particular application of the relativistic hydrodynamics\nto cosmology related to the primordial gravitational waves (pGW). The main hypothesis lies in\nmodelling the cosmological plasma of the Early Universe as a dissipative \u001duid described by a\nDTT.\nOur contribution is to present a hydrodynamical scheme that allows to study the evolution\nof the pGW in presence of the primordial viscous plasma in the Early Universe, through a selfconsistent interaction which includes the back-reaction of the GW on the plasma. In particular,\nwe study how the spin-2 modes of the \u001duid, which represent part of the non-ideal degrees of\nfreedom, couple to GW to \u001crst order capturing the GW-viscous \u001duid interaction. This interaction\ndeveloped within the SOT scheme is compatible with the description arising from the kinetic\ntheory approach and it is not fully captured by the usual \u001crst order hydrodynamic theories.\nWe consider that all the dissipative e\u001bects of the plasma are due to an e\u001bectively massless,\nminimally coupled and self-interacting extra scalar \u001celd. During In\u001dation it remains in its vacuum\nstate, but towards the end of Reheating the state becomes a highly excited many-particles one, for\nwhich a hydordynamic description is suitable. In the simplest case, non-ideal e\u001bects are included\nthrough a single dimensionful parameter, the relaxation time τ . The initial conditions, for both\nthe gravitons and the \u001duid, are obtained from the quantum \u001ductuations at the end of In\u001dation.\nWe numerically solve the evolution equations and explicitly compute the current GW spectrum consisting of two contributions. On the one hand we \u001cnd the dissipative channel characterized by the absorption of the pGW energy for small scales with wavelengths λ < cτ due to\nthe damping e\u001bect produced by the free-streaming spin-2 modes of the \u001duid and driven by the\nexpansion of the universe. In our case, the relative amplitude decrease of the spectrum compared\nto the ideal one is of about 1 to 10 %. On the other hand we have the GW production channel\ndue to the e\u001bective decay of the initial \u001ductuations of the \u001duid, this contribution is negligible\ncompared to the previous one.\nIt is worth noting the possibility that this e\u001bect may have an impact on the elusive primordial\nB-modes spectrum of the Cosmic Microwave Background polarization. Likewise, our scheme\nto model the relation between GW and dissipation can be useful in other scenarios, such as\nfor describing the production and evolution of GW during a binary neutron star merger or a\ncosmological phase transitions. In turn, incorporating the thermal \u001ductuations in this formalism\nallows to broaden the study of GW production due to the \u001duid hydrodynamic \u001ductuations.\nRelativistic hydrodynamics has proven to be a very fertile ground in describing real \u001duids\nin the well-known Relativistic Heavy Ion Collisions. Perhaps the cosmological context and in\nparticular the Early Universe could be scenarios in which causal hydrodynamics becomes a\npowerful tool that brings out some of its characteristic phenomena and processes. This Thesis\naims to be a small contribution in that direction."
+    },
+    {
       "id": "10.1093/mnras/stab1873",
       "authors": [
         "Pablo Corcho-Caballero",
@@ -2897,6 +2851,40 @@
       "arxiv": "1907.02118",
       "doi": "10.1088/1475-7516/2020/06/036",
       "abstract": "The possibility of variation of the fundamental constants of nature has been a long-standing question, with important consequences for fundamental physics and cosmology. In particular, it has been shown that variations in the fine-structure constant, α, are directly related to violation of the distance duality relation (DDR), which holds true as long as photons travel on unique null geodesics and their number is conserved. In this paper we use the currently available measurements of Δ α/α to impose the most stringent constraints on departures of the DDR to date, here quantified by the parameter η0. From the observational data we obtain constraints on η0 of the order of 10−7, the most stringent constraints on a possible violation of the DDR to date."
+    },
+    {
+      "id": "inspire-1847037",
+      "authors": [
+        "Aihara, Hiroaki",
+        "Aranda, Alfredo",
+        "Camacho Toro, Reina ",
+        "Cambiaso, Mauro",
+        "Carena, Marcela",
+        "Carrera, Edgar",
+        "D'Olivo, Juan Carlos",
+        "Gago, Alberto",
+        "Goncalves, Thiago",
+        "Herrera, Gerardo",
+        "López Nacir, Diana ",
+        "Losada, Marta",
+        "Molina, Jorge",
+        "Mulders, Martijn",
+        "Restrepo, Diego",
+        "Rosenfeld, Rogerio",
+        "Sánchez, Arturo",
+        "Sánchez, Federico",
+        "Soares-Santos, Marcelle",
+        "Subieta, Martin",
+        "Wahlberg, Hernán",
+        "Yepes Ramirez, Harold ",
+        "Zerwekh, Alfonso"
+      ],
+      "title": "Latin American Strategy Forum for Research Infrastructures for High Energy, Cosmology, Astroparticle Physics  LASF4RI for HECAP",
+      "journal": "Preprint",
+      "year": 2020,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "abstract": "An important effort is currently being forged in Latin America to map a landscape of initiatives\nin High Energy, Cosmology and Astroparticle Physics (HECAP) towards the development of\nstrategic research infrastructures for the region. The process derived from the October 2018\nIberoamerican Science and Technology Ministerial meeting and its corresponding declaration1\n.\n\nThis declaration was then ratified at the end of 2018 by the Heads of State2\n\n. The declaration\ngave the mandate to create a Strategic Forum for Research Infrastructures, both to provide an\nincentive for participation in existing facilities as well as to encourage the development of new\nprojects and initiatives. It is important to note that in the area of HECAP Spain and Portugal\ntake part in the European processes for the development of the corresponding strategy. Thus, a\nnecessary first step was to pursue the HECAP strategy at the Latin American level that would\nthen interface with those of Spain and Portugal. Additionally, the LASF4RI-HECAP initiative\nis aligned with current national efforts aiming at including HECAP in the roadmap of Science\nand Technology (S&T) programs.\nHigh energy, cosmology and astroparticle physics research focuses on new phenomena arising\nfrom the smallest to the largest scales in the Universe. Inspired by the fundamental unknowns\nin cosmology, astroparticle and particle physics, Latin American scientists have come together\nto jointly build the landscape of current efforts and to layout the trajectory in Latin America\nfor future developments of experimental research in these fields. Both regional projects and\nthe participation in key global projects are prioritized. Thus, this document presents the main\nexperimental activities and thrusts in high energy physics, cosmology and astroparticle physics\nfor the short and mid term, at the same time identifying where they should be focused for long\nterm future.\nThe LASF4RI-HECAP process comes about for the first time in Latin America in a similar\ntime frame to analogous reiterative processes occurring in the US and Canada, while Europe has\n\nrecently completed an update to its own process for particle physics. The main goals and mile-\nstones of the Latin American process are described in the next section. Nevertheless, the fun-\ndamental objective is to strengthen regional cooperation, that accompanied with proper funding,\n\nwith allow for more impactful contributions and benefits for the region from the development of\nresearch infrastructures and the participation in global projects. The principal outcome of this process are ten recommendations that aim to foster the develop-\nment, and define the roadmap, for experimental HECAP projects and facilities in the region,\n\n\nfor a sustained and active participation and leadership in global flagship projects, for efforts\nto maintain continuous capacity building in advanced training, technological developments and\ncomputing, as well as for societal engagement. Figure 1.1 summarizes both the landscape and\nthe roadmap, exemplifying the growing community that is engaged and that could continue to thrive with sustained resources3\n. The long term future projects under consideration are identified\n\n\nby the lighter colors.\nIn this document, a scientific roadmap of research infrastructures for HECAP is presented for\n\n\neach of the following areas: astrophysics, multi-messenger astronomy and astroparticles, cos-\nmology, dark matter, collider and neutrinos. The software and computing requirements and\n\n\nstrategy are also discussed. At the same time explicit social and economic benefits are detailed\nthat justify the corresponding recommendations. Outreach and citizen science4\n\n\ninitiatives are\npresented to fully complement the picture of a strategic development of HECAP, relevant for\nscientific discoveries and societal impact. Recognizing that the final stages of this process has\n\n\noccurred against the backdrop of the global pandemic, some highlights of the activities per-\nformed by HECAP scientists to support the national responses to the COVID-19 pandemic are\n\n\nalso presented.\nThe Latin American HECAP Physics Briefing Book is a supporting document which delves into\nthe contributions received from the scientific community during the LASF4RI-HECAP process.\nIt is intended to be useful reference for the community. Additional benefits of this strategic\nprocess is the development of national roadmaps via in-depth discussions of the communities at\nthe national level, and to promote the knowledge, visibility and diffusion of regional expertise raising awareness internationally of this coordinated regional strategy.\nTo finalize, this effort has led to the conclusion that a coordinating body for HECAP at the Latin\nAmerican level is needed and is an important next step that the scientific community should\ndevelop."
     },
     {
       "id": "orcid-118302459",
@@ -3269,6 +3257,18 @@
       "arxiv": "1612.03845",
       "doi": "10.1088/1751-8121/aa77dd",
       "abstract": "We develop the exact renormalization group approach as a way to evaluate the effective speed of the propagation of a scalar wave in a medium with random inhomogeneities. We use the Martin–Siggia–Rose formalism to translate the problem into a non equilibrium field theory one, and then consider a sequence of models with a progressively lower infrared cutoff, in the limit where the cutoff is removed we recover the problem of interest. As a test of the formalism, we compute the effective dielectric constant of an homogeneous medium interspersed with randomly located, interpenetrating bubbles. A simple approximation to the renormalization group equations turns out to be equivalent to a self-consistent two-loops evaluation of the effective dielectric constant."
+    },
+    {
+      "id": "inspire-1766715",
+      "authors": [
+        "Badía, J."
+      ],
+      "title": "Agujeros negros como lentes gravitatorias en teorías alternativas",
+      "journal": "Master's Thesis, Buenos Aires U.",
+      "year": 2017,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "abstract": "En este trabajo se realiza un estudio teórico de agujeros negros no rotantescomo lentes gravitatorias en el marco de la gravedad de Horndeski. Luego de unabreve introducción a la relatividad general y las soluciones de agujeros negros, semuestra el formalismo general para calcular trayectorias de la luz alrededor de unobjeto esférico. Este formalismo se puede especializar a los límites de deflexióndébil y de deflexión fuerte. Es en este último donde se centra el análisis; se en-cuentra de manera general que en el caso de que la lente sea un agujero negro, elángulo de deflexión de la luz diverge a medida que la misma se acerca a la esferade fotones del mismo. Como consecuencia, se generan dos secuencias infinitas delas llamadas imágenes relativistas, una a cada lado de la lente. Ambos límites sonaplicados a la solución de agujero negro proveniente de un caso particular de lagravedad de Horndeski, una clase de teorías escalar-tensoriales alternativas a la re-latividad general. Se obtienen las posiciones y las magnificaciones de las imágenes.Se consideran como posibles lentes a los agujeros negros supermasivos ubicados enel centro de nuestra galaxia y de la galaxia M87, y se discuten las posibilidades deobservación de estos efectos ópticos en el entorno de los mismos."
     },
     {
       "id": "1610.09943",

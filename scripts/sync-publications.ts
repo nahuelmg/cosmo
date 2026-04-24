@@ -99,6 +99,12 @@ interface InspireAbstract {
   value: string;
 }
 
+interface InspireThesisInfo {
+  degree_type?: string;   // "phd" | "master" | "bachelor" | "diploma" | ...
+  defense_date?: string;  // "YYYY-MM-DD"
+  institutions?: { name?: string }[];
+}
+
 interface InspireHit {
   id: string;
   metadata: {
@@ -110,6 +116,8 @@ interface InspireHit {
     publication_info?: InspirePubInfo[];
     dois?: InspireDoi[];
     abstracts?: InspireAbstract[];
+    thesis_info?: InspireThesisInfo;
+    earliest_date?: string; // "YYYY" or "YYYY-MM" or "YYYY-MM-DD"
   };
 }
 
@@ -296,7 +304,7 @@ function readPeople(): PersonWithSyncIds[] {
  */
 async function fetchInspireHEP(bai: string): Promise<InspireHit[]> {
   const fields =
-    "arxiv_eprints,titles,authors,publication_info,preprint_date,dois,control_number,abstracts";
+    "arxiv_eprints,titles,authors,publication_info,preprint_date,dois,control_number,abstracts,thesis_info,earliest_date";
   const base =
     `https://inspirehep.net/api/literature` +
     `?q=a%20${encodeURIComponent(bai)}` +
@@ -425,31 +433,88 @@ export function stripBibTeX(title: string): string {
 }
 
 /**
+ * Map an InspireHEP `thesis_info.degree_type` to a human-readable prefix.
+ * Unknown values fall through to plain "Thesis".
+ */
+function thesisLabel(degreeType?: string): string {
+  // Inspire returns degree_type inconsistently — "phd" from /literature/{id},
+  // "PhD" from the search endpoint. Lowercase before matching.
+  switch (degreeType?.toLowerCase()) {
+    case "phd":      return "PhD Thesis";
+    case "master":   return "Master's Thesis";
+    case "bachelor": return "Bachelor's Thesis";
+    case "diploma":  return "Diploma Thesis";
+    case "habilitation": return "Habilitation Thesis";
+    default:         return "Thesis";
+  }
+}
+
+/**
+ * Parse a 4-digit year from an Inspire date string (YYYY, YYYY-MM, or YYYY-MM-DD).
+ * Returns NaN on empty/malformed input.
+ */
+function yearFromInspireDate(date: string | undefined): number {
+  if (!date) return NaN;
+  return parseInt(date.slice(0, 4), 10);
+}
+
+/**
  * Transform a raw InspireHEP hit into a Publication object.
  *
- * Year resolution (SYNC-07):
- *   1. publication_info[0].year
- *   2. preprint_date YYYY segment
- *   3. current year (last resort)
+ * Year resolution ladder (first match wins):
+ *   1. publication_info[0].year         — published papers
+ *   2. preprint_date YYYY               — arXiv preprints
+ *   3. thesis_info.defense_date YYYY    — theses (no publication_info / preprint_date)
+ *   4. earliest_date YYYY               — Inspire's catch-all
+ *   5. current year — last resort, pushes a warning when `warnings` is provided
+ *
+ * Journal rendering:
+ *   - publication_info present → "{journal_title} {volume} ({year}) {artid}"
+ *   - thesis_info present      → "{PhD|Master's|…} Thesis, {institution}"
+ *   - otherwise                → "Preprint"
  */
-export function inspireHitToPublication(hit: InspireHit): Publication {
+export function inspireHitToPublication(
+  hit: InspireHit,
+  warnings?: string[],
+): Publication {
   const meta = hit.metadata;
   const arxivId = meta.arxiv_eprints?.[0]?.value; // bare, e.g. "2603.11236"
   const pi = meta.publication_info?.[0];
+  const ti = meta.thesis_info;
 
-  // Year resolution: publication_info[0].year → preprint_date YYYY → current year
-  const parsedPreprintYear = meta.preprint_date
-    ? parseInt(meta.preprint_date.split("-")[0], 10)
-    : NaN;
+  // Year resolution: publication_info → preprint_date → thesis_info.defense_date → earliest_date → current year
+  const parsedPreprintYear = yearFromInspireDate(meta.preprint_date);
+  const parsedThesisYear = yearFromInspireDate(ti?.defense_date);
+  const parsedEarliestYear = yearFromInspireDate(meta.earliest_date);
+  const hasYear =
+    pi?.year !== undefined ||
+    Number.isFinite(parsedPreprintYear) ||
+    Number.isFinite(parsedThesisYear) ||
+    Number.isFinite(parsedEarliestYear);
   const year: number =
-    pi?.year ?? (Number.isFinite(parsedPreprintYear) ? parsedPreprintYear : new Date().getFullYear());
+    pi?.year ??
+    (Number.isFinite(parsedPreprintYear)
+      ? parsedPreprintYear
+      : Number.isFinite(parsedThesisYear)
+        ? parsedThesisYear
+        : Number.isFinite(parsedEarliestYear)
+          ? parsedEarliestYear
+          : new Date().getFullYear());
+
+  const thesisJournal = ti
+    ? [thesisLabel(ti.degree_type), ti.institutions?.[0]?.name]
+        .filter(Boolean)
+        .join(", ")
+    : "";
 
   const journal: string =
     (pi
       ? [pi.journal_title, pi.journal_volume, pi.year ? `(${pi.year})` : "", pi.artid]
           .filter(Boolean)
           .join(" ")
-      : "") || "Preprint";
+      : "") ||
+    thesisJournal ||
+    "Preprint";
 
   // DOI preference: material==="publication" over "bibmatch"
   const doi =
@@ -460,11 +525,19 @@ export function inspireHitToPublication(hit: InspireHit): Publication {
     meta.titles.find((t) => t.source !== "arXiv")?.title ??
     meta.titles[0]?.title ??
     "Untitled";
+  const cleanTitle = stripBibTeX(rawTitle).normalize("NFC");
+
+  if (!hasYear && warnings) {
+    const displayId = arxivId ?? `inspire-${meta.control_number}`;
+    warnings.push(
+      `Missing year for inspirehep ${displayId} "${cleanTitle}" — defaulted to ${year}`,
+    );
+  }
 
   const pub: Publication = {
     id: arxivId ?? `inspire-${meta.control_number}`,
     authors: meta.authors.map((a) => a.full_name.normalize("NFC")),
-    title: stripBibTeX(rawTitle).normalize("NFC"),
+    title: cleanTitle,
     journal,
     year,
     topic_tags: [],
@@ -772,7 +845,7 @@ async function syncMember(
           `No InspireHEP results for ${person.name} (${person.inspirehep_id})`,
         );
       }
-      result.inspirePubs = hits.map(inspireHitToPublication);
+      result.inspirePubs = hits.map((hit) => inspireHitToPublication(hit, result.warnings));
     } else {
       result.warnings.push(`skipping InspireHEP for ${person.name}: no inspirehep_id`);
     }
