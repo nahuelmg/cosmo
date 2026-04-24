@@ -89,6 +89,47 @@ describe("fetchWithRetry", () => {
     expect(res.status).toBe(503);
     expect(fetchSpy).toHaveBeenCalledTimes(maxRetries + 1);
   });
+
+  it("retries on AbortSignal.timeout (TimeoutError) and returns the 200 on the second attempt", async () => {
+    const timeoutError = Object.assign(new Error("The operation was aborted due to timeout"), {
+      name: "TimeoutError",
+    });
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValueOnce(timeoutError)
+      .mockResolvedValueOnce(new Response("{}", { status: 200 }));
+
+    const res = await fetchWithRetry("https://example.test/any", undefined, 2, 1);
+
+    expect(res.status).toBe(200);
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries on generic network TypeError (DNS/ECONNRESET) and returns the 200 on the second attempt", async () => {
+    const networkError = new TypeError("fetch failed");
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValueOnce(networkError)
+      .mockResolvedValueOnce(new Response("{}", { status: 200 }));
+
+    const res = await fetchWithRetry("https://example.test/any", undefined, 2, 1);
+
+    expect(res.status).toBe(200);
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("propagates a network error after retries are exhausted", async () => {
+    const maxRetries = 2;
+    const networkError = new TypeError("fetch failed");
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValue(networkError);
+
+    await expect(
+      fetchWithRetry("https://example.test/any", undefined, maxRetries, 1),
+    ).rejects.toThrow("fetch failed");
+    expect(fetchSpy).toHaveBeenCalledTimes(maxRetries + 1);
+  });
 });
 
 // ---------------------------------------------------------------------------

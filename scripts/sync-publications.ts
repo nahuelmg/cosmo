@@ -207,7 +207,10 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
  * fetch wrapper with:
  *  - AbortSignal.timeout(10_000) on every request (SYNC-14)
  *  - User-Agent header
- *  - Exponential backoff on HTTP 429 or 503 (2s → 4s → 8s, capped at 30s)
+ *  - Exponential backoff (2s → 4s → 8s, capped at 30s) on:
+ *      - HTTP 429 / 503 responses
+ *      - Network errors (fetch throws): timeouts, DNS failures, connection resets
+ *    Non-retryable errors (e.g. TypeError for an invalid URL) propagate immediately.
  */
 async function fetchWithRetry(
   url: string,
@@ -217,21 +220,41 @@ async function fetchWithRetry(
 ): Promise<Response> {
   let attempt = 0;
   while (true) {
-    const response = await fetch(url, {
-      ...init,
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-      headers: { "User-Agent": USER_AGENT, ...(init?.headers ?? {}) },
-    });
-    if ((response.status === 429 || response.status === 503) && attempt < maxRetries) {
-      const delay = Math.min(baseDelayMs * 2 ** attempt, 30_000);
-      if (isVerbose) {
-        process.stderr.write(`  ${response.status} — retry ${attempt + 1}/${maxRetries} in ${delay}ms\n`);
+    try {
+      const response = await fetch(url, {
+        ...init,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        headers: { "User-Agent": USER_AGENT, ...(init?.headers ?? {}) },
+      });
+      if ((response.status === 429 || response.status === 503) && attempt < maxRetries) {
+        const delay = Math.min(baseDelayMs * 2 ** attempt, 30_000);
+        if (isVerbose) {
+          process.stderr.write(`  ${response.status} — retry ${attempt + 1}/${maxRetries} in ${delay}ms\n`);
+        }
+        await sleep(delay);
+        attempt++;
+        continue;
       }
-      await sleep(delay);
-      attempt++;
-      continue;
+      return response;
+    } catch (err) {
+      // Retry only on transient network failures: AbortError (timeout) and
+      // fetch's generic TypeError (DNS, ECONNRESET, ECONNREFUSED, etc.).
+      // We can't easily distinguish invalid-URL TypeErrors from network TypeErrors,
+      // so we retry both — worst case is 3 retries on a bad URL, then it propagates.
+      const isAbort = err instanceof Error && err.name === "TimeoutError";
+      const isNetwork = err instanceof TypeError;
+      if ((isAbort || isNetwork) && attempt < maxRetries) {
+        const delay = Math.min(baseDelayMs * 2 ** attempt, 30_000);
+        if (isVerbose) {
+          const label = isAbort ? "timeout" : "network";
+          process.stderr.write(`  ${label} — retry ${attempt + 1}/${maxRetries} in ${delay}ms\n`);
+        }
+        await sleep(delay);
+        attempt++;
+        continue;
+      }
+      throw err;
     }
-    return response;
   }
 }
 
@@ -297,12 +320,14 @@ function readPeople(): PersonWithSyncIds[] {
 
 /**
  * Fetch ALL InspireHEP literature entries for a BAI identifier.
- * Paginates using hits.total; safety cap at 10 pages (2000 papers).
+ * Paginates using hits.total; safety cap at 10 pages (2000 papers). On cap-hit
+ * with more results available, pushes a warning into `warnings` so a future
+ * high-volume author isn't silently truncated.
  * Returns raw InspireHit[] — transformation is 09-02's job.
  *
  * SYNC-05: no arXiv name-based fallback exists in this code.
  */
-async function fetchInspireHEP(bai: string): Promise<InspireHit[]> {
+async function fetchInspireHEP(bai: string, warnings?: string[]): Promise<InspireHit[]> {
   const fields =
     "arxiv_eprints,titles,authors,publication_info,preprint_date,dois,control_number,abstracts,thesis_info,earliest_date";
   const base =
@@ -315,6 +340,7 @@ async function fetchInspireHEP(bai: string): Promise<InspireHit[]> {
   let page = 1;
   let total = Infinity;
   const allHits: InspireHit[] = [];
+  const pageCap = 10;
 
   while (allHits.length < total) {
     const url = `${base}&page=${page}`;
@@ -328,8 +354,14 @@ async function fetchInspireHEP(bai: string): Promise<InspireHit[]> {
       process.stderr.write(`  fetched ${allHits.length} of ${total} total for ${bai}\n`);
     }
     page++;
-    // Safety cap — anything over 2000 papers is almost certainly a query bug
-    if (page > 10) break;
+    if (page > pageCap) {
+      if (allHits.length < total && warnings) {
+        warnings.push(
+          `InspireHEP pagination cap hit for ${bai}: fetched ${allHits.length} of ${total} — raise pageCap or tighten the query`,
+        );
+      }
+      break;
+    }
   }
 
   return allHits;
@@ -839,7 +871,7 @@ async function syncMember(
 
   if (runInspire) {
     if (person.inspirehep_id) {
-      const hits = await fetchInspireHEP(person.inspirehep_id);
+      const hits = await fetchInspireHEP(person.inspirehep_id, result.warnings);
       if (hits.length === 0) {
         result.warnings.push(
           `No InspireHEP results for ${person.name} (${person.inspirehep_id})`,
