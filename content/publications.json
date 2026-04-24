@@ -1,14 +1,14 @@
 {
   "_meta": {
-    "synced_at": "2026-04-20T20:45:58.468Z",
+    "synced_at": "2026-04-24T13:31:53.049Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 317,
-      "arxiv": 73,
+      "inspirehep": 319,
+      "arxiv": 74,
       "manual": 0,
       "orcid": 87,
       "deduped": 36
@@ -20,6 +20,49 @@
     ]
   },
   "publications": [
+    {
+      "id": "2604.21307",
+      "authors": [
+        "Wei, Wenzhao",
+        "Jaidee, I-see Warisa",
+        "Dockal, Spencer",
+        "Tsvetkova, Vyara T.",
+        "Bui, Genevieve",
+        "Lin, Tenaya Chen",
+        "Epstein, Lucia",
+        "Faubus, Ava",
+        "Hambraeus, Neneh M.T.",
+        "Lyon, Sushine B.",
+        "Lopez, Diana",
+        "McGee, Natalie",
+        "Migden, Piper J.",
+        "Nicollin, Cleo",
+        "Unnithan, Meenakshi",
+        "Asaadi, Jonathan",
+        "Battat, James B.R."
+      ],
+      "title": "Liquid argon purification and purity monitoring: apparatus and first results",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2604.21307",
+      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College. The system includes a single-pass liquid-phase purification column, a double-gridded purity monitor to assess the electron lifetime, and a slow control and data acquisition system. Initial measurements demonstrate an O$_2$-equivalent impurity concentration of 0.25 ppb, corresponding to an electron lifetime of 1.2 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout technologies for future large-scale liquid argon time projection chambers, such as Q-Pix and other cold electronics systems, as part of a facility at Wellesley College for fundamental studies of LArTPC readouts."
+    },
+    {
+      "id": "2604.21080",
+      "authors": [
+        "Chase, Tomás Esteban Ferreira",
+        "López Nacir, Diana"
+      ],
+      "title": "Cosmological Gravitational Waves from Ultralight Vector Dark Matter",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2604.21080",
+      "abstract": "We compute the abundance of cosmological gravitational waves produced during the evolution of an ultralight vector (spin-1) dark matter field. A homogeneous background vector field breaks spatial isotropy, requiring a Bianchi I geometry and inducing a mixing between the scalar, vector, and tensor perturbation sectors. We derive the perturbation equations in this background and show that, as a consequence of this mixing, scalar perturbations act as a source of tensor modes, generating a stochastic GW background. The production and cosmological evolution of these gravitational waves are implemented in a modified version of CLASS, from which we obtain the present-day spectrum."
+    },
     {
       "id": "2603.11236",
       "authors": [
