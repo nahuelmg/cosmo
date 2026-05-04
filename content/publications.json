@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "synced_at": "2026-04-28T12:54:12.668Z",
+    "synced_at": "2026-05-04T08:30:24.455Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 319,
-      "arxiv": 74,
+      "inspirehep": 320,
+      "arxiv": 75,
       "manual": 0,
-      "orcid": 87,
+      "orcid": 88,
       "deduped": 36
     },
     "warnings": [
@@ -20,6 +20,20 @@
     ]
   },
   "publications": [
+    {
+      "id": "2604.26092",
+      "authors": [
+        "Huxhagen, Federico",
+        "López Nacir, Diana"
+      ],
+      "title": "Sensitivity of binary pulsar timing to spin-0 and spin-1 ultralight dark matter",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2604.26092",
+      "abstract": "If dark matter consists of ultralight bosons, on galactic scales it can be effectively described as a coherent classical field experiencing oscillations. Such a field could perturb the dynamics of celestial bodies via a direct coupling to ordinary matter, introducing signatures detectable through high-precision pulsar timing analysis. In this work, we extend a two-step Bayesian inference framework, originally developed for linearly coupled scalar ultralight dark matter (ULDM), to probe a quadratic scalar coupling and spin-1 vector dark matter. By explicitly marginalising over nuisance orbital parameters, our approach provides robust sensitivity limits that avoid the artificial overestimation often associated with direct fitting techniques. For quadratic scalar ULDM, we establish new constraints on the coupling $β$ in the range between $2 \\times 10^{-22}$ eV and $2 \\times 10^{-21}$ eV inaccessible to other experiments, while identifying mass regimes where the sensitivity is dominated by the orbital phase $Ψ'$ or the projected semi-major axis $x$. For vector ULDM, we characterize resonant signatures present even in circular orbits and obtain bounds on the coupling $g$ within the $10^{-23}$ eV to $10^{-18}$ eV range, yielding results within the same orders of magnitude as current laboratory and space-based experiments."
+    },
     {
       "id": "2604.21307",
       "authors": [
@@ -231,6 +245,21 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
+    },
+    {
+      "id": "10.3390/universe12050129",
+      "authors": [
+        "Matías Leizerovich",
+        "Luisa G. Jaime",
+        "Susana J. Landau",
+        "Gustavo Arciniega"
+      ],
+      "title": "Geometric Cosmology Models: Statistical Analysis with Observational Data",
+      "journal": "Universe",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.3390/universe12050129"
     },
     {
       "id": "10.1051/0004-6361/202555861",
