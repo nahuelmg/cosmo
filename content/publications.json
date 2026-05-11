@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-05-04T08:30:24.455Z",
+    "synced_at": "2026-05-11T09:39:30.430Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -8,10 +8,10 @@
     ],
     "counts": {
       "inspirehep": 320,
-      "arxiv": 75,
+      "arxiv": 82,
       "manual": 0,
       "orcid": 88,
-      "deduped": 36
+      "deduped": 37
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
@@ -166,6 +166,23 @@
       "abstract": "We develop a causal hydrodynamic model that provides an effective macroscopic description of the field-theoretic dynamics during the early stages of reheating. The inflaton condensate is treated as a homogeneous background coupled to a relativistic fluid that represents its inhomogeneous fluctuations. Within the divergence-type theory framework derived from kinetic considerations, the model captures essential dissipative and nonequilibrium effects while remaining stable and causal. We find that the coupling between the oscillating condensate and the fluid induces a parametric resonance in the tensor sector, leading to the amplification of the viscous stress tensor and the generation of gravitational waves with a characteristic spectral peak. The predicted spectrum agrees with lattice simulations performed with CosmoLattice. This hydrodynamic approach offers an effective bridge between microscopic field dynamics and macroscopic cosmological observables."
     },
     {
+      "id": "2506.11299",
+      "authors": [
+        "Leizerovich, Matías",
+        "Jaime, Luisa G.",
+        "Landau, Susana J.",
+        "Arciniega, Gustavo"
+      ],
+      "title": "Geometric Cosmology models: statistical analysis with observational data",
+      "journal": "Universe 12 (2026) 5",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2506.11299",
+      "doi": "10.3390/universe12050129",
+      "abstract": "Although the standard cosmological model is capable of explaining most current observational data, it faces some theoretical and observational issues. This is the main motivation for exploring alternative cosmological models. In this paper, we focus on a novel proposal that consists in adding an infinite tower of higher-order curvature invariants to the usual Einstein-Hilbert action. We obtain the late-time background evolution for three families of models that can be obtained from this proposal. We use recent data from Cosmic Chronometers and type Ia supernovae to test the late-time predictions of our models. In addition, we consider estimations from the Age of the Older Globular Clusters to constrain our models. While some of the studied cases are ruled out by the data, we show that there are particular cases of the GILA model that can explain current data."
+    },
+    {
       "id": "2409.18714",
       "authors": [
         "Regnier, M.",
@@ -247,21 +264,6 @@
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
     },
     {
-      "id": "10.3390/universe12050129",
-      "authors": [
-        "Matías Leizerovich",
-        "Luisa G. Jaime",
-        "Susana J. Landau",
-        "Gustavo Arciniega"
-      ],
-      "title": "Geometric Cosmology Models: Statistical Analysis with Observational Data",
-      "journal": "Universe",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "orcid",
-      "doi": "10.3390/universe12050129"
-    },
-    {
       "id": "10.1051/0004-6361/202555861",
       "authors": [
         "L. Biaus",
@@ -339,22 +341,6 @@
       "arxiv": "2508.08443",
       "doi": "10.1103/8mpc-8wmc",
       "abstract": "We consider the evolution of linear matter perturbations in the context of the standard cosmological model (<math display=\"inline\"><mi mathvariant=\"normal\">Λ</mi><mi>CDM</mi></math>) and a phenomenological modified gravity model. We use the physics-informed neural network (PINN) bundle method, which allows to integrate differential systems as an alternative to the traditional numerical method. We apply the PINN bundle method to the equation that describes the matter perturbation evolution, to compare its outcomes with recent data on structure growth, <math display=\"inline\"><mi>f</mi><msub><mi>σ</mi><mn>8</mn></msub></math>. Unlike our previous works, we can calculate a bound on the error of this observable without using the numerical solution of the equation. For this, we use a method developed previously by ourselves to calculate an exact bound on the PINN-based solution using only the outcomes of the network and its residual. On the other hand, the use of an updated data set allows us to obtain more stringent constraints on the plane <math display=\"inline\"><msub><mi mathvariant=\"normal\">Ω</mi><mi>m</mi></msub><mo>-</mo><msub><mi>σ</mi><mn>8</mn></msub></math> than previous works."
-    },
-    {
-      "id": "2506.11299",
-      "authors": [
-        "Leizerovich, Matías",
-        "Jaime, Luisa G.",
-        "Landau, Susana J.",
-        "Arciniega, Gustavo"
-      ],
-      "title": "Geometric Cosmology models: statistical analysis with observational data",
-      "journal": "Preprint",
-      "year": 2025,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "arxiv": "2506.11299",
-      "abstract": "Although the standard cosmological model is capable of explaining most current observational data, it faces some theoretical and observational issues. This is the main motivation for exploring alternative cosmological models. In this paper, we focus on a novel proposal that consists in adding an infinite tower of higher-order curvature invariants to the usual Einstein-Hilbert action. We obtain the late-time background evolution for three families of models that can be obtained from this proposal. We use recent data from Cosmic Chronometers and type Ia supernovae to test the late-time predictions of our models. In addition, we consider estimations from the Age of the Older Globular Clusters to constrain our models. While some of the studied cases are ruled out by the data, we show that there are particular cases of the GILA model that can explain current data."
     },
     {
       "id": "2506.04100",
