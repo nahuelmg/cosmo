@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-05-11T09:39:30.430Z",
+    "synced_at": "2026-05-18T10:03:52.450Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -10,7 +10,7 @@
       "inspirehep": 320,
       "arxiv": 82,
       "manual": 0,
-      "orcid": 88,
+      "orcid": 89,
       "deduped": 37
     },
     "warnings": [
@@ -40,7 +40,7 @@
         "Wei, Wenzhao",
         "Jaidee, I-see Warisa",
         "Dockal, Spencer",
-        "Tsvetkova, Vyara T.",
+        "Tsvetkova, Vyara",
         "Bui, Genevieve",
         "Lin, Tenaya Chen",
         "Epstein, Lucia",
@@ -61,7 +61,7 @@
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2604.21307",
-      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College. The system includes a single-pass liquid-phase purification column, a double-gridded purity monitor to assess the electron lifetime, and a slow control and data acquisition system. Initial measurements demonstrate an O$_2$-equivalent impurity concentration of 0.25 ppb, corresponding to an electron lifetime of 1.2 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout technologies for future large-scale liquid argon time projection chambers, such as Q-Pix and other cold electronics systems, as part of a facility at Wellesley College for fundamental studies of LArTPC readouts."
+      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College. The system includes a single-pass liquid-phase purification column, a double-gridded purity monitor to assess the electron lifetime, and a slow control and data acquisition system. Initial measurements demonstrate an O$_2$-equivalent impurity concentration of 0.25 ppb, corresponding to an electron lifetime of 1.5 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout technologies for future large-scale liquid argon time projection chambers, such as Q-Pix and other cold electronics systems, as part of a facility at Wellesley College for fundamental studies of LArTPC readouts."
     },
     {
       "id": "2604.21080",
@@ -233,6 +233,56 @@
       "abstract": "The detection of B-modes in the CMB polarization pattern is a major issue in modern cosmology and must therefore be handled with analytical methods that produce reliable results. We describe a method that uses the frequency dependence of the QUBIC synthesized beam to perform component separation at the map-making stage, to obtain more precise results. We aim to demonstrate the feasibility of component separation during the map-making stage in time domain space. This new technique leads to a more accurate description of the data and reduces the biases in cosmological analyses. The method uses a library for highly parallel computation which facilitates the programming and allows the description of experiments as easily manipulated operators. These operators can be combined to obtain a joint analysis using several experiments to maximize precision. The results show that the method works well and permits end-to-end analysis for the CMB experiments, and in particular, for QUBIC. The method includes astrophysical foregrounds, and also systematic effects like gain variation in the detectors. We developed a software pipeline that produces uncertainties on the tensor-to-scalar ratio at the level of σ(r) ∼ 0.023 using only QUBIC simulated data."
     },
     {
+      "id": "2409.18698",
+      "authors": [
+        "Regnier, M.",
+        "Laclavère, T.",
+        "Hamilton, J-Ch.",
+        "Bunn, E.",
+        "Chabirand, V.",
+        "Chanial, P.",
+        "Goetz, L.",
+        "Kardum, L.",
+        "Huchet, A.",
+        "Masson, P.",
+        "Granese, N. Miron",
+        "Scóccola, C.G.",
+        "Torchinsky, S.A.",
+        "Battistelli, E.",
+        "Bersanelli, M.",
+        "Columbro, F.",
+        "Coppolecchia, A.",
+        "Costanza, B.",
+        "De Bernardis, P.",
+        "De Gasperis, G.",
+        "Ferazzoli, S.",
+        "Flood, A.",
+        "Ganga, K.",
+        "Gervasi, M.",
+        "Grandsire, L.",
+        "Manzan, E.",
+        "Masi, S.",
+        "Mennella, A.",
+        "Mousset, L.",
+        "O'Sullivan, C.",
+        "Paiella, A.",
+        "Piacentini, F.",
+        "Piat, M.",
+        "Piccirillo, L.",
+        "Rasztocky, E.",
+        "Stolpovskiy, M.",
+        "Zannoni, M."
+      ],
+      "title": "Spectral imaging with QUBIC: building frequency maps from Time-Ordered-Data using Bolometric Interferometry",
+      "journal": "JCAP 05 (2026) 032",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2409.18698",
+      "doi": "10.1088/1475-7516/2026/05/032",
+      "abstract": "The search for relics from the inflation era in the form of B-mode polarization of the CMB is a major challenge in cosmology. The main obstacle appears to come from the complexity of Galactic foregrounds that need to be removed. Multi-frequencyobservations are key to mitigating their contamination and mapping primordial fluctuations.We present “Spectral-Imaging”, a method to reconstruct sub-frequency maps of the CMB polarization within the instrument's physical bandwidth, a unique feature of Bolometric Interferometry that could be crucial for foreground mitigation as it provides an increased spectral resolution.Our technique uses the frequency evolution of the shape of the Bolometric Interferometer's synthesized beam to reconstruct frequency information from the time domain data. We reconstruct sub-frequency maps using an inverse problem approach based on detailed modeling of the instrument acquisition. We use external data to regularize the convergence of the estimator and account for bandpass mismatch and varying angular resolution.The reconstructed maps are unbiased and allow exploiting the spectral-imaging capacity of QUBIC. Using end-to-end simulations of the QUBIC instrument, we perform a cross-spectra analysis to extract a forecast on the tensor-to-scalar ratio constraint of σ(r)= 0.0225 after component separation."
+    },
+    {
       "id": "inspire-3129374",
       "authors": [
         "Ferazzoli, Sofia",
@@ -262,6 +312,22 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
+    },
+    {
+      "id": "10.1016/j.dark.2026.102333",
+      "authors": [
+        "Matías Leizerovich",
+        "Susana J. Landau",
+        "Giuseppe Gaetano Luciano",
+        "Andreas Papatriantafyllou",
+        "Emmanuel N. Saridakis"
+      ],
+      "title": "Observational constraints on Luciano-Saridakis entropic cosmology",
+      "journal": "Physics of the Dark Universe",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1016/j.dark.2026.102333"
     },
     {
       "id": "10.1051/0004-6361/202555861",
@@ -1107,55 +1173,6 @@
       "source": "inspirehep",
       "arxiv": "2411.13848",
       "abstract": "The use of neural networks to solve differential equations, as an alternative to traditional numerical solvers, has increased recently. However, error bounds for the obtained solutions have only been developed for certain equations. In this work, we report important progress in calculating error bounds of physics-informed neural networks (PINNs) solutions of nonlinear first-order ODEs. We give a general expression that describes the error of the solution that the PINN-based method provides for a nonlinear first-order ODE. In addition, we propose a technique to calculate an approximate bound for the general case and an exact bound for a particular case. The error bounds are computed using only the residual information and the equation structure. We apply the proposed methods to particular cases and show that they can successfully provide error bounds without relying on the numerical solution."
-    },
-    {
-      "id": "2409.18698",
-      "authors": [
-        "Regnier, M.",
-        "Laclavère, T.",
-        "Hamilton, J-Ch.",
-        "Bunn, E.",
-        "Chabirand, V.",
-        "Chanial, P.",
-        "Goetz, L.",
-        "Kardum, L.",
-        "Huchet, A.",
-        "Masson, P.",
-        "Granese, N. Miron",
-        "Scóccola, C.G.",
-        "Torchinsky, S.A.",
-        "Battistelli, E.",
-        "Bersanelli, M.",
-        "Columbro, F.",
-        "Coppolecchia, A.",
-        "Costanza, B.",
-        "De Bernardis, P.",
-        "De Gasperis, G.",
-        "Ferazzoli, S.",
-        "Flood, A.",
-        "Ganga, K.",
-        "Gervasi, M.",
-        "Grandsire, L.",
-        "Manzan, E.",
-        "Masi, S.",
-        "Mennella, A.",
-        "Mousset, L.",
-        "O'Sullivan, C.",
-        "Paiella, A.",
-        "Piacentini, F.",
-        "Piat, M.",
-        "Piccirillo, L.",
-        "Rasztocky, E.",
-        "Stolpovskiy, M.",
-        "Zannoni, M."
-      ],
-      "title": "Spectral Imaging with QUBIC: building frequency maps from Time-Ordered-Data using Bolometric Interferometry",
-      "journal": "Preprint",
-      "year": 2024,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "arxiv": "2409.18698",
-      "abstract": "The search for relics from the inflation era in the form of B-mode polarization of the CMB is a major challenge in cosmology. The main obstacle appears to come from the complexity of Galactic foregrounds that need to be removed. Multi-frequency observations are key to mitigating their contamination and mapping primordial fluctuations. We present spectral-imaging, a method to reconstruct sub-frequency maps of the CMB polarization within the instrument's physical bandwidth, a unique feature of Bolometric Interferometry that could be crucial for foreground mitigation as it provides an increased spectral resolution. Our technique uses the frequency evolution of the shape of the Bolometric Interferometer's synthesized beam to reconstruct frequency information from the time domain data. We reconstruct sub-frequency maps using an inverse problem approach based on detailed modeling of the instrument acquisition. We use external data to regularize the convergence of the estimator and account for bandpass mismatch and varying angular resolution. The reconstructed maps are unbiased and allow exploiting the spectral-imaging capacity of QUBIC. Using end-to-end simulations of the QUBIC instrument, we perform a cross-spectra analysis to extract a forecast on the tensor-to-scalar ratio constraint of $σ(r)= 0.0225$ after component separation."
     },
     {
       "id": "2405.01633",
