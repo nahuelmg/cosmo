@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-05-18T10:03:52.450Z",
+    "synced_at": "2026-05-25T10:06:20.558Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -11,12 +11,13 @@
       "arxiv": 82,
       "manual": 0,
       "orcid": 89,
-      "deduped": 37
+      "deduped": 38
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
       "No arXiv results for Susana Landau (0000-0003-2645-9197)",
-      "No arXiv results for Javier Badia (0000-0002-9095-9594)"
+      "No arXiv results for Javier Badia (0000-0002-9095-9594)",
+      "No InspireHEP results for Matias Leizerovich (M.Leizerovich.1)"
     ]
   },
   "publications": [
@@ -141,11 +142,12 @@
         "Saridakis, Emmanuel N."
       ],
       "title": "Observational constraints on Luciano-Saridakis entropic cosmology",
-      "journal": "Preprint",
+      "journal": "Phys.Dark Univ. 52 (2026) 102333",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2603.03568",
+      "doi": "10.1016/j.dark.2026.102333",
       "abstract": "A recently proposed generalized entropy by Luciano and Saridakis extends the standard Boltzmann-Gibbs and Bekenstein-Hawking framework through a microscopically motivated construction involving two independent entropic exponents. When applied within the gravity-thermodynamics correspondence, this entropy leads to a modified cosmological dynamics that can be interpreted as an effective dark energy sector of entropic origin, while recovering $Λ$CDM in appropriate limits. In this work, we perform the first observational confrontation of the resulting entropic cosmology at the background level. Focusing on the case $α_δ=0$, we constrain the model using Cosmic Chronometers, Pantheon$^+$ Type Ia supernovae calibrated with SH0ES, BAO measurements from DESI DR2 and compressed Planck 2018 CMB information. We find that the model yields a statistically robust fit to the combined data sets and can simultaneously satisfy Pantheon$^+$, SH0ES and CMB shift-parameter constraints, unlike $Λ$CDM. Although the entropic parameters remain close to their standard values, the $Λ$CDM limit is excluded at the $2σ$ level within the restricted parameter space considered. These results indicate that the Luciano-Saridakis entropic cosmology offers a viable extension of the standard model with the potential to alleviate the Hubble tension at the background level."
     },
     {
@@ -312,22 +314,6 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
-    },
-    {
-      "id": "10.1016/j.dark.2026.102333",
-      "authors": [
-        "Matías Leizerovich",
-        "Susana J. Landau",
-        "Giuseppe Gaetano Luciano",
-        "Andreas Papatriantafyllou",
-        "Emmanuel N. Saridakis"
-      ],
-      "title": "Observational constraints on Luciano-Saridakis entropic cosmology",
-      "journal": "Physics of the Dark Universe",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "orcid",
-      "doi": "10.1016/j.dark.2026.102333"
     },
     {
       "id": "10.1051/0004-6361/202555861",
