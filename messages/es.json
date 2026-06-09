@@ -45,6 +45,7 @@
   "people": {
     "title": "Personas",
     "pi": "Investigadores",
+    "researchStaff": "Posdocs, doctorandos y estudiantes de grado",
     "postdoc": "Investigadores Postdoctorales",
     "phd": "Estudiantes de Doctorado",
     "external": "Colaboradores Externos",

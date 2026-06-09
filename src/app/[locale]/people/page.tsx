@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
-import { getLocalizedPeople } from '@/content';
+import { getLocalizedPeople, type Person } from '@/content';
 import { buildPageMetadata } from '@/lib/metadata';
 import { PeopleSection } from '@/components/people/PeopleSection';
 import { PeoplePlainSection } from '@/components/people/PeoplePlainSection';
@@ -9,9 +9,20 @@ import { PeoplePlainSection } from '@/components/people/PeoplePlainSection';
 type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
 
-const CATEGORIES = ['pi', 'postdoc', 'phd', 'external', 'visitors', 'undergrad', 'past'] as const;
-type Category = (typeof CATEGORIES)[number];
-const CLICKABLE: readonly Category[] = ['pi', 'postdoc', 'phd', 'external', 'visitors'] as const;
+type Section = {
+  id: 'pi' | 'researchStaff' | 'external' | 'visitors' | 'past';
+  categories: ReadonlyArray<Person['category']>;
+  layout: 'cards' | 'rows';
+  rowVariant?: 'undergrad' | 'past';
+};
+
+const SECTIONS: ReadonlyArray<Section> = [
+  { id: 'pi',            categories: ['pi'],                                  layout: 'cards' },
+  { id: 'researchStaff', categories: ['postdoc', 'phd', 'undergrad'],        layout: 'cards' },
+  { id: 'external',      categories: ['external'],                            layout: 'cards' },
+  { id: 'visitors',      categories: ['visitors'],                            layout: 'cards' },
+  { id: 'past',          categories: ['past'],                                layout: 'rows', rowVariant: 'past' },
+];
 
 export async function generateMetadata({
   params,
@@ -42,26 +53,27 @@ export default async function PeoplePage({ params }: Props) {
           {t('title')}
         </h1>
       </header>
-      {CATEGORIES.map((cat) => {
-        const people = all.filter((p) => p.category === cat);
+      {SECTIONS.map((section) => {
+        const people = all.filter((p) => section.categories.includes(p.category));
         if (people.length === 0) return null;
-        if (CLICKABLE.includes(cat)) {
+        const title = t(section.id);
+        if (section.layout === 'cards') {
           return (
             <PeopleSection
-              key={cat}
-              id={cat}
-              title={t(cat)}
+              key={section.id}
+              id={section.id}
+              title={title}
               people={people}
             />
           );
         }
         return (
           <PeoplePlainSection
-            key={cat}
-            id={cat}
-            title={t(cat)}
+            key={section.id}
+            id={section.id}
+            title={title}
             people={people}
-            category={cat as 'undergrad' | 'past'}
+            category={section.rowVariant ?? 'past'}
             thesisLabel={t('thesis')}
             nowAtLabel={t('nowAt')}
           />
