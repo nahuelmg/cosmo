@@ -10,18 +10,17 @@ type Locale = (typeof routing.locales)[number];
 type Props = { params: Promise<{ locale: Locale }> };
 
 type Section = {
-  id: 'pi' | 'researchStaff' | 'external' | 'visitors' | 'past';
+  id: 'pi' | 'researchStaff' | 'externalVisitors' | 'past';
   categories: ReadonlyArray<Person['category']>;
   layout: 'cards' | 'rows';
-  rowVariant?: 'undergrad' | 'past';
+  rowVariant?: 'undergrad' | 'past' | 'plain';
 };
 
 const SECTIONS: ReadonlyArray<Section> = [
-  { id: 'pi',            categories: ['pi'],                                  layout: 'cards' },
-  { id: 'researchStaff', categories: ['postdoc', 'phd', 'undergrad'],        layout: 'cards' },
-  { id: 'external',      categories: ['external'],                            layout: 'cards' },
-  { id: 'visitors',      categories: ['visitors'],                            layout: 'cards' },
-  { id: 'past',          categories: ['past'],                                layout: 'rows', rowVariant: 'past' },
+  { id: 'pi',               categories: ['pi'],                                  layout: 'cards' },
+  { id: 'researchStaff',    categories: ['postdoc', 'phd', 'undergrad'],        layout: 'cards' },
+  { id: 'externalVisitors', categories: ['external', 'visitors'],               layout: 'rows', rowVariant: 'plain' },
+  { id: 'past',             categories: ['past'],                                layout: 'rows', rowVariant: 'past' },
 ];
 
 export async function generateMetadata({
@@ -67,17 +66,17 @@ export default async function PeoplePage({ params }: Props) {
             />
           );
         }
-        return (
-          <PeoplePlainSection
-            key={section.id}
-            id={section.id}
-            title={title}
-            people={people}
-            category={section.rowVariant ?? 'past'}
-            thesisLabel={t('thesis')}
-            nowAtLabel={t('nowAt')}
-          />
-        );
+          return (
+            <PeoplePlainSection
+              key={section.id}
+              id={section.id}
+              title={title}
+              people={people}
+              category={section.rowVariant ?? 'plain'}
+              thesisLabel={t('thesis')}
+              nowAtLabel={t('nowAt')}
+            />
+          );
       })}
     </>
   );

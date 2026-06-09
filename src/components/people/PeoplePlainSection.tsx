@@ -16,7 +16,7 @@ interface PeoplePlainSectionProps {
   id: string;
   title: string;
   people: LocalizedPerson[];
-  category: 'undergrad' | 'past';
+  category: 'undergrad' | 'past' | 'plain';
   thesisLabel: string;
   nowAtLabel: string;
 }
@@ -54,12 +54,21 @@ export function PeoplePlainSection({
               />
             );
           }
+          if (category === 'undergrad') {
+            return (
+              <PersonRow
+                key={p.slug}
+                name={p.name}
+                thesisTopic={p.thesis_topic}
+                thesisLabel={thesisLabel}
+              />
+            );
+          }
           return (
             <PersonRow
               key={p.slug}
               name={p.name}
-              thesisTopic={p.thesis_topic}
-              thesisLabel={thesisLabel}
+              role={p.role}
             />
           );
         })}
