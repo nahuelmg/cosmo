@@ -6,6 +6,7 @@ type LocalizedPerson = {
   slug: string;
   name: string;
   role: string;
+  teaching_role?: string;
   photo?: string;
   category: string;
   [key: string]: unknown;
@@ -33,6 +34,7 @@ export function PeopleSection({ id, title, people }: PeopleSectionProps) {
             slug={p.slug}
             name={p.name}
             role={p.role}
+            teachingRole={p.teaching_role}
             photo={p.photo}
           />
         ))}

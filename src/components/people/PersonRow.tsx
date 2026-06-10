@@ -1,6 +1,7 @@
 interface PersonRowProps {
   name: string;
   role?: string;
+  affiliation?: string;
   thesisTopic?: string;
   currentPosition?: string;
   years?: { start: number; end?: number };
@@ -11,6 +12,7 @@ interface PersonRowProps {
 export function PersonRow({
   name,
   role,
+  affiliation,
   thesisTopic,
   currentPosition,
   years,
@@ -32,7 +34,12 @@ export function PersonRow({
     <li>
       <article className="flex h-full flex-col rounded-md bg-surface-alt p-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h3 className="font-serif text-lg font-semibold leading-snug">{name}</h3>
+          <h3 className="font-serif text-lg font-semibold leading-snug">
+            {name}
+            {affiliation && (
+              <span className="ml-1 font-normal text-ink-muted">({affiliation})</span>
+            )}
+          </h3>
           {yearRange && (
             <time
               dateTime={dateTime}

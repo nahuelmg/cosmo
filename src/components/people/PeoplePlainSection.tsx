@@ -6,6 +6,7 @@ type LocalizedPerson = {
   slug: string;
   name: string;
   role: string;
+  affiliation?: string;
   thesis_topic?: string;
   current_position?: string;
   years?: { start: number; end?: number };
@@ -69,6 +70,7 @@ export function PeoplePlainSection({
               key={p.slug}
               name={p.name}
               role={p.role}
+              affiliation={p.affiliation}
             />
           );
         })}

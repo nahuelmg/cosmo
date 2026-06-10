@@ -88,6 +88,8 @@ export function getLocalizedPerson(slug: string, locale: Locale) {
     current_position: p.current_position
       ? localize(p.current_position, locale)
       : undefined,
+    teaching_role: p.teaching_role ? localize(p.teaching_role, locale) : undefined,
+    affiliation: p.affiliation ? localize(p.affiliation, locale) : undefined,
   };
 }
 
@@ -110,6 +112,8 @@ export function getLocalizedPeople(locale: Locale) {
     current_position: p.current_position
       ? localize(p.current_position, locale)
       : undefined,
+    teaching_role: p.teaching_role ? localize(p.teaching_role, locale) : undefined,
+    affiliation: p.affiliation ? localize(p.affiliation, locale) : undefined,
   }));
 }
 

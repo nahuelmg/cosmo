@@ -87,7 +87,9 @@ export function buildPersonSchema(person: Person, locale: Locale) {
     jobTitle: localize(person.role, locale),
     description: localize(person.short_bio, locale),
     worksFor: { "@id": orgId },
-    affiliation: { "@id": orgId },
+    affiliation: person.affiliation
+      ? { "@type": "Organization", name: localize(person.affiliation, locale) }
+      : { "@id": orgId },
   };
 
   if (person.contact.orcid) {

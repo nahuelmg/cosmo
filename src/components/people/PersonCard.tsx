@@ -5,10 +5,11 @@ interface PersonCardProps {
   slug: string;
   name: string;
   role: string;
+  teachingRole?: string;
   photo?: string;
 }
 
-export function PersonCard({ slug, name, role, photo }: PersonCardProps) {
+export function PersonCard({ slug, name, role, teachingRole, photo }: PersonCardProps) {
   return (
     <Link
       href={{ pathname: '/people/[slug]', params: { slug } }}
@@ -41,6 +42,9 @@ export function PersonCard({ slug, name, role, photo }: PersonCardProps) {
           {name}
         </h3>
         <p className="mt-1 text-sm text-ink-muted">{role}</p>
+        {teachingRole && (
+          <p className="mt-0.5 text-sm text-ink-muted">{teachingRole}</p>
+        )}
       </div>
     </Link>
   );

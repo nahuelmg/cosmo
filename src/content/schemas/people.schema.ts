@@ -145,6 +145,21 @@ export const PersonSchema = z.strictObject({
    * Where the person works now — shown on the Past Members section (PEOP-05).
    */
   current_position: bilingualString("current_position").optional(),
+
+  /**
+   * Teaching position (cargo docente) for PIs, postdocs, PhD and undergrad
+   * students — rendered as a second muted line on the card. Optional: not
+   * every member has a teaching appointment.
+   */
+  teaching_role: bilingualString("teaching_role").optional(),
+
+  /**
+   * Current institutional affiliation for external collaborators and
+   * visitors — rendered in parentheses next to the name on the plain-row
+   * view, and used as the `affiliation` value in the Person JSON-LD.
+   * Optional: not every member has a separate affiliation.
+   */
+  affiliation: bilingualString("affiliation").optional(),
 });
 
 // ---------------------------------------------------------------------------
