@@ -1,13 +1,9 @@
-import { EmailLink } from '@/components/ui/EmailLink';
-
 interface ContactDetailsProps {
   address: string;
-  office: string;
-  email: string;
+  emailPlaceholder: string;
   socialLinks: Array<{ platform: string; url: string; label: string }>;
   labels: {
     addressLabel: string;
-    officeLabel: string;
     emailLabel: string;
     socialLabel: string;
     noSocialMessage: string;
@@ -16,13 +12,10 @@ interface ContactDetailsProps {
 
 export function ContactDetails({
   address,
-  office,
-  email,
+  emailPlaceholder,
   socialLinks,
   labels,
 }: ContactDetailsProps) {
-  const [user, domain] = email.split('@');
-
   return (
     <dl
       aria-label={labels.addressLabel}
@@ -36,15 +29,10 @@ export function ContactDetails({
       </dd>
 
       <dt className="font-serif text-sm uppercase tracking-wider text-ink-subtle">
-        {labels.officeLabel}
-      </dt>
-      <dd className="text-ink">{office}</dd>
-
-      <dt className="font-serif text-sm uppercase tracking-wider text-ink-subtle">
         {labels.emailLabel}
       </dt>
-      <dd>
-        <EmailLink user={user} domain={domain} />
+      <dd className="text-ink-muted" aria-hidden="true">
+        {emailPlaceholder}
       </dd>
 
       <dt className="font-serif text-sm uppercase tracking-wider text-ink-subtle">

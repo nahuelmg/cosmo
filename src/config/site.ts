@@ -81,16 +81,11 @@ export const siteConfig = {
   contactEmail: "cosmologia@df.uba.ar",
 
   address: {
-    es: "Departamento de Física, Pabellón I, Ciudad Universitaria, C1428EGA Ciudad Autónoma de Buenos Aires, Argentina",
-    en: "Department of Physics, Pabellón I, Ciudad Universitaria, C1428EGA Buenos Aires, Argentina",
+    es: "Departamento de Física\nFacultad de Ciencias Exactas y Naturales\nPabellón I\nCiudad Universitaria\nC1428 - Buenos Aires - Argentina",
+    en: "Department of Physics\nFaculty of Exact and Natural Sciences\nPabellón I\nCiudad Universitaria\nC1428 - Buenos Aires - Argentina",
   } satisfies BilingualString,
 
-  office: {
-    es: "Oficina 6, Pabellón I, DF-FCEN, UBA",
-    en: "Office 6, Pabellón I, DF-FCEN, UBA",
-  } satisfies BilingualString,
-
-  mapQuery: "Departamento de Física, Pabellón I, Ciudad Universitaria, Buenos Aires",
+  mapQuery: "Pabellón 1, Ciudad Universitaria, Buenos Aires, C1428 Buenos Aires, Argentina",
 
   /** Populate as real social accounts become known. */
   socialLinks: [] satisfies SocialLink[],

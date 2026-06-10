@@ -103,7 +103,6 @@
   "contact": {
     "title": "Contact",
     "addressLabel": "Address",
-    "officeLabel": "Office",
     "emailLabel": "Email",
     "mapTitle": "Map location",
     "viewOnMaps": "View on Google Maps",
@@ -148,7 +147,7 @@
     },
     "contact": {
       "title": "Contact",
-      "description": "How to reach the Cosmology Group at FCEN, UBA. Address, office, email, and institutional links."
+      "description": "How to reach the Cosmology Group at FCEN, UBA. Address, email, and institutional links."
     }
   }
 }

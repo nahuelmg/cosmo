@@ -31,7 +31,6 @@ export default async function ContactPage({ params }: Props) {
   const t = await getTranslations('contact');
 
   const address = localize(siteConfig.address, locale);
-  const office = localize(siteConfig.office, locale);
   const mapQuery = siteConfig.mapQuery;
   const fallbackHref = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}`;
   const mapTitle = t('mapTitle');
@@ -51,12 +50,10 @@ export default async function ContactPage({ params }: Props) {
       <div className="mt-10">
         <ContactDetails
           address={address}
-          office={office}
-          email={siteConfig.contactEmail}
+          emailPlaceholder="…"
           socialLinks={socialLinks}
           labels={{
             addressLabel: t('addressLabel'),
-            officeLabel: t('officeLabel'),
             emailLabel: t('emailLabel'),
             socialLabel: t('social'),
             noSocialMessage: t('noSocial'),
