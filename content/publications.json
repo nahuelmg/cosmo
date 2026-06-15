@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "synced_at": "2026-06-01T11:33:47.904Z",
+    "synced_at": "2026-06-15T12:13:19.730Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 321,
+      "inspirehep": 322,
       "arxiv": 82,
       "manual": 0,
       "orcid": 89,
@@ -16,7 +16,7 @@
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
       "No arXiv results for Susana Landau (0000-0003-2645-9197)",
-      "No arXiv results for Javier Badia (0000-0002-9095-9594)",
+      "No arXiv results for Javier Badía (0000-0002-9095-9594)",
       "No InspireHEP results for Matias Leizerovich (M.Leizerovich.1)"
     ]
   },
@@ -94,17 +94,18 @@
     {
       "id": "2603.11236",
       "authors": [
-        "Perna, Guillermo",
+        "Perna, Guillermo Ezequiel",
         "Centrone, Federico",
         "Calzetta, Esteban"
       ],
       "title": "A First-Principles Thermodynamic Uncertainty Relation for Shortcuts to Adiabaticity",
-      "journal": "Preprint",
+      "journal": "Entropy 28 (2026) 519",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2603.11236",
-      "abstract": "We study the fundamental limitations of implementing time-dependent Hamiltonian protocols when ''time'' is provided by a quantum clock rather than an external classical parameter. For a parametric harmonic oscillator controlled through a shortcut-to-adiabaticity (STA) schedule and coupled to a minimal clock degree of freedom, tracing out the clock yields an effective reduced dynamics that is a mixture of unitary Gaussian trajectories. Within a noise-dominated regime, we compute the energetic deviation from the target STA outcome and its fluctuations, together with the fidelity to the target evolution and the purity loss of the reduced state, for vacuum and coherent initial states. Combining these observables produces a thermodynamic-uncertainty-type tradeoff that links achievable precision to an irreducible loss of purity set by the clock precision and the protocol sensitivity."
+      "doi": "10.3390/e28050519",
+      "abstract": "We study the fundamental limitations of implementing time-dependent Hamiltonian protocols when “time” is provided by a quantum clock rather than an external classical parameter. For a parametric harmonic oscillator controlled through a shortcut-to-adiabaticity (STA) schedule and coupled to a minimal clock degree of freedom, tracing out the clock yields an effective reduced dynamics that is a mixture of unitary Gaussian trajectories. Within a noise-dominated regime, we compute the energetic deviation from the target STA outcome and its fluctuations, together with the fidelity to the target evolution and the purity loss of the reduced state, for vacuum and coherent initial states. Combining these observables produces a thermodynamic-uncertainty-type tradeoff that links achievable precision to an irreducible loss of purity set by the clock precision and the protocol sensitivity"
     },
     {
       "id": "2603.06291",
@@ -1531,6 +1532,18 @@
       "source": "inspirehep",
       "doi": "10.22323/1.454.0049",
       "abstract": "Binary pulsars can serve as natural dark matter detectors. We consider an ultralight scalar dark matter, which interacts directly with the binary pulsar components via a universal effective interaction, characterized by one coupling constant. This causes a perturbation of the dynamics of the binary system. The perturbation is manifested by a change in the arrival time of pulses from the pulsar on Earth. The aim of our work is to determine the limiting value of the coupling constant, enabling the measurement of this effect. In other words, time residuals can serve as a proxy for ULDM. In this proceedings, a simple approach to sensitivity curve construction (i.e., a plot of the coupling constant versus particle mass) is presented. Further details and a comprehensive analysis can be found in [1]."
+    },
+    {
+      "id": "inspire-3166232",
+      "authors": [
+        "Badía, Javier"
+      ],
+      "title": "Sombras de agujeros negros rotantes rodeados por medios transparente",
+      "journal": "PhD Thesis, Buenos Aires U.",
+      "year": 2024,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "abstract": "En esta Tesis se realiza un estudio teórico acerca de las sombras que producen en el cielo de un observador lejano ciertos tipos de agujeros negros rotantes, en presencia de un medio transparente. Cuando un agujero negro está iluminado por una fuente extensa o rodeado de un disco de acreción geométricamente grueso y ópticamente delgado, su apariencia es la de una región oscura en un fondo lumi noso. Las sombras tienen una forma no trivial debido a la deflexión gravitatoria de la luz, que en el caso de un agujero negro rotante da lugar a una asimetría característica en la dirección perpendicular al eje de rotación. Para obtener el con torno de la sombra se utiliza el formalismo de Hamilton-Jacobi en cada una de las métricas consideradas, para así integrar las ecuaciones de movimiento de la luz. Las curvas teóricas obtenidas en este trabajo se pueden usar para contrastar observaciones de agujeros negros para diversas teorías de gravedad. En particu lar, se consideran agujeros negros en relatividad general rodeados de un fluido transparente con presión anisótropa. Luego se estudia una familia de métricas que incluye ejemplos provenientes de teorías como las cosmologías de mundos brana, gravedad de Horndeski y gravedad escalar-tensorial de Einstein-Gauss-Bonnet en 4 dimensiones. Finalmente, se analiza el caso de la teoría de Einstein-Maxwell acoplada a un campo dilatónico. En estos últimos dos casos, se incluye la presencia de un medio en estado de plasma, que refracta los rayos de luz en función de su frecuencia. En todos los escenarios, dado el contorno de una sombra se definen tres observables geométricos que caracterizan su forma y tamaño, y se estudia su dependencia con los parámetros de cada caso."
     },
     {
       "id": "10.1093/mnras/stae576",
@@ -3436,7 +3449,7 @@
     {
       "id": "10.1364/OL.41.003010",
       "authors": [
-        "Nahuel Miron Granese"
+        "Nahuel Mirón Granese"
       ],
       "title": "Extreme events and crises observed in an all-solid-state laser with modulation of losses",
       "journal": "Opt. Lett.",
