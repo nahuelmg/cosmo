@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-06-15T12:13:19.730Z",
+    "synced_at": "2026-06-22T11:53:44.362Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -60,7 +60,7 @@
         "Epstein, Lucia",
         "Faubus, Ava",
         "Hambraeus, Neneh M.T.",
-        "Lyon, Sushine B.",
+        "Lyon, Sunshine B.",
         "Lopez, Diana",
         "McGee, Natalie",
         "Migden, Piper J.",
@@ -89,7 +89,7 @@
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2604.21080",
-      "abstract": "We compute the abundance of cosmological gravitational waves produced during the evolution of an ultralight vector (spin-1) dark matter field. A homogeneous background vector field breaks spatial isotropy, requiring a Bianchi I geometry and inducing a mixing between the scalar, vector, and tensor perturbation sectors. We derive the perturbation equations in this background and show that, as a consequence of this mixing, scalar perturbations act as a source of tensor modes, generating a stochastic GW background. The production and cosmological evolution of these gravitational waves are implemented in a modified version of CLASS, from which we obtain the present-day spectrum."
+      "abstract": "We compute the abundance of cosmological gravitational waves produced during the evolution of an ultralight vector (spin-1) dark matter field. A homogeneous background vector field breaks spatial isotropy, requiring a Bianchi I geometry and inducing a mixing between the scalar, vector, and tensor perturbation sectors. We derive the perturbation equations in this background and show that, as a consequence of this mixing, scalar perturbations act as a source of tensor modes, generating a stochastic GW background. The production and cosmological evolution of these gravitational waves are implemented in \\texttt{class.VFDM}, a modified version of \\texttt{CLASS}, from which we obtain the present-day spectrum."
     },
     {
       "id": "2603.11236",
