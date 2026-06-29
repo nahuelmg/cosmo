@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-06-22T11:53:44.362Z",
+    "synced_at": "2026-06-29T10:59:14.641Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -189,14 +189,14 @@
         "Landau, Susana J.",
         "Arciniega, Gustavo"
       ],
-      "title": "Geometric Cosmology models: statistical analysis with observational data",
-      "journal": "Universe 12 (2026) 5",
+      "title": "Geometric Cosmology Models: Statistical Analysis with Observational Data",
+      "journal": "Universe 12 (2026) 129",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2506.11299",
       "doi": "10.3390/universe12050129",
-      "abstract": "Although the standard cosmological model is capable of explaining most current observational data, it faces some theoretical and observational issues. This is the main motivation for exploring alternative cosmological models. In this paper, we focus on a novel proposal that consists in adding an infinite tower of higher-order curvature invariants to the usual Einstein-Hilbert action. We obtain the late-time background evolution for three families of models that can be obtained from this proposal. We use recent data from Cosmic Chronometers and type Ia supernovae to test the late-time predictions of our models. In addition, we consider estimations from the Age of the Older Globular Clusters to constrain our models. While some of the studied cases are ruled out by the data, we show that there are particular cases of the GILA model that can explain current data."
+      "abstract": "Although the standard cosmological model successfully describes most current observational data, it faces several theoretical and observational challenges that motivate the exploration of alternative frameworks. In this work, we investigate a class of geometric cosmology models (GC) obtained by adding an infinite tower of higher-order curvature invariants to the Einstein–Hilbert action. Focusing on an exponential ansatz for the characteristic function entering the modified Friedmann equations, we derive the late-time background evolution for three families of solutions within this framework, named as (i) GILA, (ii) GR-deformation, and (iii) non-GR contribution. These models are confronted with recent Cosmic Chronometer and Type Ia supernova data, as well as age estimates of the oldest globular clusters—a constraint frequently overlooked in the literature. The stiffness of the equations in certain regions of parameter space, together with technical difficulties arising from the inclusion of the globular cluster bound, motivates the development of a dedicated methodology as an alternative to standard Markov Chain Monte Carlo techniques. Our results show that two entire families of GC models (non-GR contribution and GR-deformation) are ruled out by the data, whereas some families within the GILA model can successfully account for all data sets. For these models, meaningful constraints on their free parameters can be derived from the statistical analysis. Nevertheless, model comparison criteria reveal a preference in the data for <inline-formula><mml:math id=\"mm1\"><mml:semantics><mml:mo>Λ</mml:mo></mml:semantics></mml:math></inline-formula>CDM over the GILA models examined here. Although none of the proposed models provides a preferred alternative to <inline-formula><mml:math id=\"mm2\"><mml:semantics><mml:mo>Λ</mml:mo></mml:semantics></mml:math></inline-formula>CDM given the specific characteristic function considered here, this work establishes a clear methodology for testing alternative cosmological models, including the globular cluster constraint, and indicates the way for future research of GILA models with alternative choices of the characteristic function"
     },
     {
       "id": "2409.18714",
