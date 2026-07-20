@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-06-29T10:59:14.641Z",
+    "synced_at": "2026-07-20T08:56:54.590Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -10,8 +10,8 @@
       "inspirehep": 322,
       "arxiv": 82,
       "manual": 0,
-      "orcid": 89,
-      "deduped": 38
+      "orcid": 90,
+      "deduped": 39
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
@@ -197,6 +197,23 @@
       "arxiv": "2506.11299",
       "doi": "10.3390/universe12050129",
       "abstract": "Although the standard cosmological model successfully describes most current observational data, it faces several theoretical and observational challenges that motivate the exploration of alternative frameworks. In this work, we investigate a class of geometric cosmology models (GC) obtained by adding an infinite tower of higher-order curvature invariants to the Einstein–Hilbert action. Focusing on an exponential ansatz for the characteristic function entering the modified Friedmann equations, we derive the late-time background evolution for three families of solutions within this framework, named as (i) GILA, (ii) GR-deformation, and (iii) non-GR contribution. These models are confronted with recent Cosmic Chronometer and Type Ia supernova data, as well as age estimates of the oldest globular clusters—a constraint frequently overlooked in the literature. The stiffness of the equations in certain regions of parameter space, together with technical difficulties arising from the inclusion of the globular cluster bound, motivates the development of a dedicated methodology as an alternative to standard Markov Chain Monte Carlo techniques. Our results show that two entire families of GC models (non-GR contribution and GR-deformation) are ruled out by the data, whereas some families within the GILA model can successfully account for all data sets. For these models, meaningful constraints on their free parameters can be derived from the statistical analysis. Nevertheless, model comparison criteria reveal a preference in the data for <inline-formula><mml:math id=\"mm1\"><mml:semantics><mml:mo>Λ</mml:mo></mml:semantics></mml:math></inline-formula>CDM over the GILA models examined here. Although none of the proposed models provides a preferred alternative to <inline-formula><mml:math id=\"mm2\"><mml:semantics><mml:mo>Λ</mml:mo></mml:semantics></mml:math></inline-formula>CDM given the specific characteristic function considered here, this work establishes a clear methodology for testing alternative cosmological models, including the globular cluster constraint, and indicates the way for future research of GILA models with alternative choices of the characteristic function"
+    },
+    {
+      "id": "2504.06831",
+      "authors": [
+        "Kraiselburd, Lucila",
+        "Pigozzo, Cassio",
+        "Landau, Susana J.",
+        "Alcaniz, Jailson"
+      ],
+      "title": "Hubble tension and small-scale inhomogeneities on light propagation",
+      "journal": "Astron.Astrophys. 711 (2026) A199",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2504.06831",
+      "doi": "10.1051/0004-6361/202660282",
+      "abstract": "Context. A major observational challenge within the standard cosmological framework is the Hubble tension, a statistically significant ($\\sim 5σ$) disagreement between the Hubble constant derived from cosmic microwave background measurements and the value obtained through local distance-ladder methods based on Type Ia supernovae and Cepheid variable stars. Aims. We relax the assumption of the Friedmann-Lemaître-Robertson-Walker (FLRW) distance-redshift relation and explore the influence of small-scale inhomogeneities on the propagation of light from distant sources, using the Zeldovich-Kantowski-Dyer-Roeder (ZKDR) approximation as an alternative approach to address this tension. Methods. We employ two distinct formulations of the ZKDR equation to test our hypothesis using recent Type Ia supernovae datafrom the Pantheon+ compilation and the SH0ES collaboration and six gravitational lens systems from the H0LiCOW collaboration. Results. We obtained constraints on the cosmological parameters and the ZKDR model parameters within the framework of the inhomogeneous models considered. The model comparison criterion indicates that the data show weak preference of $Λ$CDM over the flat ZKDR model , whereas the remaining models studied are strongly disfavored. Conclusions. Our findings indicate that a background model characterized by the ZKDR approximation and its modifications does not solve or alleviate the Hubble tension."
     },
     {
       "id": "2409.18714",
@@ -455,22 +472,6 @@
       "arxiv": "2504.21110",
       "doi": "10.1103/rlrc-87sk",
       "abstract": "In this paper, we introduce a new interacting mechanism within the dark sector, encompassing both dark energy and dark matter, while grounding our analysis in the familiar framework of the <math display=\"inline\"><mrow><mi mathvariant=\"normal\">Λ</mi></mrow></math> cold dark matter model augmented by baryons and radiation components, including photons and neutrinos. The interaction between dark energy and dark matter is confined to the perturbative level. One significant advantage of this proposal is that all geometric probes yield constraints consistent with the so-called vanilla model or the extended vanilla model, where dark energy has a constant equation of state, <math display=\"inline\"><msub><mi>w</mi><mi>x</mi></msub></math>. However, the introduction of this new interacting mechanism affects several theoretical signatures, involving contrast dark-matter and dark-energy densities. We perform an exploratory analysis of those effects in the cosmic microwave background power spectra, matter-power spectra, and redshift space distortions. For instance, it allows for a decrease/increment in the integrated Sachs-Wolfe (ISW) effect depending on the value taken by the interaction coupling. This effect could be observationally detected by looking for a cross-correlation between the ISW temperature fluctuations and the distribution of galaxies or quasars. At late times, the interaction in the dark sector becomes very effective, affecting the nonlinear scale of structure formation. We discuss how the estimators <math display=\"inline\"><mi>f</mi><msub><mi>σ</mi><mn>8</mn></msub><mo stretchy=\"false\">(</mo><mi>z</mi><mo stretchy=\"false\">)</mo></math> and <math display=\"inline\"><msub><mi>S</mi><mn>8</mn></msub><mo stretchy=\"false\">(</mo><mi>z</mi><mo stretchy=\"false\">)</mo></math> are affected by different interacting couplings, indicating that <math display=\"inline\"><mi>f</mi><msub><mi>σ</mi><mn>8</mn></msub><mo stretchy=\"false\">(</mo><mi>z</mi><mo stretchy=\"false\">)</mo></math> can show a relative change of up to 15% compared to the concordance model at low redshifts. Finally, we show how the various terms in the dark-energy pressure perturbation (both adiabatic and nonadiabatic) are relevant for different scales, demonstrating the absence of large-scale instabilities."
-    },
-    {
-      "id": "2504.06831",
-      "authors": [
-        "Kraiselburd, Lucila",
-        "Pigozzo, Cassio",
-        "Landau, Susana J.",
-        "Alcaniz, Jailson"
-      ],
-      "title": "Hubble tension and small-scale inhomogeneities on light propagation",
-      "journal": "Preprint",
-      "year": 2025,
-      "topic_tags": [],
-      "source": "inspirehep",
-      "arxiv": "2504.06831",
-      "abstract": "Context. A major observational challenge within the standard cosmological framework is the Hubble tension, a statistically significant ($\\sim 5σ$) disagreement between the Hubble constant derived from cosmic microwave background measurements and the value obtained through local distance-ladder methods based on Type Ia supernovae and Cepheid variable stars. Aims. We relax the assumption of the Friedmann-Lemaître-Robertson-Walker (FLRW) distance-redshift relation and explore the influence of small-scale inhomogeneities on the propagation of light from distant sources, using the Zeldovich-Kantowski-Dyer-Roeder (ZKDR) approximation as an alternative approach to address this tension. Methods. We employ two distinct formulations of the ZKDR equation to test our hypothesis using recent Type Ia supernovae datafrom the Pantheon+ compilation and the SH0ES collaboration and six gravitational lens systems from the H0LiCOW collaboration. Results. We obtained constraints on the cosmological parameters and the ZKDR model parameters within the framework of the inhomogeneous models considered. The model comparison criterion indicates that the data show weak preference of $Λ$CDM over the flat ZKDR model , whereas the remaining models studied are strongly disfavored. Conclusions. Our findings indicate that a background model characterized by the ZKDR approximation and its modifications does not solve or alleviate the Hubble tension."
     },
     {
       "id": "2504.01669",
