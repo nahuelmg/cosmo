@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-07-27T09:51:08.763Z",
+    "synced_at": "2026-08-03T09:42:55.630Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -213,7 +213,7 @@
       "source": "inspirehep",
       "arxiv": "2504.06831",
       "doi": "10.1051/0004-6361/202660282",
-      "abstract": "Context. A major observational challenge within the standard cosmological framework is the Hubble tension, a statistically significant ($\\sim 5σ$) disagreement between the Hubble constant derived from cosmic microwave background measurements and the value obtained through local distance-ladder methods based on Type Ia supernovae and Cepheid variable stars. Aims. We relax the assumption of the Friedmann-Lemaître-Robertson-Walker (FLRW) distance-redshift relation and explore the influence of small-scale inhomogeneities on the propagation of light from distant sources, using the Zeldovich-Kantowski-Dyer-Roeder (ZKDR) approximation as an alternative approach to address this tension. Methods. We employ two distinct formulations of the ZKDR equation to test our hypothesis using recent Type Ia supernovae datafrom the Pantheon+ compilation and the SH0ES collaboration and six gravitational lens systems from the H0LiCOW collaboration. Results. We obtained constraints on the cosmological parameters and the ZKDR model parameters within the framework of the inhomogeneous models considered. The model comparison criterion indicates that the data show weak preference of $Λ$CDM over the flat ZKDR model , whereas the remaining models studied are strongly disfavored. Conclusions. Our findings indicate that a background model characterized by the ZKDR approximation and its modifications does not solve or alleviate the Hubble tension."
+      "abstract": "Context. A major observational challenge within the standard cosmological framework is the Hubble tension, a statistically significant (∼5σ) disagreement between the Hubble constant derived from cosmic microwave background measurements and the value obtained through local distance-ladder methods based on Type Ia supernovae (SNIa) and Cepheid variable stars.Aims. We relaxed the assumption derived from the Friedmann-Lemaître-Robertson-Walker (FLRW) distance- redshift relation and explored the influence of small-scale inhomogeneities on the propagation of light from distant sources, using the Zeldovich-Kantowski-Dyer-Roeder (ZKDR) approximation as an alternative approach to address this tension.Methods. We employed two distinct formulations of the ZKDR equation to test our hypothesis using recent SNIa data from the Pantheon+ compilation and the SH0ES collaboration, as well as six gravitational lens systems from the H0LiCOW collaboration.Results. We obtained constraints on the cosmological parameters and the ZKDR model parameters within the framework of the inhomogeneous models considered here. The model comparison criterion indicates that the data display a weak preference in favour of ΛCDM over the flat ZKDR model, whereas the remaining models investigated in this study are shown to be strongly disfavoured.Conclusions. Our findings indicate that a background model characterised by the ZKDR approximation and/or any of its modifications does not solve or alleviate the Hubble tension.Key words: cosmological parameters / distance scale"
     },
     {
       "id": "2409.18714",
