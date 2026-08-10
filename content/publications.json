@@ -1,17 +1,17 @@
 {
   "_meta": {
-    "synced_at": "2026-08-03T09:42:55.630Z",
+    "synced_at": "2026-08-10T07:39:42.442Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 322,
+      "inspirehep": 323,
       "arxiv": 82,
       "manual": 0,
-      "orcid": 90,
-      "deduped": 39
+      "orcid": 92,
+      "deduped": 40
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
@@ -21,6 +21,22 @@
     ]
   },
   "publications": [
+    {
+      "id": "2608.00331",
+      "authors": [
+        "Ahumada Acuña, Guadalupe",
+        "Ferreira Chase, Tomas",
+        "López Nacir, Diana",
+        "Nunes, Rafael C."
+      ],
+      "title": "Spin-1 Ultralight Dark Matter under Cosmological Scrutiny: Mass Constraints from CMB and Distance Probes",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2608.00331",
+      "abstract": "We present cosmological constraints on spin-1 ultralight dark matter, described by a vector field (VFDM) with mass $m_{\\rm A}$, using Planck CMB data and geometrical probes from BAO and SNIa. A key theoretical result is the derivation of the full CMB temperature covariance matrix, including both diagonal and off-diagonal anisotropic contributions induced by the preferred direction of the background vector field. We first constrain the model using the diagonal part of the covariance, together with CMB lensing; the off-diagonal terms, which couple multipoles with $Δ\\ell\\in\\{2,4\\}$, could bias lensing reconstruction, but only at very low multipoles ($L=\\{2,4\\}$) not included in the Planck likelihood. We consider both a pure VFDM scenario and a mixed VFDM+CDM scenario, characterized by the fraction $f=Ω_{\\rm A}/(Ω_{\\rm A}+Ω_{\\rm cdm})$, obtaining $\\log_{10}(m_{\\rm A}/\\mathrm{eV})>-24.07$ (95% C.L.) in the pure case, and a clear correlation between $f$ and $m_{\\rm A}$ in the mixed case, with smaller fractions allowing lighter masses; standard cosmological parameters remain fully consistent with $Λ$CDM. For the off-diagonal contributions, we derive the corresponding Bipolar Spherical Harmonic (BipoSH) coefficients and predict their amplitude using our best-fit and bounds. While the anisotropic signal is difficult to detect in the pure VFDM scenario with current Planck data, mixed VFDM+CDM models can produce signals at, or above, Planck sensitivity over a range of multipoles, motivating dedicated searches for this characteristic signature."
+    },
     {
       "id": "2605.25329",
       "authors": [
@@ -83,13 +99,14 @@
         "Chase, Tomás Ferreira",
         "López Nacir, Diana"
       ],
-      "title": "Cosmological Gravitational Waves from Ultralight Vector Dark Matter",
-      "journal": "Preprint",
+      "title": "Cosmological gravitational waves from ultralight vector dark matter",
+      "journal": "Phys.Rev.D 114 (2026) 043509",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2604.21080",
-      "abstract": "We compute the abundance of cosmological gravitational waves produced during the evolution of an ultralight vector (spin-1) dark matter field. A homogeneous background vector field breaks spatial isotropy, requiring a Bianchi I geometry and inducing a mixing between the scalar, vector, and tensor perturbation sectors. We derive the perturbation equations in this background and show that, as a consequence of this mixing, scalar perturbations act as a source of tensor modes, generating a stochastic GW background. The production and cosmological evolution of these gravitational waves are implemented in \\texttt{class.VFDM}, a modified version of \\texttt{CLASS}, from which we obtain the present-day spectrum."
+      "doi": "10.1103/dfl4-b4hv",
+      "abstract": "We compute the abundance of cosmological gravitational waves produced during the evolution of an ultralight vector (spin-1) dark matter field. A homogeneous background vector field breaks spatial isotropy, requiring a Bianchi I geometry and inducing a mixing between the scalar, vector, and tensor perturbation sectors. We derive the perturbation equations in this background and show that, as a consequence of this mixing, scalar perturbations act as a source of tensor modes, generating a stochastic gravitational wave background. The production and cosmological evolution of these gravitational waves are implemented in class.vfdm, a modified version of class, from which we obtain the present-day spectrum."
     },
     {
       "id": "2603.11236",
