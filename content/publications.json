@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-08-24T06:56:35.652Z",
+    "synced_at": "2026-08-31T12:49:54.174Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -92,7 +92,7 @@
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2604.21307",
-      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College. The system includes a single-pass liquid-phase purification column, a double-gridded purity monitor to assess the electron lifetime, and a slow control and data acquisition system. Initial measurements demonstrate an O$_2$-equivalent impurity concentration of 0.25 ppb, corresponding to an electron lifetime of 1.5 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout technologies for future large-scale liquid argon time projection chambers, such as Q-Pix and other cold electronics systems, as part of a facility at Wellesley College for fundamental studies of LArTPC readouts."
+      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College in Massachusetts, USA. The system includes a single-pass liquid-phase purification column that can achieve sub-part-per-billion impurity levels. The liquid argon purity is measured with a double-gridded purity monitor to assess the electron lifetime. Measurements demonstrate an O2-equivalent impurity concentration of $0.21 \\pm 0.05$ ppb (stable over a 20-hour duration), corresponding to an electron lifetime of 1.6 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout for liquid argon time projection chambers, such as Q-Pix and other cold electronics systems."
     },
     {
       "id": "2604.21080",
