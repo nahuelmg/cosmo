@@ -31,6 +31,10 @@ export interface SocialLink {
 interface Affiliation {
   name: { es: string; en: string };
   url?: string;
+  /** schema.org @type for the JSON-LD parentOrganization entry. */
+  schemaType?: string;
+  /** Wikidata (or similar) URI for the JSON-LD `sameAs` field. */
+  sameAs?: string;
 }
 
 export const siteConfig = {
@@ -57,17 +61,11 @@ export const siteConfig = {
   affiliations: [
     {
       name: {
-        es: "Universidad de Buenos Aires",
-        en: "University of Buenos Aires",
+        es: "Departamento de Física",
+        en: "Department of Physics",
       },
-      url: "https://www.uba.ar",
-    },
-    {
-      name: {
-        es: "Facultad de Ciencias Exactas y Naturales",
-        en: "School of Exact and Natural Sciences",
-      },
-      url: "https://exactas.uba.ar",
+      url: "https://www.df.uba.ar",
+      schemaType: "EducationalOrganization",
     },
     {
       name: {
@@ -75,6 +73,25 @@ export const siteConfig = {
         en: "CONICET",
       },
       url: "https://www.conicet.gov.ar",
+      schemaType: "ResearchOrganization",
+      sameAs: "https://www.wikidata.org/wiki/Q1054964",
+    },
+    {
+      name: {
+        es: "Facultad de Ciencias Exactas y Naturales",
+        en: "School of Exact and Natural Sciences",
+      },
+      url: "https://exactas.uba.ar",
+      schemaType: "EducationalOrganization",
+    },
+    {
+      name: {
+        es: "Universidad de Buenos Aires",
+        en: "University of Buenos Aires",
+      },
+      url: "https://www.uba.ar",
+      schemaType: "CollegeOrUniversity",
+      sameAs: "https://www.wikidata.org/wiki/Q1572590",
     },
   ] satisfies Affiliation[],
 

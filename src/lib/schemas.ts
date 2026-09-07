@@ -46,25 +46,12 @@ export function buildOrganizationSchema(locale: Locale) {
       contactType: "inquiries",
       url: contactUrl,
     },
-    parentOrganization: [
-      {
-        "@type": "CollegeOrUniversity",
-        name: siteConfig.affiliations[0].name.es,
-        url: siteConfig.affiliations[0].url,
-        sameAs: "https://www.wikidata.org/wiki/Q1572590",
-      },
-      {
-        "@type": "EducationalOrganization",
-        name: siteConfig.affiliations[1].name.es,
-        url: siteConfig.affiliations[1].url,
-      },
-      {
-        "@type": "ResearchOrganization",
-        name: siteConfig.affiliations[2].name.es,
-        url: siteConfig.affiliations[2].url,
-        sameAs: "https://www.wikidata.org/wiki/Q1054964",
-      },
-    ],
+    parentOrganization: siteConfig.affiliations.map((a) => ({
+      "@type": a.schemaType ?? "Organization",
+      name: a.name.es,
+      url: a.url,
+      ...(a.sameAs ? { sameAs: a.sameAs } : {}),
+    })),
   };
 }
 
