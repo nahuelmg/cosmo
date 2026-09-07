@@ -297,13 +297,13 @@ person doesn't have one. Both together gives the richest sync coverage
 
 ## Operational Troubleshooting
 
-Day-to-day operator guide for the weekly publication sync. Complements the
+Day-to-day operator guide for the daily publication sync. Complements the
 ID-lookup sections above.
 
 ### Running a manual sync (`workflow_dispatch`)
 
 When to use: you just added a new member's `inspirehep_id` / `orcid_id` and
-don't want to wait until next Monday 06:00 UTC; or you're testing a sync
+don't want to wait until the next 06:00 UTC run; or you're testing a sync
 script change on `main`.
 
 Steps:
@@ -318,8 +318,8 @@ Steps:
    progress.
 
 The `workflow_dispatch` trigger is declared in
-`.github/workflows/sync-publications.yml` alongside the weekly
-`schedule: cron: "0 6 * * 1"` (Monday 06:00 UTC).
+`.github/workflows/sync-publications.yml` alongside the daily
+`schedule: cron: "0 6 * * *"` (06:00 UTC every day).
 
 ### Reading the step summary
 
@@ -329,11 +329,11 @@ shows a delta block. Expected shapes:
 - **First run after adding a new member:** `X added, 0 removed, Y unchanged`
   where `X` is the number of new papers pulled from InspireHEP + arXiv for
   that member.
-- **Steady-state weekly run:** `0 added, 0 removed, Z unchanged` → the
+- **Steady-state daily run:** `0 added, 0 removed, Z unchanged` → the
   workflow's `jq -cS '.publications'` payload diff against `HEAD` detects
   no change, skips the commit, and the step summary notes
   **"No changes — skipping commit"** (CI-05 + CI-07).
-- **New papers published that week:** `N added, 0 removed, Z unchanged` →
+- **New papers published since the last run:** `N added, 0 removed, Z unchanged` →
   commit lands with message `chore(content): sync publications [skip ci]`
   (the `[skip ci]` prefix prevents the push from re-triggering the workflow
   — CI-06).
@@ -348,7 +348,7 @@ Warnings (non-fatal) appear in the step summary's warnings block:
 
 ### When the cron fails
 
-If the Monday run didn't commit and Vercel didn't redeploy, GitHub Actions
+If a scheduled run didn't commit and Vercel didn't redeploy, GitHub Actions
 notifies the repo owner by email (default setting). Investigate in this
 order:
 

@@ -2,7 +2,7 @@ name: Sync Publications
 
 on:
   schedule:
-    - cron: '0 6 * * 1'   # Monday 06:00 UTC
+    - cron: '0 6 * * *'   # daily 06:00 UTC
   workflow_dispatch:
 
 concurrency:
@@ -69,7 +69,7 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         run: |
           git add content/publications.json
-          git commit -m "chore(publications): sync weekly feed [skip ci]"
+          git commit -m "chore(publications): sync daily feed [skip ci]"
 
       - name: Push to main
         if: steps.diff.outputs.changed == 'true'
