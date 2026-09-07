@@ -23,6 +23,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { href: '/publications', labelKey: 'publications' },
   { href: '/journal-club', labelKey: 'journalClub' },
   { href: '/resources',    labelKey: 'resources' },
-  { href: '/outreach',     labelKey: 'outreach' },
+  // { href: '/outreach',     labelKey: 'outreach' }, // hidden — page still reachable by URL
   { href: '/contact',      labelKey: 'contact' },
 ] as const;

@@ -68,7 +68,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/publications",
     "/journal-club",
     "/resources",
-    "/outreach",
     "/contact",
   ];
 
