@@ -72,13 +72,17 @@
     "doi": "DOI",
     "preprint": "Preprint",
     "published": "Published",
-    "filter": {
-      "all": "All",
-      "inspirehep": "InspireHEP",
-      "arxiv": "arXiv",
-      "orcid": "ORCID",
-      "manual": "Manual"
+    "search": {
+      "label": "Search publications",
+      "placeholder": "Search by title, author, or year"
     },
+    "member": {
+      "label": "Filter by group member",
+      "all": "All members"
+    },
+    "results": "{count, plural, =0 {No publications} one {# publication} other {# publications}}",
+    "clear": "Clear filters",
+    "noResults": "No publications match those filters.",
     "updatedAt": "Last updated {date}",
     "footnote": "Publications are sourced from InspireHEP, arXiv, and ORCID. When the same paper is indexed by more than one source, entries are merged by DOI into a single record (precedence: InspireHEP, then ORCID, then arXiv)."
   },

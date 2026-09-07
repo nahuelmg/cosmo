@@ -72,13 +72,17 @@
     "doi": "DOI",
     "preprint": "Preprint",
     "published": "Publicado",
-    "filter": {
-      "all": "Todos",
-      "inspirehep": "InspireHEP",
-      "arxiv": "arXiv",
-      "orcid": "ORCID",
-      "manual": "Manual"
+    "search": {
+      "label": "Buscar publicaciones",
+      "placeholder": "Buscar por título, autor o año"
     },
+    "member": {
+      "label": "Filtrar por integrante del grupo",
+      "all": "Todos los integrantes"
+    },
+    "results": "{count, plural, =0 {Sin publicaciones} one {# publicación} other {# publicaciones}}",
+    "clear": "Limpiar filtros",
+    "noResults": "No se encontraron publicaciones con esos criterios.",
     "updatedAt": "Actualizado el {date}",
     "footnote": "Las publicaciones provienen de InspireHEP, arXiv y ORCID. Cuando un mismo trabajo aparece en más de una fuente, las entradas se fusionan por DOI en un único registro (precedencia: InspireHEP, luego ORCID, luego arXiv)."
   },

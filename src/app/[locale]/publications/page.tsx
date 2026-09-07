@@ -2,7 +2,11 @@ import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getAllYears, getPublicationsByYear, getPublicationsMeta, getPeople } from '@/content';
-import { buildMemberSurnameSet, buildMemberOrcidMap } from '@/lib/publications-helpers';
+import {
+  buildMemberSurnameSet,
+  buildMemberOrcidMap,
+  buildMemberAuthorIndex,
+} from '@/lib/publications-helpers';
 import { buildPageMetadata } from '@/lib/metadata';
 import { buildScholarlyArticleSchema } from '@/lib/schemas';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -47,13 +51,19 @@ export default async function PublicationsPage({ params }: Props) {
     year,
     publications: getPublicationsByYear(year),
   }));
+  const allPublications = groups.flatMap((g) => g.publications);
+  // "Filter by group member" dropdown — core group only (no visitors / past).
+  const coreCategories: ReadonlySet<string> = new Set(['pi', 'postdoc', 'phd', 'undergrad']);
+  const memberIndex = buildMemberAuthorIndex(
+    people.filter((p) => coreCategories.has(p.category)),
+    allPublications,
+  );
   const labels = {
     arxiv: t('arxiv'),
     doi: t('doi'),
     preprint: t('preprint'),
     published: t('published'),
   };
-  const allPublications = groups.flatMap((g) => g.publications);
   const formattedSyncedAt = new Intl.DateTimeFormat(
     locale === 'es' ? 'es-AR' : 'en-US',
     { year: 'numeric', month: 'long', day: 'numeric' },
@@ -78,6 +88,8 @@ export default async function PublicationsPage({ params }: Props) {
           groups={groups}
           memberSurnameList={memberSurnameList}
           memberOrcidList={memberOrcidList}
+          memberOptions={memberIndex.options}
+          memberMatchList={Object.entries(memberIndex.bySlug)}
           labels={labels}
         />
         <p className="mt-12 text-sm text-ink-subtle">

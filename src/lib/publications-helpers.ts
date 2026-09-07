@@ -50,6 +50,61 @@ export function deriveNameVariants(
 }
 
 // ---------------------------------------------------------------------------
+// Member ↔ publication author index (publications page filter)
+// ---------------------------------------------------------------------------
+
+export interface MemberAuthorIndex {
+  /** Members who authored at least one publication, sorted by name (es collation). */
+  options: { slug: string; name: string }[];
+  /** publication id → slugs of member-authors. Only ids with ≥ 1 match are present. */
+  bySlug: Record<string, string[]>;
+}
+
+/**
+ * Cross-reference the member list against every publication's author strings so
+ * the /publications page can offer a "filter by group member" dropdown.
+ *
+ * Matching reuses the same surname-variant strategy as `getPublicationsByAuthor`
+ * (`deriveNameVariants` → `normalizeName` → substring test, variants < 4 chars
+ * dropped), so a member's dropdown selection returns exactly the papers their
+ * profile page lists.
+ */
+export function buildMemberAuthorIndex(
+  people: Pick<Person, "slug" | "name" | "display_name_normalized">[],
+  publications: Pick<Publication, "id" | "authors">[],
+): MemberAuthorIndex {
+  const members = people.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    variants: deriveNameVariants(p)
+      .map((v) => normalizeName(v))
+      .filter((v) => v.length >= 4),
+  }));
+
+  const bySlug: Record<string, string[]> = {};
+  const authored = new Set<string>();
+
+  for (const pub of publications) {
+    const normAuthors = pub.authors.map((a) => normalizeName(a));
+    const hits: string[] = [];
+    for (const m of members) {
+      if (m.variants.some((v) => normAuthors.some((a) => a.includes(v)))) {
+        hits.push(m.slug);
+        authored.add(m.slug);
+      }
+    }
+    if (hits.length > 0) bySlug[pub.id] = hits;
+  }
+
+  const options = members
+    .filter((m) => authored.has(m.slug))
+    .map((m) => ({ slug: m.slug, name: m.name }))
+    .sort((a, b) => a.name.localeCompare(b.name, "es"));
+
+  return { options, bySlug };
+}
+
+// ---------------------------------------------------------------------------
 // Member surname set construction
 // ---------------------------------------------------------------------------
 

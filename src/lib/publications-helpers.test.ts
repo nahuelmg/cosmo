@@ -15,6 +15,7 @@ import { describe, it, expect } from "vitest";
 import {
   deriveNameVariants,
   buildMemberSurnameSet,
+  buildMemberAuthorIndex,
   isMember,
   formatAuthors,
   getSourcePillHref,
@@ -333,5 +334,37 @@ describe("getAuthorOrcidUrl", () => {
     );
     // Nacir appears first in the author list → her ORCID wins
     expect(url).toBe("https://orcid.org/0000-0001-5533-9821");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buildMemberAuthorIndex
+// ---------------------------------------------------------------------------
+
+describe("buildMemberAuthorIndex", () => {
+  const people = [
+    { slug: "esteban-calzetta", name: "Esteban Calzetta", display_name_normalized: "esteban calzetta" },
+    { slug: "diana-lopez-nacir", name: "Diana López Nacir", display_name_normalized: "diana lopez nacir" },
+    { slug: "susana-landau", name: "Susana Landau", display_name_normalized: "susana landau" },
+  ];
+  const pubs = [
+    { id: "p1", authors: ["Calzetta, Esteban", "Hu, B. L."] },
+    { id: "p2", authors: ["Lopez Nacir, Diana", "Calzetta, Esteban"] },
+    { id: "p3", authors: ["Smith, John"] },
+  ];
+
+  it("maps publication ids to member-author slugs", () => {
+    const { bySlug } = buildMemberAuthorIndex(people, pubs);
+    expect(bySlug.p1).toEqual(["esteban-calzetta"]);
+    expect(bySlug.p2.sort()).toEqual(["diana-lopez-nacir", "esteban-calzetta"]);
+    expect(bySlug.p3).toBeUndefined();
+  });
+
+  it("only lists members with ≥ 1 authored paper, sorted by name", () => {
+    const { options } = buildMemberAuthorIndex(people, pubs);
+    expect(options.map((o) => o.slug)).toEqual([
+      "diana-lopez-nacir",
+      "esteban-calzetta",
+    ]);
   });
 });
