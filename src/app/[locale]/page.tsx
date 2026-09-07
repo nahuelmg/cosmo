@@ -4,7 +4,6 @@ import { routing } from '@/i18n/routing';
 import { localize, siteConfig } from '@/content';
 import { buildPageMetadata } from '@/lib/metadata';
 import { HeroCarousel } from '@/components/home/HeroCarousel';
-import { Highlights } from '@/components/home/Highlights';
 import { PartnerStrip } from '@/components/home/PartnerStrip';
 
 type Locale = (typeof routing.locales)[number];
@@ -53,15 +52,6 @@ export default async function HomePage({ params }: Props) {
         slides={slides}
         groupName={siteConfig.groupName}
         affiliation={affiliation}
-      />
-
-      <Highlights
-        sectionTitle={t('highlightsTitle')}
-        cards={[
-          { title: t('highlight1Title'), body: t('highlight1Body') },
-          { title: t('highlight2Title'), body: t('highlight2Body') },
-          { title: t('highlight3Title'), body: t('highlight3Body') },
-        ]}
       />
 
       <PartnerStrip

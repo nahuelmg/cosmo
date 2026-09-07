@@ -39,8 +39,8 @@ import {ThemeToggle} from './ThemeToggle';
  *     asset on content pages (migrated from deprecated `priority` per
  *     Next.js 16.2.4, RESEARCH.md Pattern 3 image-role matrix).
  *   - `alt={siteConfig.groupName}` — the logo's accessible name is the
- *     institutional group name (Spanish, canonical per 02-01). Screen-reader
- *     users on /en also hear "Grupo de Cosmología"; that is the correct
+ *     institutional group name (canonical per 02-01). Screen-reader users on
+ *     /en also hear "Buenos Aires Cosmología"; that is the correct
  *     institutional identity, not a localisation miss.
  *
  * Active-state rendering happens inside each NavLink (Plan 03), so SiteHeader

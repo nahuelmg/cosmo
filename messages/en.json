@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteName": "Cosmology Group",
+    "siteName": "Buenos Aires Cosmología",
     "institution": "FCEN · UBA"
   },
   "nav": {
@@ -21,7 +21,7 @@
     "affiliationUba": "University of Buenos Aires",
     "affiliationFcen": "Faculty of Exact and Natural Sciences",
     "affiliationConicet": "CONICET",
-    "copyright": "© {year} Cosmology Group — FCEN / UBA"
+    "copyright": "© {year} Buenos Aires Cosmología — FCEN / UBA"
   },
   "layout": {
     "skipToContent": "Skip to main content",
@@ -33,13 +33,6 @@
     "theme_system": "system"
   },
   "home": {
-    "highlightsTitle": "Highlights",
-    "highlight1Title": "Perturbation cosmology",
-    "highlight1Body": "We study primordial fluctuations and their evolution into the structures we observe today.",
-    "highlight2Title": "Recent publication",
-    "highlight2Body": "Our latest work analyses cosmological constraints from weak gravitational lensing data.",
-    "highlight3Title": "Science outreach",
-    "highlight3Body": "We actively participate in public science communication activities at the national level.",
     "partnersTitle": "Partner institutions"
   },
   "people": {
@@ -128,7 +121,7 @@
     },
     "people": {
       "title": "People",
-      "description": "Researchers, postdoctoral fellows and students of the Cosmology Group at the Physics Department, FCEN, University of Buenos Aires."
+      "description": "Researchers, postdoctoral fellows and students of Buenos Aires Cosmología at the Physics Department, FCEN, University of Buenos Aires."
     },
     "research": {
       "title": "Research",
@@ -136,23 +129,23 @@
     },
     "publications": {
       "title": "Publications",
-      "description": "Scientific publications of the Cosmology Group. Peer-reviewed articles with arXiv and DOI links."
+      "description": "Scientific publications of Buenos Aires Cosmología. Peer-reviewed articles with arXiv and DOI links."
     },
     "journalClub": {
       "title": "Journal Club",
-      "description": "Weekly meetings of the Cosmology Group to discuss recent papers in cosmology and astrophysics."
+      "description": "Weekly meetings of Buenos Aires Cosmología to discuss recent papers in cosmology and astrophysics."
     },
     "outreach": {
       "title": "Outreach",
-      "description": "Public-science communication activities of the Cosmology Group: talks, workshops, and outreach publications."
+      "description": "Public-science communication activities of Buenos Aires Cosmología: talks, workshops, and outreach publications."
     },
     "resources": {
       "title": "Resources",
-      "description": "Useful material from the Cosmology Group: notes, books, code, and repositories."
+      "description": "Useful material from Buenos Aires Cosmología: notes, books, code, and repositories."
     },
     "contact": {
       "title": "Contact",
-      "description": "How to reach the Cosmology Group at FCEN, UBA. Address, email, and institutional links."
+      "description": "How to reach Buenos Aires Cosmología at FCEN, UBA. Address, email, and institutional links."
     }
   }
 }

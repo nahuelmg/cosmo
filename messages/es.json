@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteName": "Grupo de Cosmología",
+    "siteName": "Buenos Aires Cosmología",
     "institution": "FCEN · UBA"
   },
   "nav": {
@@ -21,7 +21,7 @@
     "affiliationUba": "Universidad de Buenos Aires",
     "affiliationFcen": "Facultad de Ciencias Exactas y Naturales",
     "affiliationConicet": "CONICET",
-    "copyright": "© {year} Grupo de Cosmología — FCEN / UBA"
+    "copyright": "© {year} Buenos Aires Cosmología — FCEN / UBA"
   },
   "layout": {
     "skipToContent": "Saltar al contenido principal",
@@ -33,13 +33,6 @@
     "theme_system": "del sistema"
   },
   "home": {
-    "highlightsTitle": "Destacados",
-    "highlight1Title": "Cosmología de perturbaciones",
-    "highlight1Body": "Estudiamos las fluctuaciones primordiales y su evolución hasta las estructuras que observamos hoy.",
-    "highlight2Title": "Publicación reciente",
-    "highlight2Body": "Nuestro último trabajo analiza restricciones cosmológicas a partir de datos de lentes gravitacionales débiles.",
-    "highlight3Title": "Divulgación científica",
-    "highlight3Body": "Participamos activamente en actividades de comunicación pública de la ciencia a nivel nacional.",
     "partnersTitle": "Instituciones asociadas"
   },
   "people": {
@@ -128,7 +121,7 @@
     },
     "people": {
       "title": "Personas",
-      "description": "Investigadores, postdoctorandos y estudiantes del Grupo de Cosmología en el Departamento de Física de la FCEN, UBA."
+      "description": "Investigadores, postdoctorandos y estudiantes de Buenos Aires Cosmología en el Departamento de Física de la FCEN, UBA."
     },
     "research": {
       "title": "Investigación",
@@ -136,23 +129,23 @@
     },
     "publications": {
       "title": "Publicaciones",
-      "description": "Publicaciones científicas del Grupo de Cosmología. Artículos en revistas arbitradas con enlaces a arXiv y DOI."
+      "description": "Publicaciones científicas de Buenos Aires Cosmología. Artículos en revistas arbitradas con enlaces a arXiv y DOI."
     },
     "journalClub": {
       "title": "Journal Club",
-      "description": "Reuniones semanales del Grupo de Cosmología para discutir artículos recientes en cosmología y astrofísica."
+      "description": "Reuniones semanales de Buenos Aires Cosmología para discutir artículos recientes en cosmología y astrofísica."
     },
     "outreach": {
       "title": "Divulgación",
-      "description": "Actividades de comunicación pública de la ciencia del Grupo de Cosmología: charlas, talleres y publicaciones de divulgación."
+      "description": "Actividades de comunicación pública de la ciencia de Buenos Aires Cosmología: charlas, talleres y publicaciones de divulgación."
     },
     "resources": {
       "title": "Recursos",
-      "description": "Material útil del Grupo de Cosmología: apuntes, libros, código y repositorios."
+      "description": "Material útil de Buenos Aires Cosmología: apuntes, libros, código y repositorios."
     },
     "contact": {
       "title": "Contacto",
-      "description": "Cómo contactar al Grupo de Cosmología de la FCEN, UBA. Dirección, correo y enlaces institucionales."
+      "description": "Cómo contactar a Buenos Aires Cosmología de la FCEN, UBA. Dirección, correo y enlaces institucionales."
     }
   }
 }

@@ -39,7 +39,7 @@ export const siteConfig = {
    * Argentine group, Spanish-default site. CONTEXT.md "Canonical-only fields".
    * If bilingual rendering is needed at a call site, use tagline.es / tagline.en.
    */
-  groupName: "Grupo de Cosmología",
+  groupName: "Buenos Aires Cosmología",
 
   /**
    * Canonical site URL used for metadata, sitemap, JSON-LD, canonical / hreflang
