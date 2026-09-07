@@ -1106,8 +1106,8 @@
     "slug": "javier-pineau",
     "name": "Javier Pineau",
     "role": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
+      "es": "Estudiante de licenciatura (2026)",
+      "en": "Undergraduate student (2026)"
     },
     "category": "past",
     "short_bio": {
@@ -1132,18 +1132,14 @@
     "years": {
       "start": 2022,
       "end": 2026
-    },
-    "current_position": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
     }
   },
   {
     "slug": "pedro-rozin",
     "name": "Pedro Rozin",
     "role": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
+      "es": "Estudiante de licenciatura (2026)",
+      "en": "Undergraduate student (2026)"
     },
     "category": "past",
     "short_bio": {
@@ -1166,18 +1162,14 @@
     "years": {
       "start": 2022,
       "end": 2026
-    },
-    "current_position": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
     }
   },
   {
     "slug": "tomas-ciccarella",
     "name": "Tomas Ciccarella",
     "role": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
+      "es": "Estudiante de licenciatura (2026)",
+      "en": "Undergraduate student (2026)"
     },
     "category": "past",
     "short_bio": {
@@ -1202,10 +1194,6 @@
     "years": {
       "start": 2022,
       "end": 2026
-    },
-    "current_position": {
-      "es": "Licenciado en Ciencias Físicas",
-      "en": "Bachelor of Physical Sciences"
     }
   }
 ]
