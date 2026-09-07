@@ -49,7 +49,6 @@ export function PeoplePlainSection({
                 key={p.slug}
                 name={p.name}
                 role={p.role}
-                years={p.years}
                 currentPosition={p.current_position}
                 nowAtLabel={nowAtLabel}
               />
