@@ -1,58 +1,26 @@
 [
   {
-    "id": "jc-2026-05",
-    "date": "2026-05-22",
-    "status": "upcoming",
-    "speaker": "Dr. Fabiola Marin",
-    "affiliation": "Universidad Nacional del Centro de la Provincia de Buenos Aires (UNICEN)",
-    "title": "Probing the large-scale structure with the eBOSS quasar power spectrum at z ~ 1.5",
-    "paper_link": "https://arxiv.org/abs/2501.09876",
-    "notes": {
-      "es": "Sesion en conjunto con el grupo de astrofisica observacional del IAFE. Se discutira tambien el pipeline de reduccion de datos del relevamiento DESI.",
-      "en": "Joint session with the observational astrophysics group at IAFE. The DESI survey data-reduction pipeline will also be discussed."
-    }
-  },
-  {
-    "id": "jc-2026-06",
+    "id": "2026-06-12-dr-kenji-bekki",
     "date": "2026-06-12",
-    "status": "upcoming",
+    "status": "past",
     "speaker": "Dr. Kenji Bekki",
-    "affiliation": "University of Western Australia (UWA)",
+    "speaker_position": "Investigador",
+    "affiliation": "University of Western Australia",
     "title": "Stellar mass function of dark matter subhalos and its implication for satellite galaxy populations",
-    "paper_link": "https://arxiv.org/abs/2503.04521"
+    "paper_link": "https://arxiv.org/abs/2501.09876",
+    "academic_year": "2025-2026"
   },
   {
-    "id": "jc-2025-04",
-    "date": "2025-04-10",
+    "id": "2026-05-22-dr-fabiola-marin",
+    "date": "2026-05-22",
     "status": "past",
-    "academic_year": "2024-2025",
-    "speaker": "Dra. Maria Celeste Artale",
-    "affiliation": "Instituto de Astrofisica de La Plata (IALP) - CONICET",
-    "title": "Gravitational wave mergers in cosmological simulations: delay times and host galaxy properties",
-    "paper_link": "https://doi.org/10.1093/mnras/stab2490",
-    "notes": {
-      "es": "Excelente presentacion con foco en las predicciones para el detector Einstein Telescope. Los participantes discutieron las implicaciones para la determinacion de la constante de Hubble.",
-      "en": "Excellent presentation focused on predictions for the Einstein Telescope detector. Participants discussed the implications for Hubble constant determination."
-    }
-  },
-  {
-    "id": "jc-2024-09",
-    "date": "2024-09-19",
-    "status": "past",
-    "academic_year": "2024-2025",
-    "speaker": "Prof. Licia Verde",
-    "affiliation": "Institut de Ciencies del Cosmos, Universitat de Barcelona (ICCUB)",
-    "title": "CMB lensing and the S8 tension: what do current data really tell us?",
-    "paper_link": "https://arxiv.org/abs/2407.11938"
-  },
-  {
-    "id": "jc-2023-11",
-    "date": "2023-11-23",
-    "status": "past",
-    "academic_year": "2023-2024",
-    "speaker": "Dr. Andres Balaguera-Antolinez",
-    "affiliation": "Instituto de Astrofisica de Canarias (IAC)",
-    "title": "Bias of cosmological tracers and its impact on power spectrum measurements in DESI",
-    "paper_link": "https://arxiv.org/abs/2312.04527"
+    "speaker": "Dr. Fabiola Marín",
+    "speaker_position": "Profesora",
+    "affiliation": "UNICEN",
+    "title": "Probing the large-scale structure",
+    "abstract": "We derive ...",
+    "paper_link": "https://arxiv.org/abs/2501.09876",
+    "notes": "Sesión conjunta con el IAFE.",
+    "academic_year": "2025-2026"
   }
 ]

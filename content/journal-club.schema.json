@@ -23,6 +23,10 @@
         "type": "string",
         "minLength": 1
       },
+      "speaker_position": {
+        "type": "string",
+        "minLength": 1
+      },
       "affiliation": {
         "type": "string",
         "minLength": 1
@@ -31,27 +35,15 @@
         "type": "string",
         "minLength": 1
       },
+      "abstract": {
+        "type": "string"
+      },
       "paper_link": {
         "type": "string",
         "format": "uri"
       },
       "notes": {
-        "type": "object",
-        "properties": {
-          "es": {
-            "type": "string",
-            "minLength": 1
-          },
-          "en": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "es",
-          "en"
-        ],
-        "additionalProperties": false
+        "type": "string"
       },
       "academic_year": {
         "type": "string",
@@ -63,7 +55,6 @@
       "date",
       "status",
       "speaker",
-      "affiliation",
       "title"
     ],
     "additionalProperties": false

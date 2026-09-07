@@ -1,5 +1,5 @@
 /**
- * SessionRow — a single past journal club session (dense archive card).
+ * SessionCard — a single upcoming journal club session (spacious card).
  *
  * Server Component. Consumes a session straight from the content layer
  * (all fields are canonical / single-language since v1.4).
@@ -17,7 +17,7 @@ interface Session {
   notes?: string;
 }
 
-interface SessionRowProps {
+interface SessionCardProps {
   session: Session;
   locale: "es" | "en";
   paperLinkLabel: string;
@@ -42,28 +42,29 @@ function speakerLine(s: Session) {
     .join(" · ");
 }
 
-export function SessionRow({
+export function SessionCard({
   session,
   locale,
   paperLinkLabel,
   abstractLabel,
-}: SessionRowProps) {
+}: SessionCardProps) {
   return (
     <li id={`session-${session.id}`}>
-      <article className="rounded-md bg-surface-alt p-4">
-        <p className="text-sm text-ink-muted">
+      <article className="rounded-md bg-surface-alt p-6">
+        <p className="text-sm font-medium text-ink-muted">
           <time dateTime={session.date}>{longDate(session.date, locale)}</time>
-          {" · "}
-          {speakerLine(session)}
         </p>
-        <p className="mt-1 font-serif text-lg leading-snug">{session.title}</p>
+        <h3 className="mt-1 font-serif text-2xl font-semibold leading-tight">
+          {session.title}
+        </h3>
+        <p className="mt-2 text-sm text-ink-muted">{speakerLine(session)}</p>
 
         {session.notes && (
-          <p className="mt-1 text-sm text-ink-muted">{session.notes}</p>
+          <p className="mt-3 text-sm leading-relaxed">{session.notes}</p>
         )}
 
         {session.abstract && (
-          <details className="mt-2 text-sm">
+          <details className="mt-3 text-sm">
             <summary className="cursor-pointer text-ink-muted marker:text-ink-subtle hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-alt rounded">
               {abstractLabel}
             </summary>
@@ -78,7 +79,7 @@ export function SessionRow({
             href={session.paper_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-2 inline-block text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-alt rounded"
+            className="mt-4 inline-block text-sm text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-alt rounded"
           >
             {paperLinkLabel} →
           </a>

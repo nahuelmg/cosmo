@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import {
-  getUpcomingSessions,
-  getPastSessionsByYear,
-  getLocalizedSession,
-} from "@/content";
+import { getUpcomingSessions, getPastSessionsByYear } from "@/content";
 import { buildPageMetadata } from "@/lib/metadata";
-import { SessionRow } from "@/components/journal-club/SessionRow";
+import { SessionCard } from "@/components/journal-club/SessionCard";
 import { JournalClubArchive } from "@/components/journal-club/JournalClubArchive";
 
 type Locale = (typeof routing.locales)[number];
@@ -34,30 +30,19 @@ export default async function JournalClubPage({ params }: Props) {
 
   const t = await getTranslations("journalClub");
 
-  // Localize notes on every session pulled from the content layer.
-  // getLocalizedSession is called HERE in the page RSC before passing sessions
-  // down to server child components — same pattern as getLocalizedPeople.
-  const upcoming = getUpcomingSessions().map((s) =>
-    getLocalizedSession(s, locale),
-  );
+  const upcoming = getUpcomingSessions();
   const grouped = getPastSessionsByYear();
-  const groupedLocalized: Record<
-    string,
-    ReturnType<typeof getLocalizedSession>[]
-  > = {};
-  for (const [year, sessions] of Object.entries(grouped)) {
-    groupedLocalized[year] = sessions.map((s) => getLocalizedSession(s, locale));
-  }
 
   const paperLinkLabel = t("paperLink");
+  const abstractLabel = t("abstract");
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <header>
-        <h1 className="font-serif text-3xl md:text-4xl font-semibold">
+        <h1 className="font-serif text-3xl md:text-4xl font-semibold leading-tight">
           {t("title")}
         </h1>
-        <p className="mt-4 max-w-2xl font-serif text-lg text-ink-muted">
+        <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-ink-muted">
           {t("intro")}
         </p>
       </header>
@@ -65,32 +50,34 @@ export default async function JournalClubPage({ params }: Props) {
       <section aria-labelledby="jc-upcoming" className="mt-12">
         <h2
           id="jc-upcoming"
-          className="font-serif text-3xl font-semibold tracking-tight"
+          className="font-serif text-3xl font-semibold tracking-tight leading-tight"
         >
           {t("upcoming")}
         </h2>
         {upcoming.length > 0 ? (
-          <ol className="mt-4 list-none">
+          <ul className="mt-6 grid list-none grid-cols-1 gap-4">
             {upcoming.map((s) => (
-              <SessionRow
+              <SessionCard
                 key={s.id}
                 session={s}
                 locale={locale}
                 paperLinkLabel={paperLinkLabel}
+                abstractLabel={abstractLabel}
               />
             ))}
-          </ol>
+          </ul>
         ) : (
           <p className="mt-4 text-ink-muted">{t("noUpcoming")}</p>
         )}
       </section>
 
-      {Object.keys(groupedLocalized).length > 0 && (
+      {Object.keys(grouped).length > 0 && (
         <JournalClubArchive
-          grouped={groupedLocalized}
+          grouped={grouped}
           locale={locale}
           archiveTitle={t("past")}
           paperLinkLabel={paperLinkLabel}
+          abstractLabel={abstractLabel}
         />
       )}
     </section>

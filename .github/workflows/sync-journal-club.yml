@@ -1,0 +1,86 @@
+name: Sync Journal Club
+
+on:
+  schedule:
+    - cron: '0 7 * * *'   # daily 07:00 UTC (staggered from Sync Publications)
+  workflow_dispatch:
+
+concurrency:
+  group: sync-journal-club
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run sync script
+        env:
+          # Optional override; the script falls back to the group's sheet.
+          JOURNAL_CLUB_SHEET_CSV_URL: ${{ vars.JOURNAL_CLUB_SHEET_CSV_URL }}
+        run: |
+          pnpm sync-journal-club > /tmp/jc-stdout.txt 2>/tmp/jc-stderr.txt
+          cat /tmp/jc-stdout.txt
+          cat /tmp/jc-stderr.txt >&2
+
+      - name: Validate content
+        run: pnpm validate-content
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- content/journal-club.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure git identity
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit changes
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git add content/journal-club.json
+          git commit -m "chore(journal-club): sync from sheet [skip ci]"
+
+      - name: Push to main
+        if: steps.diff.outputs.changed == 'true'
+        run: git push origin main
+
+      - name: Write step summary
+        if: always()
+        run: |
+          tail -1 /tmp/jc-stdout.txt >> $GITHUB_STEP_SUMMARY || true
+          WARNINGS=$(grep '^Warning:' /tmp/jc-stderr.txt 2>/dev/null || true)
+          if [ -n "$WARNINGS" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "## Warnings" >> $GITHUB_STEP_SUMMARY
+            while IFS= read -r line; do
+              echo "- ${line#Warning: }" >> $GITHUB_STEP_SUMMARY
+            done <<< "$WARNINGS"
+          fi

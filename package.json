@@ -15,6 +15,7 @@
     "validate-content": "tsx scripts/validate-content.mjs",
     "generate-schemas": "tsx scripts/generate-schemas.mjs",
     "sync-publications": "tsx scripts/sync-publications.ts",
+    "sync-journal-club": "tsx scripts/sync-journal-club.ts",
     "axe": "npx -y @axe-core/cli@4 http://localhost:3000/es http://localhost:3000/es/personas http://localhost:3000/es/personas/esteban-calzetta http://localhost:3000/es/investigacion http://localhost:3000/es/publicaciones http://localhost:3000/es/contacto http://localhost:3000/es/divulgacion http://localhost:3000/es/journal-club --load-delay 1500"
   },
   "engines": {

@@ -1,8 +1,15 @@
 /**
  * Schema for journal club sessions (DATA-04, CLUB-01/02).
  *
- * Sessions are mostly canonical (paper-native language for titles, speaker names,
- * affiliations). The one bilingual field is `notes` — optional group commentary.
+ * Since v1.4 the sessions are synced from a Google Sheet by
+ * `scripts/sync-journal-club.ts`; `content/journal-club.json` is generated —
+ * never hand-edit it. Titles, speaker names, affiliations, abstracts and notes
+ * are canonical (kept in whatever language the sheet maintainer typed).
+ *
+ * Derived fields (set by the sync script, not present in the sheet):
+ *   - `id`            — `${date}-${speaker-slug}`
+ *   - `status`        — `upcoming` when `date >= today`, else `past`
+ *   - `academic_year` — `YYYY-YYYY` season, only on past sessions
  *
  * Business rules enforced in superRefine:
  *   - id uniqueness
@@ -11,19 +18,21 @@
  */
 
 import * as z from "zod";
-import { canonicalString, bilingualString } from "./shared";
+import { canonicalString } from "./shared";
 
 export const JournalClubSessionSchema = z.strictObject({
-  id: z.string().min(1), // stable — used as React key + URL anchor
+  id: z.string().min(1), // derived — stable React key + URL anchor
   date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "date must be ISO YYYY-MM-DD"),
-  status: z.enum(["upcoming", "past"]),
+  status: z.enum(["upcoming", "past"]), // derived from date
   speaker: canonicalString, // person name, original form (e.g. "Dr. Jun Koda")
-  affiliation: canonicalString, // institution, original form
+  speaker_position: canonicalString.optional(), // "Posición" column — e.g. "Profesora", "Investigador"
+  affiliation: canonicalString.optional(), // institution, original form
   title: canonicalString, // paper title, paper-native
+  abstract: z.string().optional(), // "Resumen" column — paper abstract, free text
   paper_link: z.url().optional(), // arXiv/DOI/journal URL
-  notes: bilingualString("notes").optional(), // optional bilingual group commentary
+  notes: z.string().optional(), // "Notas" column — short group commentary
   academic_year: z
     .string()
     .regex(

@@ -2,6 +2,9 @@
  * Accessor for journal club sessions content.
  * Parses and validates content/journal-club.json at module load.
  * All consumers receive typed, validated data.
+ *
+ * All fields are canonical (single-language) since v1.4 — there is no
+ * per-locale resolution step. Components consume sessions directly.
  */
 
 import rawSessions from "../../../content/journal-club.json";
@@ -9,7 +12,6 @@ import {
   JournalClubSchema,
   type JournalClubSession,
 } from "../schemas/journal-club.schema";
-import { localize, type Locale } from "../schemas/shared";
 
 // Parse at module load — throws immediately if JSON is malformed or invalid
 const sessions: JournalClubSession[] = JournalClubSchema.parse(rawSessions);
@@ -47,18 +49,4 @@ export function getPastSessionsByYear(): Record<string, JournalClubSession[]> {
     arr.sort((a, b) => b.date.localeCompare(a.date)),
   );
   return grouped;
-}
-
-/**
- * Returns a single session with the optional `notes` bilingual field resolved
- * to the requested locale. All other fields are returned as-is.
- */
-export function getLocalizedSession(
-  session: JournalClubSession,
-  locale: Locale,
-) {
-  return {
-    ...session,
-    notes: session.notes ? localize(session.notes, locale) : undefined,
-  };
 }
