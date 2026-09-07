@@ -3,8 +3,8 @@
     "slug": "esteban-calzetta",
     "name": "Esteban Calzetta",
     "role": {
-      "es": "Investigador Principal (contratado)",
-      "en": "Principal Researcher (contracted)"
+      "es": "Investigador Principal",
+      "en": "Principal Researcher"
     },
     "category": "pi",
     "photo": "people/Esteban_C.png",
@@ -590,16 +590,16 @@
     "social_links": []
   },
   {
-    "slug": "tomas-ciccarella",
-    "name": "Tomas Ciccarella",
+    "slug": "matias-zaldarriaga",
+    "name": "Matias Zaldarriaga",
     "role": {
-      "es": "Estudiante de Grado",
-      "en": "Undergraduate Student"
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
     },
-    "category": "undergrad",
+    "category": "visitors",
     "short_bio": {
-      "es": "Tomas Ciccarella es estudiante de grado del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Tomas Ciccarella is an undergraduate student in the cosmology group. Detailed biography to be completed."
+      "es": "Matias Zaldarriaga es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Matias Zaldarriaga is a visiting researcher at the cosmology group. Detailed biography to be completed."
     },
     "full_bio": {
       "es": "Biografia detallada a completar.",
@@ -611,18 +611,72 @@
         "en": "Research interests to be completed"
       }
     ],
-    "thesis_topic": {
-      "es": "Tema de tesis por definir",
-      "en": "Thesis topic to be defined"
-    },
-    "display_name_normalized": "tomas ciccarella",
-    "contact": {
-      "email": "tomas.cicarella@df.uba.ar"
-    },
+    "display_name_normalized": "matias zaldarriaga",
+    "contact": {},
     "social_links": [],
-    "teaching_role": {
-      "es": "Ayudante de segunda",
-      "en": "Second-rank Teaching Assistant"
+    "affiliation": {
+      "es": "Institute for Advanced Study, Princeton, EE. UU.",
+      "en": "Institute for Advanced Study, Princeton, USA"
+    }
+  },
+  {
+    "slug": "giorgio-torrieri",
+    "name": "Giorgio Torrieri",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Giorgio Torrieri es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Giorgio Torrieri is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "giorgio torrieri",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "UNICAMP, Campinas, Brasil",
+      "en": "UNICAMP, Campinas, Brazil"
+    }
+  },
+  {
+    "slug": "elia-battistelli",
+    "name": "Elia Battistelli",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Elia Battistelli es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Elia Battistelli is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "elia battistelli",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "Sapienza Università di Roma, Italia",
+      "en": "Sapienza Università di Roma, Italy"
     }
   },
   {
@@ -686,6 +740,186 @@
     "affiliation": {
       "es": "IAFE UBA-CONICET, Argentina",
       "en": "IAFE UBA-CONICET, Argentina"
+    }
+  },
+  {
+    "slug": "nicolas-yunes",
+    "name": "Nicolas Yunes",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Nicolas Yunes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Nicolas Yunes is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "nicolas yunes",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "University of Illinois at Urbana-Champaign, EE. UU.",
+      "en": "University of Illinois at Urbana-Champaign, USA"
+    }
+  },
+  {
+    "slug": "arttu-rajantie",
+    "name": "Arttu Rajantie",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Arttu Rajantie es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Arttu Rajantie is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "arttu rajantie",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "Imperial College London, Reino Unido",
+      "en": "Imperial College London, UK"
+    }
+  },
+  {
+    "slug": "martin-makler",
+    "name": "Martin Makler",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Martin Makler es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Martin Makler is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "martin makler",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "CBPF, Río de Janeiro, Brasil",
+      "en": "CBPF, Rio de Janeiro, Brazil"
+    }
+  },
+  {
+    "slug": "leonardo-trombetta",
+    "name": "Leonardo Trombetta",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Leonardo Trombetta es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Leonardo Trombetta is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "leonardo trombetta",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "Università di Milano-Bicocca & INFN, Italia",
+      "en": "Università di Milano-Bicocca & INFN, Italy"
+    }
+  },
+  {
+    "slug": "lucas-pinol",
+    "name": "Lucas Pinol",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Lucas Pinol es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Lucas Pinol is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "lucas pinol",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "LPENS, París, Francia",
+      "en": "LPENS, Paris, France"
+    }
+  },
+  {
+    "slug": "sebastian-cespedes",
+    "name": "Sebastian Cespedes",
+    "role": {
+      "es": "Investigador Visitante",
+      "en": "Visiting Researcher"
+    },
+    "category": "visitors",
+    "short_bio": {
+      "es": "Sebastian Cespedes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Sebastian Cespedes is a visiting researcher at the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "sebastian cespedes",
+    "contact": {},
+    "social_links": [],
+    "affiliation": {
+      "es": "Imperial College London, Reino Unido",
+      "en": "Imperial College London, UK"
     }
   },
   {
@@ -869,276 +1103,6 @@
     }
   },
   {
-    "slug": "giorgio-torrieri",
-    "name": "Giorgio Torrieri",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Giorgio Torrieri es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Giorgio Torrieri is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "giorgio torrieri",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "UNICAMP, Campinas, Brasil",
-      "en": "UNICAMP, Campinas, Brazil"
-    }
-  },
-  {
-    "slug": "elia-battistelli",
-    "name": "Elia Battistelli",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Elia Battistelli es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Elia Battistelli is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "elia battistelli",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "Sapienza Università di Roma, Italia",
-      "en": "Sapienza Università di Roma, Italy"
-    }
-  },
-  {
-    "slug": "arttu-rajantie",
-    "name": "Arttu Rajantie",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Arttu Rajantie es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Arttu Rajantie is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "arttu rajantie",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "Imperial College London, Reino Unido",
-      "en": "Imperial College London, UK"
-    }
-  },
-  {
-    "slug": "martin-makler",
-    "name": "Martin Makler",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Martin Makler es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Martin Makler is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "martin makler",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "CBPF, Río de Janeiro, Brasil",
-      "en": "CBPF, Rio de Janeiro, Brazil"
-    }
-  },
-  {
-    "slug": "matias-zaldarriaga",
-    "name": "Matias Zaldarriaga",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Matias Zaldarriaga es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Matias Zaldarriaga is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "matias zaldarriaga",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "Institute for Advanced Study, Princeton, EE. UU.",
-      "en": "Institute for Advanced Study, Princeton, USA"
-    }
-  },
-  {
-    "slug": "nicolas-yunes",
-    "name": "Nicolas Yunes",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Nicolas Yunes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Nicolas Yunes is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "nicolas yunes",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "University of Illinois at Urbana-Champaign, EE. UU.",
-      "en": "University of Illinois at Urbana-Champaign, USA"
-    }
-  },
-  {
-    "slug": "leonardo-trombetta",
-    "name": "Leonardo Trombetta",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Leonardo Trombetta es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Leonardo Trombetta is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "leonardo trombetta",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "Università di Milano-Bicocca & INFN, Italia",
-      "en": "Università di Milano-Bicocca & INFN, Italy"
-    }
-  },
-  {
-    "slug": "lucas-pinol",
-    "name": "Lucas Pinol",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Lucas Pinol es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Lucas Pinol is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "lucas pinol",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "LPENS, París, Francia",
-      "en": "LPENS, Paris, France"
-    }
-  },
-  {
-    "slug": "sebastian-cespedes",
-    "name": "Sebastian Cespedes",
-    "role": {
-      "es": "Investigador Visitante",
-      "en": "Visiting Researcher"
-    },
-    "category": "visitors",
-    "short_bio": {
-      "es": "Sebastian Cespedes es investigador visitante del grupo de cosmologia. Biografia detallada a completar.",
-      "en": "Sebastian Cespedes is a visiting researcher at the cosmology group. Detailed biography to be completed."
-    },
-    "full_bio": {
-      "es": "Biografia detallada a completar.",
-      "en": "Detailed biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Lineas de investigacion por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
-    "display_name_normalized": "sebastian cespedes",
-    "contact": {},
-    "social_links": [],
-    "affiliation": {
-      "es": "Imperial College London, Reino Unido",
-      "en": "Imperial College London, UK"
-    }
-  },
-  {
     "slug": "javier-pineau",
     "name": "Javier Pineau",
     "role": {
@@ -1170,8 +1134,8 @@
       "end": 2026
     },
     "current_position": {
-      "es": "Tema de tesis por definir",
-      "en": "Thesis topic to be defined"
+      "es": "Licenciado en Ciencias Físicas",
+      "en": "Bachelor of Physical Sciences"
     }
   },
   {
@@ -1198,6 +1162,42 @@
     ],
     "display_name_normalized": "pedro rozin",
     "contact": {},
+    "social_links": [],
+    "years": {
+      "start": 2022,
+      "end": 2026
+    },
+    "current_position": {
+      "es": "Licenciado en Ciencias Físicas",
+      "en": "Bachelor of Physical Sciences"
+    }
+  },
+  {
+    "slug": "tomas-ciccarella",
+    "name": "Tomas Ciccarella",
+    "role": {
+      "es": "Licenciado en Ciencias Físicas",
+      "en": "Bachelor of Physical Sciences"
+    },
+    "category": "past",
+    "short_bio": {
+      "es": "Tomas Ciccarella fue estudiante de grado del grupo de cosmologia. Biografia detallada a completar.",
+      "en": "Tomas Ciccarella was an undergraduate student in the cosmology group. Detailed biography to be completed."
+    },
+    "full_bio": {
+      "es": "Biografia detallada a completar.",
+      "en": "Detailed biography to be completed."
+    },
+    "research_interests": [
+      {
+        "es": "Lineas de investigacion por completar",
+        "en": "Research interests to be completed"
+      }
+    ],
+    "display_name_normalized": "tomas ciccarella",
+    "contact": {
+      "email": "tomas.cicarella@df.uba.ar"
+    },
     "social_links": [],
     "years": {
       "start": 2022,
