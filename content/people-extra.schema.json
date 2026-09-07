@@ -1,17 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "array",
-  "items": {
+  "type": "object",
+  "propertyNames": {
+    "type": "string"
+  },
+  "additionalProperties": {
     "type": "object",
     "properties": {
-      "slug": {
-        "type": "string",
-        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      },
-      "name": {
-        "type": "string",
-        "minLength": 1
-      },
       "role": {
         "type": "object",
         "properties": {
@@ -30,20 +25,104 @@
         ],
         "additionalProperties": false
       },
-      "category": {
+      "teaching_role": {
+        "type": "object",
+        "properties": {
+          "es": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "es",
+          "en"
+        ],
+        "additionalProperties": false
+      },
+      "affiliation": {
+        "type": "object",
+        "properties": {
+          "es": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "es",
+          "en"
+        ],
+        "additionalProperties": false
+      },
+      "inspirehep_id": {
         "type": "string",
-        "enum": [
-          "pi",
-          "postdoc",
-          "phd",
-          "external",
-          "visitors",
-          "undergrad",
-          "past"
-        ]
+        "pattern": "^[A-Z][A-Za-z-]*(\\.[A-Za-z-]+)+\\.\\d+$"
+      },
+      "orcid_id": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
       },
       "photo": {
         "type": "string"
+      },
+      "contact": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "orcid": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
+          },
+          "office": {
+            "type": "string"
+          },
+          "scholar": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "social_links": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "platform": {
+              "type": "string",
+              "enum": [
+                "twitter",
+                "linkedin",
+                "github",
+                "orcid",
+                "scholar",
+                "website",
+                "bluesky",
+                "instagram"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "platform",
+            "url"
+          ],
+          "additionalProperties": false
+        }
       },
       "short_bio": {
         "type": "object",
@@ -103,71 +182,6 @@
           "additionalProperties": false
         }
       },
-      "inspirehep_id": {
-        "type": "string",
-        "pattern": "^[A-Z][A-Za-z-]*(\\.[A-Za-z-]+)+\\.\\d+$"
-      },
-      "orcid_id": {
-        "type": "string",
-        "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
-      },
-      "display_name_normalized": {
-        "type": "string",
-        "minLength": 1
-      },
-      "contact": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email",
-            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
-          },
-          "orcid": {
-            "type": "string",
-            "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[\\dX]$"
-          },
-          "office": {
-            "type": "string"
-          },
-          "scholar": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "additionalProperties": false
-      },
-      "social_links": {
-        "default": [],
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "platform": {
-              "type": "string",
-              "enum": [
-                "twitter",
-                "linkedin",
-                "github",
-                "orcid",
-                "scholar",
-                "website",
-                "bluesky",
-                "instagram"
-              ]
-            },
-            "url": {
-              "type": "string",
-              "format": "uri"
-            }
-          },
-          "required": [
-            "platform",
-            "url"
-          ],
-          "additionalProperties": false
-        }
-      },
       "years": {
         "type": "object",
         "properties": {
@@ -222,56 +236,8 @@
           "en"
         ],
         "additionalProperties": false
-      },
-      "teaching_role": {
-        "type": "object",
-        "properties": {
-          "es": {
-            "type": "string",
-            "minLength": 1
-          },
-          "en": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "es",
-          "en"
-        ],
-        "additionalProperties": false
-      },
-      "affiliation": {
-        "type": "object",
-        "properties": {
-          "es": {
-            "type": "string",
-            "minLength": 1
-          },
-          "en": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "es",
-          "en"
-        ],
-        "additionalProperties": false
       }
     },
-    "required": [
-      "slug",
-      "name",
-      "role",
-      "category",
-      "short_bio",
-      "full_bio",
-      "research_interests",
-      "display_name_normalized",
-      "contact",
-      "social_links"
-    ],
     "additionalProperties": false
   }
 }

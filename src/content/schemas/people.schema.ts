@@ -25,6 +25,26 @@ import {
 } from "./shared";
 
 // ---------------------------------------------------------------------------
+// Shared field validators
+// ---------------------------------------------------------------------------
+
+/** InspireHEP BAI identifier — e.g. "E.Calzetta.1", "S.J.Landau.1". */
+export const inspirehepId = z
+  .string()
+  .regex(
+    /^[A-Z][A-Za-z-]*(\.[A-Za-z-]+)+\.\d+$/,
+    "InspireHEP BAI format: Initial.Surname.N or MultiPart.Name.N (e.g. E.Calzetta.1, S.J.Landau.1, Tomas.F.Chase.1)",
+  );
+
+/** Contact block shared by PersonSchema and the people-extra enrichment file. */
+export const ContactSchema = z.strictObject({
+  email: z.email().optional(),
+  orcid: orcidId.optional(),
+  office: z.string().optional(),
+  scholar: z.url().optional(),
+});
+
+// ---------------------------------------------------------------------------
 // A. SocialLinkSchema
 // ---------------------------------------------------------------------------
 
@@ -84,13 +104,7 @@ export const PersonSchema = z.strictObject({
    * Optional — students may not have one yet.
    * @see content/SYNC.md
    */
-  inspirehep_id: z
-    .string()
-    .regex(
-      /^[A-Z][A-Za-z-]*(\.[A-Za-z-]+)+\.\d+$/,
-      "InspireHEP BAI format: Initial.Surname.N or MultiPart.Name.N (e.g. E.Calzetta.1, S.J.Landau.1, Tomas.F.Chase.1)",
-    )
-    .optional(),
+  inspirehep_id: inspirehepId.optional(),
 
   /**
    * ORCID iD (16-digit identifier like 0000-0002-1234-5678).
@@ -114,19 +128,14 @@ export const PersonSchema = z.strictObject({
    * Contact details shown on the individual profile page (PEOP-11).
    * Not every person has all fields — all are optional.
    */
-  contact: z.strictObject({
-    email: z.email().optional(),
-    orcid: orcidId.optional(),
-    office: z.string().optional(),
-    scholar: z.url().optional(),
-  }),
+  contact: ContactSchema,
 
   /** Social accounts rendered as icon links (PEOP-11) */
   social_links: z.array(SocialLinkSchema).optional().default([]),
 
   /**
-   * Years active in the group.
-   * REQUIRED for category "past" — enforced in PeopleSchema superRefine.
+   * Years active in the group. Optional — not currently surfaced in the UI
+   * (the redesigned Past Members list shows only the role line).
    */
   years: z
     .strictObject({
@@ -135,10 +144,7 @@ export const PersonSchema = z.strictObject({
     })
     .optional(),
 
-  /**
-   * Thesis topic for undergraduate researchers (PEOP-04).
-   * REQUIRED for category "undergrad" — enforced in PeopleSchema superRefine.
-   */
+  /** Thesis topic for undergraduate researchers. Optional. */
   thesis_topic: bilingualString("thesis_topic").optional(),
 
   /**
@@ -163,7 +169,7 @@ export const PersonSchema = z.strictObject({
 });
 
 // ---------------------------------------------------------------------------
-// C. PeopleSchema — array with three superRefine rules
+// C. PeopleSchema — array with a slug-uniqueness rule
 // ---------------------------------------------------------------------------
 
 export const PeopleSchema = z.array(PersonSchema).superRefine((people, ctx) => {
@@ -172,7 +178,7 @@ export const PeopleSchema = z.array(PersonSchema).superRefine((people, ctx) => {
   for (let i = 0; i < people.length; i++) {
     const p = people[i];
 
-    // Rule 1: Slug uniqueness
+    // Slug uniqueness
     if (seen.has(p.slug)) {
       ctx.addIssue({
         code: "custom",
@@ -182,26 +188,6 @@ export const PeopleSchema = z.array(PersonSchema).superRefine((people, ctx) => {
       });
     } else {
       seen.add(p.slug);
-    }
-
-    // Rule 2: Past members must have years.start
-    if (p.category === "past" && !p.years?.start) {
-      ctx.addIssue({
-        code: "custom",
-        message: "past members must specify years.start",
-        path: [i, "years"],
-        input: p.years,
-      });
-    }
-
-    // Rule 3: Undergrads must have thesis_topic
-    if (p.category === "undergrad" && !p.thesis_topic) {
-      ctx.addIssue({
-        code: "custom",
-        message: "undergrads must specify thesis_topic (both es and en)",
-        path: [i, "thesis_topic"],
-        input: p.thesis_topic,
-      });
     }
   }
 });

@@ -25,6 +25,7 @@
 import { parseArgs } from "node:util";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { parseCsv } from "./csv";
 import {
   JournalClubSchema,
   type JournalClubSession,
@@ -83,72 +84,7 @@ interface RawRow {
 }
 
 // ---------------------------------------------------------------------------
-// B. CSV parsing (RFC 4180: quoted fields, "" escapes, embedded commas/newlines)
-// ---------------------------------------------------------------------------
-
-export function parseCsv(input: string): string[][] {
-  let text = input;
-  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1); // strip BOM
-
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let inQuotes = false;
-  let i = 0;
-
-  while (i < text.length) {
-    const c = text[i];
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i += 2;
-          continue;
-        }
-        inQuotes = false;
-        i += 1;
-        continue;
-      }
-      field += c;
-      i += 1;
-      continue;
-    }
-    if (c === '"') {
-      inQuotes = true;
-      i += 1;
-      continue;
-    }
-    if (c === ",") {
-      row.push(field);
-      field = "";
-      i += 1;
-      continue;
-    }
-    if (c === "\r") {
-      i += 1;
-      continue;
-    }
-    if (c === "\n") {
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-      i += 1;
-      continue;
-    }
-    field += c;
-    i += 1;
-  }
-  // trailing field / row when the file has no final newline
-  if (field.length > 0 || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows;
-}
-
-// ---------------------------------------------------------------------------
-// C. Field helpers
+// B. Field helpers
 // ---------------------------------------------------------------------------
 
 const fold = (s: string) =>

@@ -28,6 +28,7 @@ import {
 import { ResearchSchema } from "../src/content/schemas/research.schema.ts";
 import { JournalClubSchema } from "../src/content/schemas/journal-club.schema.ts";
 import { OutreachSchema } from "../src/content/schemas/outreach.schema.ts";
+import { PeopleExtraSchema } from "../src/content/schemas/people-extra.schema.ts";
 import { siteConfig } from "../src/config/site.ts";
 
 // ---------------------------------------------------------------------------
@@ -108,6 +109,7 @@ const errors = [];
 
 const files = [
   { name: "people.json",       schema: PeopleSchema },
+  { name: "people-extra.json", schema: PeopleExtraSchema },
   { name: "publications.json", schema: PublicationsFileSchema },
   { name: "research.json",     schema: ResearchSchema },
   { name: "journal-club.json", schema: JournalClubSchema },
@@ -163,5 +165,5 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\u2714 Content validation passed (5 files, all entries parsed, all photos exist, contactEmail well-formed)");
+console.log("\u2714 Content validation passed (6 files, all entries parsed, all photos exist, contactEmail well-formed)");
 process.exit(0);

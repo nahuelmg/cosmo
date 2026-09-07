@@ -19,6 +19,7 @@ import { join } from "node:path";
 import * as z from "zod";
 
 import { PeopleSchema } from "../src/content/schemas/people.schema.ts";
+import { PeopleExtraSchema } from "../src/content/schemas/people-extra.schema.ts";
 import {
   PublicationsFileSchema,
 } from "../src/content/schemas/publications.schema.ts";
@@ -49,6 +50,7 @@ function writeSchema(zodSchema, filename) {
 
 console.log("Generating content JSON Schemas (draft-07 for VS Code compatibility)...");
 writeSchema(PeopleSchema,       "people.schema.json");
+writeSchema(PeopleExtraSchema,  "people-extra.schema.json");
 writeSchema(PublicationsFileSchema, "publications.schema.json");
 writeSchema(ResearchSchema,     "research.schema.json");
 writeSchema(JournalClubSchema,  "journal-club.schema.json");
