@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "synced_at": "2026-08-31T12:49:54.174Z",
+    "synced_at": "2026-09-08T10:20:52.849Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 323,
-      "arxiv": 82,
+      "inspirehep": 326,
+      "arxiv": 85,
       "manual": 0,
-      "orcid": 93,
+      "orcid": 94,
       "deduped": 40
     },
     "warnings": [
@@ -21,6 +21,96 @@
     ]
   },
   "publications": [
+    {
+      "id": "2609.04510",
+      "authors": [
+        "Zapelli, L.",
+        "Bersanelli, M.",
+        "Colombo, L.P.L.",
+        "Mennella, A.",
+        "Bachar, L.G.",
+        "Battistelli, E.",
+        "Bekkaoui, I.",
+        "Bianchi, L.A.",
+        "Coppolecchia, A.",
+        "Costanza, B.",
+        "De Bernardis, P.",
+        "De Gasperis, G.",
+        "Ferazzoli, S.",
+        "Galloway, M.",
+        "Gervasi, M.",
+        "Mirón-Granese, N.",
+        "Hamilton, J-Ch.",
+        "Laclavère, T.",
+        "Lunde, J.G.S.",
+        "Masi, S.",
+        "Moulane, Y.",
+        "Paradiso, S.",
+        "Queirolo, I.D.",
+        "Regnier, M.",
+        "Romero, G.E.",
+        "Scóccola, C.G."
+      ],
+      "title": "Implementation of frequency-correlated noise in CMB component separation: Method, Validation, and Early Applications",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2609.04510",
+      "abstract": "Parametric component separation methods used in cosmic microwave background (CMB) analyses commonly assume instrumental noise to be uncorrelated between frequency channels. This approximation may become insufficient for experiments whose design naturally introduces cross-channel correlations, such as interferometric or multi-band bolometric systems. This work aims to provide a consistent framework to include frequency-correlated noise in Commander2 and to quantify its impact on component separation in controlled and instrument-motivated simulations. We generalized the amplitude sampling of the Commander2 framework to consistently handle dense frequency-frequency noise covariance matrices, modifying the likelihood evaluation and parallel architecture. The implementation is validated on low-resolution simulations of a simplified CMB-S4-like configuration. We applied the generalized framework to instrument-motivated simulations of the QUBIC bolometric interferometer, using representative noise models derived from end-to-end simulations. Validation tests show excellent convergence and agreement between sampled parameters and analytical maximum-likelihood estimates. Accounting for frequency correlations reduces the width of the maximum-likelihood residual distributions by up to 8% on average, and up to 11% for individual parameters, relative to the diagonal-noise approximation. In QUBIC-based simulations, accounting for an anti-correlated noise produces posterior widths reduced by about 60%, while a positive-correlation test increases them by about 40%. This shows that neglecting cross-channel correlations can lead to incorrect posterior estimates in either direction. The generalized implementation presented here enables the Commander2 software to consistently propagate such correlations into parameter estimation, providing a framework for assessing their impact in future CMB analyses."
+    },
+    {
+      "id": "2609.02908",
+      "authors": [
+        "Leizerovich, Matías",
+        "Landau, Susana J.",
+        "Luciano, Giuseppe Gaetano",
+        "Papatriantafyllou, Andreas",
+        "Saridakis, Emmanuel N."
+      ],
+      "title": "Observational constraints on Luciano-Saridakis holographic dark energy",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2609.02908",
+      "abstract": "Holographic dark energy (HDE) models provide a natural framework for linking gravitational thermodynamics to the late-time accelerated expansion of the Universe. In this work, we investigate the observational viability of an extended HDE scenario arising from a recently proposed generalized entropy. For bounded systems, this entropy exhibits a generalized holographic scaling with two independent area contributions, giving rise to a modified HDE density that encompasses both standard HDE and $Λ$CDM as limiting cases. Focusing on the Hubble-horizon infrared cutoff, we constrain the model using Cosmic Chronometers, the Pantheon$^+$+SH0ES Type Ia supernova compilation, DESI DR2 baryon acoustic oscillations, and compressed Planck 2018 CMB shift parameters. We find that the model provides an excellent fit to the combined dataset and admits regions of parameter space in which the Pantheon$^+$+SH0ES and CMB constraints can be simultaneously accommodated. The preferred solutions lie close to the $Λ$CDM regime, although non-standard entropic contributions remain compatible with current observations. We further compare the complete realization of the model, containing both independent area contributions, with its reduced single-contribution limit, finding that both provide essentially equivalent descriptions of the data, with a mild preference for the latter. Our results establish generalized entropic HDE as a viable and theoretically motivated extension of the standard cosmological scenario and provide the first observational assessment of this cosmological framework."
+    },
+    {
+      "id": "2609.00249",
+      "authors": [
+        "Costanza, Belen",
+        "Azzolina, Lucas Merlo",
+        "Scoccola, Claudia G.",
+        "Granese, Nahuel Miron",
+        "Battistelli, Elia",
+        "Hamilton, Jean-Christophe",
+        "Piat, Michel",
+        "Prele, Damien",
+        "Torchinsky, Steve",
+        "Bekkaoui, Ismail",
+        "Coppolecchia, Alessandro",
+        "De Bernardis, Paolo",
+        "Ferazzoli, Sofia",
+        "Gervasi, Massimo",
+        "Gomez, Luca",
+        "Marwede, Sabrina",
+        "Masi, Silvia",
+        "Moulane, Youssef",
+        "Paiella, Alessandro",
+        "Regnier, Mathias",
+        "Romero, Gustavo",
+        "Sanchez, Federico",
+        "Queirolo, Ivan"
+      ],
+      "title": "Flux jump correction in the QUBIC TES data pipeline",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2609.00249",
+      "abstract": "Flux jumps occur in the readout electronics of Transition Edge Sensor (TES) detectors coupled to Superconducting Quantum Interference Devices (SQUIDs), as a consequence of the periodic transfer function of SQUIDs in the superconducting regime. These events manifest as discontinuities in the Time Ordered Data (TOD) and can significantly degrade the quality of the measured signals. In this work, we present an automated pipeline to identify and correct flux jumps in the calibration data of the QUBIC (Q & U Bolometric Interferometer for Cosmology) instrument, designed to measure the B-mode polarization of the Cosmic Microwave Background (CMB). Using data from multiple observation campaigns, we characterize the statistical properties of flux jumps and compare them with expectations based on the electronic configuration of the instrument. The proposed pipeline successfully corrects these events, allowing the recovery of affected data and enabling their use in subsequent CMB analysis."
+    },
     {
       "id": "2608.00331",
       "authors": [
@@ -363,6 +453,22 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
+    },
+    {
+      "id": "10.1016/j.dark.2026.102443",
+      "authors": [
+        "Matías Leizerovich",
+        "Susana J. Landau",
+        "Giuseppe Gaetano Luciano",
+        "Andreas Papatriantafyllou",
+        "Emmanuel N. Saridakis"
+      ],
+      "title": "Observational constraints on Luciano-Saridakis holographic dark energy",
+      "journal": "Physics of the Dark Universe",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "orcid",
+      "doi": "10.1016/j.dark.2026.102443"
     },
     {
       "id": "10.1051/0004-6361/202555861",
