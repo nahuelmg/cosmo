@@ -4,20 +4,32 @@
  * CLI: pnpm sync-people [--dry-run] [--verbose]
  *
  * Hybrid sync for the People tab. The roster (who is in the group, which
- * section they belong to, and their Spanish research / teaching roles) comes
- * from a published Google Sheet. Everything the sheet cannot express — ORCID /
- * InspireHEP ids, photos, e-mails, bios, research interests, curated bilingual
- * affiliations — lives in `content/people-extra.json`, keyed by slug, and is
+ * section they belong to, their Spanish research / teaching roles, and — for
+ * PIs and research staff — e-mail, office, a short Spanish bio and research
+ * lines) comes from a published Google Sheet. Everything else — ORCID /
+ * InspireHEP ids, photos, curated bilingual bios / interests / affiliations,
+ * social links — lives in `content/people-extra.json`, keyed by slug, and is
  * merged in here. The result is written to `content/people.json` (generated —
  * do not hand-edit).
  *
- * Sheet layout (one tab, section headers as rows):
+ * Sheet layout (one tab, section headers as rows). The "Nombre | …" row that
+ * opens each block names the columns; the mapping is accepted in any order and
+ * accumulated across blocks, so a value in a column the block's own sub-header
+ * does not re-name is still picked up:
  *   Investigadores                       → category "pi"
- *     Nombre | Cargo en investigación | Cargo docente
+ *     Nombre | Cargo en investigación | Cargo docente | EMAIL | Oficina |
+ *     Mini Biografía | Líneas de investigación
  *   Postdocs / docs / lics               → category from "Cargo en investigación"
- *     Nombre | Cargo en investigación | Cargo docente
+ *     (same columns)
  *   Miembros Anteriores:                 → category "past"   ("Nombre (… 2026)")
  *   Colaboradores externos y visitantes: → category "visitors"  ("Nombre (Afiliación)")
+ *
+ * Enrichment columns (EMAIL, Oficina, Mini Biografía, Líneas de investigación)
+ * are read only for the "pi" and "researchStaff" sections. EMAIL and Oficina
+ * override people-extra.json; Mini Biografía and Líneas de investigación fill
+ * the gap only when people-extra.json has no curated (bilingual) value, and are
+ * shown for both languages. "Líneas de investigación" is one interest per line
+ * or ";"-separated.
  *
  * Rules (mirrors the other sync scripts):
  *  - Relative imports only, no top-level await, guard main() with require.main
@@ -64,6 +76,32 @@ const OUTPUT_PATH = resolve(__dirname, "../content/people.json");
 
 type Section = "pi" | "researchStaff" | "past" | "collaborators";
 
+// Column sub-header label (accent/case-folded) → RawPerson field. Learned from
+// the "Nombre | …" row that opens each pi / researchStaff block. The mapping is
+// accumulated across blocks (the Investigadores header names all columns; the
+// Postdocs header only names the first three), so a value typed in any block is
+// picked up regardless of which sub-header row introduced the column.
+type ColumnField =
+  | "name"
+  | "roleEs"
+  | "teachingEs"
+  | "email"
+  | "office"
+  | "bioEs"
+  | "interestsEs";
+
+const COLUMN_HEADERS: Record<string, ColumnField> = {
+  nombre: "name",
+  "cargo en investigacion": "roleEs",
+  "cargo docente": "teachingEs",
+  email: "email",
+  oficina: "office",
+  "mini biografia": "bioEs",
+  "lineas de investigacion": "interestsEs",
+};
+
+const DEFAULT_COLUMNS: ColumnField[] = ["name", "roleEs", "teachingEs"];
+
 const SECTION_HEADERS: Record<string, Section> = {
   investigadores: "pi",
   "postdocs / docs / lics": "researchStaff",
@@ -85,8 +123,11 @@ const ROLE_EN: Record<string, string> = {
   "investigador postdoctoral": "Postdoctoral Researcher",
   doctorando: "PhD Student",
   doctoranda: "PhD Student",
+  "estudiante de doctorado": "PhD Student",
+  "estudiante de posgrado": "Graduate Student",
   licenciando: "Undergraduate Student",
   licencianda: "Undergraduate Student",
+  "estudiante de licenciatura": "Undergraduate Student",
   "investigador visitante": "Visiting Researcher",
   "investigadora visitante": "Visiting Researcher",
 };
@@ -148,9 +189,31 @@ export function splitParen(cell: string): { name: string; paren?: string } {
 export function staffCategory(researchRole: string): Person["category"] {
   const f = fold(researchRole);
   if (/pos.?doc/.test(f)) return "postdoc";
-  if (/doctorand/.test(f)) return "phd";
-  if (/licenciand/.test(f)) return "undergrad";
+  if (/doctorand|doctorado/.test(f)) return "phd";
+  if (/licenciand|licenciatura/.test(f)) return "undergrad";
   return "phd";
+}
+
+/**
+ * Google Sheets silently turns straight quotes into curly ones. `proseString`
+ * (the schema helper behind short_bio / research_interests) rejects curly
+ * quotes, so a bio typed in the sheet would fail validation. Straighten them
+ * here instead of failing the whole sync.
+ */
+export function straightenQuotes(s: string): string {
+  return s
+    .replace(/[‘’‛]/g, "'")
+    .replace(/[“”‟]/g, '"');
+}
+
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+/** Split the "Líneas de investigación" cell into individual interests. */
+export function splitInterests(cell: string): string[] {
+  return cell
+    .split(/[\n;]+/)
+    .map((s) => straightenQuotes(s).trim())
+    .filter(Boolean);
 }
 
 interface RawPerson {
@@ -161,6 +224,10 @@ interface RawPerson {
   teachingEs?: string;
   parenAffiliation?: string;
   pastYear?: string;
+  email?: string;
+  office?: string;
+  bioEs?: string;
+  interestsEs?: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -173,13 +240,13 @@ export function rowsToRawPeople(
 ): RawPerson[] {
   const people: RawPerson[] = [];
   let section: Section | null = null;
+  // Index → field, accumulated across every "Nombre | …" sub-header row.
+  const columns: ColumnField[] = [...DEFAULT_COLUMNS];
 
   for (const cells of table) {
     const a = (cells[0] ?? "").trim();
-    const b = (cells[1] ?? "").trim();
-    const c = (cells[2] ?? "").trim();
 
-    if (!a && !b && !c) continue;
+    if (cells.every((cell) => !(cell ?? "").trim())) continue;
 
     const header = SECTION_HEADERS[fold(a).replace(/:$/, "")];
     if (header) {
@@ -187,9 +254,25 @@ export function rowsToRawPeople(
       continue;
     }
     if (!section) continue;
-    if (fold(a) === "nombre") continue; // column sub-header
+
+    if (fold(a) === "nombre") {
+      // Column sub-header — learn (and keep) the column order.
+      cells.forEach((cell, i) => {
+        const field = COLUMN_HEADERS[fold(cell ?? "")];
+        if (field) columns[i] = field;
+      });
+      continue;
+    }
 
     if (!a) continue;
+
+    // Pull each named column by its learned position.
+    const cell = (field: ColumnField): string => {
+      const i = columns.indexOf(field);
+      return i >= 0 ? (cells[i] ?? "").trim() : "";
+    };
+    const b = cell("roleEs");
+    const c = cell("teachingEs");
 
     const { name: parsedName, paren } =
       section === "past" || section === "collaborators"
@@ -207,19 +290,36 @@ export function rowsToRawPeople(
     else if (section === "collaborators") category = "visitors";
     else {
       category = staffCategory(b);
-      if (b && category === "phd" && !/doctorand/.test(fold(b))) {
+      if (b && category === "phd" && !/doctorand|doctorado/.test(fold(b))) {
         warnings.push(`unknown research role "${b}" for ${slug} — defaulted to PhD`);
       }
     }
+
+    const enrichable = section === "pi" || section === "researchStaff";
+
+    let email: string | undefined;
+    const rawEmail = cell("email");
+    if (rawEmail && enrichable) {
+      if (EMAIL_RE.test(rawEmail)) email = rawEmail;
+      else warnings.push(`EMAIL "${rawEmail}" for ${slug} is not a valid address — ignored`);
+    }
+
+    const office = enrichable ? cell("office") || undefined : undefined;
+    const bioEs = enrichable ? straightenQuotes(cell("bioEs")).trim() || undefined : undefined;
+    const interests = enrichable ? splitInterests(cell("interestsEs")) : [];
 
     people.push({
       slug,
       name,
       category,
-      roleEs: section === "pi" || section === "researchStaff" ? b || undefined : undefined,
-      teachingEs: section === "pi" || section === "researchStaff" ? c || undefined : undefined,
+      roleEs: enrichable ? b || undefined : undefined,
+      teachingEs: enrichable ? c || undefined : undefined,
       parenAffiliation: section === "collaborators" ? paren : undefined,
       pastYear: section === "past" ? paren?.match(/\b(\d{4})\b/)?.[1] : undefined,
+      email,
+      office,
+      bioEs,
+      interestsEs: interests.length > 0 ? interests : undefined,
     });
   }
 
@@ -289,19 +389,45 @@ export function assemble(
     },
   ];
 
+  // Bio / research interests: a curated bilingual entry in people-extra.json
+  // always wins (the sheet only carries Spanish). The sheet fills the gap for
+  // everyone who has no curated entry; its text is shown for both languages.
+  const sheetBio = raw.bioEs ? { es: raw.bioEs, en: raw.bioEs } : undefined;
+  if (raw.bioEs && e.short_bio) {
+    warnings.push(
+      `${raw.slug}: "Mini Biografía" from the sheet ignored — people-extra.json has a curated short_bio`,
+    );
+  }
+  const short_bio = e.short_bio ?? sheetBio ?? stubBio;
+  const full_bio = e.full_bio ?? sheetBio ?? stubBio;
+
+  const sheetInterests = raw.interestsEs?.map((i) => ({ es: i, en: i }));
+  if (sheetInterests && e.research_interests) {
+    warnings.push(
+      `${raw.slug}: "Líneas de investigación" from the sheet ignored — people-extra.json has curated research_interests`,
+    );
+  }
+  const research_interests =
+    e.research_interests ?? sheetInterests ?? stubInterests;
+
+  // Contact: sheet EMAIL / Oficina win over people-extra when present.
+  const contact = { ...(e.contact ?? {}) };
+  if (raw.email) contact.email = raw.email;
+  if (raw.office) contact.office = raw.office;
+
   return {
     slug: raw.slug,
     name: raw.name,
     role,
     category: raw.category,
     ...(e.photo ? { photo: e.photo } : {}),
-    short_bio: e.short_bio ?? stubBio,
-    full_bio: e.full_bio ?? stubBio,
-    research_interests: e.research_interests ?? stubInterests,
+    short_bio,
+    full_bio,
+    research_interests,
     ...(e.inspirehep_id ? { inspirehep_id: e.inspirehep_id } : {}),
     ...(e.orcid_id ? { orcid_id: e.orcid_id } : {}),
     display_name_normalized: normalizeName(raw.name),
-    contact: e.contact ?? {},
+    contact,
     social_links: e.social_links ?? [],
     ...(e.years ? { years: e.years } : {}),
     ...(e.thesis_topic ? { thesis_topic: e.thesis_topic } : {}),

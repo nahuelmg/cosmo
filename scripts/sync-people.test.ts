@@ -8,6 +8,8 @@ import {
   slugify,
   splitParen,
   staffCategory,
+  straightenQuotes,
+  splitInterests,
   rowsToRawPeople,
   assemble,
 } from "./sync-people";
@@ -40,8 +42,29 @@ describe("staffCategory", () => {
   it("maps the research-role wording to a category", () => {
     expect(staffCategory("Posdoc")).toBe("postdoc");
     expect(staffCategory("Doctorando")).toBe("phd");
+    expect(staffCategory("Estudiante de doctorado")).toBe("phd");
     expect(staffCategory("Licenciando")).toBe("undergrad");
+    expect(staffCategory("Estudiante de licenciatura")).toBe("undergrad");
     expect(staffCategory("mystery")).toBe("phd"); // default
+  });
+});
+
+describe("straightenQuotes", () => {
+  it("replaces curly quotes with straight ones", () => {
+    expect(straightenQuotes("“hola” y ‘chau’")).toBe("\"hola\" y 'chau'");
+  });
+});
+
+describe("splitInterests", () => {
+  it("splits on newlines and semicolons, trimming blanks", () => {
+    expect(splitInterests("Cosmología cuántica\nAgujeros negros; Inflación\n")).toEqual([
+      "Cosmología cuántica",
+      "Agujeros negros",
+      "Inflación",
+    ]);
+  });
+  it("returns an empty array for an empty cell", () => {
+    expect(splitInterests("")).toEqual([]);
   });
 });
 
@@ -106,6 +129,76 @@ describe("rowsToRawPeople", () => {
       "Tomas Ferreira Chase",
     );
     expect(raw.find((r) => r.slug === "javier-pineau")!.name).toBe("Javier Pineau");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// rowsToRawPeople — enrichment columns (EMAIL / Oficina / bio / interests)
+// ---------------------------------------------------------------------------
+
+const SHEET_7COL: string[][] = [
+  ["Investigadores", "", "", "", "", "", ""],
+  [
+    "Nombre",
+    "Cargo en investigación",
+    "Cargo docente",
+    "EMAIL",
+    "Oficina",
+    "Mini Biografía",
+    "Líneas de investigación",
+  ],
+  [
+    "Ana Torres",
+    "Investigadora Principal",
+    "",
+    "ana@df.uba.ar",
+    "Oficina 12",
+    "Trabaja en cosmología.",
+    "Inflación\nMateria oscura",
+  ],
+  ["Postdocs / docs / lics", "", "", "", "", "", ""],
+  // The Postdocs sub-header only re-names the first three columns …
+  ["Nombre", "Cargo en investigación", "Cargo docente", "", "", "", ""],
+  // … but the accumulated map still resolves EMAIL / Oficina by position.
+  ["Beto Díaz", "Posdoc", "", "beto@df.uba.ar", "Oficina 9", "", ""],
+  ["Colaboradores externos y visitantes:", "", "", "", "", "", ""],
+  ["Carla Ruiz", "", "", "ignored@x.com", "", "", ""],
+];
+
+describe("rowsToRawPeople — enrichment columns", () => {
+  it("reads EMAIL, Oficina, Mini Biografía and Líneas de investigación for staff", () => {
+    const raw = rowsToRawPeople(SHEET_7COL, []);
+    const ana = raw.find((r) => r.slug === "ana-torres")!;
+    expect(ana.email).toBe("ana@df.uba.ar");
+    expect(ana.office).toBe("Oficina 12");
+    expect(ana.bioEs).toBe("Trabaja en cosmología.");
+    expect(ana.interestsEs).toEqual(["Inflación", "Materia oscura"]);
+  });
+
+  it("keeps the column map across blocks whose sub-header omits later columns", () => {
+    const raw = rowsToRawPeople(SHEET_7COL, []);
+    const beto = raw.find((r) => r.slug === "beto-diaz")!;
+    expect(beto.email).toBe("beto@df.uba.ar");
+    expect(beto.office).toBe("Oficina 9");
+  });
+
+  it("ignores enrichment columns for collaborators / past members", () => {
+    const raw = rowsToRawPeople(SHEET_7COL, []);
+    const carla = raw.find((r) => r.slug === "carla-ruiz")!;
+    expect(carla.email).toBeUndefined();
+  });
+
+  it("warns and drops an invalid EMAIL", () => {
+    const warnings: string[] = [];
+    rowsToRawPeople(
+      [
+        ["Investigadores", "", "", ""],
+        ["Nombre", "Cargo en investigación", "Cargo docente", "EMAIL"],
+        ["Zoe Vega", "Investigadora Principal", "", "not-an-email"],
+      ],
+      warnings,
+    );
+    expect(warnings.some((w) => w.includes("not a valid address"))).toBe(true);
   });
 });
 
@@ -191,5 +284,66 @@ describe("assemble", () => {
     );
     expect(person.role).toEqual({ es: "Becario raro", en: "Becario raro" });
     expect(warnings).toHaveLength(1);
+  });
+
+  it("uses the sheet bio / interests / email / office when there is no enrichment", () => {
+    const warnings: string[] = [];
+    const person = assemble(
+      {
+        slug: "ana-torres",
+        name: "Ana Torres",
+        category: "pi",
+        roleEs: "Investigadora Principal",
+        email: "ana@df.uba.ar",
+        office: "Oficina 12",
+        bioEs: "Trabaja en cosmología.",
+        interestsEs: ["Inflación", "Materia oscura"],
+      },
+      undefined,
+      warnings,
+    );
+    expect(person.short_bio).toEqual({
+      es: "Trabaja en cosmología.",
+      en: "Trabaja en cosmología.",
+    });
+    expect(person.full_bio).toEqual(person.short_bio);
+    expect(person.research_interests).toEqual([
+      { es: "Inflación", en: "Inflación" },
+      { es: "Materia oscura", en: "Materia oscura" },
+    ]);
+    expect(person.contact).toEqual({
+      email: "ana@df.uba.ar",
+      office: "Oficina 12",
+    });
+    expect(warnings).toEqual([]);
+    expect(PeopleSchema.safeParse([person]).success).toBe(true);
+  });
+
+  it("keeps the curated bilingual bio / interests and warns that the sheet value is ignored", () => {
+    const warnings: string[] = [];
+    const curated = {
+      short_bio: { es: "Bio ES curada", en: "Curated EN bio" },
+      research_interests: [{ es: "Tema", en: "Topic" }],
+      contact: { email: "curated@df.uba.ar", orcid: "0000-0002-1825-0097" as const },
+    };
+    const person = assemble(
+      {
+        slug: "ana-torres",
+        name: "Ana Torres",
+        category: "pi",
+        roleEs: "Investigadora Principal",
+        email: "sheet@df.uba.ar",
+        bioEs: "Bio del sheet",
+        interestsEs: ["Otra"],
+      },
+      curated,
+      warnings,
+    );
+    expect(person.short_bio).toEqual(curated.short_bio);
+    expect(person.research_interests).toEqual(curated.research_interests);
+    // EMAIL from the sheet still overrides the curated contact.
+    expect(person.contact.email).toBe("sheet@df.uba.ar");
+    expect(person.contact.orcid).toBe("0000-0002-1825-0097");
+    expect(warnings).toHaveLength(2);
   });
 });

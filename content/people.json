@@ -240,8 +240,9 @@
     "orcid_id": "0000-0003-0770-1865",
     "display_name_normalized": "nahuel miron granese",
     "contact": {
-      "email": "nahuel.mirongranese@df.uba.ar",
-      "orcid": "0000-0003-0770-1865"
+      "email": "nahuelmg@df.uba.ar",
+      "orcid": "0000-0003-0770-1865",
+      "office": "Oficina 2166 2do piso, Dpto. de Física, Pabellón 1"
     },
     "social_links": [],
     "teaching_role": {
@@ -288,7 +289,7 @@
     "slug": "tomas-ferreira-chase",
     "name": "Tomas Ferreira Chase",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -323,7 +324,7 @@
     "slug": "matias-leizerovich",
     "name": "Matias Leizerovich",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -358,7 +359,7 @@
     "slug": "guadalupe-ahumada-acuna",
     "name": "Guadalupe Ahumada Acuña",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -386,7 +387,7 @@
     "slug": "gonzalo-santa-cruz",
     "name": "Gonzalo Santa Cruz",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -419,7 +420,7 @@
     "slug": "juan-pablo-elia",
     "name": "Juan Pablo Elia",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -447,7 +448,7 @@
     "slug": "augusto-chantada",
     "name": "Augusto Chantada",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -481,7 +482,7 @@
     "slug": "federico-uxhagen",
     "name": "Federico Uxhagen",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -511,7 +512,7 @@
     "slug": "luis-biaus",
     "name": "Luis Biaus",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -537,7 +538,7 @@
     "slug": "ezequiel-lozano",
     "name": "Ezequiel Lozano",
     "role": {
-      "es": "Doctorando",
+      "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
     "category": "phd",
@@ -563,7 +564,7 @@
     "slug": "martin-castelli",
     "name": "Martin Castelli",
     "role": {
-      "es": "Licenciando",
+      "es": "Estudiante de licenciatura",
       "en": "Undergraduate Student"
     },
     "category": "undergrad",
