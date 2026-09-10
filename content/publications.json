@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-09-08T10:20:52.849Z",
+    "synced_at": "2026-09-10T10:18:43.248Z",
     "sources": [
       "inspirehep",
       "orcid",
@@ -11,7 +11,7 @@
       "arxiv": 85,
       "manual": 0,
       "orcid": 94,
-      "deduped": 40
+      "deduped": 41
     },
     "warnings": [
       "No arXiv results for Esteban Calzetta (0000-0002-3083-3420)",
@@ -69,12 +69,13 @@
         "Saridakis, Emmanuel N."
       ],
       "title": "Observational constraints on Luciano-Saridakis holographic dark energy",
-      "journal": "Preprint",
+      "journal": "Phys.Dark Univ. 54 (2026) 102443",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2609.02908",
-      "abstract": "Holographic dark energy (HDE) models provide a natural framework for linking gravitational thermodynamics to the late-time accelerated expansion of the Universe. In this work, we investigate the observational viability of an extended HDE scenario arising from a recently proposed generalized entropy. For bounded systems, this entropy exhibits a generalized holographic scaling with two independent area contributions, giving rise to a modified HDE density that encompasses both standard HDE and $Λ$CDM as limiting cases. Focusing on the Hubble-horizon infrared cutoff, we constrain the model using Cosmic Chronometers, the Pantheon$^+$+SH0ES Type Ia supernova compilation, DESI DR2 baryon acoustic oscillations, and compressed Planck 2018 CMB shift parameters. We find that the model provides an excellent fit to the combined dataset and admits regions of parameter space in which the Pantheon$^+$+SH0ES and CMB constraints can be simultaneously accommodated. The preferred solutions lie close to the $Λ$CDM regime, although non-standard entropic contributions remain compatible with current observations. We further compare the complete realization of the model, containing both independent area contributions, with its reduced single-contribution limit, finding that both provide essentially equivalent descriptions of the data, with a mild preference for the latter. Our results establish generalized entropic HDE as a viable and theoretically motivated extension of the standard cosmological scenario and provide the first observational assessment of this cosmological framework."
+      "doi": "10.1016/j.dark.2026.102443",
+      "abstract": "Holographic dark energy (HDE) models provide a natural framework for linking gravitational thermodynamics to the late-time accelerated expansion of the Universe. In this work, we investigate the observational viability of an extended HDE scenario arising from a recently proposed generalized entropy. For bounded systems, this entropy exhibits a generalized holographic scaling with two independent area contributions, giving rise to a modified HDE density that encompasses both standard HDE and ΛCDM as limiting cases. Focusing on the Hubble-horizon infrared cutoff, we constrain the model using Cosmic Chronometers, the Pantheon<math altimg=\"si2.svg\"><msup><mrow/><mo>+</mo></msup></math>+SH0ES Type Ia supernova compilation, DESI DR2 baryon acoustic oscillations, and compressed Planck 2018 CMB shift parameters. We find that the model provides an excellent fit to the combined dataset and admits regions of parameter space in which the Pantheon<math altimg=\"si2.svg\"><msup><mrow/><mo>+</mo></msup></math>+SH0ES and CMB constraints can be simultaneously accommodated. The preferred solutions lie close to the ΛCDM regime, although non-standard entropic contributions remain compatible with current observations. We further compare the complete realization of the model, containing both independent area contributions, with its reduced single- contribution limit, finding that both provide essentially equivalent descriptions of the data, with a mild preference for the latter. Our results establish generalized entropic HDE as a viable and theoretically motivated extension of the standard cosmological scenario and provide the first observational assessment of this cosmological framework."
     },
     {
       "id": "2609.00249",
@@ -453,22 +454,6 @@
       "source": "inspirehep",
       "doi": "10.3389/fspas.2025.1659952",
       "abstract": "$\\mathbf{Introduction}$: QUBIC (the Q & U Bolometric Interferometer for Cosmology) is an international ground-based experiment designed to observe the polarization of the cosmic microwave background. It has been installed at a high-altitude site in Alto Chorrillos, Argentina (4,869 m above sea level). At this altitude, the cosmic ray flux is high, thus requiring an advanced algorithm for their detection and removal from raw data. Cosmic rays can leave two types of traces in the data: above and below the noise level. This article describes an algorithm for detecting the above-noise traces. $\\mathbf{Methods}$: An algorithm was developed for detecting cosmic ray events in the time-ordered data (TOD) of transition-edge sensor detectors (TES bolometers). Raw signals were pre-processed to obtain de-noised data. Events were searched by applying a threshold to isolate segments showing a rapid increase and subsequent exponential decay. The final goal is to fit each segment to extract the time scale of the candidate and verify the fit quality statistically. $\\mathbf{Results}$: The cosmic ray detection algorithm was applied to datasets acquired in Salta (Argentina) in 2022, during a testing campaign. So far, no candidates have been found after exploring different thresholds for initiating the cosmic ray search, along with various combinations of minimum points required for the sudden increase and exponential decay expected in the signal. $\\mathbf{Discussion}$: We select only high signal-to-noise regions to find the most energetic cosmic ray candidates matching the filters proposed in the method. The null result is not surprising since, for the energy range of cosmic muons of interest here (approximately [1,100] Gev), the expected energy deposited in our very thin bolometer membranes is small and produces a small signal with respect to the measured noise. However, this methodology could be applied to future longer campaigns to estimate, from the largest (and rare) cosmic ray energy depositions, the TES time constants."
-    },
-    {
-      "id": "10.1016/j.dark.2026.102443",
-      "authors": [
-        "Matías Leizerovich",
-        "Susana J. Landau",
-        "Giuseppe Gaetano Luciano",
-        "Andreas Papatriantafyllou",
-        "Emmanuel N. Saridakis"
-      ],
-      "title": "Observational constraints on Luciano-Saridakis holographic dark energy",
-      "journal": "Physics of the Dark Universe",
-      "year": 2026,
-      "topic_tags": [],
-      "source": "orcid",
-      "doi": "10.1016/j.dark.2026.102443"
     },
     {
       "id": "10.1051/0004-6361/202555861",
