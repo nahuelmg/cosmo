@@ -10,6 +10,8 @@ import { SessionRow } from "./SessionRow";
 interface Session {
   id: string;
   date: string;
+  start_time?: string;
+  location?: string;
   speaker: string;
   speaker_position?: string;
   affiliation?: string;

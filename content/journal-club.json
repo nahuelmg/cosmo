@@ -1,35 +1,14 @@
 [
   {
-    "id": "2026-09-14-dr-tomas-ferreira-chase",
+    "id": "2026-09-14-nahuel-miron",
     "date": "2026-09-14",
     "status": "upcoming",
-    "speaker": "Dr. Tomas Ferreira Chase",
-    "speaker_position": "Posdoc",
-    "affiliation": "ICTP",
-    "title": "Dark matter found?"
-  },
-  {
-    "id": "2026-06-12-dr-kenji-bekki",
-    "date": "2026-06-12",
-    "status": "past",
-    "speaker": "Dr. Kenji Bekki",
-    "speaker_position": "Investigador",
-    "affiliation": "University of Western Australia",
-    "title": "Stellar mass function of dark matter subhalos and its implication for satellite galaxy populations",
-    "paper_link": "https://arxiv.org/abs/2501.09876",
-    "academic_year": "2025-2026"
-  },
-  {
-    "id": "2026-05-22-dr-fabiola-marin",
-    "date": "2026-05-22",
-    "status": "past",
-    "speaker": "Dr. Fabiola Marín",
-    "speaker_position": "Profesora",
-    "affiliation": "UNICEN",
-    "title": "Probing the large-scale structure",
-    "abstract": "We derive ...",
-    "paper_link": "https://arxiv.org/abs/2501.09876",
-    "notes": "Sesión conjunta con el IAFE.",
-    "academic_year": "2025-2026"
+    "speaker": "nahuel miron",
+    "speaker_position": "investigador",
+    "affiliation": "uba",
+    "start_time": "14:30",
+    "location": "aula federman",
+    "title": "luz y gw",
+    "abstract": "veremos como las gw y la luz son iguales"
   }
 ]

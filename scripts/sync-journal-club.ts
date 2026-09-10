@@ -7,8 +7,16 @@
  * export) and writes content/journal-club.json. The sheet is the single source
  * of truth — the JSON file is generated and must not be hand-edited.
  *
- * Sheet columns (header row, order-independent, accent/case-insensitive):
- *   Fecha | Speaker | Posición | Afiliación | Título | Resumen | Link | Notas
+ * Sheet columns (header row, order-independent, accent/case-insensitive). The
+ * source is a Google Form response sheet with English headers; the older
+ * Spanish headers are still accepted so a legacy sheet keeps working:
+ *   Date of the journal | Complete name | Academic position | Affiliation |
+ *   Hour | Place/room | Title of the journal | Abstract | Links
+ *   (legacy: Fecha | Speaker | Posición | Afiliación | Título | Resumen | Link | Notas)
+ *
+ * The Google Forms "Timestamp" column (submission time, not the talk date) is
+ * ignored. Dates are accepted as YYYY-MM-DD or M/D/YYYY (the en-US format
+ * Google Forms writes) and normalized to YYYY-MM-DD.
  *
  * Derived (not in the sheet):
  *   id            = `${date}-${speaker-slug}` (with a numeric suffix on collision)
@@ -46,7 +54,7 @@ const { values: flags } = parseArgs({
 
 const isVerbose = Boolean(flags.verbose);
 
-const SHEET_ID = "1DOgFAP-e_aqOvQzkT5js0dVySqL6EHEyLApjMniQX3M";
+const SHEET_ID = "1fBfnMGPPQ_dgz-hdYmJDyuntg1rqRT2YiJADTo92vfA";
 const DEFAULT_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 const CSV_URL = process.env.JOURNAL_CLUB_SHEET_CSV_URL || DEFAULT_CSV_URL;
 
@@ -61,7 +69,20 @@ const OUTPUT_PATH = resolve(__dirname, "../content/journal-club.json");
 const SEASON_START_MONTH = 8;
 
 // Header label (accent/case-folded) → session field.
+// "timestamp" is intentionally unmapped: it is the Google Forms submission time,
+// not the date of the talk.
 const HEADER_MAP: Record<string, keyof RawRow> = {
+  // English Google Form sheet (current source)
+  "date of the journal": "date",
+  "complete name": "speaker",
+  "academic position": "speaker_position",
+  affiliation: "affiliation",
+  hour: "start_time",
+  "place/room": "location",
+  "title of the journal": "title",
+  abstract: "abstract",
+  links: "paper_link",
+  // Spanish sheet (legacy)
   fecha: "date",
   speaker: "speaker",
   posicion: "speaker_position",
@@ -77,6 +98,8 @@ interface RawRow {
   speaker?: string;
   speaker_position?: string;
   affiliation?: string;
+  start_time?: string;
+  location?: string;
   title?: string;
   abstract?: string;
   paper_link?: string;
@@ -104,6 +127,38 @@ export function deriveStatus(date: string, today: string): "upcoming" | "past" {
   return date >= today ? "upcoming" : "past";
 }
 
+/**
+ * Accepts an ISO `YYYY-MM-DD` date or the en-US `M/D/YYYY` form Google Forms
+ * writes, and returns it as `YYYY-MM-DD`. Returns null for anything else.
+ */
+export function normalizeDate(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  const us = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (us) {
+    const [, m, d, y] = us;
+    const mm = m.padStart(2, "0");
+    const dd = d.padStart(2, "0");
+    if (Number(mm) >= 1 && Number(mm) <= 12 && Number(dd) >= 1 && Number(dd) <= 31) {
+      return `${y}-${mm}-${dd}`;
+    }
+  }
+  return null;
+}
+
+/**
+ * Accepts `H:MM` or `HH:MM` (24-hour) and returns it zero-padded as `HH:MM`.
+ * Returns null for anything else.
+ */
+export function normalizeTime(raw: string): string | null {
+  const m = raw.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) return null;
+  const h = Number(m[1]);
+  const min = Number(m[2]);
+  if (h > 23 || min > 59) return null;
+  return `${String(h).padStart(2, "0")}:${m[2]}`;
+}
+
 export function deriveAcademicYear(date: string): string {
   const [y, m] = date.split("-").map(Number);
   return m >= SEASON_START_MONTH ? `${y}-${y + 1}` : `${y - 1}-${y}`;
@@ -124,13 +179,14 @@ export function rowsToSessions(
   const columns = headerRow.map((h) => HEADER_MAP[fold(h)]);
   if (!columns.includes("date") || !columns.includes("speaker") || !columns.includes("title")) {
     throw new Error(
-      `sheet header is missing a required column (need Fecha, Speaker, Título). Got: ${headerRow.join(", ")}`,
+      `sheet header is missing a required column (need a date, speaker, and title ` +
+        `column — e.g. "Date of the journal", "Complete name", "Title of the journal"). ` +
+        `Got: ${headerRow.join(", ")}`,
     );
   }
 
   const sessions: JournalClubSession[] = [];
   const usedIds = new Map<string, number>();
-  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
   for (const cells of dataRows) {
     const raw: RawRow = {};
@@ -143,40 +199,52 @@ export function rowsToSessions(
     // Fully blank spreadsheet line — skip silently.
     if (!raw.date && !raw.speaker && !raw.title) continue;
 
-    if (!raw.date || !DATE_RE.test(raw.date)) {
-      warnings.push(`skipped row: missing or malformed Fecha (${raw.speaker ?? raw.title ?? "?"})`);
+    const date = raw.date ? normalizeDate(raw.date) : null;
+    if (!date) {
+      warnings.push(
+        `skipped row: missing or malformed date (${raw.speaker ?? raw.title ?? "?"})`,
+      );
       continue;
     }
     if (!raw.speaker || !raw.title) {
-      warnings.push(`skipped ${raw.date}: missing Speaker or Título`);
+      warnings.push(`skipped ${date}: missing speaker or title`);
       continue;
     }
 
     let paperLink = raw.paper_link;
     if (paperLink && !/^https?:\/\//i.test(paperLink)) {
-      warnings.push(`${raw.date}: Link is not a URL, dropped ("${paperLink}")`);
+      warnings.push(`${date}: Link is not a URL, dropped ("${paperLink}")`);
       paperLink = undefined;
     }
 
-    const status = deriveStatus(raw.date, today);
+    let startTime: string | undefined;
+    if (raw.start_time) {
+      const normalized = normalizeTime(raw.start_time);
+      if (normalized) startTime = normalized;
+      else warnings.push(`${date}: Hour "${raw.start_time}" is not HH:MM, dropped`);
+    }
 
-    let id = `${raw.date}-${slugify(raw.speaker)}`;
+    const status = deriveStatus(date, today);
+
+    let id = `${date}-${slugify(raw.speaker)}`;
     const seen = usedIds.get(id) ?? 0;
     usedIds.set(id, seen + 1);
     if (seen > 0) id = `${id}-${seen + 1}`;
 
     const session: JournalClubSession = {
       id,
-      date: raw.date,
+      date,
       status,
       speaker: raw.speaker,
       title: raw.title,
       ...(raw.speaker_position ? { speaker_position: raw.speaker_position } : {}),
       ...(raw.affiliation ? { affiliation: raw.affiliation } : {}),
+      ...(startTime ? { start_time: startTime } : {}),
+      ...(raw.location ? { location: raw.location } : {}),
       ...(raw.abstract ? { abstract: raw.abstract } : {}),
       ...(paperLink ? { paper_link: paperLink } : {}),
       ...(raw.notes ? { notes: raw.notes } : {}),
-      ...(status === "past" ? { academic_year: deriveAcademicYear(raw.date) } : {}),
+      ...(status === "past" ? { academic_year: deriveAcademicYear(date) } : {}),
     };
     sessions.push(session);
   }

@@ -27,8 +27,13 @@ export const JournalClubSessionSchema = z.strictObject({
     .regex(/^\d{4}-\d{2}-\d{2}$/, "date must be ISO YYYY-MM-DD"),
   status: z.enum(["upcoming", "past"]), // derived from date
   speaker: canonicalString, // person name, original form (e.g. "Dr. Jun Koda")
-  speaker_position: canonicalString.optional(), // "Posición" column — e.g. "Profesora", "Investigador"
+  speaker_position: canonicalString.optional(), // "Academic position" column — e.g. "Profesora", "Investigador"
   affiliation: canonicalString.optional(), // institution, original form
+  start_time: z
+    .string()
+    .regex(/^\d{2}:\d{2}$/, "start_time format: HH:MM (24-hour)")
+    .optional(), // "Hour" column — local start time of the talk
+  location: canonicalString.optional(), // "Place/room" column — e.g. "Aula Federman"
   title: canonicalString, // paper title, paper-native
   abstract: z.string().optional(), // "Resumen" column — paper abstract, free text
   paper_link: z.url().optional(), // arXiv/DOI/journal URL

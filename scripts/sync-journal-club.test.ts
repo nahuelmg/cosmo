@@ -8,6 +8,8 @@ import {
   slugify,
   deriveStatus,
   deriveAcademicYear,
+  normalizeDate,
+  normalizeTime,
   rowsToSessions,
 } from "./sync-journal-club";
 import { JournalClubSchema } from "../src/content/schemas/journal-club.schema";
@@ -50,6 +52,33 @@ describe("deriveAcademicYear", () => {
   });
 });
 
+describe("normalizeDate", () => {
+  it("passes ISO YYYY-MM-DD through unchanged", () => {
+    expect(normalizeDate("2026-09-14")).toBe("2026-09-14");
+  });
+  it("converts the en-US M/D/YYYY form Google Forms writes", () => {
+    expect(normalizeDate("9/14/2026")).toBe("2026-09-14");
+    expect(normalizeDate("12/1/2026")).toBe("2026-12-01");
+  });
+  it("rejects malformed or out-of-range dates", () => {
+    expect(normalizeDate("not-a-date")).toBeNull();
+    expect(normalizeDate("14/9/2026")).toBeNull(); // month 14
+    expect(normalizeDate("2026/09/14")).toBeNull();
+  });
+});
+
+describe("normalizeTime", () => {
+  it("zero-pads H:MM to HH:MM", () => {
+    expect(normalizeTime("9:00")).toBe("09:00");
+    expect(normalizeTime("14:30")).toBe("14:30");
+  });
+  it("rejects non-times and out-of-range values", () => {
+    expect(normalizeTime("2:30 PM")).toBeNull();
+    expect(normalizeTime("24:00")).toBeNull();
+    expect(normalizeTime("14h30")).toBeNull();
+  });
+});
+
 // ---------------------------------------------------------------------------
 // rowsToSessions
 // ---------------------------------------------------------------------------
@@ -64,6 +93,91 @@ const HEADER = [
   "Link",
   "Notas",
 ];
+
+// English Google Form response sheet (current source).
+const FORM_HEADER = [
+  "Timestamp",
+  "Complete name",
+  "Academic position",
+  "Affiliation",
+  "Date of the journal",
+  "Hour",
+  "Place/room",
+  "Title of the journal",
+  "Abstract",
+  "Links",
+];
+
+describe("rowsToSessions — English Google Form sheet", () => {
+  const today = "2026-09-10";
+
+  it("maps the form columns, normalizes the date, and keeps hour + place", () => {
+    const warnings: string[] = [];
+    const sessions = rowsToSessions(
+      [
+        FORM_HEADER,
+        [
+          "9/10/2026 12:41:06",
+          "Nahuel Mirón",
+          "Investigador",
+          "UBA",
+          "9/14/2026",
+          "14:30",
+          "Aula Federman",
+          "Light and gravitational waves",
+          "We show how GW and light behave alike.",
+          "",
+        ],
+      ],
+      today,
+      warnings,
+    );
+
+    expect(warnings).toEqual([]);
+    expect(sessions).toHaveLength(1);
+    expect(sessions[0]).toMatchObject({
+      id: "2026-09-14-nahuel-miron",
+      date: "2026-09-14",
+      status: "upcoming",
+      speaker: "Nahuel Mirón",
+      speaker_position: "Investigador",
+      affiliation: "UBA",
+      start_time: "14:30",
+      location: "Aula Federman",
+      title: "Light and gravitational waves",
+      abstract: "We show how GW and light behave alike.",
+    });
+    expect(sessions[0]).not.toHaveProperty("paper_link");
+    expect(JournalClubSchema.safeParse(sessions).success).toBe(true);
+  });
+
+  it("ignores the Timestamp column and drops a malformed Hour with a warning", () => {
+    const warnings: string[] = [];
+    const sessions = rowsToSessions(
+      [
+        FORM_HEADER,
+        [
+          "9/10/2026 12:41:06",
+          "Jane Doe",
+          "",
+          "",
+          "2026-03-01",
+          "half past two",
+          "",
+          "A paper",
+          "",
+          "",
+        ],
+      ],
+      today,
+      warnings,
+    );
+    expect(sessions).toHaveLength(1);
+    expect(sessions[0]).not.toHaveProperty("start_time");
+    expect(sessions[0].date).toBe("2026-03-01");
+    expect(warnings.some((w) => w.includes("Hour"))).toBe(true);
+  });
+});
 
 describe("rowsToSessions", () => {
   const today = "2026-09-07";

@@ -8,6 +8,8 @@
 interface Session {
   id: string;
   date: string; // "YYYY-MM-DD"
+  start_time?: string; // "HH:MM" (24-hour, local)
+  location?: string; // room / venue
   speaker: string;
   speaker_position?: string;
   affiliation?: string;
@@ -52,7 +54,17 @@ export function SessionRow({
     <li id={`session-${session.id}`}>
       <article className="rounded-md bg-surface-alt p-4">
         <p className="text-sm text-ink-muted">
-          <time dateTime={session.date}>{longDate(session.date, locale)}</time>
+          <time
+            dateTime={
+              session.start_time
+                ? `${session.date}T${session.start_time}`
+                : session.date
+            }
+          >
+            {longDate(session.date, locale)}
+          </time>
+          {session.start_time && ` · ${session.start_time}`}
+          {session.location && ` · ${session.location}`}
           {" · "}
           {speakerLine(session)}
         </p>
