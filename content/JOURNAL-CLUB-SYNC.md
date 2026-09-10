@@ -44,8 +44,9 @@ with a warning.
 
 ## When it runs
 
-`.github/workflows/sync-journal-club.yml` — daily at 07:00 UTC, plus
-**Actions ▸ "Sync Journal Club" ▸ Run workflow** for an on-demand sync.
+`.github/workflows/sync-journal-club.yml` — daily at 00:15 UTC (21:15 ART,
+GMT-3), plus **Actions ▸ "Sync Journal Club" ▸ Run workflow** for an on-demand
+sync.
 If `content/journal-club.json` changed it is committed with `[skip ci]` and
 Vercel redeploys. If the sheet can't be fetched or a row fails validation the
 run fails and the committed JSON is left untouched. If the sheet has **no valid

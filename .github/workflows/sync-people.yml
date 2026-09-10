@@ -2,7 +2,7 @@ name: Sync People
 
 on:
   schedule:
-    - cron: '0 8 * * *'   # daily 08:00 UTC (staggered from the other syncs)
+    - cron: '30 0 * * *'  # daily 00:30 UTC = 21:30 ART (GMT-3), staggered ~30 min from Sync Publications
   workflow_dispatch:
 
 concurrency:

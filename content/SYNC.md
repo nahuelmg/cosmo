@@ -303,7 +303,7 @@ ID-lookup sections above.
 ### Running a manual sync (`workflow_dispatch`)
 
 When to use: you just added a new member's `inspirehep_id` / `orcid_id` and
-don't want to wait until the next 06:00 UTC run; or you're testing a sync
+don't want to wait until the next 00:00 UTC run; or you're testing a sync
 script change on `main`.
 
 Steps:
@@ -319,7 +319,8 @@ Steps:
 
 The `workflow_dispatch` trigger is declared in
 `.github/workflows/sync-publications.yml` alongside the daily
-`schedule: cron: "0 6 * * *"` (06:00 UTC every day).
+`schedule: cron: "0 0 * * *"` (00:00 UTC = 21:00 ART / GMT-3, every day).
+The Journal Club and People syncs follow at 00:15 and 00:30 UTC.
 
 ### Reading the step summary
 

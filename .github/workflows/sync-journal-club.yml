@@ -2,7 +2,7 @@ name: Sync Journal Club
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # daily 07:00 UTC (staggered from Sync Publications)
+    - cron: '15 0 * * *'  # daily 00:15 UTC = 21:15 ART (GMT-3), staggered ~15 min from Sync Publications
   workflow_dispatch:
 
 concurrency:

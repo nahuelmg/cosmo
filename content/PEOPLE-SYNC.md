@@ -67,8 +67,8 @@ writes `content/people.json`.
 
 ## When it runs
 
-`.github/workflows/sync-people.yml` — daily 08:00 UTC + **Actions ▸ "Sync
-People" ▸ Run workflow**. Changed `people.json` is committed `[skip ci]` and
+`.github/workflows/sync-people.yml` — daily 00:30 UTC (21:30 ART, GMT-3) +
+**Actions ▸ "Sync People" ▸ Run workflow**. Changed `people.json` is committed `[skip ci]` and
 Vercel redeploys. A missing sheet or a validation failure fails the run and
 leaves the committed file untouched.
 

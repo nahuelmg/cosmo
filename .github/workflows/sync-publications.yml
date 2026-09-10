@@ -2,7 +2,7 @@ name: Sync Publications
 
 on:
   schedule:
-    - cron: '0 6 * * *'   # daily 06:00 UTC
+    - cron: '0 0 * * *'   # daily 00:00 UTC = 21:00 (9 pm) ART (GMT-3)
   workflow_dispatch:
 
 concurrency:
