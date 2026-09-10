@@ -105,7 +105,6 @@ export default async function PersonDetailPage({ params }: Props) {
           researchInterests: t('researchInterests'),
           email: t('email'),
           office: t('office'),
-          orcid: t('orcid'),
           scholar: t('scholar'),
           links: t('links'),
           backToPeople: t('backToPeople'),

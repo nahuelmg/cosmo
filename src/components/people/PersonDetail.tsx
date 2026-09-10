@@ -8,7 +8,6 @@ interface Labels {
   researchInterests: string;
   email: string;
   office: string;
-  orcid: string;
   scholar: string;
   links: string;
   backToPeople: string;
@@ -60,11 +59,9 @@ export function PersonDetail({
   pubLabels,
   publicationsHeading,
 }: PersonDetailProps) {
-  const hasContactInfo =
-    Boolean(person.contact.email) ||
-    Boolean(person.contact.office) ||
-    Boolean(person.contact.orcid) ||
-    Boolean(person.contact.scholar);
+  const emailParts = person.contact.email
+    ? person.contact.email.split('@')
+    : null;
 
   return (
     <article className="mx-auto max-w-5xl px-6 py-16">
@@ -111,6 +108,28 @@ export function PersonDetail({
               {person.current_position}
             </p>
           )}
+          {(emailParts || person.contact.office) && (
+            <dl className="mt-4 space-y-1 text-sm text-ink-muted">
+              {emailParts && (
+                <div className="flex gap-2">
+                  <dt className="text-ink-subtle">{labels.email}</dt>
+                  <dd>
+                    <EmailLink
+                      user={emailParts[0]}
+                      domain={emailParts[1]}
+                      className="text-accent underline underline-offset-4"
+                    />
+                  </dd>
+                </div>
+              )}
+              {person.contact.office && (
+                <div className="flex gap-2">
+                  <dt className="text-ink-subtle">{labels.office}</dt>
+                  <dd>{person.contact.office}</dd>
+                </div>
+              )}
+            </dl>
+          )}
         </div>
       </header>
 
@@ -154,59 +173,22 @@ export function PersonDetail({
         </section>
       )}
 
-      {(hasContactInfo || person.social_links.length > 0) && (
+      {(Boolean(person.contact.scholar) || person.social_links.length > 0) && (
         <section className="mt-12">
           <h2 className="font-serif text-2xl font-semibold">{labels.links}</h2>
-          {hasContactInfo && (
+          {person.contact.scholar && (
             <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-[140px_1fr]">
-              {person.contact.email &&
-                (() => {
-                  const [user, domain] = person.contact.email!.split('@');
-                  return (
-                    <>
-                      <dt className="text-ink-muted">{labels.email}</dt>
-                      <dd>
-                        <EmailLink user={user} domain={domain} />
-                      </dd>
-                    </>
-                  );
-                })()}
-              {person.contact.office && (
-                <>
-                  <dt className="text-ink-muted">{labels.office}</dt>
-                  <dd>{person.contact.office}</dd>
-                </>
-              )}
-              {person.contact.orcid && (
-                <>
-                  <dt className="text-ink-muted">{labels.orcid}</dt>
-                  <dd>
-                    <a
-                      href={`https://orcid.org/${person.contact.orcid}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent underline underline-offset-4"
-                    >
-                      {person.contact.orcid}
-                    </a>
-                  </dd>
-                </>
-              )}
-              {person.contact.scholar && (
-                <>
-                  <dt className="text-ink-muted">{labels.scholar}</dt>
-                  <dd>
-                    <a
-                      href={person.contact.scholar}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent underline underline-offset-4"
-                    >
-                      {labels.scholar}
-                    </a>
-                  </dd>
-                </>
-              )}
+              <dt className="text-ink-muted">{labels.scholar}</dt>
+              <dd>
+                <a
+                  href={person.contact.scholar}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent underline underline-offset-4"
+                >
+                  {labels.scholar}
+                </a>
+              </dd>
             </dl>
           )}
           {person.social_links.length > 0 && (
