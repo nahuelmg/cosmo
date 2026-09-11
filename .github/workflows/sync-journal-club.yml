@@ -40,9 +40,15 @@ jobs:
           # Optional override; the script falls back to the group's sheet.
           JOURNAL_CLUB_SHEET_CSV_URL: ${{ vars.JOURNAL_CLUB_SHEET_CSV_URL }}
         run: |
+          # Capture the exit code so the logs are printed even when the sync
+          # fails — `bash -e` would otherwise abort before the `cat` lines and
+          # leave the run with a bare "exit code 1" and no error message.
+          set +e
           pnpm sync-journal-club > /tmp/jc-stdout.txt 2>/tmp/jc-stderr.txt
+          status=$?
           cat /tmp/jc-stdout.txt
           cat /tmp/jc-stderr.txt >&2
+          exit $status
 
       - name: Validate content
         run: pnpm validate-content

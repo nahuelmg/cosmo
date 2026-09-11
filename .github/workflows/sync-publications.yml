@@ -40,9 +40,15 @@ jobs:
       # ORCID is a Phase 16 stub returning []; Phase 17 wires the real ORCID fetch.
       - name: Run sync script
         run: |
+          # Capture the exit code so the logs are printed even when the sync
+          # fails — `bash -e` would otherwise abort before the `cat` lines and
+          # leave the run with a bare "exit code 1" and no error message.
+          set +e
           pnpm sync-publications > /tmp/sync-stdout.txt 2>/tmp/sync-stderr.txt
+          status=$?
           cat /tmp/sync-stdout.txt
           cat /tmp/sync-stderr.txt >&2
+          exit $status
 
       - name: Validate content
         run: pnpm validate-content
