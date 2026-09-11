@@ -65,8 +65,9 @@ export function getPersonBySlug(slug: string): Person | undefined {
  * for the given locale. Returns undefined if the slug is not found.
  *
  * The returned object has the same shape as Person except that:
- * - role, short_bio, full_bio → string (not { es, en })
- * - research_interests → string[] (not { es, en }[])
+ * - role → string (not { es, en })
+ * - short_bio, full_bio → string | undefined (absent when the sheet has no bio)
+ * - research_interests → string[] (empty when the sheet has none)
  * - thesis_topic, current_position → string | undefined
  *
  * Page components never have to reference .es / .en directly.
@@ -81,9 +82,10 @@ export function getLocalizedPerson(slug: string, locale: Locale) {
   return {
     ...p,
     role: localize(p.role, locale),
-    short_bio: localize(p.short_bio, locale),
-    full_bio: localize(p.full_bio, locale),
-    research_interests: p.research_interests.map((ri) => localize(ri, locale)),
+    short_bio: p.short_bio ? localize(p.short_bio, locale) : undefined,
+    full_bio: p.full_bio ? localize(p.full_bio, locale) : undefined,
+    research_interests:
+      p.research_interests?.map((ri) => localize(ri, locale)) ?? [],
     thesis_topic: p.thesis_topic ? localize(p.thesis_topic, locale) : undefined,
     current_position: p.current_position
       ? localize(p.current_position, locale)
@@ -105,9 +107,10 @@ export function getLocalizedPeople(locale: Locale) {
   return people.map((p) => ({
     ...p,
     role: localize(p.role, locale),
-    short_bio: localize(p.short_bio, locale),
-    full_bio: localize(p.full_bio, locale),
-    research_interests: p.research_interests.map((ri) => localize(ri, locale)),
+    short_bio: p.short_bio ? localize(p.short_bio, locale) : undefined,
+    full_bio: p.full_bio ? localize(p.full_bio, locale) : undefined,
+    research_interests:
+      p.research_interests?.map((ri) => localize(ri, locale)) ?? [],
     thesis_topic: p.thesis_topic ? localize(p.thesis_topic, locale) : undefined,
     current_position: p.current_position
       ? localize(p.current_position, locale)

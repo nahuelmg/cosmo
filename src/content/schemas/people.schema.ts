@@ -91,13 +91,22 @@ export const PersonSchema = z.strictObject({
   photo: optionalPhoto,
 
   /** One- or two-sentence intro shown on the People card and at the top of the profile */
-  short_bio: bilingualString("short_bio"),
+  short_bio: bilingualString("short_bio").optional(),
 
-  /** Full institutional bio shown on the individual profile page */
-  full_bio: bilingualString("full_bio"),
+  /**
+   * Full institutional bio shown on the individual profile page.
+   * Optional: bios come from the "Mini Biografía" column of the roster sheet,
+   * and a profile whose author has not filled it in simply shows no bio rather
+   * than a placeholder.
+   */
+  full_bio: bilingualString("full_bio").optional(),
 
-  /** At least one research interest is required (PEOP-03 / PEOP-06) */
-  research_interests: z.array(bilingualString("research_interest")).min(1),
+  /**
+   * Research interests, one per bullet on the profile page. Optional for the
+   * same reason as the bio — the "Líneas de investigación" column is the only
+   * source. Present means non-empty.
+   */
+  research_interests: z.array(bilingualString("research_interest")).min(1).optional(),
 
   /**
    * InspireHEP BAI identifier (e.g. "E.Calzetta.1").

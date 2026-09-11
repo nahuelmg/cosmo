@@ -8,6 +8,10 @@
  * `scripts/sync-people.ts` when it regenerates `content/people.json`.
  *
  * Every field is optional. A slug with no useful enrichment is simply absent.
+ *
+ * Bios and research interests are deliberately NOT enrichable: the roster sheet
+ * ("Mini Biografía" / "Líneas de investigación") is their only source, so a
+ * profile shows them exactly when the sheet carries them.
  */
 
 import * as z from "zod";
@@ -35,10 +39,6 @@ export const PersonExtraSchema = z.strictObject({
   photo: optionalPhoto,
   contact: ContactSchema.optional(),
   social_links: z.array(SocialLinkSchema).optional(),
-
-  short_bio: bilingualString("short_bio").optional(),
-  full_bio: bilingualString("full_bio").optional(),
-  research_interests: z.array(bilingualString("research_interest")).min(1).optional(),
 
   years: z
     .strictObject({

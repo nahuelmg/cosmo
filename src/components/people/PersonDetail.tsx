@@ -19,7 +19,7 @@ interface LocalizedPerson {
   name: string;
   role: string;
   photo?: string;
-  full_bio: string;
+  full_bio?: string;
   research_interests: string[];
   current_position?: string;
   contact: {
@@ -133,13 +133,15 @@ export function PersonDetail({
         </div>
       </header>
 
-      <section className="mt-12 prose max-w-none">
-        {person.full_bio.split('\n\n').map((para, i) => (
-          <p key={i} className="font-serif text-lg leading-relaxed">
-            {para}
-          </p>
-        ))}
-      </section>
+      {person.full_bio && (
+        <section className="mt-12 prose max-w-none">
+          {person.full_bio.split('\n\n').map((para, i) => (
+            <p key={i} className="font-serif text-lg leading-relaxed">
+              {para}
+            </p>
+          ))}
+        </section>
+      )}
 
       {person.research_interests.length > 0 && (
         <section className="mt-12">

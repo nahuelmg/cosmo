@@ -63,6 +63,32 @@ describe("splitInterests", () => {
       "Inflación",
     ]);
   });
+  it("splits a dash-separated cell, one interest per bullet", () => {
+    expect(
+      splitInterests(
+        "Simulaciones cosmológicas de la evolución de galaxias - Formación de discos galácticos - Evolución química de galaxias ",
+      ),
+    ).toEqual([
+      "Simulaciones cosmológicas de la evolución de galaxias",
+      "Formación de discos galácticos",
+      "Evolución química de galaxias",
+    ]);
+  });
+  it("splits on bullet characters and strips leading markers", () => {
+    expect(splitInterests("• Inflación • Ondas gravitacionales")).toEqual([
+      "Inflación",
+      "Ondas gravitacionales",
+    ]);
+    expect(splitInterests("- Materia oscura\n- Energía oscura")).toEqual([
+      "Materia oscura",
+      "Energía oscura",
+    ]);
+  });
+  it("keeps a hyphenated term in one piece", () => {
+    expect(splitInterests("Teoría de campos en espacio-tiempo curvo")).toEqual([
+      "Teoría de campos en espacio-tiempo curvo",
+    ]);
+  });
   it("returns an empty array for an empty cell", () => {
     expect(splitInterests("")).toEqual([]);
   });
@@ -241,7 +267,8 @@ describe("assemble", () => {
       es: "Estudiante de licenciatura (2026)",
       en: "Undergraduate student (2026)",
     });
-    expect(person.short_bio.es).toContain("Biografía a completar");
+    expect(person.short_bio).toBeUndefined();
+    expect(person.research_interests).toBeUndefined();
     expect(PeopleSchema.safeParse([person]).success).toBe(true);
   });
 
@@ -319,11 +346,9 @@ describe("assemble", () => {
     expect(PeopleSchema.safeParse([person]).success).toBe(true);
   });
 
-  it("keeps the curated bilingual bio / interests and warns that the sheet value is ignored", () => {
+  it("takes the bio / interests from the sheet even when the person has enrichment", () => {
     const warnings: string[] = [];
     const curated = {
-      short_bio: { es: "Bio ES curada", en: "Curated EN bio" },
-      research_interests: [{ es: "Tema", en: "Topic" }],
       contact: { email: "curated@df.uba.ar", orcid: "0000-0002-1825-0097" as const },
     };
     const person = assemble(
@@ -339,11 +364,28 @@ describe("assemble", () => {
       curated,
       warnings,
     );
-    expect(person.short_bio).toEqual(curated.short_bio);
-    expect(person.research_interests).toEqual(curated.research_interests);
+    expect(person.short_bio).toEqual({ es: "Bio del sheet", en: "Bio del sheet" });
+    expect(person.research_interests).toEqual([{ es: "Otra", en: "Otra" }]);
     // EMAIL from the sheet still overrides the curated contact.
     expect(person.contact.email).toBe("sheet@df.uba.ar");
     expect(person.contact.orcid).toBe("0000-0002-1825-0097");
-    expect(warnings).toHaveLength(2);
+    expect(warnings).toEqual([]);
+  });
+
+  it("omits bio and interests entirely when the sheet cells are empty", () => {
+    const person = assemble(
+      {
+        slug: "ana-torres",
+        name: "Ana Torres",
+        category: "pi",
+        roleEs: "Investigadora Principal",
+      },
+      undefined,
+      [],
+    );
+    expect(person).not.toHaveProperty("short_bio");
+    expect(person).not.toHaveProperty("full_bio");
+    expect(person).not.toHaveProperty("research_interests");
+    expect(PeopleSchema.safeParse([person]).success).toBe(true);
   });
 });

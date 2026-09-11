@@ -8,32 +8,6 @@
     },
     "category": "pi",
     "photo": "people/Esteban_C.png",
-    "short_bio": {
-      "es": "Esteban Calzetta es Licenciado en Ciencias Fisicas por la Universidad de Buenos Aires (1983) y Ph.D. in Physics por la University of Wisconsin-Milwaukee (1985), y miembro de la Carrera del Investigador Cientifico del CONICET. Su trabajo abarca temas de cosmologia cuantica, termodinamica de agujeros negros y el problema de las condiciones iniciales del universo.",
-      "en": "Esteban Calzetta earned his Licenciatura in Physical Sciences from the Universidad de Buenos Aires (1983) and a Ph.D. in Physics from the University of Wisconsin-Milwaukee (1985), and is a CONICET Principal Researcher. His work spans quantum cosmology, black hole thermodynamics, and the problem of initial conditions in the early universe."
-    },
-    "full_bio": {
-      "es": "Esteban Calzetta obtuvo su Licenciatura en Ciencias Fisicas en la Facultad de Ciencias Exactas y Naturales (FCEN) de la Universidad de Buenos Aires en junio de 1983, y su Ph.D. in Physics en la University of Wisconsin-Milwaukee (Estados Unidos) en agosto de 1985. Realizo estadias postdoctorales en la University of Maryland (Estados Unidos, 1985-1987) y en la University of Alberta (Canada, 1987-1989) antes de incorporarse al plantel permanente del IFIBA (Instituto de Fisica de Buenos Aires), unidad ejecutora de doble dependencia UBA-CONICET.\n\nSu linea principal de investigacion se centra en la cosmologia cuantica de campo abierto: como los grados de libertad de alta frecuencia del universo primordial generan efectos de decoherencia sobre los modos infrarojos que se observan hoy en el fondo de microondas. Ha publicado mas de 80 articulos en revistas internacionales referenciadas, con mas de 3000 citas acumuladas (Google Scholar).\n\nEn la actualidad lidera el grupo de Cosmologia Teorica del Departamento de Fisica de la FCEN y coordina el proyecto PICT 2022-00741 financiado por la Agencia Nacional de Promocion Cientifica y Tecnologica (ANPCyT). Dirige estudiantes de doctorado e integra el comite editorial de la revista Journal of Cosmology and Astroparticle Physics (JCAP).",
-      "en": "Esteban Calzetta earned his Licenciatura in Physical Sciences from the Facultad de Ciencias Exactas y Naturales (FCEN) of the Universidad de Buenos Aires in June 1983, and his Ph.D. in Physics from the University of Wisconsin-Milwaukee (USA) in August 1985. He held postdoctoral fellowships at the University of Maryland (USA, 1985-1987) and at the University of Alberta (Canada, 1987-1989) before joining the permanent staff of IFIBA (Instituto de Fisica de Buenos Aires), a joint UBA-CONICET research unit.\n\nHis main research line is open quantum-field cosmology: how high-frequency degrees of freedom in the primordial universe generate decoherence effects on the infrared modes observed today in the cosmic microwave background. He has published more than 80 papers in refereed international journals, accumulating over 3,000 citations (Google Scholar).\n\nHe currently leads the Theoretical Cosmology Group in the Department of Physics at FCEN and coordinates project PICT 2022-00741 funded by the Argentine National Agency for Scientific and Technological Promotion (ANPCyT). He supervises doctoral students and serves on the editorial board of the Journal of Cosmology and Astroparticle Physics (JCAP)."
-    },
-    "research_interests": [
-      {
-        "es": "Cosmologia cuantica y decoherencia en el universo primordial",
-        "en": "Quantum cosmology and decoherence in the primordial universe"
-      },
-      {
-        "es": "Termodinamica de agujeros negros y radiacion de Hawking",
-        "en": "Black hole thermodynamics and Hawking radiation"
-      },
-      {
-        "es": "Fondo cosmico de microondas: perturbaciones primordiales y no-gaussianidades",
-        "en": "Cosmic microwave background: primordial perturbations and non-Gaussianities"
-      },
-      {
-        "es": "Teoria cuantica de campos en espacios curvos",
-        "en": "Quantum field theory in curved spacetime"
-      }
-    ],
     "inspirehep_id": "E.Calzetta.1",
     "orcid_id": "0000-0002-3083-3420",
     "display_name_normalized": "esteban calzetta",
@@ -62,28 +36,6 @@
     },
     "category": "pi",
     "photo": "people/Diana_LN.png",
-    "short_bio": {
-      "es": "Diana Lopez Nacir es Investigadora Independiente del CONICET en el IFIBA. Sus trabajos sobre inflacion y no-gaussianidades primordiales han sido ampliamente citados en la comunidad de cosmologia teorica.",
-      "en": "Diana Lopez Nacir is an Independent Researcher at CONICET/IFIBA. Her work on inflation and primordial non-Gaussianities is widely cited in the theoretical cosmology community."
-    },
-    "full_bio": {
-      "es": "Diana Lopez Nacir se doctoro en Fisica en la UBA en 2010, con una tesis sobre efectos de un campo escalar no gaussiano en la inflacion chatica. Realizo postdoctorados en el Centro Atomico Bariloche (CAB) y en la Universidad de California, Santa Barbara (KITP), antes de regresar a Buenos Aires como investigadora del CONICET.\n\nSu investigacion se enmarca en la teoria de la inflacion cosmologica: el periodo de expansion exponencial en el universo muy temprano que siembra las perturbaciones que posteriormente dan lugar a galaxias y estructura. En particular, estudia la generacion de no-gaussianidades primordiales (parametro f_NL) y como estas imprimen senales en el espectro de potencias del CMB y en el bispectro de galaxias.\n\nHa publicado trabajos en Physical Review D, Journal of High Energy Physics y JCAP, y recibio el Premio L'Oreal-UNESCO para Mujeres en la Ciencia en 2018. Dicta el curso de posgrado 'Cosmologia Cuantica' en la FCEN.",
-      "en": "Diana Lopez Nacir completed her PhD in Physics at UBA in 2010, with a thesis on non-Gaussian scalar field effects in chaotic inflation. She held postdoctoral positions at the Centro Atomico Bariloche (CAB) and at the University of California, Santa Barbara (KITP), before returning to Buenos Aires as a CONICET researcher.\n\nHer research sits at the heart of inflationary cosmology: the period of exponential expansion in the very early universe that seeds the perturbations later responsible for galaxies and cosmic structure. She specifically studies the generation of primordial non-Gaussianities (the parameter f_NL) and how these imprint signatures in the CMB power spectrum and the galaxy bispectrum.\n\nShe has published in Physical Review D, Journal of High Energy Physics, and JCAP, and received the L'Oreal-UNESCO Award for Women in Science in 2018. She teaches the postgraduate course 'Quantum Cosmology' at FCEN."
-    },
-    "research_interests": [
-      {
-        "es": "Inflacion cosmologica y fluctuaciones cuanticas primordiales",
-        "en": "Cosmological inflation and primordial quantum fluctuations"
-      },
-      {
-        "es": "No-gaussianidades primordiales y el parametro f_NL",
-        "en": "Primordial non-Gaussianities and the f_NL parameter"
-      },
-      {
-        "es": "Espectro de potencias y bispectro del CMB",
-        "en": "CMB power spectrum and bispectrum"
-      }
-    ],
     "inspirehep_id": "D.Lopez.Nacir.1",
     "orcid_id": "0000-0003-4398-1147",
     "display_name_normalized": "diana lopez nacir",
@@ -112,28 +64,6 @@
     },
     "category": "pi",
     "photo": "people/Susana_L.png",
-    "short_bio": {
-      "es": "Susana Landau es Investigadora Independiente del CONICET y Profesora Adjunta de la FCEN-UBA. Especialista en variacion de constantes fundamentales y pruebas de precision del modelo estandar de la cosmologia.",
-      "en": "Susana Landau is an Independent Researcher at CONICET and Adjunct Professor at FCEN-UBA. She specialises in variations of fundamental constants and precision tests of the standard model of cosmology."
-    },
-    "full_bio": {
-      "es": "Susana Landau obtuvo su licenciatura y doctorado en Fisica en la UBA. Tras un postdoctorado en el Instituto de Astrofisica de Canarias (IAC, Espana), regreso a Buenos Aires donde se incorporo al grupo de cosmologia del IFIBA.\n\nSu investigacion examina si las constantes fisicas fundamentales, como la constante de estructura fina alpha y la razon de masas electron-proton, pudieron haber variado a lo largo de la historia cosmica. Usa datos del fondo de microondas, espectroscopia de quasares y fisica nuclear para imponer limites observacionales muy precisos sobre estas variaciones.\n\nEs Profesora Adjunta del Departamento de Fisica y ha dirigido seis tesis de doctorado. Integra la Comision Asesora de Ciencias Exactas y Naturales del CONICET y es revisora habitual de Physical Review D y Monthly Notices of the Royal Astronomical Society.",
-      "en": "Susana Landau received her undergraduate and doctoral degrees in Physics from UBA. After a postdoctoral fellowship at the Instituto de Astrofisica de Canarias (IAC, Spain), she returned to Buenos Aires and joined the IFIBA cosmology group.\n\nHer research examines whether fundamental physical constants, such as the fine-structure constant alpha and the electron-to-proton mass ratio, may have varied over cosmic history. She uses CMB data, quasar spectroscopy, and nuclear physics to place precise observational limits on such variations.\n\nShe is Adjunct Professor in the Department of Physics and has supervised six doctoral theses. She serves on the Advisory Committee for Exact and Natural Sciences at CONICET and is a regular referee for Physical Review D and Monthly Notices of the Royal Astronomical Society."
-    },
-    "research_interests": [
-      {
-        "es": "Variacion de constantes fundamentales a lo largo de la historia cosmica",
-        "en": "Variation of fundamental constants across cosmic history"
-      },
-      {
-        "es": "Pruebas de precision del modelo estandar cosmologico (sigma_8, H_0)",
-        "en": "Precision tests of the standard cosmological model (sigma_8, H_0)"
-      },
-      {
-        "es": "Espectroscopia de quasares como laboratorio cosmologico",
-        "en": "Quasar spectroscopy as a cosmological laboratory"
-      }
-    ],
     "inspirehep_id": "S.J.Landau.1",
     "orcid_id": "0000-0003-2645-9197",
     "display_name_normalized": "susana landau",
@@ -158,18 +88,18 @@
     },
     "category": "pi",
     "photo": "people/Cecilia_C.png",
-    "short_bio": {
-      "es": "Cecilia Scannapieco. Biografía a completar.",
-      "en": "Cecilia Scannapieco. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Cecilia Scannapieco. Biografía a completar.",
-      "en": "Cecilia Scannapieco. Biography to be completed."
-    },
     "research_interests": [
       {
-        "es": "Simulaciones cosmológicas de la evolución de galaxias - Formación de discos galácticos - Evolución química de galaxias",
-        "en": "Simulaciones cosmológicas de la evolución de galaxias - Formación de discos galácticos - Evolución química de galaxias"
+        "es": "Simulaciones cosmológicas de la evolución de galaxias",
+        "en": "Simulaciones cosmológicas de la evolución de galaxias"
+      },
+      {
+        "es": "Formación de discos galácticos",
+        "en": "Formación de discos galácticos"
+      },
+      {
+        "es": "Evolución química de galaxias",
+        "en": "Evolución química de galaxias"
       }
     ],
     "inspirehep_id": "C.Scannapieco.2",
@@ -194,20 +124,6 @@
     },
     "category": "pi",
     "photo": "people/claudio-simeone.svg",
-    "short_bio": {
-      "es": "Claudio Simeone. Biografía a completar.",
-      "en": "Claudio Simeone. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Claudio Simeone. Biografía a completar.",
-      "en": "Claudio Simeone. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "claudio simeone",
     "contact": {
       "email": "csimeone@df.uba.ar"
@@ -223,20 +139,6 @@
     },
     "category": "pi",
     "photo": "people/nmg.jpg",
-    "short_bio": {
-      "es": "Nahuel Mirón Granese. Biografía a completar.",
-      "en": "Nahuel Mirón Granese. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Nahuel Mirón Granese. Biografía a completar.",
-      "en": "Nahuel Mirón Granese. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "inspirehep_id": "N.MironGranese.1",
     "orcid_id": "0000-0003-0770-1865",
     "display_name_normalized": "nahuel miron granese",
@@ -260,20 +162,6 @@
     },
     "category": "postdoc",
     "photo": "people/Javier_B.jpeg",
-    "short_bio": {
-      "es": "Javier Badía. Biografía a completar.",
-      "en": "Javier Badía. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Javier Badía. Biografía a completar.",
-      "en": "Javier Badía. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "inspirehep_id": "J.Badia.1",
     "orcid_id": "0000-0002-9095-9594",
     "display_name_normalized": "javier badia",
@@ -295,20 +183,6 @@
     },
     "category": "phd",
     "photo": "people/Tomas_C.png",
-    "short_bio": {
-      "es": "Tomas Ferreira Chase. Biografía a completar.",
-      "en": "Tomas Ferreira Chase. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Tomas Ferreira Chase. Biografía a completar.",
-      "en": "Tomas Ferreira Chase. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "inspirehep_id": "Tomas.F.Chase.1",
     "orcid_id": "0009-0001-0286-2136",
     "display_name_normalized": "tomas ferreira chase",
@@ -330,20 +204,6 @@
     },
     "category": "phd",
     "photo": "people/Matias_L.png",
-    "short_bio": {
-      "es": "Matias Leizerovich. Biografía a completar.",
-      "en": "Matias Leizerovich. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Matias Leizerovich. Biografía a completar.",
-      "en": "Matias Leizerovich. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "inspirehep_id": "M.Leizerovich.1",
     "orcid_id": "0000-0002-6438-2285",
     "display_name_normalized": "matias leizerovich",
@@ -364,20 +224,6 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "short_bio": {
-      "es": "Guadalupe Ahumada Acuña. Biografía a completar.",
-      "en": "Guadalupe Ahumada Acuña. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Guadalupe Ahumada Acuña. Biografía a completar.",
-      "en": "Guadalupe Ahumada Acuña. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "guadalupe ahumada acuna",
     "contact": {
       "email": "guadalupe.ahumada@df.uba.ar"
@@ -393,20 +239,6 @@
     },
     "category": "phd",
     "photo": "people/Gonzalo_SC.png",
-    "short_bio": {
-      "es": "Gonzalo Santa Cruz. Biografía a completar.",
-      "en": "Gonzalo Santa Cruz. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Gonzalo Santa Cruz. Biografía a completar.",
-      "en": "Gonzalo Santa Cruz. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "gonzalo santa cruz",
     "contact": {
       "email": "gonzalo.santacruz@df.uba.ar"
@@ -425,20 +257,6 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "short_bio": {
-      "es": "Juan Pablo Elia. Biografía a completar.",
-      "en": "Juan Pablo Elia. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Juan Pablo Elia. Biografía a completar.",
-      "en": "Juan Pablo Elia. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "juan pablo elia",
     "contact": {
       "email": "juanpablo.elia@df.uba.ar"
@@ -453,20 +271,6 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "short_bio": {
-      "es": "Augusto Chantada. Biografía a completar.",
-      "en": "Augusto Chantada. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Augusto Chantada. Biografía a completar.",
-      "en": "Augusto Chantada. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "inspirehep_id": "A.T.Chantada.1",
     "orcid_id": "0000-0002-4480-9595",
     "display_name_normalized": "augusto chantada",
@@ -487,20 +291,6 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "short_bio": {
-      "es": "Federico Uxhagen. Biografía a completar.",
-      "en": "Federico Uxhagen. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Federico Uxhagen. Biografía a completar.",
-      "en": "Federico Uxhagen. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "federico uxhagen",
     "contact": {},
     "social_links": [],
@@ -517,20 +307,6 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "short_bio": {
-      "es": "Luis Biaus. Biografía a completar.",
-      "en": "Luis Biaus. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Luis Biaus. Biografía a completar.",
-      "en": "Luis Biaus. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "luis biaus",
     "contact": {},
     "social_links": []
@@ -544,20 +320,6 @@
     },
     "category": "phd",
     "photo": "people/Ezequiel_L.jpeg",
-    "short_bio": {
-      "es": "Ezequiel Lozano. Biografía a completar.",
-      "en": "Ezequiel Lozano. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Ezequiel Lozano. Biografía a completar.",
-      "en": "Ezequiel Lozano. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "ezequiel lozano",
     "contact": {},
     "social_links": []
@@ -570,20 +332,6 @@
       "en": "Undergraduate Student"
     },
     "category": "undergrad",
-    "short_bio": {
-      "es": "Martin Castelli. Biografía a completar.",
-      "en": "Martin Castelli. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Martin Castelli. Biografía a completar.",
-      "en": "Martin Castelli. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "martin castelli",
     "contact": {},
     "social_links": []
@@ -596,20 +344,6 @@
       "en": "Undergraduate Student"
     },
     "category": "undergrad",
-    "short_bio": {
-      "es": "Joaquín Sequeira. Biografía a completar.",
-      "en": "Joaquín Sequeira. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Joaquín Sequeira. Biografía a completar.",
-      "en": "Joaquín Sequeira. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "joaquin sequeira",
     "contact": {},
     "social_links": []
@@ -622,20 +356,6 @@
       "en": "Undergraduate Student"
     },
     "category": "undergrad",
-    "short_bio": {
-      "es": "Santiago Iannucci. Biografía a completar.",
-      "en": "Santiago Iannucci. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Santiago Iannucci. Biografía a completar.",
-      "en": "Santiago Iannucci. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "santiago iannucci",
     "contact": {},
     "social_links": []
@@ -648,20 +368,6 @@
       "en": "Undergraduate Student"
     },
     "category": "undergrad",
-    "short_bio": {
-      "es": "Santiago Paramio. Biografía a completar.",
-      "en": "Santiago Paramio. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Santiago Paramio. Biografía a completar.",
-      "en": "Santiago Paramio. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "santiago paramio",
     "contact": {},
     "social_links": []
@@ -674,20 +380,6 @@
       "en": "Undergraduate student (2026)"
     },
     "category": "past",
-    "short_bio": {
-      "es": "Javier Pineau. Biografía a completar.",
-      "en": "Javier Pineau. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Javier Pineau. Biografía a completar.",
-      "en": "Javier Pineau. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "javier pineau",
     "contact": {
       "email": "javier.pineau@df.uba.ar"
@@ -702,20 +394,6 @@
       "en": "Undergraduate student (2026)"
     },
     "category": "past",
-    "short_bio": {
-      "es": "Pedro Rozin. Biografía a completar.",
-      "en": "Pedro Rozin. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Pedro Rozin. Biografía a completar.",
-      "en": "Pedro Rozin. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "pedro rozin",
     "contact": {},
     "social_links": []
@@ -728,20 +406,6 @@
       "en": "Undergraduate student (2026)"
     },
     "category": "past",
-    "short_bio": {
-      "es": "Tomas Ciccarella. Biografía a completar.",
-      "en": "Tomas Ciccarella. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Tomas Ciccarella. Biografía a completar.",
-      "en": "Tomas Ciccarella. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "tomas ciccarella",
     "contact": {
       "email": "tomas.cicarella@df.uba.ar"
@@ -756,20 +420,6 @@
       "en": "Undergraduate student (2026)"
     },
     "category": "past",
-    "short_bio": {
-      "es": "Federico Iza. Biografía a completar.",
-      "en": "Federico Iza. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Federico Iza. Biografía a completar.",
-      "en": "Federico Iza. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "federico iza",
     "contact": {},
     "social_links": []
@@ -782,20 +432,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Matias Zaldarriaga. Biografía a completar.",
-      "en": "Matias Zaldarriaga. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Matias Zaldarriaga. Biografía a completar.",
-      "en": "Matias Zaldarriaga. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "matias zaldarriaga",
     "contact": {},
     "social_links": [],
@@ -812,20 +448,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Giorgio Torrieri. Biografía a completar.",
-      "en": "Giorgio Torrieri. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Giorgio Torrieri. Biografía a completar.",
-      "en": "Giorgio Torrieri. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "giorgio torrieri",
     "contact": {},
     "social_links": [],
@@ -842,20 +464,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Elia Battistelli. Biografía a completar.",
-      "en": "Elia Battistelli. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Elia Battistelli. Biografía a completar.",
-      "en": "Elia Battistelli. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "elia battistelli",
     "contact": {},
     "social_links": [],
@@ -872,20 +480,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Alejandra Kandus. Biografía a completar.",
-      "en": "Alejandra Kandus. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Alejandra Kandus. Biografía a completar.",
-      "en": "Alejandra Kandus. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "alejandra kandus",
     "contact": {},
     "social_links": [],
@@ -902,20 +496,6 @@
       "en": "Postdoctoral Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Juan Manuel Armaleo. Biografía a completar.",
-      "en": "Juan Manuel Armaleo. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Juan Manuel Armaleo. Biografía a completar.",
-      "en": "Juan Manuel Armaleo. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "juan manuel armaleo",
     "contact": {
       "email": "juanmanuel.armaleo@df.uba.ar"
@@ -934,20 +514,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Nicolas Yunes. Biografía a completar.",
-      "en": "Nicolas Yunes. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Nicolas Yunes. Biografía a completar.",
-      "en": "Nicolas Yunes. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "nicolas yunes",
     "contact": {},
     "social_links": [],
@@ -964,20 +530,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Arttu Rajantie. Biografía a completar.",
-      "en": "Arttu Rajantie. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Arttu Rajantie. Biografía a completar.",
-      "en": "Arttu Rajantie. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "arttu rajantie",
     "contact": {},
     "social_links": [],
@@ -994,20 +546,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Martin Makler. Biografía a completar.",
-      "en": "Martin Makler. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Martin Makler. Biografía a completar.",
-      "en": "Martin Makler. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "martin makler",
     "contact": {},
     "social_links": [],
@@ -1024,20 +562,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Leonardo Trombetta. Biografía a completar.",
-      "en": "Leonardo Trombetta. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Leonardo Trombetta. Biografía a completar.",
-      "en": "Leonardo Trombetta. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "leonardo trombetta",
     "contact": {},
     "social_links": [],
@@ -1054,20 +578,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Lucas Pinol. Biografía a completar.",
-      "en": "Lucas Pinol. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Lucas Pinol. Biografía a completar.",
-      "en": "Lucas Pinol. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "lucas pinol",
     "contact": {},
     "social_links": [],
@@ -1084,20 +594,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Sebastian Cespedes. Biografía a completar.",
-      "en": "Sebastian Cespedes. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Sebastian Cespedes. Biografía a completar.",
-      "en": "Sebastian Cespedes. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "sebastian cespedes",
     "contact": {},
     "social_links": [],
@@ -1114,20 +610,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Jailson Alcaniz. Biografía a completar.",
-      "en": "Jailson Alcaniz. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Jailson Alcaniz. Biografía a completar.",
-      "en": "Jailson Alcaniz. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "jailson alcaniz",
     "contact": {},
     "social_links": [],
@@ -1144,20 +626,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Pavlos Protopapas. Biografía a completar.",
-      "en": "Pavlos Protopapas. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Pavlos Protopapas. Biografía a completar.",
-      "en": "Pavlos Protopapas. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "pavlos protopapas",
     "contact": {},
     "social_links": [],
@@ -1174,20 +642,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Giovanni Otalora. Biografía a completar.",
-      "en": "Giovanni Otalora. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Giovanni Otalora. Biografía a completar.",
-      "en": "Giovanni Otalora. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "giovanni otalora",
     "contact": {},
     "social_links": [],
@@ -1204,20 +658,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Martín Richarte. Biografía a completar.",
-      "en": "Martín Richarte. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Martín Richarte. Biografía a completar.",
-      "en": "Martín Richarte. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "martin richarte",
     "contact": {},
     "social_links": [],
@@ -1234,20 +674,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Lucila Kraiselburd. Biografía a completar.",
-      "en": "Lucila Kraiselburd. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Lucila Kraiselburd. Biografía a completar.",
-      "en": "Lucila Kraiselburd. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "lucila kraiselburd",
     "contact": {},
     "social_links": [],
@@ -1264,20 +690,6 @@
       "en": "Visiting Researcher"
     },
     "category": "visitors",
-    "short_bio": {
-      "es": "Claudia Scoccola. Biografía a completar.",
-      "en": "Claudia Scoccola. Biography to be completed."
-    },
-    "full_bio": {
-      "es": "Claudia Scoccola. Biografía a completar.",
-      "en": "Claudia Scoccola. Biography to be completed."
-    },
-    "research_interests": [
-      {
-        "es": "Líneas de investigación por completar",
-        "en": "Research interests to be completed"
-      }
-    ],
     "display_name_normalized": "claudia scoccola",
     "contact": {},
     "social_links": [],

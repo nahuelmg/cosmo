@@ -7,7 +7,7 @@
  * section they belong to, their Spanish research / teaching roles, and — for
  * PIs and research staff — e-mail, office, a short Spanish bio and research
  * lines) comes from a published Google Sheet. Everything else — ORCID /
- * InspireHEP ids, photos, curated bilingual bios / interests / affiliations,
+ * InspireHEP ids, photos, curated bilingual affiliations,
  * social links — lives in `content/people-extra.json`, keyed by slug, and is
  * merged in here. The result is written to `content/people.json` (generated —
  * do not hand-edit).
@@ -26,9 +26,13 @@
  *
  * Enrichment columns (EMAIL, Oficina, Mini Biografía, Líneas de investigación)
  * are read only for the "pi" and "researchStaff" sections. EMAIL and Oficina
- * override people-extra.json; Mini Biografía and Líneas de investigación fill
- * the gap only when people-extra.json has no curated (bilingual) value, and are
- * shown for both languages. "Líneas de investigación" is one interest per line
+ * override people-extra.json. Mini Biografía and Líneas de investigación are
+ * read from the sheet only — no curated fallback and no placeholder: a person
+ * whose cells are empty simply has no bio and no interests, and the profile
+ * page omits those sections. Their Spanish text is shown for both languages.
+ * "Líneas de investigación" is one interest per line,
+ * per semicolon, or per dash/bullet-separated fragment — each becomes its own
+ * bullet on the person page
  * or ";"-separated.
  *
  * Rules (mirrors the other sync scripts):
@@ -208,11 +212,27 @@ export function straightenQuotes(s: string): string {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-/** Split the "Líneas de investigación" cell into individual interests. */
+/**
+ * Split the "Líneas de investigación" cell into individual interests, one per
+ * bullet on the person page.
+ *
+ * The cell is free text and people separate their lines however they like: one
+ * per row, with semicolons, or strung together with a dash or a bullet
+ * character ("Simulaciones cosmológicas - Formación de discos"). A separating
+ * dash is only recognized with whitespace on both sides, so a hyphenated term
+ * such as "espacio-tiempo" stays in one piece. Any leading bullet marker left
+ * on an item is stripped.
+ */
+const INTEREST_SEPARATOR = /[\n;]+|\s+[-\u2013\u2014\u2022\u00b7*]+\s+/;
+
 export function splitInterests(cell: string): string[] {
   return cell
-    .split(/[\n;]+/)
-    .map((s) => straightenQuotes(s).trim())
+    .split(INTEREST_SEPARATOR)
+    .map((s) =>
+      straightenQuotes(s)
+        .replace(/^[\s\-\u2013\u2014\u2022\u00b7*]+/, "")
+        .trim(),
+    )
     .filter(Boolean);
 }
 
@@ -378,37 +398,13 @@ export function assemble(
       ? { es: raw.parenAffiliation, en: raw.parenAffiliation }
       : undefined);
 
-  const stubBio = {
-    es: `${raw.name}. Biografía a completar.`,
-    en: `${raw.name}. Biography to be completed.`,
-  };
-  const stubInterests = [
-    {
-      es: "Líneas de investigación por completar",
-      en: "Research interests to be completed",
-    },
-  ];
-
-  // Bio / research interests: a curated bilingual entry in people-extra.json
-  // always wins (the sheet only carries Spanish). The sheet fills the gap for
-  // everyone who has no curated entry; its text is shown for both languages.
-  const sheetBio = raw.bioEs ? { es: raw.bioEs, en: raw.bioEs } : undefined;
-  if (raw.bioEs && e.short_bio) {
-    warnings.push(
-      `${raw.slug}: "Mini Biografía" from the sheet ignored — people-extra.json has a curated short_bio`,
-    );
-  }
-  const short_bio = e.short_bio ?? sheetBio ?? stubBio;
-  const full_bio = e.full_bio ?? sheetBio ?? stubBio;
-
-  const sheetInterests = raw.interestsEs?.map((i) => ({ es: i, en: i }));
-  if (sheetInterests && e.research_interests) {
-    warnings.push(
-      `${raw.slug}: "Líneas de investigación" from the sheet ignored — people-extra.json has curated research_interests`,
-    );
-  }
-  const research_interests =
-    e.research_interests ?? sheetInterests ?? stubInterests;
+  // Bio / research interests come from the sheet and nowhere else. A person
+  // whose "Mini Biografía" or "Líneas de investigación" cell is empty gets no
+  // field at all, and the profile page omits that section — better an honest
+  // gap than a "to be completed" placeholder on most of the roster. The sheet
+  // only carries Spanish, so its text is shown for both languages.
+  const bio = raw.bioEs ? { es: raw.bioEs, en: raw.bioEs } : undefined;
+  const research_interests = raw.interestsEs?.map((i) => ({ es: i, en: i }));
 
   // Contact: sheet EMAIL / Oficina win over people-extra when present.
   const contact = { ...(e.contact ?? {}) };
@@ -421,9 +417,8 @@ export function assemble(
     role,
     category: raw.category,
     ...(e.photo ? { photo: e.photo } : {}),
-    short_bio,
-    full_bio,
-    research_interests,
+    ...(bio ? { short_bio: bio, full_bio: bio } : {}),
+    ...(research_interests ? { research_interests } : {}),
     ...(e.inspirehep_id ? { inspirehep_id: e.inspirehep_id } : {}),
     ...(e.orcid_id ? { orcid_id: e.orcid_id } : {}),
     display_name_normalized: normalizeName(raw.name),

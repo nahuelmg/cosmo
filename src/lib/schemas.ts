@@ -72,7 +72,9 @@ export function buildPersonSchema(person: Person, locale: Locale) {
     "@type": "Person",
     name: person.name,
     jobTitle: localize(person.role, locale),
-    description: localize(person.short_bio, locale),
+    ...(person.short_bio
+      ? { description: localize(person.short_bio, locale) }
+      : {}),
     worksFor: { "@id": orgId },
     affiliation: person.affiliation
       ? { "@type": "Organization", name: localize(person.affiliation, locale) }
