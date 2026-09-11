@@ -1,22 +1,5 @@
 [
   {
-    "id": "dark-matter",
-    "title": {
-      "es": "Materia Oscura",
-      "en": "Dark Matter"
-    },
-    "short_description": {
-      "es": "Modelado de halos, simulaciones N-cuerpo y restricciones observacionales sobre la naturaleza de la materia oscura.",
-      "en": "Halo modelling, N-body simulations, and observational constraints on the nature of dark matter."
-    },
-    "full_description": {
-      "es": "La materia oscura constituye aproximadamente el 27% del contenido energético total del universo, pero su naturaleza fundamental permanece como uno de los grandes enigmas de la física moderna. Nuestro grupo investiga la distribución y estructura de halos de materia oscura mediante simulaciones numéricas de N-cuerpos y modelos analíticos derivados de la teoría de perturbaciones.\n\nAplicamos técnicas estadísticas avanzadas para extraer restricciones observacionales a partir de datos de lentes gravitacionales débiles, correlaciones de galaxias y la función de masa de cúmulos. Colaboramos activamente con grupos observacionales del IAFE y del Observatorio Astronómico de Córdoba para contrastar nuestras predicciones teóricas con relevamientos fotométricos y espectroscópicos de gran escala.\n\nEntre nuestros objetivos actuales se encuentran el estudio de la concentración de halos en función de la masa y el corrimiento al rojo, y la búsqueda de señales de materia oscura tibia que podrían revelar desviaciones respecto al modelo Lambda-CDM estándar.",
-      "en": "Dark matter constitutes approximately 27% of the total energy content of the universe, yet its fundamental nature remains one of the great open questions in modern physics. Our group investigates the distribution and structure of dark matter halos through N-body numerical simulations and analytical models derived from perturbation theory.\n\nWe apply advanced statistical techniques to extract observational constraints from weak gravitational lensing data, galaxy correlations, and cluster mass functions. We actively collaborate with observational groups at IAFE and the Observatorio Astronomico de Cordoba to confront our theoretical predictions with large-scale photometric and spectroscopic surveys.\n\nAmong our current goals are the study of halo concentration as a function of mass and redshift, and the search for warm dark matter signatures that could reveal deviations from the standard Lambda-CDM model."
-    },
-    "icon": "atom",
-    "order": 0
-  },
-  {
     "id": "gravitational-waves",
     "title": {
       "es": "Ondas Gravitacionales",
@@ -31,6 +14,23 @@
       "en": "The direct detection of gravitational waves by LIGO and Virgo opened a new observational window to the universe. Our group works on the theoretical modelling of compact binary sources — pairs of black holes and neutron stars — with emphasis on the cosmological aspects of their signals: the independent determination of the Hubble constant via standard sirens and the extraction of information about stellar formation history.\n\nWe also study the stochastic gravitational-wave background produced by early-universe processes, such as first-order phase transitions and networks of topological defects. This background could be detected by future space observatories such as LISA and constitutes a unique complement to observations of the cosmic microwave background.\n\nWe collaborate with the relativistic astrophysics group at UBA and with data analysis teams of the LIGO-Virgo-KAGRA collaboration for the study of population parameters of detected sources."
     },
     "icon": "waves",
+    "order": 0
+  },
+  {
+    "id": "dark-matter",
+    "title": {
+      "es": "Materia Oscura",
+      "en": "Dark Matter"
+    },
+    "short_description": {
+      "es": "Modelado de halos, simulaciones N-cuerpo y restricciones observacionales sobre la naturaleza de la materia oscura.",
+      "en": "Halo modelling, N-body simulations, and observational constraints on the nature of dark matter."
+    },
+    "full_description": {
+      "es": "La materia oscura constituye aproximadamente el 27% del contenido energético total del universo, pero su naturaleza fundamental permanece como uno de los grandes enigmas de la física moderna. Nuestro grupo investiga la distribución y estructura de halos de materia oscura mediante simulaciones numéricas de N-cuerpos y modelos analíticos derivados de la teoría de perturbaciones.\n\nAplicamos técnicas estadísticas avanzadas para extraer restricciones observacionales a partir de datos de lentes gravitacionales débiles, correlaciones de galaxias y la función de masa de cúmulos. Colaboramos activamente con grupos observacionales del IAFE y del Observatorio Astronómico de Córdoba para contrastar nuestras predicciones teóricas con relevamientos fotométricos y espectroscópicos de gran escala.\n\nEntre nuestros objetivos actuales se encuentran el estudio de la concentración de halos en función de la masa y el corrimiento al rojo, y la búsqueda de señales de materia oscura tibia que podrían revelar desviaciones respecto al modelo Lambda-CDM estándar.",
+      "en": "Dark matter constitutes approximately 27% of the total energy content of the universe, yet its fundamental nature remains one of the great open questions in modern physics. Our group investigates the distribution and structure of dark matter halos through N-body numerical simulations and analytical models derived from perturbation theory.\n\nWe apply advanced statistical techniques to extract observational constraints from weak gravitational lensing data, galaxy correlations, and cluster mass functions. We actively collaborate with observational groups at IAFE and the Observatorio Astronomico de Cordoba to confront our theoretical predictions with large-scale photometric and spectroscopic surveys.\n\nAmong our current goals are the study of halo concentration as a function of mass and redshift, and the search for warm dark matter signatures that could reveal deviations from the standard Lambda-CDM model."
+    },
+    "icon": "atom",
     "order": 1
   },
   {
@@ -74,8 +74,8 @@
       "en": "Galaxy Formation and Evolution"
     },
     "short_description": {
-      "es": "Formación y evolución de la red cósmica, funciones de correlación de galaxias y análisis estadístico de relevamientos modernos.",
-      "en": "Formation and evolution of the cosmic web, galaxy correlation functions, and statistical analysis of modern surveys."
+      "es": "Formación y evolución de galaxias mediante simulaciones cosmológicas, con foco en discos galácticos, ensamblaje, entorno y evolución química.",
+      "en": "Galaxy formation and evolution through cosmological simulations, focusing on galactic discs, assembly, environment, and chemical evolution."
     },
     "full_description": {
       "es": "La distribución a gran escala de galaxias traza la evolución no lineal de las perturbaciones primordiales y codifica información sobre los parámetros cosmológicos fundamentales, la naturaleza de la energía oscura y la masa de los neutrinos. Nuestro grupo estudia la dinámica de la red cósmica mediante teoría de perturbaciones de orden superior, modelos de sesgo de galaxias y simulaciones hidrodinámicas a gran volumen.\n\nAnalizamos la función de correlación de dos puntos y el espectro de potencias en el espacio de corrimiento al rojo, con especial énfasis en las oscilaciones acústicas de bariones (BAO) como regla estándar cosmológica y en las distorsiones de Kaiser como prueba del crecimiento de estructura. Estos observables permiten contrastar Lambda-CDM frente a modelos alternativos de gravedad modificada y energía oscura dinámica.\n\nColaboramos con equipos de los relevamientos DESI, Euclid y Rubin LSST, aportando modelos teóricos y pipelines de análisis para la próxima generación de restricciones cosmológicas. Una línea en desarrollo combina estadísticos de orden superior — bispectrum y topología de Minkowski — para capturar información no gaussiana que escapa a los análisis de dos puntos tradicionales.",
