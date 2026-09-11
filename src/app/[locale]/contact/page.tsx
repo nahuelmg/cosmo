@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { localize, siteConfig } from '@/content';
+import { Link } from '@/i18n/navigation';
 import { buildPageMetadata } from '@/lib/metadata';
 import { ContactDetails } from '@/components/contact/ContactDetails';
 import MapEmbed from '@/components/contact/MapEmbed';
@@ -50,9 +51,20 @@ export default async function ContactPage({ params }: Props) {
       <div className="mt-10">
         <ContactDetails
           address={address}
+          emailNote={t.rich('emailNote', {
+            people: (chunks) => (
+              <Link
+                href="/people"
+                className="text-accent underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface rounded"
+              >
+                {chunks}
+              </Link>
+            ),
+          })}
           socialLinks={socialLinks}
           labels={{
             addressLabel: t('addressLabel'),
+            emailLabel: t('emailLabel'),
             socialLabel: t('social'),
             noSocialMessage: t('noSocial'),
           }}

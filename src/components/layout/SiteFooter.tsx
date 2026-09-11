@@ -25,8 +25,9 @@ interface SiteFooterProps {
  *
  * Identity:
  *   - Group name comes from the site config (canonical Spanish — 02-01).
- *   - The affiliation line uses the `footer.affiliations` translation key
- *     (bilingual); the config `affiliations` array intentionally stays
+ *   - The affiliation block uses the `footer.affiliationsPrimary` /
+ *     `affiliationsSecondary` keys, one per line (bilingual); the config
+ *     `affiliations` array intentionally stays
  *     available for future logo-linked references but is not used here.
  *   - The group has no public contact address, so the footer shows none.
  *   - Social links render only when the config list is non-empty
@@ -59,7 +60,10 @@ export async function SiteFooter({locale}: SiteFooterProps) {
           <h2 className="font-serif text-lg font-semibold text-ink">
             {siteConfig.groupName}
           </h2>
-          <p className="text-sm text-ink-muted">{tFooter('affiliations')}</p>
+          <div className="flex flex-col gap-1 text-sm text-ink-muted">
+            <p>{tFooter('affiliationsPrimary')}</p>
+            <p>{tFooter('affiliationsSecondary')}</p>
+          </div>
         </div>
 
         {/* Contact column */}

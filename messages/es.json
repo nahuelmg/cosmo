@@ -18,7 +18,8 @@
     "current": "Español"
   },
   "footer": {
-    "affiliations": "Universidad de Buenos Aires - CONICET // Departamento de Física FCEN - IFIBA",
+    "affiliationsPrimary": "Universidad de Buenos Aires - CONICET",
+    "affiliationsSecondary": "Departamento de Física FCEN - IFIBA",
     "copyright": "© {year} Buenos Aires Cosmología - UBA - CONICET"
   },
   "layout": {
@@ -80,7 +81,7 @@
     "title": "Journal Club",
     "intro": "Encuentros semanales para discutir artículos recientes en cosmología.",
     "upcoming": "Próximas sesiones",
-    "past": "Archivo",
+    "past": "Journals previos",
     "paperLink": "Artículo",
     "abstract": "Resumen",
     "noUpcoming": "No hay sesiones próximas programadas.",
@@ -101,6 +102,8 @@
     "addressLabel": "Dirección",
     "mapTitle": "Ubicación en el mapa",
     "viewOnMaps": "Ver en Google Maps",
+    "emailLabel": "Email",
+    "emailNote": "En la sección <people>Personas</people> se encuentran las direcciones de email de cada integrante.",
     "social": "Redes sociales",
     "noSocial": "Pronto se publicarán cuentas oficiales."
   },

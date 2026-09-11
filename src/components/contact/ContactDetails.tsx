@@ -1,8 +1,13 @@
+import type { ReactNode } from 'react';
+
 interface ContactDetailsProps {
   address: string;
+  /** Where to find member addresses — rendered rich, so it can link to People. */
+  emailNote: ReactNode;
   socialLinks: Array<{ platform: string; url: string; label: string }>;
   labels: {
     addressLabel: string;
+    emailLabel: string;
     socialLabel: string;
     noSocialMessage: string;
   };
@@ -10,6 +15,7 @@ interface ContactDetailsProps {
 
 export function ContactDetails({
   address,
+  emailNote,
   socialLinks,
   labels,
 }: ContactDetailsProps) {
@@ -24,6 +30,11 @@ export function ContactDetails({
       <dd className="font-serif text-lg text-ink whitespace-pre-line">
         {address}
       </dd>
+
+      <dt className="font-serif text-sm uppercase tracking-wider text-ink-subtle">
+        {labels.emailLabel}
+      </dt>
+      <dd className="text-ink-muted">{emailNote}</dd>
 
       <dt className="font-serif text-sm uppercase tracking-wider text-ink-subtle">
         {labels.socialLabel}
