@@ -2,9 +2,12 @@
  * JournalClubArchive — past sessions grouped by academic year.
  *
  * Server Component. Academic-year keys are "YYYY-YYYY"; lexicographic
- * descending sort gives newest season first.
+ * descending sort gives newest season first. The heading itself shows only the
+ * years in which sessions actually happened (see formatArchiveYearLabels), so a
+ * season that has not reached its second calendar year reads as a single year.
  */
 
+import { formatArchiveYearLabels } from "@/lib/journal-club-helpers";
 import { SessionRow } from "./SessionRow";
 
 interface Session {
@@ -37,6 +40,7 @@ export function JournalClubArchive({
   abstractLabel,
 }: JournalClubArchiveProps) {
   const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+  const labels = formatArchiveYearLabels(grouped);
 
   return (
     <section aria-labelledby="jc-archive" className="mt-16">
@@ -56,7 +60,7 @@ export function JournalClubArchive({
             id={`jc-year-${year}`}
             className="font-serif text-xl font-semibold text-ink-muted"
           >
-            {year}
+            {labels[year]}
           </h3>
           <ul className="mt-4 grid list-none grid-cols-1 gap-3">
             {grouped[year].map((s) => (
