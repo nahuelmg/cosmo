@@ -1,5 +1,16 @@
 [
   {
+    "id": "2026-09-14-tomas-chase",
+    "date": "2026-09-14",
+    "status": "upcoming",
+    "speaker": "Tomas Chase",
+    "speaker_position": "PhD",
+    "affiliation": "IFIBA",
+    "location": "Aula Federman",
+    "title": "El evento de 248 keV en LZ y la búsqueda de WIMPs",
+    "abstract": "En esta charla nos centraremos en el evento de alta energía observado recientemente por la colaboración LUX-ZEPLIN (LZ), presentado en arXiv:2609.02823. Utilizaremos este resultado como punto de partida para introducir cómo pueden describirse las interacciones entre WIMPs y núcleos mediante una teoría efectiva de campos. Luego discutiremos el funcionamiento y la calibración del experimento LZ, así como la reconstrucción del evento observado. Finalmente, revisaremos el análisis de los datos, sus principales fuentes de fondo y qué conclusiones pueden extraerse acerca de la posible naturaleza de este evento."
+  },
+  {
     "id": "2026-09-07-nahuel-miron-granese",
     "date": "2026-09-07",
     "status": "past",
