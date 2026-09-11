@@ -58,6 +58,16 @@ export const siteConfig = {
     en: "Exploring the large-scale universe from Buenos Aires",
   },
 
+  /**
+   * The line under the group name on the home hero. Written out rather than
+   * joined from `affiliations` so the hero can name the two institutions the
+   * group belongs to, in full, while the partner strip keeps the shorter forms.
+   */
+  affiliationLine: {
+    es: "Departamento de Física - FCEN - Universidad de Buenos Aires · IFIBA - CONICET",
+    en: "Department of Physics - FCEN - University of Buenos Aires · IFIBA - CONICET",
+  },
+
   affiliations: [
     {
       name: {

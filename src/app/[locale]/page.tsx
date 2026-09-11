@@ -37,9 +37,7 @@ export default async function HomePage({ params }: Props) {
     { src: '/Portadas/portada_3.jpg', alt: '', width: 1920, height: 820 },
   ];
 
-  const affiliation = siteConfig.affiliations
-    .map(a => localize(a.name, locale))
-    .join(' · ');
+  const affiliation = localize(siteConfig.affiliationLine, locale);
 
   const partners = siteConfig.affiliations.map(a => ({
     name: localize(a.name, locale),

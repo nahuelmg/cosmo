@@ -21,14 +21,7 @@ type Locale = (typeof routing.locales)[number];
 
 export function generateStaticParams() {
   const people = getPeople();
-  const clickable = people.filter(
-    (p) =>
-      p.category === 'pi' ||
-      p.category === 'postdoc' ||
-      p.category === 'phd' ||
-      p.category === 'external' ||
-      p.category === 'visitors'
-  );
+  const clickable = people.filter((p) => p.category !== 'past');
   return routing.locales.flatMap((locale) =>
     clickable.map((p) => ({ locale, slug: p.slug }))
   );
@@ -44,7 +37,7 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const person = getPersonBySlug(slug);
   if (!person) return {};
-  if (person.category === 'undergrad' || person.category === 'past') return {};
+  if (person.category === 'past') return {};
 
   // role is bilingual; pick the matching locale value directly.
   const localizedRole = person.role[locale as Locale];
@@ -72,7 +65,7 @@ export default async function PersonDetailPage({ params }: Props) {
   const rawPerson = getPersonBySlug(slug);
   const person = getLocalizedPerson(slug, locale);
   if (!rawPerson || !person) notFound();
-  if (person.category === 'undergrad' || person.category === 'past') notFound();
+  if (person.category === 'past') notFound();
 
   const t = await getTranslations('people');
   const tPubs = await getTranslations('publications');
