@@ -187,6 +187,9 @@
       "email": "augusto.chantada@df.uba.ar"
     }
   },
+  "ezequiel-lozano": {
+    "photo": "people/Ezequiel_L.jpeg"
+  },
   "matias-zaldarriaga": {
     "affiliation": {
       "es": "Institute for Advanced Study, Princeton, EE. UU.",
@@ -228,7 +231,6 @@
     }
   },
   "juan-manuel-armaleo": {
-    "photo": "people/juanma_A.png",
     "contact": {
       "email": "juanmanuel.armaleo@df.uba.ar"
     },
