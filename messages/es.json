@@ -18,10 +18,8 @@
     "current": "Español"
   },
   "footer": {
-    "affiliationUba": "Universidad de Buenos Aires",
-    "affiliationFcen": "Facultad de Ciencias Exactas y Naturales",
-    "affiliationConicet": "CONICET",
-    "copyright": "© {year} Buenos Aires Cosmología — FCEN / UBA"
+    "affiliations": "Universidad de Buenos Aires - CONICET // Departamento de Física FCEN - IFIBA",
+    "copyright": "© {year} Buenos Aires Cosmología - UBA - CONICET"
   },
   "layout": {
     "skipToContent": "Saltar al contenido principal",
@@ -101,7 +99,6 @@
   "contact": {
     "title": "Contacto",
     "addressLabel": "Dirección",
-    "emailLabel": "Correo electrónico",
     "mapTitle": "Ubicación en el mapa",
     "viewOnMaps": "Ver en Google Maps",
     "social": "Redes sociales",
@@ -145,7 +142,7 @@
     },
     "contact": {
       "title": "Contacto",
-      "description": "Cómo contactar a Buenos Aires Cosmología de la FCEN, UBA. Dirección, correo y enlaces institucionales."
+      "description": "Cómo contactar a Buenos Aires Cosmología de la FCEN, UBA. Dirección y enlaces institucionales."
     }
   }
 }

@@ -50,11 +50,9 @@ export default async function ContactPage({ params }: Props) {
       <div className="mt-10">
         <ContactDetails
           address={address}
-          emailPlaceholder="…"
           socialLinks={socialLinks}
           labels={{
             addressLabel: t('addressLabel'),
-            emailLabel: t('emailLabel'),
             socialLabel: t('social'),
             noSocialMessage: t('noSocial'),
           }}

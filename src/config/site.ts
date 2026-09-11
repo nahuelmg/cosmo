@@ -61,20 +61,21 @@ export const siteConfig = {
   affiliations: [
     {
       name: {
-        es: "Departamento de Física",
-        en: "Department of Physics",
+        es: "Departamento de Física - FCEN - UBA",
+        en: "Department of Physics - FCEN - UBA",
       },
       url: "https://www.df.uba.ar",
       schemaType: "EducationalOrganization",
     },
     {
+      // The institute the group belongs to, not the funding agency itself, so
+      // this entry links to IFIBA's record and carries no CONICET sameAs.
       name: {
-        es: "CONICET",
-        en: "CONICET",
+        es: "IFIBA - CONICET",
+        en: "IFIBA - CONICET",
       },
-      url: "https://www.conicet.gov.ar",
+      url: "https://bicyt.conicet.gov.ar/fichas/u/ifiba",
       schemaType: "ResearchOrganization",
-      sameAs: "https://www.wikidata.org/wiki/Q1054964",
     },
     {
       name: {
@@ -94,8 +95,6 @@ export const siteConfig = {
       sameAs: "https://www.wikidata.org/wiki/Q1572590",
     },
   ] satisfies Affiliation[],
-
-  contactEmail: "cosmologia@df.uba.ar",
 
   address: {
     es: "Departamento de Física\nFacultad de Ciencias Exactas y Naturales\nPabellón I\nCiudad Universitaria\nC1428 - Buenos Aires - Argentina",

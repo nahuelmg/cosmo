@@ -146,15 +146,17 @@ if (Array.isArray(rawPeople)) {
 }
 
 // 3. siteConfig placeholder guard
-//    Catches bracket/angle placeholders like "[insert mail]", "<TBD>" that
+//    Catches bracket/angle placeholders like "[insert name]", "<TBD>" that
 //    would otherwise silently ship to prod via src/config/site.ts.
 const PLACEHOLDER_CHARS = /[[\]<>{}]/;
-const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const email = siteConfig.contactEmail;
-if (typeof email !== "string" || PLACEHOLDER_CHARS.test(email) || !EMAIL_SHAPE.test(email)) {
-  errors.push(
-    `\n  src/config/site.ts\n  └─ contactEmail\n     Value looks like a placeholder — fill in the real email.\n     Received: ${JSON.stringify(email)}`,
-  );
+for (const affiliation of siteConfig.affiliations) {
+  for (const [locale, value] of Object.entries(affiliation.name)) {
+    if (PLACEHOLDER_CHARS.test(value)) {
+      errors.push(
+        `\n  src/config/site.ts\n  └─ affiliations[].name.${locale}\n     Value looks like a placeholder — fill in the real name.\n     Received: ${JSON.stringify(value)}`,
+      );
+    }
+  }
 }
 
 // 4. Report and exit
@@ -165,5 +167,5 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log("\u2714 Content validation passed (6 files, all entries parsed, all photos exist, contactEmail well-formed)");
+console.log("\u2714 Content validation passed (6 files, all entries parsed, all photos exist, no placeholder affiliations)");
 process.exit(0);
