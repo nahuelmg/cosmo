@@ -10,6 +10,8 @@ import {
   deriveAcademicYear,
   normalizeDate,
   normalizeTime,
+  normalizeLocation,
+  resolveHeader,
   rowsToSessions,
 } from "./sync-journal-club";
 import { JournalClubSchema } from "../src/content/schemas/journal-club.schema";
@@ -72,10 +74,59 @@ describe("normalizeTime", () => {
     expect(normalizeTime("9:00")).toBe("09:00");
     expect(normalizeTime("14:30")).toBe("14:30");
   });
+  it("drops a seconds part", () => {
+    expect(normalizeTime("14:30:00")).toBe("14:30");
+  });
+  it("converts a 12-hour time to 24-hour", () => {
+    expect(normalizeTime("3:00:00 PM")).toBe("15:00");
+    expect(normalizeTime("2:30 pm")).toBe("14:30");
+    expect(normalizeTime("9:05 AM")).toBe("09:05");
+    expect(normalizeTime("3 PM")).toBe("15:00");
+  });
+  it("handles the Spanish a. m. / p. m. spelling", () => {
+    expect(normalizeTime("3:00 p. m.")).toBe("15:00");
+    expect(normalizeTime("11:15 a.m.")).toBe("11:15");
+  });
+  it("maps the 12 o'clock edges", () => {
+    expect(normalizeTime("12:00 AM")).toBe("00:00");
+    expect(normalizeTime("12:30 PM")).toBe("12:30");
+  });
   it("rejects non-times and out-of-range values", () => {
-    expect(normalizeTime("2:30 PM")).toBeNull();
     expect(normalizeTime("24:00")).toBeNull();
     expect(normalizeTime("14h30")).toBeNull();
+    expect(normalizeTime("13:00 PM")).toBeNull();
+    expect(normalizeTime("half past two")).toBeNull();
+  });
+});
+
+describe("normalizeLocation", () => {
+  it("prefixes a bare room name", () => {
+    expect(normalizeLocation("Federman")).toBe("Aula Federman");
+    expect(normalizeLocation("  1620  ")).toBe("Aula 1620");
+  });
+  it("leaves an already-qualified room alone", () => {
+    expect(normalizeLocation("Aula Federman")).toBe("Aula Federman");
+    expect(normalizeLocation("aula 8")).toBe("aula 8");
+    expect(normalizeLocation("Aulas 3 y 4")).toBe("Aulas 3 y 4");
+  });
+});
+
+describe("resolveHeader", () => {
+  it("maps the exact form headers", () => {
+    expect(resolveHeader("Date of the journal")).toBe("date");
+    expect(resolveHeader("Place/room")).toBe("location");
+  });
+  it("ignores a parenthetical hint and trailing punctuation", () => {
+    expect(resolveHeader("Links (format https://...)")).toBe("paper_link");
+    expect(resolveHeader("Abstract:")).toBe("abstract");
+  });
+  it("falls back to a prefix match for a reworded question", () => {
+    expect(resolveHeader("Title of the journal club talk")).toBe("title");
+    expect(resolveHeader("Hour")).toBe("start_time");
+  });
+  it("leaves the Timestamp and unknown columns unmapped", () => {
+    expect(resolveHeader("Timestamp")).toBeUndefined();
+    expect(resolveHeader("Email address")).toBeUndefined();
   });
 });
 
@@ -148,6 +199,37 @@ describe("rowsToSessions — English Google Form sheet", () => {
       abstract: "We show how GW and light behave alike.",
     });
     expect(sessions[0]).not.toHaveProperty("paper_link");
+    expect(JournalClubSchema.safeParse(sessions).success).toBe(true);
+  });
+
+  it("reads the live sheet shape: 12-hour time, bare room, hinted Links header", () => {
+    const warnings: string[] = [];
+    const sessions = rowsToSessions(
+      [
+        [...FORM_HEADER.slice(0, -1), "Links (format https://...)"],
+        [
+          "9/11/2026 14:05:55",
+          "Tomas Chase",
+          "PhD",
+          "IFIBA",
+          "9/14/2026",
+          "3:00:00 PM",
+          "Federman",
+          "El evento de 248 keV en LZ",
+          "Sobre el evento de alta energia de LZ.",
+          "https://arxiv.org/abs/2609.02823",
+        ],
+      ],
+      today,
+      warnings,
+    );
+
+    expect(warnings).toEqual([]);
+    expect(sessions[0]).toMatchObject({
+      start_time: "15:00",
+      location: "Aula Federman",
+      paper_link: "https://arxiv.org/abs/2609.02823",
+    });
     expect(JournalClubSchema.safeParse(sessions).success).toBe(true);
   });
 

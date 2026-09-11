@@ -14,9 +14,16 @@
  *   Hour | Place/room | Title of the journal | Abstract | Links
  *   (legacy: Fecha | Speaker | Posición | Afiliación | Título | Resumen | Link | Notas)
  *
+ * Header matching tolerates the drift a Google Form question picks up over
+ * time: a parenthetical hint ("Links (format https://...)"), trailing
+ * punctuation, or a slightly shortened wording still resolve to the same field
+ * (see resolveHeader).
+ *
  * The Google Forms "Timestamp" column (submission time, not the talk date) is
  * ignored. Dates are accepted as YYYY-MM-DD or M/D/YYYY (the en-US format
- * Google Forms writes) and normalized to YYYY-MM-DD.
+ * Google Forms writes) and normalized to YYYY-MM-DD. Times are accepted in
+ * either 12-hour ("3:00:00 PM") or 24-hour ("14:30") form and always written
+ * as 24-hour HH:MM. Rooms are always written with an "Aula" prefix.
  *
  * Derived (not in the sheet):
  *   id            = `${date}-${speaker-slug}` (with a numeric suffix on collision)
@@ -117,6 +124,34 @@ const fold = (s: string) =>
     .toLowerCase()
     .trim();
 
+/**
+ * Sheet header label → session field.
+ *
+ * A Google Form question drifts: it gains a parenthetical hint ("Links (format
+ * https://...)"), a trailing colon, or a word or two, without changing what the
+ * column means. Fold the label, drop any parenthetical aside and trailing
+ * punctuation, then fall back to a prefix match in either direction so a
+ * lightly reworded question still maps to the same field. An ambiguous label
+ * (one matching two different fields) is left unmapped.
+ */
+export function resolveHeader(label: string): keyof RawRow | undefined {
+  const cleaned = fold(label)
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[\s:.*]+$/g, "")
+    .trim();
+  if (!cleaned) return undefined;
+
+  const exact = HEADER_MAP[cleaned];
+  if (exact) return exact;
+
+  const matches = Object.keys(HEADER_MAP).filter(
+    (key) => key.startsWith(cleaned) || cleaned.startsWith(key),
+  );
+  const fields = new Set(matches.map((key) => HEADER_MAP[key]));
+  return fields.size === 1 ? HEADER_MAP[matches[0]] : undefined;
+}
+
 export function slugify(name: string): string {
   return fold(name)
     .replace(/[^a-z0-9]+/g, "-")
@@ -147,16 +182,45 @@ export function normalizeDate(raw: string): string | null {
 }
 
 /**
- * Accepts `H:MM` or `HH:MM` (24-hour) and returns it zero-padded as `HH:MM`.
- * Returns null for anything else.
+ * Normalizes a talk time to 24-hour `HH:MM`, which is what the site displays.
+ *
+ * A Google Forms time field is written in whatever format the responder's
+ * locale uses, so the same column mixes `14:30`, `3:00:00 PM` and `3:00 p. m.`.
+ * Accepts an optional seconds part (dropped) and an optional AM/PM marker in
+ * its English or Spanish spelling. Returns null for anything else.
  */
 export function normalizeTime(raw: string): string | null {
-  const m = raw.trim().match(/^(\d{1,2}):(\d{2})$/);
+  const cleaned = fold(raw).replace(/[\s\u00a0]+/g, " ").trim();
+  const m = cleaned.match(
+    /^(\d{1,2})(?::(\d{2}))?(?::\d{2})?\s*(a\.? ?m\.?|p\.? ?m\.?)?$/,
+  );
   if (!m) return null;
-  const h = Number(m[1]);
-  const min = Number(m[2]);
-  if (h > 23 || min > 59) return null;
-  return `${String(h).padStart(2, "0")}:${m[2]}`;
+
+  let h = Number(m[1]);
+  const min = Number(m[2] ?? "0");
+  if (min > 59) return null;
+
+  const meridiem = m[3]?.[0]; // "a" or "p"
+  if (meridiem) {
+    if (h < 1 || h > 12) return null;
+    if (meridiem === "p" && h !== 12) h += 12;
+    if (meridiem === "a" && h === 12) h = 0;
+  } else if (h > 23) {
+    return null;
+  }
+
+  return `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
+}
+
+/**
+ * Rooms are written into the sheet either bare ("Federman") or already
+ * qualified ("Aula Federman"). The site always shows the qualified form, so add
+ * the prefix only when it is not there already.
+ */
+export function normalizeLocation(raw: string): string {
+  const value = raw.trim().replace(/\s+/g, " ");
+  if (!value || /^aulas?\b/.test(fold(value))) return value;
+  return `Aula ${value}`;
 }
 
 export function deriveAcademicYear(date: string): string {
@@ -176,7 +240,7 @@ export function rowsToSessions(
   if (table.length === 0) return [];
 
   const [headerRow, ...dataRows] = table;
-  const columns = headerRow.map((h) => HEADER_MAP[fold(h)]);
+  const columns = headerRow.map((h) => resolveHeader(h));
   if (!columns.includes("date") || !columns.includes("speaker") || !columns.includes("title")) {
     throw new Error(
       `sheet header is missing a required column (need a date, speaker, and title ` +
@@ -221,7 +285,7 @@ export function rowsToSessions(
     if (raw.start_time) {
       const normalized = normalizeTime(raw.start_time);
       if (normalized) startTime = normalized;
-      else warnings.push(`${date}: Hour "${raw.start_time}" is not HH:MM, dropped`);
+      else warnings.push(`${date}: Hour "${raw.start_time}" is not a readable time, dropped`);
     }
 
     const status = deriveStatus(date, today);
@@ -240,7 +304,7 @@ export function rowsToSessions(
       ...(raw.speaker_position ? { speaker_position: raw.speaker_position } : {}),
       ...(raw.affiliation ? { affiliation: raw.affiliation } : {}),
       ...(startTime ? { start_time: startTime } : {}),
-      ...(raw.location ? { location: raw.location } : {}),
+      ...(raw.location ? { location: normalizeLocation(raw.location) } : {}),
       ...(raw.abstract ? { abstract: raw.abstract } : {}),
       ...(paperLink ? { paper_link: paperLink } : {}),
       ...(raw.notes ? { notes: raw.notes } : {}),
