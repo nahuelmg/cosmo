@@ -85,7 +85,8 @@
     "past": "Archive",
     "paperLink": "Paper",
     "abstract": "Abstract",
-    "noUpcoming": "No upcoming sessions scheduled."
+    "noUpcoming": "No upcoming sessions scheduled.",
+    "empty": "Information will be uploaded soon."
   },
   "outreach": {
     "title": "Outreach",

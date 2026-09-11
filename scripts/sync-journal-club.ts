@@ -302,8 +302,12 @@ async function main() {
   const table = parseCsv(csv);
   const sessions = rowsToSessions(table, today, warnings);
 
+  // An empty sheet is a legitimate state, not a failure: the season may simply
+  // not have been loaded yet. Write an empty list so the page can show its
+  // "coming soon" placeholder. A malformed sheet still throws in rowsToSessions
+  // (missing header columns) and leaves the existing file untouched.
   if (sessions.length === 0) {
-    throw new Error("no valid sessions parsed from the sheet — aborting without writing");
+    warnings.push("the sheet has no valid sessions — writing an empty list");
   }
 
   // Validate BEFORE writing — a bad sheet must not corrupt the site.

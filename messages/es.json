@@ -85,7 +85,8 @@
     "past": "Archivo",
     "paperLink": "Artículo",
     "abstract": "Resumen",
-    "noUpcoming": "No hay sesiones próximas programadas."
+    "noUpcoming": "No hay sesiones próximas programadas.",
+    "empty": "La información se subirá próximamente."
   },
   "outreach": {
     "title": "Divulgación",
