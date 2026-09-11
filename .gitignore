@@ -51,3 +51,6 @@ ui-ux-pro-max/
 
 # sync-publications --member output sink (per-member dry files, never committed)
 scripts/tmp/
+
+# local navigation aid, generated — not part of the site
+CODE-MAP.md
