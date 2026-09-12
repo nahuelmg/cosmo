@@ -166,7 +166,7 @@
     "orcid_id": "0000-0002-9095-9594",
     "display_name_normalized": "javier badia",
     "contact": {
-      "email": "javier.badia@df.uba.ar"
+      "email": "j.badia@df.uba.ar"
     },
     "social_links": [],
     "teaching_role": {
@@ -321,7 +321,9 @@
     "category": "phd",
     "photo": "people/Ezequiel_L.jpeg",
     "display_name_normalized": "ezequiel lozano",
-    "contact": {},
+    "contact": {
+      "email": "elozano@df.uba.ar"
+    },
     "social_links": []
   },
   {
