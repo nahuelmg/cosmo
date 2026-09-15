@@ -166,7 +166,8 @@
     "orcid_id": "0000-0002-9095-9594",
     "display_name_normalized": "javier badia",
     "contact": {
-      "email": "j.badia@df.uba.ar"
+      "email": "j.badia@df.uba.ar",
+      "office": "Oficina 2.024"
     },
     "social_links": [],
     "teaching_role": {
@@ -308,7 +309,10 @@
     },
     "category": "phd",
     "display_name_normalized": "luis biaus",
-    "contact": {},
+    "contact": {
+      "email": "lbiaus@df.uba.ar",
+      "office": "Oficina 2.133"
+    },
     "social_links": []
   },
   {
