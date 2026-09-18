@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "synced_at": "2026-09-17T04:32:30.518Z",
+    "synced_at": "2026-09-18T04:17:24.920Z",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 326,
+      "inspirehep": 327,
       "arxiv": 85,
       "manual": 0,
       "orcid": 94,
@@ -21,6 +21,49 @@
     ]
   },
   "publications": [
+    {
+      "id": "2609.17658",
+      "authors": [
+        "Dolag, Klaus",
+        "Karademir, Geray S.",
+        "Tornatore, Luca",
+        "Ragagnin, Antonio",
+        "Valentini, Milena",
+        "Böss, Ludwig M.",
+        "Groth, Frederick",
+        "Murante, Giuseppe",
+        "Borgani, Stefano",
+        "Springel, Volker",
+        "Arido, Cenanda",
+        "Badía, Javier",
+        "Castro, Tiago",
+        "Damiano, Alice",
+        "Di Federico, Laura",
+        "Fischer, Moritz S.",
+        "Granato, Gian Luigi",
+        "Hariharan, Nitya",
+        "Klemmer, David",
+        "Maio, Umberto",
+        "Marin-Gilabert, Tirso",
+        "Marini, Ilaria",
+        "Patil, Yashraj",
+        "Egelhofer, Margarita",
+        "Ragone-Figueroa, Cinthia",
+        "Sala, Luca",
+        "Scannapieco, Cecilia",
+        "Schmidt, Ludwig D.",
+        "Steinwandel, Ulrich P.",
+        "Tedeschi-Prades, Giovanni",
+        "Wiertel, Marc"
+      ],
+      "title": "The OpenGadget3 Code for Cosmological Simulations",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2609.17658",
+      "abstract": "We present the public release of OpenGadget3 (OG3), a substantially extended and re-organised version of the widely used Gadget-2/3 family of cosmological simulation codes. Since G2 was made publicly available, the absence of continued official development led to the creation of numerous, mutually incompatible developer versions of G3 across the community. This made it effectively impossible to track bug fixes, reproduce published results, or consistently credit the many individual contributors. OG3 addresses this by consolidating these disparate developments into a single, documented, and continuously maintained code base, released under the GNU GPLv3 through a GitLab repository (with an accompanying wiki), regularly synchronised with the active developer branch, and supported by a dedicated continuous-integration (CI) pipeline. OG3 retains the core algorithmic backbone of its predecessors, a Barnes&Hut oct-tree combined with a Particle-Mesh method for gravity, and a choice of Smoothed Particle Hydrodynamics or Meshless-Finite-Mass solvers for gas dynamics, within a hybrid MPI/OpenMP parallelisation framework, extended with GPU offloading via OpenACC and OpenMP. The code integrates an extensive suite of sub-resolution and physical modules, including primordial chemistry, radiative cooling, star formation, stellar feedback and chemical enrichment, dust formation and evolution, black hole growth and AGN feedback, MHD, thermal conduction, physical viscosity, SIDM, and massive neutrinos. OG3 introduces new features improving robustness, reproducibility, and usability: a flexible mixed-precision framework spanning 16- to 128-bit representations; expert-level tagged parameters with restart-time change log; extensive consistency checks against invalid configurations; and FAIR-compliant reporting of all settings, parameters, and specific publications. (shortened and abridged)"
+    },
     {
       "id": "2609.04510",
       "authors": [
