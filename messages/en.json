@@ -36,8 +36,8 @@
   },
   "people": {
     "title": "People",
-    "pi": "Investigators",
-    "researchStaff": "Posdocs, PhD and undergraduate students",
+    "pi": "Researchers",
+    "researchStaff": "Postdoctoral researchers, PhD students and undergraduate students",
     "postdoc": "Postdoctoral Researchers",
     "phd": "PhD Students",
     "externalVisitors": "External Collaborators and Visitors",
@@ -79,12 +79,12 @@
   },
   "journalClub": {
     "title": "Journal Club",
-    "intro": "Weekly meetings to discuss recent papers in cosmology.",
+    "intro": "Weekly meetings to discuss recent work and papers. Mondays at 15:00.",
     "upcoming": "Upcoming Sessions",
-    "past": "Previous journals",
+    "past": "Past sessions",
     "paperLink": "Paper",
     "abstract": "Abstract",
-    "noUpcoming": "No upcoming sessions scheduled.",
+    "noUpcoming": "Speakers to be confirmed",
     "empty": "Information will be uploaded soon."
   },
   "outreach": {

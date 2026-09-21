@@ -11,6 +11,7 @@
  */
 
 import * as z from "zod";
+import englishTranslations from "../../../content/translations.en.json";
 
 // ---------------------------------------------------------------------------
 // Smart-quote detection
@@ -162,6 +163,18 @@ export const orcidId = z
 
 export type Locale = "es" | "en";
 
+// Curated translations of sheet text live separately from generated content,
+// so scheduled syncs cannot overwrite them. Exact source matching prevents an
+// old translation from being applied after the original text changes.
+const translations = z.record(z.string(), proseString("translation.en"))
+  .parse(englishTranslations);
+
+export function localizeSource(value: string, locale: Locale): string {
+  return locale === "en" && Object.hasOwn(translations, value)
+    ? translations[value]
+    : value;
+}
+
 /**
  * Pick the locale-specific string from a bilingual field.
  * Accessors call this so page components never have to reference .es / .en.
@@ -170,7 +183,9 @@ export function localize<T extends { es: string; en: string }>(
   field: T,
   locale: Locale,
 ): string {
-  return field[locale];
+  return field.en === field.es
+    ? localizeSource(field[locale], locale)
+    : field[locale];
 }
 
 /**

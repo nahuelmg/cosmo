@@ -30,8 +30,8 @@ export default async function JournalClubPage({ params }: Props) {
 
   const t = await getTranslations("journalClub");
 
-  const upcoming = getUpcomingSessions();
-  const grouped = getPastSessionsByYear();
+  const upcoming = getUpcomingSessions(locale);
+  const grouped = getPastSessionsByYear(locale);
   const hasArchive = Object.keys(grouped).length > 0;
   // The sheet is empty (no session has been loaded yet) — show a placeholder
   // instead of an "Upcoming" heading with nothing under it.

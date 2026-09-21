@@ -1,8 +1,7 @@
 /**
  * SessionRow — a single past journal club session (dense archive card).
  *
- * Server Component. Consumes a session straight from the content layer
- * (all fields are canonical / single-language since v1.4).
+ * Server Component. Consumes a locale-resolved session from the content layer.
  */
 
 interface Session {
