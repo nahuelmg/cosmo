@@ -272,6 +272,22 @@ describe("assemble", () => {
     expect(PeopleSchema.safeParse([person]).success).toBe(true);
   });
 
+  it("displays the past-member second column with its degree and year", () => {
+    const warnings: string[] = [];
+    const raw = rowsToRawPeople([
+      ["Miembros Anteriores:"],
+      ["Javi Pineau", "estudiante de licenciatura,2026"],
+      ["Federico Iza", "estudiante de doctorado, 2026"],
+    ], warnings);
+    const people = raw.map((p) => assemble(p, undefined, warnings));
+    expect(people.map((p) => p.role)).toEqual([
+      { es: "estudiante de licenciatura,2026", en: "Undergraduate Student,2026" },
+      { es: "estudiante de doctorado, 2026", en: "PhD Student, 2026" },
+    ]);
+    expect(warnings).toEqual([]);
+    expect(PeopleSchema.safeParse(people).success).toBe(true);
+  });
+
   it("falls back to the enrichment role for collaborators (no sheet role column)", () => {
     const person = assemble(
       { slug: "alejandra-kandus", name: "Alejandra Kandus", category: "visitors" },

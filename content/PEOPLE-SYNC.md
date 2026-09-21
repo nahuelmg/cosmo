@@ -26,7 +26,7 @@ writes `content/people.json`.
 |-----------------------------------------|----------|-----------|
 | `Investigadores`                        | `pi`     | see column list below |
 | `Postdocs / docs / lics`                | from "Cargo en investigación": Posdoc→`postdoc`, Doctorando / Estudiante de doctorado→`phd`, Licenciando / Estudiante de licenciatura→`undergrad` | same columns |
-| `Miembros Anteriores:`                  | `past`   | `Nombre (estudiante de licenciatura 2026)` |
+| `Miembros Anteriores:`                  | `past`   | Name in column one; description and year in column two, e.g. `estudiante de doctorado, 2026` |
 | `Colaboradores externos y visitantes:`  | `visitors` | `Nombre` or `Nombre (Afiliación)` |
 
 - **Columns** for the `pi` / `Postdocs` blocks (named by the `Nombre | …` row
@@ -37,6 +37,9 @@ writes `content/people.json`.
   not re-name is still read.
 - `EMAIL` and `Oficina` **override** the `contact` block in
   `people-extra.json` when present (an invalid e-mail is warned and skipped).
+- Past members display column two verbatim in Spanish; recognized student roles
+  are translated into English with the comma and year preserved. If column two
+  is empty, the legacy parenthesized-year fallback is used.
 - `Mini Biografía` and `Líneas de investigación` are Spanish-only and are shown
   for **both** languages. They are used **only when `people-extra.json` has no
   curated bilingual value** for that person — otherwise the sheet value is

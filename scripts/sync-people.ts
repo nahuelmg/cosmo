@@ -244,6 +244,7 @@ interface RawPerson {
   teachingEs?: string;
   parenAffiliation?: string;
   pastYear?: string;
+  pastDescription?: string;
   email?: string;
   office?: string;
   bioEs?: string;
@@ -336,6 +337,7 @@ export function rowsToRawPeople(
       teachingEs: enrichable ? c || undefined : undefined,
       parenAffiliation: section === "collaborators" ? paren : undefined,
       pastYear: section === "past" ? paren?.match(/\b(\d{4})\b/)?.[1] : undefined,
+      pastDescription: section === "past" ? (cells[1] ?? "").trim() || undefined : undefined,
       email,
       office,
       bioEs,
@@ -358,7 +360,13 @@ export function assemble(
   const e = extra ?? {};
 
   let role: { es: string; en: string };
-  if (raw.category === "past") {
+  if (raw.category === "past" && raw.pastDescription) {
+    const es = straightenQuotes(raw.pastDescription);
+    const match = es.match(/^(.*?)(\s*,\s*\d{4})?$/)!;
+    const translated = ROLE_EN[fold(match[1])];
+    role = { es, en: translated ? `${translated}${match[2] ?? ""}` : es };
+    if (!translated) warnings.push(`unknown past-member description "${es}" for ${raw.slug} — English uses Spanish`);
+  } else if (raw.category === "past") {
     const suffix = raw.pastYear ? ` (${raw.pastYear})` : "";
     role = {
       es: `Estudiante de licenciatura${suffix}`,
