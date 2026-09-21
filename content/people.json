@@ -382,7 +382,7 @@
     "slug": "javier-pineau",
     "name": "Javier Pineau",
     "role": {
-      "es": "estudiante de licenciatura, 2026",
+      "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
     "category": "past",
@@ -396,7 +396,7 @@
     "slug": "pedro-rozin",
     "name": "Pedro Rozin",
     "role": {
-      "es": "estudiante de licenciatura, 2026",
+      "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
     "category": "past",
@@ -405,22 +405,24 @@
     "social_links": []
   },
   {
-    "slug": "tomas-ciccarellan",
-    "name": "Tomas Ciccarellan",
+    "slug": "tomas-ciccarella",
+    "name": "Tomas Ciccarella",
     "role": {
-      "es": "estudiante de licenciatura, 2026",
+      "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
     "category": "past",
-    "display_name_normalized": "tomas ciccarellan",
-    "contact": {},
+    "display_name_normalized": "tomas ciccarella",
+    "contact": {
+      "email": "tomas.cicarella@df.uba.ar"
+    },
     "social_links": []
   },
   {
     "slug": "federico-iza",
     "name": "Federico Iza",
     "role": {
-      "es": "estudiante de doctorado, 2026",
+      "es": "Estudiante de doctorado, 2026",
       "en": "PhD Student, 2026"
     },
     "category": "past",
