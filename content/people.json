@@ -64,13 +64,19 @@
     },
     "category": "pi",
     "photo": "people/susana_landau_foto.jpg",
+    "research_interests": [
+      {
+        "es": "Analisis de Datos e Inferencia, Inteligencia Artificial, Gravedad Modificada",
+        "en": "Analisis de Datos e Inferencia, Inteligencia Artificial, Gravedad Modificada"
+      }
+    ],
     "inspirehep_id": "S.J.Landau.1",
     "orcid_id": "0000-0003-2645-9197",
     "display_name_normalized": "susana landau",
     "contact": {
-      "email": "susana.landau@df.uba.ar",
+      "email": "slandau@df.uba.ar",
       "orcid": "0000-0002-4411-8732",
-      "office": "Pabellon 1, Oficina 324, Ciudad Universitaria"
+      "office": "Oficina 2173, 2do Piso Pabellon 1"
     },
     "social_links": [
       {
@@ -427,6 +433,18 @@
     },
     "category": "past",
     "display_name_normalized": "federico iza",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "luca-gomez-bachar",
+    "name": "Luca Gomez Bachar",
+    "role": {
+      "es": "Estudiante de Licenciatura, 2023",
+      "en": "Undergraduate Student, 2023"
+    },
+    "category": "past",
+    "display_name_normalized": "luca gomez bachar",
     "contact": {},
     "social_links": []
   },
