@@ -66,8 +66,16 @@
     "photo": "people/susana_landau_foto.jpg",
     "research_interests": [
       {
-        "es": "Analisis de Datos e Inferencia, Inteligencia Artificial, Gravedad Modificada",
-        "en": "Analisis de Datos e Inferencia, Inteligencia Artificial, Gravedad Modificada"
+        "es": "Analisis de Datos e Inferencia",
+        "en": "Analisis de Datos e Inferencia"
+      },
+      {
+        "es": "Inteligencia Artificial",
+        "en": "Inteligencia Artificial"
+      },
+      {
+        "es": "Gravedad Modificada",
+        "en": "Gravedad Modificada"
       }
     ],
     "inspirehep_id": "S.J.Landau.1",
