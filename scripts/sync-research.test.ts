@@ -69,7 +69,7 @@ describe("parseDoc", () => {
     expect(areas[1].full).toBe("La materia oscura es el 27% del universo.");
   });
 
-  it("skips an area that is missing a block, with a warning", () => {
+  it("retains an area that is missing a block, with a warning", () => {
     const warnings: string[] = [];
     const areas = parseDoc(
       `Gravedad Modificada
@@ -78,7 +78,7 @@ Teorías alternativas.
 `,
       warnings,
     );
-    expect(areas).toEqual([]);
+    expect(areas).toEqual([{ title: "Gravedad Modificada", short: "Teorías alternativas.", full: "" }]);
     expect(warnings.some((w) => w.includes("Explicación"))).toBe(true);
   });
 
@@ -115,6 +115,31 @@ const EXISTING: ResearchArea[] = [
 ];
 
 describe("mergeAreas", () => {
+  it("updates filled blocks while preserving blank blocks and their translations", () => {
+    const warnings: string[] = [];
+    const merged = mergeAreas([
+      { title: "Materia Oscura", short: "", full: "Nueva explicación." },
+      { title: "Ondas Gravitacionales", short: "", full: "" },
+    ], EXISTING, warnings);
+    expect(merged[0].short_description).toEqual(EXISTING[0].short_description);
+    expect(merged[0].full_description.es).toBe("Nueva explicación.");
+    expect(merged[1]).toEqual(EXISTING[1]);
+    expect(ResearchSchema.safeParse(merged).success).toBe(true);
+  });
+
+  it("rejects incomplete new areas", () => {
+    expect(() => mergeAreas([{ title: "New", short: "", full: "Text" }], EXISTING, []))
+      .toThrow("new but incomplete");
+  });
+
+  it("keeps the pulsar anchor and icon when the source title changes", () => {
+    const previous = { ...EXISTING[0], id: "binary-pulsars", title: { es: "Púlsares Binarios", en: "Binary Pulsars" }, icon: "binary" };
+    const [merged] = mergeAreas([{ title: "Púlsares", short: "", full: "Nueva explicación." }], [previous], []);
+    expect(merged.id).toBe("binary-pulsars");
+    expect(merged.icon).toBe("binary");
+    expect(merged.title).toEqual({ es: "Púlsares", en: "Púlsares" });
+  });
+
   it("takes order and Spanish from the document, keeping id, icon and English", () => {
     const warnings: string[] = [];
     const merged = mergeAreas(parseDoc(DOC, warnings), EXISTING, warnings);

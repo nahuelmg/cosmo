@@ -41,6 +41,8 @@
  * derived from its title and no icon; an area that disappears from the
  * document is dropped. Both are warned about. An empty document is an error,
  * not a valid state — the existing file is kept.
+ * Blank blocks retain existing bilingual text with a warning. Incomplete new
+ * areas abort the sync rather than publishing empty content.
  *
  * Rules (mirrors sync-publications.ts):
  *  - Relative imports only — no @/ alias (tsx CJS mode)
@@ -145,15 +147,14 @@ export function parseDoc(text: string, warnings: string[]): DocArea[] {
       warnings.push(
         `"${current.title}" is missing its ${
           current.short.length === 0 ? "Mini resumen" : "Explicación"
-        } — skipped`,
+        } — existing text will be retained if available`,
       );
-    } else {
-      areas.push({
+    }
+    areas.push({
         title: current.title,
         short: current.short.join(" "),
         full: current.full.join("\n\n"),
-      });
-    }
+    });
     current = null;
     block = null;
   };
@@ -202,8 +203,21 @@ export function mergeAreas(
   const matched = new Set<string>();
 
   const merged = doc.map((area, order) => {
-    const prev = byTitle.get(fold(area.title));
+    // The document renamed this area; retain its public anchor and icon.
+    const prev = byTitle.get(fold(area.title)) ??
+      (fold(area.title) === "pulsares"
+        ? existing.find((a) => a.id === "binary-pulsars")
+        : undefined);
     if (prev) matched.add(prev.id);
+
+    if (!prev && (!area.short || !area.full)) {
+      throw new Error(`"${area.title}" is new but incomplete — existing file left untouched`);
+    }
+    const short = area.short || prev!.short_description.es;
+    const full = area.full || prev!.full_description.es;
+    if (!area.short || !area.full) {
+      warnings.push(`"${area.title}" has blank blocks — retained existing text for those blocks`);
+    }
 
     let id = prev?.id;
     if (!id) {
@@ -219,17 +233,17 @@ export function mergeAreas(
     // English follows the Spanish: a changed Spanish text means the stored
     // translation describes something else now.
     const shortEn =
-      prev && prev.short_description.es === area.short
+      prev && prev.short_description.es === short
         ? prev.short_description.en
-        : area.short;
+        : short;
     const fullEn =
-      prev && prev.full_description.es === area.full
+      prev && prev.full_description.es === full
         ? prev.full_description.en
-        : area.full;
+        : full;
     const edited =
       prev &&
-      (prev.short_description.es !== area.short ||
-        prev.full_description.es !== area.full);
+      (prev.title.es !== area.title || prev.short_description.es !== short ||
+        prev.full_description.es !== full);
     if (edited) {
       warnings.push(
         `"${area.title}" changed in the document — English mirrors the Spanish until it is translated`,
@@ -238,9 +252,9 @@ export function mergeAreas(
 
     return {
       id,
-      title: { es: area.title, en: prev ? prev.title.en : area.title },
-      short_description: { es: area.short, en: shortEn },
-      full_description: { es: area.full, en: fullEn },
+      title: { es: area.title, en: prev?.title.es === area.title ? prev.title.en : area.title },
+      short_description: { es: short, en: shortEn },
+      full_description: { es: full, en: fullEn },
       ...(prev?.icon ? { icon: prev.icon } : {}),
       ...(prev?.image ? { image: prev.image } : {}),
       order,
