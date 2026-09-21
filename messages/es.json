@@ -79,12 +79,12 @@
   },
   "journalClub": {
     "title": "Journal Club",
-    "intro": "Encuentros semanales para discutir artículos recientes en cosmología.",
+    "intro": "Reuniones semanales para discutir trabajos y artículos recientes. Lunes 15:00 h.",
     "upcoming": "Próximas sesiones",
     "past": "Journals previos",
     "paperLink": "Artículo",
     "abstract": "Resumen",
-    "noUpcoming": "No hay sesiones próximas programadas.",
+    "noUpcoming": "Speakers a confirmar",
     "empty": "La información se subirá próximamente."
   },
   "outreach": {
