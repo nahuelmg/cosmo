@@ -272,8 +272,8 @@
       "en": "PhD Student"
     },
     "category": "phd",
-    "display_name_normalized": "juan pablo elia",
     "photo": "people/juanpabloelia.jpeg",
+    "display_name_normalized": "juan pablo elia",
     "contact": {
       "email": "juanpablo.elia@df.uba.ar"
     },
@@ -297,22 +297,6 @@
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
-    }
-  },
-  {
-    "slug": "federico-uxhagen",
-    "name": "Federico Uxhagen",
-    "role": {
-      "es": "Estudiante de doctorado",
-      "en": "PhD Student"
-    },
-    "category": "phd",
-    "display_name_normalized": "federico uxhagen",
-    "contact": {},
-    "social_links": [],
-    "teaching_role": {
-      "es": "Ayudante de segunda",
-      "en": "Second-rank Teaching Assistant"
     }
   },
   {
@@ -391,6 +375,18 @@
     },
     "category": "undergrad",
     "display_name_normalized": "santiago paramio",
+    "contact": {},
+    "social_links": []
+  },
+  {
+    "slug": "federico-huxhagen",
+    "name": "Federico Huxhagen",
+    "role": {
+      "es": "Estudiante de licenciatura, 2026",
+      "en": "Undergraduate Student, 2026"
+    },
+    "category": "past",
+    "display_name_normalized": "federico huxhagen",
     "contact": {},
     "social_links": []
   },
