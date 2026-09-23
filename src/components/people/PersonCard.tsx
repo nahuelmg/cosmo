@@ -1,3 +1,4 @@
+import { withBasePath } from "@/config/paths";
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 
@@ -18,7 +19,7 @@ export function PersonCard({ slug, name, role, teachingRole, photo }: PersonCard
       <div className="relative w-full aspect-[4/5] bg-surface">
         {photo ? (
           <Image
-            src={`/${photo}`}
+            src={withBasePath(photo)}
             alt=""
             fill
             sizes="(min-width: 640px) 200px, 100vw"

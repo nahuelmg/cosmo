@@ -1,6 +1,6 @@
 'use client';
 
-import {createContext, useCallback, useContext, useEffect, useState} from 'react';
+import {createContext, useCallback, useContext, useEffect, useSyncExternalStore} from 'react';
 
 export type Theme = 'light' | 'dark' | 'system';
 
@@ -23,40 +23,36 @@ function applyTheme(t: Theme) {
   document.documentElement.classList.toggle('dark', isDark);
 }
 
-type Props = {
-  initialTheme: Theme;
-  children: React.ReactNode;
-};
+function readTheme(): Theme {
+  try {
+    const value = document.cookie.match(/(?:^|;\s*)theme=([^;]+)/)?.[1];
+    const theme = value ? decodeURIComponent(value) : 'system';
+    return theme === 'light' || theme === 'dark' ? theme : 'system';
+  } catch {
+    return 'system';
+  }
+}
 
-/**
- * Cookie-based theme provider — no next-themes dependency. Mirrors the pattern
- * in skills/domains/dark-mode/SKILL.md (extracted from dime.ar v2.4).
- *
- * No-flash strategy is two-layer:
- *   1. An inline <script> in [locale]/layout.tsx runs before body renders and
- *      sets `.dark` on <html> based on the theme cookie + prefers-color-scheme.
- *   2. This provider reconciles React state with that class on mount and keeps
- *      it in sync when the user toggles or the system preference changes.
- *
- * The cookie is set client-side (path=/, 1 year, SameSite=Lax) so it's
- * available to the server on the next request for SSR parity on `light`/`dark`.
- * `system` can't be read server-side, so system users accept the inline script
- * as their no-flash source of truth.
- */
-export function ThemeProvider({initialTheme, children}: Props) {
-  const [theme, setThemeState] = useState<Theme>(initialTheme);
+function subscribe(listener: () => void) {
+  window.addEventListener('theme-change', listener);
+  return () => window.removeEventListener('theme-change', listener);
+}
 
-  const setTheme = useCallback((t: Theme) => {
-    setThemeState(t);
-    document.cookie = `theme=${t};path=/;max-age=31536000;SameSite=Lax`;
-    applyTheme(t);
+export function ThemeProvider({children}: {children: React.ReactNode}) {
+  const theme = useSyncExternalStore(subscribe, readTheme, () => 'system' as Theme);
+
+  const setTheme = useCallback((value: Theme) => {
+    document.cookie = `theme=${value};path=/;max-age=31536000;SameSite=Lax`;
+    applyTheme(value);
+    window.dispatchEvent(new Event('theme-change'));
   }, []);
 
   useEffect(() => {
-    applyTheme(theme);
-    if (theme !== 'system') return;
+    // Read the cookie directly even on the first hydration effect so the
+    // server's system snapshot cannot overwrite the bootstrap script's theme.
+    applyTheme(readTheme());
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = () => applyTheme('system');
+    const handler = () => applyTheme(readTheme());
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, [theme]);

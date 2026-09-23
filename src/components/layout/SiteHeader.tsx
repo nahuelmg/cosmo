@@ -1,5 +1,6 @@
 'use client';
 
+import { withBasePath } from "@/config/paths";
 import Image from 'next/image';
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/navigation';
@@ -77,7 +78,7 @@ export function SiteHeader() {
             ].join(' ')}
           >
             <Image
-              src="/logo_cosmo.png"
+              src={withBasePath("/logo_cosmo.png")}
               alt={siteConfig.groupName}
               width={80}
               height={80}

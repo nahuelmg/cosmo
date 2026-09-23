@@ -1,6 +1,5 @@
 'use client';
 
-import {useEffect, useState} from 'react';
 import {useTranslations} from 'next-intl';
 import {Monitor, Moon, Sun} from 'lucide-react';
 import {type Theme, useTheme} from './ThemeProvider';
@@ -18,22 +17,13 @@ interface ThemeToggleProps {
  *   - Icon reflects current theme (Sun / Moon / Monitor) so the state is
  *     legible at a glance; aria-label announces the *next* state so keyboard
  *     and SR users know what the click will do (e.g., "Switch to dark mode").
- *   - Mounted-gate renders a neutral Monitor icon until the client has
- *     reconciled with the cookie + system preference. Without it, SSR would
- *     render the icon for `initialTheme` (e.g. Monitor for 'system') while a
- *     system user actually sees dark surfaces — a visual contradiction.
+ *   - The theme store supplies a stable system snapshot during hydration.
  *   - Styling mirrors the LocaleToggle so the two sit as matched chips on the
  *     right of the header.
  */
 export function ThemeToggle({className = ''}: ThemeToggleProps) {
   const {theme, setTheme} = useTheme();
   const t = useTranslations('layout');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   function handleCycle() {
     const idx = ORDER.indexOf(theme);
     const next = ORDER[(idx + 1) % ORDER.length];
@@ -43,9 +33,7 @@ export function ThemeToggle({className = ''}: ThemeToggleProps) {
   const nextTheme = ORDER[(ORDER.indexOf(theme) + 1) % ORDER.length];
   const ariaLabel = t('themeToggle', {next: t(`theme_${nextTheme}`)});
 
-  const Icon = !mounted
-    ? Monitor
-    : theme === 'dark'
+  const Icon = theme === 'dark'
       ? Moon
       : theme === 'light'
         ? Sun

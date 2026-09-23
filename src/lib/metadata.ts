@@ -75,13 +75,13 @@ export function buildPageMetadata({
       siteName: siteConfig.groupName,
       locale: locale === "en" ? "en_US" : "es_AR",
       type: ogType,
-      images: [{ url: ogImage, width: 1920, height: 820 }],
+      images: [{ url: `${siteConfig.url}/${ogImage.replace(/^\/+/, "")}`, width: 1920, height: 820 }],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description,
-      images: [ogImage],
+      images: [`${siteConfig.url}/${ogImage.replace(/^\/+/, "")}`],
     },
   };
 }

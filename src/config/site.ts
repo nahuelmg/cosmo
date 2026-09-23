@@ -49,9 +49,9 @@ export const siteConfig = {
    * Canonical site URL used for metadata, sitemap, JSON-LD, canonical / hreflang
    * link tags, and OG / Twitter URL fields. Single source of truth — change this
    * (or the NEXT_PUBLIC_SITE_URL env var) and every downstream SEO surface updates.
-   * Fallback points at the Vercel preview domain until a group-owned domain lands.
+   * Defaults to the GitHub project Pages address.
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://cosmo.vercel.app",
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://nahuelmg.github.io/cosmo").replace(/\/+$/, ""),
 
   tagline: {
     es: "Explorando el universo a gran escala desde Buenos Aires",

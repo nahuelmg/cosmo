@@ -1,3 +1,4 @@
+import { withBasePath } from "@/config/paths";
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { EmailLink } from '@/components/ui/EmailLink';
@@ -76,7 +77,7 @@ export function PersonDetail({
         <div className="relative w-full aspect-[4/5] rounded-md overflow-hidden bg-surface-alt max-w-[180px] mx-auto md:mx-0">
           {person.photo ? (
             <Image
-              src={`/${person.photo}`}
+              src={withBasePath(person.photo)}
               alt=""
               fill
               sizes="(min-width: 768px) 180px, 180px"

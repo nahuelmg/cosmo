@@ -1,4 +1,4 @@
-import { getResearchIcon } from './icons';
+import { ResearchIcon } from './icons';
 
 interface ResearchCardProps {
   id: string;
@@ -8,7 +8,6 @@ interface ResearchCardProps {
 }
 
 export function ResearchCard({ id, title, shortDescription, iconName }: ResearchCardProps) {
-  const Icon = getResearchIcon(iconName);
 
   return (
     <a
@@ -16,7 +15,7 @@ export function ResearchCard({ id, title, shortDescription, iconName }: Research
       aria-labelledby={`research-${id}`}
       className="group block cursor-pointer rounded-md bg-surface-alt p-6 transition-transform duration-150 motion-safe:hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
     >
-      <Icon aria-hidden="true" className="h-10 w-10 text-accent" />
+      <ResearchIcon iconName={iconName} aria-hidden="true" className="h-10 w-10 text-accent" />
       <h2
         id={`research-${id}`}
         className="mt-6 font-serif text-2xl font-semibold transition-colors duration-150 group-hover:text-accent"

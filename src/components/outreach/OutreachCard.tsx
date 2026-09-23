@@ -1,3 +1,4 @@
+import { withBasePath } from "@/config/paths";
 import Image from 'next/image';
 
 interface OutreachCardProps {
@@ -25,7 +26,7 @@ export function OutreachCard({ activity, locale, learnMoreLabel }: OutreachCardP
       {activity.image && (
         <div className="relative w-full aspect-[16/9] bg-surface">
           <Image
-            src={`/${activity.image}`}
+            src={withBasePath(activity.image)}
             alt=""
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

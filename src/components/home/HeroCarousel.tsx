@@ -1,5 +1,6 @@
 'use client';
 
+import { withBasePath } from "@/config/paths";
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -117,7 +118,7 @@ export default function HeroCarousel({
             ].join(' ')}
           >
             <Image
-              src={slide.src}
+              src={withBasePath(slide.src)}
               alt={slide.alt}
               fill
               sizes="100vw"

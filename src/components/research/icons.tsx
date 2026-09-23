@@ -99,6 +99,7 @@ const ICON_MAP: Record<string, IconComponent> = {
   posterior: Posterior,
 };
 
-export function getResearchIcon(iconName?: string): IconComponent {
-  return iconName ? (ICON_MAP[iconName] ?? HelpCircle) : HelpCircle;
+export function ResearchIcon({iconName, ...props}: IconProps & {iconName?: string}) {
+  const Icon = ICON_MAP[iconName ?? ''] ?? HelpCircle;
+  return <Icon {...props} />;
 }

@@ -3,6 +3,8 @@ import { getPathname } from "@/i18n/navigation";
 import { siteConfig } from "@/config/site";
 import { getPeople } from "@/content";
 
+export const dynamic = "force-static";
+
 const SITE_URL = siteConfig.url;
 
 // Static href keys are literal-typed so TypeScript narrows them to the concrete
@@ -68,16 +70,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/publications",
     "/journal-club",
     "/resources",
+    "/outreach",
     "/contact",
   ];
 
-  const people = getPeople().filter(
-    (p) =>
-      p.category === "pi" ||
-      p.category === "postdoc" ||
-      p.category === "phd" ||
-      p.category === "external"
-  );
+  const people = getPeople().filter((person) => person.category !== "past");
 
   return [
     ...staticHrefs.map(staticEntry),

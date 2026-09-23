@@ -19,14 +19,6 @@ import { JsonLd } from '@/components/seo/JsonLd';
 
 type Locale = (typeof routing.locales)[number];
 
-export function generateStaticParams() {
-  const people = getPeople();
-  const clickable = people.filter((p) => p.category !== 'past');
-  return routing.locales.flatMap((locale) =>
-    clickable.map((p) => ({ locale, slug: p.slug }))
-  );
-}
-
 type Props = { params: Promise<{ locale: Locale; slug: string }> };
 
 export async function generateMetadata({

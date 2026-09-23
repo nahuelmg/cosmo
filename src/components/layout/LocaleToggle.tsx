@@ -65,12 +65,9 @@ function LocaleToggleInner({className = ''}: LocaleToggleProps) {
       query[key] = value;
     });
 
-    // Strip the current locale from params — the {locale: otherLocale} option
-    // below is authoritative; leaving a stale `locale: <current>` key in
-    // params confuses next-intl's reconciliation, especially on the root
-    // `/[locale]` route where that key is the only thing in params.
-    const {locale: _stale, ...restParams} = params;
-    void _stale;
+    // Only pass the profile slug. Locale and translated section are selected
+    // by next-intl from the destination locale and internal pathname key.
+    const restParams = params.slug ? {slug: params.slug} : {};
 
     startTransition(() => {
       router.replace(

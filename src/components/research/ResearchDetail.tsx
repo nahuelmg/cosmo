@@ -1,4 +1,4 @@
-import { getResearchIcon } from './icons';
+import { ResearchIcon } from './icons';
 
 interface ResearchDetailProps {
   id: string;
@@ -15,7 +15,6 @@ export function ResearchDetail({
   iconName,
   imageOnLeft,
 }: ResearchDetailProps) {
-  const Icon = getResearchIcon(iconName);
   const paragraphs = fullDescription.split(/\n\n+/).filter(Boolean);
 
   return (
@@ -30,7 +29,7 @@ export function ResearchDetail({
           imageOnLeft ? 'md:order-1' : 'md:order-2'
         }`}
       >
-        <Icon className="h-32 w-32 text-accent" strokeWidth={1} />
+        <ResearchIcon iconName={iconName} className="h-32 w-32 text-accent" strokeWidth={1} />
       </figure>
       <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>
         <h2
