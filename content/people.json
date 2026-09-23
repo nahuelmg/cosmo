@@ -330,6 +330,22 @@
     "social_links": []
   },
   {
+    "slug": "federico-huxhagen",
+    "name": "Federico Huxhagen",
+    "role": {
+      "es": "Estudiante de doctorado",
+      "en": "PhD Student"
+    },
+    "category": "phd",
+    "display_name_normalized": "federico huxhagen",
+    "contact": {},
+    "social_links": [],
+    "teaching_role": {
+      "es": "Ayudante de primera",
+      "en": "First-rank Teaching Assistant"
+    }
+  },
+  {
     "slug": "martin-castelli",
     "name": "Martin Castelli",
     "role": {
@@ -375,18 +391,6 @@
     },
     "category": "undergrad",
     "display_name_normalized": "santiago paramio",
-    "contact": {},
-    "social_links": []
-  },
-  {
-    "slug": "federico-huxhagen",
-    "name": "Federico Huxhagen",
-    "role": {
-      "es": "Estudiante de licenciatura, 2026",
-      "en": "Undergraduate Student, 2026"
-    },
-    "category": "past",
-    "display_name_normalized": "federico huxhagen",
     "contact": {},
     "social_links": []
   },
