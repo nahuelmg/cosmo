@@ -4,6 +4,8 @@ Bilingual institutional website for the Cosmology Group at FCEN, Universidad de 
 
 Production address: **https://nahuelmg.github.io/cosmo/**
 
+For coding agents and future sessions, read [AGENTS.md](AGENTS.md) for the project handoff, sync schedules, and implementation constraints.
+
 ## Development
 
 Use Node **20.x** (`nvm use`) and pnpm **10.x**, matching CI.
