@@ -1,0 +1,126 @@
+{
+  "COLUMN_HEADERS": {
+    "nombre": "name",
+    "cargo en investigacion": "roleEs",
+    "cargo docente": "teachingEs",
+    "email": "email",
+    "oficina": "office",
+    "mini biografia": "bioEs",
+    "lineas de investigacion": "interestsEs"
+  },
+  "SECTION_HEADERS": {
+    "investigadores": "pi",
+    "postdocs / docs / lics": "researchStaff",
+    "miembros anteriores": "past",
+    "colaboradores externos y visitantes": "collaborators"
+  },
+  "ROLE_EN": {
+    "investigador principal": "Principal Researcher",
+    "investigadora principal": "Principal Researcher",
+    "investigador independiente": "Independent Researcher",
+    "investigadora independiente": "Independent Researcher",
+    "investigador": "Researcher",
+    "investigadora": "Researcher",
+    "investigador asistente": "Assistant Researcher",
+    "investigadora asistente": "Assistant Researcher",
+    "posdoc": "Postdoctoral Researcher",
+    "postdoc": "Postdoctoral Researcher",
+    "investigador postdoctoral": "Postdoctoral Researcher",
+    "doctorando": "PhD Student",
+    "doctoranda": "PhD Student",
+    "estudiante de doctorado": "PhD Student",
+    "estudiante de posgrado": "Graduate Student",
+    "licenciando": "Undergraduate Student",
+    "licencianda": "Undergraduate Student",
+    "estudiante de licenciatura": "Undergraduate Student",
+    "investigador visitante": "Visiting Researcher",
+    "investigadora visitante": "Visiting Researcher"
+  },
+  "TEACHING": {
+    "profesor emerito": {
+      "es": "Profesor Emérito",
+      "en": "Professor Emeritus"
+    },
+    "profesora emerita": {
+      "es": "Profesora Emérita",
+      "en": "Professor Emerita"
+    },
+    "profesor adjunto": {
+      "es": "Profesor Adjunto",
+      "en": "Adjunct Professor"
+    },
+    "profesora adjunta": {
+      "es": "Profesora Adjunta",
+      "en": "Adjunct Professor"
+    },
+    "jefe de trabajos practicos": {
+      "es": "Jefe de Trabajos Prácticos",
+      "en": "Head of Practical Works"
+    },
+    "jefa de trabajos practicos": {
+      "es": "Jefa de Trabajos Prácticos",
+      "en": "Head of Practical Works"
+    },
+    "ay 1era": {
+      "es": "Ayudante de primera",
+      "en": "First-rank Teaching Assistant"
+    },
+    "ay 1ra": {
+      "es": "Ayudante de primera",
+      "en": "First-rank Teaching Assistant"
+    },
+    "ayudante de primera": {
+      "es": "Ayudante de primera",
+      "en": "First-rank Teaching Assistant"
+    },
+    "ay 2da": {
+      "es": "Ayudante de segunda",
+      "en": "Second-rank Teaching Assistant"
+    },
+    "ayudante de segunda": {
+      "es": "Ayudante de segunda",
+      "en": "Second-rank Teaching Assistant"
+    }
+  },
+  "ALIASES": {
+    "diana-lopez-nacir": {
+      "slug": "diana-lopez-nacir",
+      "name": "Diana López Nacir"
+    },
+    "tomas-chase": {
+      "slug": "tomas-ferreira-chase",
+      "name": "Tomas Ferreira Chase"
+    },
+    "javi-pineau": {
+      "slug": "javier-pineau",
+      "name": "Javier Pineau"
+    },
+    "giorigio-torrieri": {
+      "slug": "giorgio-torrieri",
+      "name": "Giorgio Torrieri"
+    },
+    "martin-richarte": {
+      "slug": "martin-richarte",
+      "name": "Martín Richarte"
+    }
+  },
+  "HEADER_MAP": {
+    "date of the journal": "date",
+    "complete name": "speaker",
+    "academic position": "speaker_position",
+    "affiliation": "affiliation",
+    "hour": "start_time",
+    "place/room": "location",
+    "title of the journal": "title",
+    "abstract": "abstract",
+    "links": "paper_link",
+    "fecha": "date",
+    "speaker": "speaker",
+    "posicion": "speaker_position",
+    "afiliacion": "affiliation",
+    "titulo": "title",
+    "resumen": "abstract",
+    "link": "paper_link",
+    "notas": "notes"
+  }
+}

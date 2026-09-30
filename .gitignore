@@ -54,3 +54,14 @@ scripts/tmp/
 
 # local navigation aid, generated — not part of the site
 CODE-MAP.md
+
+# Static website tooling and generated artifacts
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cosmo-build-*/
+dist.previous/
+tools/tmp/
+test-results/
+cosmo-static-site.zip

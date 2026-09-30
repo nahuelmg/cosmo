@@ -1,0 +1,53 @@
+{
+  "groupName": "Buenos Aires Cosmología",
+  "url": "https://cosmo.vercel.app",
+  "tagline": {
+    "es": "Explorando el universo a gran escala desde Buenos Aires",
+    "en": "Exploring the large-scale universe from Buenos Aires"
+  },
+  "affiliationLine": {
+    "es": "Departamento de Física - FCEN - Universidad de Buenos Aires · IFIBA - CONICET",
+    "en": "Department of Physics - FCEN - University of Buenos Aires · IFIBA - CONICET"
+  },
+  "affiliations": [
+    {
+      "name": {
+        "es": "Departamento de Física - FCEN - UBA",
+        "en": "Department of Physics - FCEN - UBA"
+      },
+      "url": "https://www.df.uba.ar",
+      "schemaType": "EducationalOrganization"
+    },
+    {
+      "name": {
+        "es": "IFIBA - CONICET",
+        "en": "IFIBA - CONICET"
+      },
+      "url": "https://bicyt.conicet.gov.ar/fichas/u/ifiba",
+      "schemaType": "ResearchOrganization"
+    },
+    {
+      "name": {
+        "es": "Facultad de Ciencias Exactas y Naturales",
+        "en": "School of Exact and Natural Sciences"
+      },
+      "url": "https://exactas.uba.ar",
+      "schemaType": "EducationalOrganization"
+    },
+    {
+      "name": {
+        "es": "Universidad de Buenos Aires",
+        "en": "University of Buenos Aires"
+      },
+      "url": "https://www.uba.ar",
+      "schemaType": "CollegeOrUniversity",
+      "sameAs": "https://www.wikidata.org/wiki/Q1572590"
+    }
+  ],
+  "address": {
+    "es": "Departamento de Física\nFacultad de Ciencias Exactas y Naturales\nPabellón I\nCiudad Universitaria\nC1428 - Buenos Aires - Argentina",
+    "en": "Department of Physics\nFaculty of Exact and Natural Sciences\nPabellón I\nCiudad Universitaria\nC1428 - Buenos Aires - Argentina"
+  },
+  "mapQuery": "Pabellón 1, Ciudad Universitaria, Buenos Aires, C1428 Buenos Aires, Argentina",
+  "socialLinks": []
+}

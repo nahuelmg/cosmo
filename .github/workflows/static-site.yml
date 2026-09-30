@@ -1,0 +1,35 @@
+name: Check static website
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m tools.build
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+      - run: python -m playwright install --with-deps chromium
+      - run: python tests/browser_check.py
+        env:
+          CHROME_PATH: chromium
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cosmo-static-site
+          path: dist/
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-screenshots
+          path: test-results/

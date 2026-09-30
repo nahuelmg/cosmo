@@ -1,6 +1,6 @@
 # People sync (hybrid)
 
-`content/people.json` is **generated** by `scripts/sync-people.ts`. Do not
+`content/people.json` is **generated** by `tools/sync_sheets.py`. Do not
 hand-edit it. There are two inputs:
 
 1. **The Google Sheet** — the roster: who is in the group, which section they
@@ -75,4 +75,4 @@ writes `content/people.json`.
 Vercel redeploys. A missing sheet or a validation failure fails the run and
 leaves the committed file untouched.
 
-Run locally: `pnpm sync-people` (`--dry-run` to preview).
+Run locally: `python -m tools.sync people` (`--dry-run` to preview).

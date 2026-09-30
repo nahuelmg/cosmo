@@ -124,64 +124,6 @@
           "additionalProperties": false
         }
       },
-      "short_bio": {
-        "type": "object",
-        "properties": {
-          "es": {
-            "type": "string",
-            "minLength": 1
-          },
-          "en": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "es",
-          "en"
-        ],
-        "additionalProperties": false
-      },
-      "full_bio": {
-        "type": "object",
-        "properties": {
-          "es": {
-            "type": "string",
-            "minLength": 1
-          },
-          "en": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "es",
-          "en"
-        ],
-        "additionalProperties": false
-      },
-      "research_interests": {
-        "minItems": 1,
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "es": {
-              "type": "string",
-              "minLength": 1
-            },
-            "en": {
-              "type": "string",
-              "minLength": 1
-            }
-          },
-          "required": [
-            "es",
-            "en"
-          ],
-          "additionalProperties": false
-        }
-      },
       "years": {
         "type": "object",
         "properties": {

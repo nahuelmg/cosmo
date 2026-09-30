@@ -1,0 +1,82 @@
+name: Sync content and generate HTML
+on:
+  schedule:
+    - cron: '0 0 * * *'
+    - cron: '15 0 * * *'
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Content source to synchronize
+        type: choice
+        required: true
+        default: publications
+        options: [publications, journal-club, people, research]
+# A single group serializes all scheduled writers to avoid stale-checkout races.
+concurrency:
+  group: cosmo-content-sync
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Select source
+        id: source
+        env:
+          SCHEDULE: ${{ github.event.schedule }}
+          REQUESTED: ${{ inputs.source }}
+        run: |
+          case "$SCHEDULE" in
+            '0 0 * * *') source=publications ;;
+            '15 0 * * *') source=journal-club ;;
+            '30 0 * * *') source=people ;;
+            *) source="$REQUESTED" ;;
+          esac
+          case "$source" in
+            publications|journal-club|people|research) echo "name=$source" >> "$GITHUB_OUTPUT" ;;
+            *) exit 1 ;;
+          esac
+      - name: Synchronize and validate
+        env:
+          SOURCE: ${{ steps.source.outputs.name }}
+          PEOPLE_SHEET_CSV_URL: ${{ vars.PEOPLE_SHEET_CSV_URL }}
+          JOURNAL_CLUB_SHEET_CSV_URL: ${{ vars.JOURNAL_CLUB_SHEET_CSV_URL }}
+          RESEARCH_DOC_TXT_URL: ${{ vars.RESEARCH_DOC_TXT_URL }}
+        run: |
+          python -m tools.sync "$SOURCE"
+          python -m tools.content
+      - name: Generate HTML before committing content
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: python -m tools.build
+      - name: Commit validated content
+        env:
+          SOURCE: ${{ steps.source.outputs.name }}
+        run: |
+          if ! git diff --quiet -- "content/$SOURCE.json"; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "content/$SOURCE.json"
+            git commit -m "chore: sync $SOURCE content"
+            git push origin HEAD:main
+          fi
+      # Bot commits do not trigger another push workflow: publish the build here.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cosmo-static-site-${{ steps.source.outputs.name }}
+          path: dist/
+      - name: Summary
+        env:
+          SOURCE: ${{ steps.source.outputs.name }}
+        run: echo "Updated $SOURCE and generated the static website. Download the artifact to publish it." >> "$GITHUB_STEP_SUMMARY"

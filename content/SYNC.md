@@ -3,8 +3,8 @@
 How to populate the three per-person fields that drive the v1.1 arXiv + InspireHEP sync:
 `inspirehep_id`, `orcid_id`, and `display_name_normalized`.
 
-All three live on each entry in `content/people.json`. The Zod schema is
-`src/content/schemas/people.schema.ts`. VS Code will auto-validate via the
+All three live on each entry in `content/people.json`. The JSON Schema is
+`content/people.schema.json`. VS Code will auto-validate via the
 sidecar `content/people.schema.json`.
 
 ---
@@ -75,7 +75,7 @@ These are two separate fields with different purposes:
   `/publications` page to render an ORCID link pill next to the
   author's name on any publication where they are listed as an author
   (Phase 18 decision 18-01; rendered via `buildMemberOrcidMap` in
-  `src/lib/publications-helpers.ts`). The pill appears even on papers
+  `tools/build.py`). The pill appears even on papers
   sourced from InspireHEP or arXiv.
 
 **Recommendation:** set both to the same 16-digit ID. `orcid_id` drives
@@ -102,7 +102,7 @@ https://pub.orcid.org/v3.0/{orcid}/works
 
 Returns a grouped list of all works on the profile. The request must
 include `Accept: application/json`; the API default is XML, which would
-break the JSON parser (scripts/sync-publications.ts line ~365).
+break the JSON parser (tools/sync_publications.py line ~365).
 
 **2. Per-work detail** (one call per ORCID-only survivor, after dedup)
 
@@ -113,7 +113,7 @@ https://pub.orcid.org/v3.0/{orcid}/work/{putCode}
 Called after cross-source DOI dedup to fetch the full contributor list
 for papers that survived only in the ORCID source (ORCID-06). Enrichment
 runs after dedup so no detail calls are wasted on papers that were already
-ingested from InspireHEP or arXiv (scripts/sync-publications.ts line ~400).
+ingested from InspireHEP or arXiv (tools/sync_publications.py line ~400).
 
 **3. arXiv ORCID feed** (separate from the ORCID API — one call per person)
 
@@ -124,14 +124,14 @@ https://arxiv.org/a/{orcid}.atom2
 The only arXiv endpoint that supports ORCID lookup. The standard
 `export.arxiv.org/api/query` search endpoint does NOT accept an ORCID as
 a query parameter. Results are an Atom feed parsed with `fast-xml-parser`
-(scripts/sync-publications.ts line ~338).
+(tools/sync_publications.py line ~338).
 
 **Work-type filter**
 
 Only `journal-article` and `conference-paper` entries surface from the
 ORCID Works API. Datasets, software, posters, talks, book chapters, and
 preprints-only entries are silently dropped in `orcidGroupToPublication`
-(scripts/sync-publications.ts line ~536). This is intentional: the
+(tools/sync_publications.py line ~536). This is intentional: the
 `/publications` page covers peer-reviewed outputs only.
 
 ---
@@ -144,7 +144,7 @@ When the same paper appears in more than one source, the sync uses
 **Manual > InspireHEP > ORCID > arXiv**
 
 This order matches the `priorityOrdered` concat at
-scripts/sync-publications.ts line ~873:
+tools/sync_publications.py line ~873:
 
 ```typescript
 const priorityOrdered = [...manualEntries, ...allInspire, ...allOrcid, ...allArxiv];
@@ -184,7 +184,7 @@ ASCII-folded, lowercase version of the maintainer's display name. Phase 11
 uses it to substring-match normalized author strings from sync output
 against the group roster.
 
-Spec (also exported as `normalizeName` in `src/content/schemas/shared.ts`):
+Spec (also exported as `fold` in `tools/content.py`):
 
 1. Unicode NFD decomposition
 2. Strip all combining marks (`\p{M}`)
@@ -223,7 +223,7 @@ Quick check in a Node shell:
 `orcid_id` and `contact.orcid` serve different purposes — see the
 `orcid_id` vs `contact.orcid` note above. Set both to the same ID.
 
-Definitive source: `src/content/schemas/people.schema.ts`. VS Code hover on
+Definitive source: `content/people.schema.json`. VS Code hover on
 each field will show the `@see content/SYNC.md` pointer back to this file.
 
 ### `_meta` block: what the sync writes to `publications.json`
@@ -365,10 +365,10 @@ order:
      pressure.
    - **arXiv Atom parse error (`SYNC-02`):** rare. `fast-xml-parser` hit an
      unexpected Atom entry shape. Capture the failing ORCID, open an issue
-     pointing at `scripts/sync-publications.ts`'s `arxivEntryToPublication`
+     pointing at `tools/sync_publications.py`'s `arxivEntryToPublication`
      function, and skip that member via `--member <slug>` omission until
      the parser is patched.
-   - **`pnpm validate-content` gate fail (`CI-04`):** the sync wrote a JSON
+   - **`python -m tools.content` gate fail (`CI-04`):** the sync wrote a JSON
      that doesn't pass `PublicationsSchema.safeParse`. This should be
      impossible because SYNC-11 runs the same validation in-memory before
      writing — if it happens, it's a schema-mismatch bug. Escalate.
@@ -382,16 +382,16 @@ Before pushing new IDs to `main`, preview the sync output without
 committing:
 
 ```bash
-pnpm sync-publications --dry-run --member <slug>
+python -m tools.sync publications --dry-run --member <slug>
 ```
 
-Output goes to `scripts/tmp/sync-<slug>.json` — the real
+Output goes to `tools/tmp/sync-<slug>.json` — the real
 `content/publications.json` is **not** touched. This is the safest way to
 validate a new member's BAI / ORCID before merging.
 
-CLI flags supported by `scripts/sync-publications.ts` (09-01 decision):
+CLI flags supported by `tools/sync_publications.py` (09-01 decision):
 
-- `--dry-run` — write to `scripts/tmp/` instead of `content/`
+- `--dry-run` — validate and report without writing files
 - `--member <slug>` — restrict sync to a single person
 - `--no-arxiv` — skip the arXiv source entirely
 - `--no-inspire` — skip the InspireHEP source entirely

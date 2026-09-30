@@ -1,3 +1,7 @@
+# Current architecture
+
+This project is a plain HTML/CSS/vanilla JavaScript website generated with Python/Jinja2. Read README.md and GUIDE.md for current commands. Do not reintroduce Next.js, React, TypeScript, Tailwind, npm, or pnpm. Preserve the existing design and bilingual content. Historical planning and reference documents describe the previous stack.
+
 # Project Instructions
 
 ## Skill Library
@@ -39,8 +43,8 @@ Follow `GUIDE.md` for the step-by-step process from zero to deployed site.
 
 ## Conventions
 
-- **TypeScript strict mode** — always
-- **Tailwind v4** with OKLCH design tokens — default CSS approach
+- **Python 3.11+ tooling** — HTML/Jinja templates and vanilla browser JavaScript
+- **Ordinary CSS** with the existing OKLCH design tokens
 - **Mock data first** — build UI with fake data, connect real API later
 - **DataProvider pattern** — abstract interface with MockProvider/ApiProvider swap via env var
 - **Atomic commits** — `feat(phase):`, `fix(phase):`, `test(phase):`, `docs(phase):`

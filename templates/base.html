@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ site.groupName if page == 'home' else site.groupName ~ ' — ' ~ title }}</title>
+<meta name="description" content="{{ description }}">
+{% if not production %}<meta name="robots" content="noindex,nofollow">{% endif %}
+<link rel="canonical" href="{{ site.url }}{{ path }}">
+{% for lang in ['es','en','x-default'] %}<link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ route('es' if lang == 'x-default' else lang, page, person.slug if person else none) }}">{% endfor %}
+<meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ description }}"><meta property="og:type" content="{{ 'profile' if person else 'website' }}"><meta property="og:url" content="{{ site.url }}{{ path }}"><meta property="og:site_name" content="{{ site.groupName }}"><meta property="og:locale" content="{{ 'es_AR' if locale == 'es' else 'en_US' }}"><meta property="og:image" content="{{ site.url }}/Portadas/portada_1.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{ title }}"><meta name="twitter:description" content="{{ description }}"><meta name="twitter:image" content="{{ site.url }}/Portadas/portada_1.jpg">
+<link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/css/fonts.css"><link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/theme.js"></script><script src="/assets/js/site.js" defer></script>
+<script type="application/ld+json">{{ structured|tojson }}</script>
+</head>
+<body>
+<a class="skip-link" href="#main-content">{{ t.layout.skipToContent }}</a>
+{% macro controls() %}<button class="theme-toggle control" type="button" hidden data-label="{{ t.layout.themeToggle }}" data-light="{{ t.layout.theme_light }}" data-dark="{{ t.layout.theme_dark }}" data-system="{{ t.layout.theme_system }}" aria-label="{{ t.layout.themeToggle|replace('{next}', t.layout.theme_light) }}">{% for mode,glyph in [('system','monitor'),('light','sun'),('dark','moon')] %}<span data-theme-icon="{{ mode }}"{% if mode != 'system' %} hidden{% endif %}>{{ icon(glyph) }}</span>{% endfor %}</button><a class="locale-toggle control" href="{{ route(other,page,person.slug if person else none) }}" lang="{{ other }}" hreflang="{{ other }}" aria-label="{{ t.locale.switchTo }}">{{ other|upper }}</a>{% endmacro %}
+<header class="site-header"><div class="header-inner container">
+<div class="brand"><a href="{{ route(locale,'home') }}"><img src="/logo_cosmo.png" alt="{{ site.groupName }}" width="80" height="80" fetchpriority="high"></a></div>
+<nav class="desktop-nav" aria-label="{{ 'Principal' if locale == 'es' else 'Primary' }}">{% for key in nav %}<a href="{{ route(locale,key) }}"{% if key == page %} aria-current="page"{% endif %}>{{ t.nav[key] }}</a>{% endfor %}</nav>
+<div class="header-controls"><div class="desktop-controls">{{ controls() }}</div><button class="menu-open control" hidden aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ t.layout.openMenu }}">{{ icon('menu') }}</button></div>
+</div></header>
+<dialog id="mobile-menu" aria-label="{{ t.layout.openMenu }}"><button class="menu-close control" aria-label="{{ t.layout.closeMenu }}">{{ icon('close') }}</button><nav>{% for key in nav %}<a href="{{ route(locale,key) }}"{% if key == page %} aria-current="page"{% endif %}>{{ t.nav[key] }}</a>{% endfor %}</nav><div class="mobile-controls">{{ controls() }}</div></dialog>
+<noscript><nav class="fallback-nav">{% for key in nav %}<a href="{{ route(locale,key) }}">{{ t.nav[key] }}</a>{% endfor %}<a href="{{ route(other,page,person.slug if person else none) }}">{{ t.locale.switchTo }}</a></nav></noscript>
+<main id="main-content" tabindex="-1">{% block body %}{% endblock %}</main>
+<footer class="site-footer"><div class="narrow footer-inner"><h2>{{ site.groupName }}</h2><p>{{ t.footer.affiliationsPrimary }}<br>{{ t.footer.affiliationsSecondary }}</p>{% if site.socialLinks %}<ul>{% for link in site.socialLinks %}<li><a href="{{ link.url }}">{{ link.label }}</a></li>{% endfor %}</ul>{% endif %}<p class="copyright">{{ t.footer.copyright|replace('{year}',year|string) }}</p></div></footer>
+</body></html>

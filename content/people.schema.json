@@ -265,9 +265,6 @@
       "name",
       "role",
       "category",
-      "short_bio",
-      "full_bio",
-      "research_interests",
       "display_name_normalized",
       "contact",
       "social_links"

@@ -1,12 +1,12 @@
 # Journal Club sync
 
 `content/journal-club.json` is **generated** from a public Google Sheet by
-`scripts/sync-journal-club.ts`. Do not hand-edit the JSON — edit the sheet.
+`tools/sync_sheets.py`. Do not hand-edit the JSON — edit the sheet.
 
 ## The sheet
 
 - Sheet ID `1fBfnMGPPQ_dgz-hdYmJDyuntg1rqRT2YiJADTo92vfA`
-  (hard-coded default in `scripts/sync-journal-club.ts`; override with the
+  (hard-coded default in `tools/sync_sheets.py`; override with the
   `JOURNAL_CLUB_SHEET_CSV_URL` env var / repo variable to point at a different one).
 - It is the response sheet of a Google Form, so the columns are the form
   questions and there is a leading `Timestamp` column (the form submission time —
@@ -53,4 +53,4 @@ run fails and the committed JSON is left untouched. If the sheet has **no valid
 rows at all** the run also fails without writing, so the last good archive stays
 live.
 
-Run locally: `pnpm sync-journal-club` (add `--dry-run` to print without writing).
+Run locally: `python -m tools.sync journal-club` (add `--dry-run` to print without writing).
