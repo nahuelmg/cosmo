@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 import sys
+import json
 
 class Page(HTMLParser):
     def __init__(self, text):
@@ -19,6 +20,8 @@ class Page(HTMLParser):
 
 def check(root):
     root=Path(root).resolve()
+    info = root / 'build-info.json'
+    base_path = json.loads(info.read_text())['base_path'] if info.exists() else ''
     pages={p:Page(p.read_text()) for p in root.rglob('*.html')}
     errors=[]
     for path,page in pages.items():
@@ -26,7 +29,13 @@ def check(root):
         for link in page.links:
             url=urlsplit(link)
             if url.scheme or url.netloc: continue
-            target=((root/unquote(url.path).lstrip('/')) if url.path.startswith('/') else path.parent/unquote(url.path)).resolve() if url.path else path
+            local_path = unquote(url.path)
+            if local_path.startswith('/') and base_path:
+                if local_path != base_path and not local_path.startswith(base_path + '/'):
+                    errors.append(f'{path.relative_to(root)}: link escapes site base path: {link}')
+                    continue
+                local_path = local_path[len(base_path):] or '/'
+            target=((root/local_path.lstrip('/')) if local_path.startswith('/') else path.parent/local_path).resolve() if local_path else path
             if target.is_dir(): target=target/'index.html'
             if not target.is_relative_to(root) or not target.exists(): errors.append(f'{path.relative_to(root)}: missing {link}')
             elif url.fragment and target in pages and unquote(url.fragment) not in pages[target].ids: errors.append(f'{path.relative_to(root)}: missing anchor {link}')

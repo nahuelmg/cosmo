@@ -5,19 +5,25 @@ import functools
 import http.server
 import os
 import threading
+import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
-class QuietHandler(http.server.SimpleHTTPRequestHandler):
+sys.path.insert(0, str(ROOT))
+from tools.preview import SiteHandler, read_base_path
+
+BASE_PATH = read_base_path(ROOT / 'dist')
+class QuietHandler(SiteHandler):
     def log_message(self,*args): pass
-handler=functools.partial(QuietHandler,directory=str(ROOT/'dist'))
+handler=functools.partial(QuietHandler,directory=str(ROOT/'dist'),base_path=BASE_PATH)
 
 
 def run():
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),handler)
     threading.Thread(target=server.serve_forever,daemon=True).start()
-    base=f'http://127.0.0.1:{server.server_port}'
+    origin=f'http://127.0.0.1:{server.server_port}'
+    base=origin+BASE_PATH
     shots=ROOT/'test-results'; shots.mkdir(exist_ok=True)
     try:
         with sync_playwright() as p:
@@ -27,6 +33,20 @@ def run():
             # External map availability is unrelated to local UI correctness.
             context.route('https://www.google.com/maps**',lambda route:route.fulfill(status=200,body='<html><title>Map test</title></html>'))
             page=context.new_page(); errors=[]; page.on('pageerror',lambda error:errors.append(str(error)))
+            page.on('response', lambda response: errors.append(f'HTTP {response.status}: {response.url}') if response.status >= 400 and response.url.startswith(origin) else None)
+            page.goto(base + '/')
+            page.wait_for_url(base + '/es/')
+            missing = context.request.get(base + '/does-not-exist/')
+            assert missing.status == 404
+            assert f'href="{BASE_PATH}/es/"' in missing.text()
+            if BASE_PATH:
+                assert context.request.get(origin + '/en/').status == 404
+            profile = base + '/en/people/cecilia-scannapieco/?from=profile'
+            page.goto(profile)
+            page.locator('.desktop-controls .locale-toggle').click()
+            assert page.url == base + '/es/personas/cecilia-scannapieco/?from=profile'
+            page.reload()
+            assert page.locator('h1').inner_text() == 'Cecilia Scannapieco'
             for generated in (ROOT/'dist').rglob('index.html'):
                 url = base + '/' + generated.parent.relative_to(ROOT/'dist').as_posix().strip('.')
                 assert context.request.get(url).status == 200, url

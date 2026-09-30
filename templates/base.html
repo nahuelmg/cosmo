@@ -6,18 +6,18 @@
 <meta name="description" content="{{ description }}">
 {% if not production %}<meta name="robots" content="noindex,nofollow">{% endif %}
 <link rel="canonical" href="{{ site.url }}{{ path }}">
-{% for lang in ['es','en','x-default'] %}<link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ route('es' if lang == 'x-default' else lang, page, person.slug if person else none) }}">{% endfor %}
+{% for lang in ['es','en','x-default'] %}<link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ raw_route('es' if lang == 'x-default' else lang, page, person.slug if person else none) }}">{% endfor %}
 <meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ description }}"><meta property="og:type" content="{{ 'profile' if person else 'website' }}"><meta property="og:url" content="{{ site.url }}{{ path }}"><meta property="og:site_name" content="{{ site.groupName }}"><meta property="og:locale" content="{{ 'es_AR' if locale == 'es' else 'en_US' }}"><meta property="og:image" content="{{ site.url }}/Portadas/portada_1.jpg">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{ title }}"><meta name="twitter:description" content="{{ description }}"><meta name="twitter:image" content="{{ site.url }}/Portadas/portada_1.jpg">
-<link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/assets/css/fonts.css"><link rel="stylesheet" href="/assets/css/site.css">
-<script src="/assets/js/theme.js"></script><script src="/assets/js/site.js" defer></script>
+<link rel="icon" href="{{ asset('favicon.ico') }}"><link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}"><link rel="stylesheet" href="{{ asset('assets/css/site.css') }}">
+<script src="{{ asset('assets/js/theme.js') }}"></script><script src="{{ asset('assets/js/site.js') }}" defer></script>
 <script type="application/ld+json">{{ structured|tojson }}</script>
 </head>
 <body>
 <a class="skip-link" href="#main-content">{{ t.layout.skipToContent }}</a>
 {% macro controls() %}<button class="theme-toggle control" type="button" hidden data-label="{{ t.layout.themeToggle }}" data-light="{{ t.layout.theme_light }}" data-dark="{{ t.layout.theme_dark }}" data-system="{{ t.layout.theme_system }}" aria-label="{{ t.layout.themeToggle|replace('{next}', t.layout.theme_light) }}">{% for mode,glyph in [('system','monitor'),('light','sun'),('dark','moon')] %}<span data-theme-icon="{{ mode }}"{% if mode != 'system' %} hidden{% endif %}>{{ icon(glyph) }}</span>{% endfor %}</button><a class="locale-toggle control" href="{{ route(other,page,person.slug if person else none) }}" lang="{{ other }}" hreflang="{{ other }}" aria-label="{{ t.locale.switchTo }}">{{ other|upper }}</a>{% endmacro %}
 <header class="site-header"><div class="header-inner container">
-<div class="brand"><a href="{{ route(locale,'home') }}"><img src="/logo_cosmo.png" alt="{{ site.groupName }}" width="80" height="80" fetchpriority="high"></a></div>
+<div class="brand"><a href="{{ route(locale,'home') }}"><img src="{{ asset('logo_cosmo.png') }}" alt="{{ site.groupName }}" width="80" height="80" fetchpriority="high"></a></div>
 <nav class="desktop-nav" aria-label="{{ 'Principal' if locale == 'es' else 'Primary' }}">{% for key in nav %}<a href="{{ route(locale,key) }}"{% if key == page %} aria-current="page"{% endif %}>{{ t.nav[key] }}</a>{% endfor %}</nav>
 <div class="header-controls"><div class="desktop-controls">{{ controls() }}</div><button class="menu-open control" hidden aria-controls="mobile-menu" aria-expanded="false" aria-label="{{ t.layout.openMenu }}">{{ icon('menu') }}</button></div>
 </div></header>

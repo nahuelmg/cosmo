@@ -2,11 +2,12 @@
 import argparse
 import json
 import os
+import re
 import shutil
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
 from markupsafe import Markup
@@ -65,11 +66,22 @@ def build(output=ROOT / 'dist', site_url=None, production=True):
     data = load_content()
     site = read_json(CONTENT / 'site.json')
     site['url'] = (site_url or os.environ.get('SITE_URL') or site['url']).rstrip('/')
-    if not site['url'].startswith(('http://', 'https://')): raise ValueError('SITE_URL must be an absolute HTTP(S) URL')
+    parsed_url = urlsplit(site['url'])
+    if parsed_url.scheme not in ('http', 'https') or not parsed_url.netloc or parsed_url.query or parsed_url.fragment:
+        raise ValueError('SITE_URL must be an absolute HTTP(S) URL without a query or fragment')
+    base_path = parsed_url.path.rstrip('/')
+    if base_path and (not re.fullmatch(r'(?:/[A-Za-z0-9._~-]+)+', base_path) or any(p in ('.', '..') for p in base_path.split('/'))):
+        raise ValueError('SITE_URL path must contain ordinary URL path segments')
     env = Environment(loader=FileSystemLoader(ROOT / 'templates'), autoescape=select_autoescape(['html']), undefined=StrictUndefined)
     env.filters['date'] = long_date
     env.filters['year_label'] = lambda rows: '-'.join(dict.fromkeys([min(s['date'][:4] for s in rows), max(s['date'][:4] for s in rows)]))
-    env.globals.update(route=route, nav=NAV, year=datetime.now(timezone.utc).year)
+    env.globals.update(
+        route=lambda locale, page, slug=None: base_path + route(locale, page, slug),
+        raw_route=route,
+        asset=lambda path: base_path + '/' + path.lstrip('/'),
+        nav=NAV,
+        year=datetime.now(timezone.utc).year,
+    )
     icons = {p.stem: Markup(p.read_text()) for p in (ROOT / 'assets/icons').glob('*.svg')}
     env.globals['icon'] = lambda key: icons.get(key, icons['fallback'])
     views = [publication_view(p, data['people']) for p in sort_publications(data['publications']['publications'])]
@@ -130,8 +142,10 @@ def build(output=ROOT / 'dist', site_url=None, production=True):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_text(html, encoding='utf-8')
                 urls.append((locale, page, slug, path))
-        (stage/'index.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=/es/"><title>Buenos Aires Cosmología</title><a href="/es/">Español</a> · <a href="/en/">English</a></html>')
-        (stage/'404.html').write_text('<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>404 — Buenos Aires Cosmología</title><h1>404</h1><p>Página no encontrada / Page not found</p><a href="/es/">Inicio</a> · <a href="/en/">Home</a></html>')
+        (stage/'index.html').write_text(f'<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url={base_path}/es/"><title>Buenos Aires Cosmología</title><a href="{base_path}/es/">Español</a> · <a href="{base_path}/en/">English</a></html>')
+        (stage/'404.html').write_text(f'<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>404 — Buenos Aires Cosmología</title><h1>404</h1><p>Página no encontrada / Page not found</p><a href="{base_path}/es/">Inicio</a> · <a href="{base_path}/en/">Home</a></html>')
+        (stage/'.nojekyll').touch()
+        (stage/'build-info.json').write_text(json.dumps({'site_url': site['url'], 'base_path': base_path}) + '\n')
         root = Element('urlset', {'xmlns':'http://www.sitemaps.org/schemas/sitemap/0.9', 'xmlns:xhtml':'http://www.w3.org/1999/xhtml'})
         for locale, page, slug, path in urls:
             entry=SubElement(root,'url'); SubElement(entry,'loc').text=site['url']+path

@@ -79,4 +79,4 @@ jobs:
       - name: Summary
         env:
           SOURCE: ${{ steps.source.outputs.name }}
-        run: echo "Updated $SOURCE and generated the static website. Download the artifact to publish it." >> "$GITHUB_STEP_SUMMARY"
+        run: echo "Updated $SOURCE and generated the static website. The GitHub Pages workflow deploys after this workflow succeeds." >> "$GITHUB_STEP_SUMMARY"

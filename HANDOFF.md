@@ -1,51 +1,19 @@
-# Cosmo static migration handoff
+# Cosmo migration handoff
 
-Updated: 2026-09-30.
+The user requested the full plain-HTML conversion on `main`, replacing the separately deployed Next.js static-export implementation. The integration keeps the latest main-branch member data and Juan Pablo Elia’s profile photo.
 
-## Requested result and decisions
+## Result
 
-Convert the whole Next.js website to plain HTML, CSS and vanilla JavaScript, preserving its appearance, Spanish/English pages, profiles, filters, themes, carousel, mobile menu, content and automatic synchronization. The user approved Python for offline generation/importing and generic static hosting at the domain root.
+- Website: HTML, CSS and vanilla JavaScript; no React/Next.js or Node build dependencies.
+- Authoring/generation: shared HTML/Jinja templates and existing JSON content, with Python tools.
+- Hosting: existing GitHub Pages address, https://nahuelmg.github.io/cosmo/.
+- Build: `python -m tools.build`; preview: `python -m tools.preview`.
+- Generation derives `/cosmo` from the full site URL and applies it to links, assets, root redirect and 404 links. Metadata and sitemap retain exactly one prefix.
+- Pages workflow builds, tests and deploys `dist/` on main pushes and after successful content synchronization. Failed checks preserve the prior deployment.
+- Content syncs retain their original schedules and source/enrichment rules.
 
-## Completed
+## Validation and maintenance
 
-- Replaced the Next.js/React/TypeScript implementation and Node package/build configuration.
-- Added Jinja HTML templates, ordinary CSS, browser JavaScript, local fonts/licenses and SVG icons.
-- Added Python generation, validation and all four content importers, preserving the existing data sources and JSON formats.
-- Added Python GitHub workflows for tests, static artifacts and scheduled content syncs. Both workflows honor the `SITE_URL` repository variable.
-- Produced `dist/` with 90 localized content pages, a root redirect, a 404 page, sitemap, robots rules and assets.
-- Packaged `cosmo-static-site.zip` with the contents of `dist/` at the ZIP root.
-- Updated README.md, GUIDE.md, content maintenance documentation and setup.sh.
+Read AGENTS.md, README.md and GUIDE.md. Unit tests cover domain-root and subdirectory exports, source parsing, translations, deduplication and safe writes. Browser checks serve generated files at the production prefix and exercise navigation, profiles, filters, themes, mobile keyboard behavior, images, carousel, map loading and no-JavaScript content.
 
-## Verified
-
-Final checks on 2026-09-30:
-
-- 18 Python tests passed, including parsing, translations, deduplication, validation, and failed-write/build preservation.
-- All 92 generated HTML files passed link/anchor/image checks; CSS font references resolve.
-- Browser checks passed for every generated route over HTTP and 18 representative pages at 390/768/1440px in light and dark themes.
-- Browser checks covered search/member filtering, theme persistence, language switching, mobile focus cycling/Escape, carousel controls, email links, disclosures, deferred map loading and no-JavaScript content.
-- Generated HTML contains no Next.js runtime references.
-- During the migration, live dry runs passed for people (42 records), journal club (2), research (8), and all publication feeds for Tomas Ferreira Chase (7 records). These did not write or refresh the checked-in content.
-- Reference comparisons are in ignored `test-results/comparison/`. The original Spanish people route looped on redirects locally; working English pages were used for visual comparison. Date-only outreach values now display the date stored in JSON rather than the prior UTC-to-local previous-day result.
-
-## Working tree and publishing
-
-Changes are local and uncommitted. No deployment or remote push was performed. Many deletions in `git status` are intentional removal of the replaced framework; new templates/tools/assets are currently untracked and must be included when committing. Do not restore the deleted framework as a cleanup step.
-
-`dist/`, `test-results/`, and the deployment ZIP are ignored generated artifacts. Old ignored `node_modules/` or `.next/` caches may still exist locally; they are not used or included in the deployment ZIP.
-
-Before publishing, set the real domain using `SITE_URL`, `--site-url`, or `content/site.json`; the default remains https://cosmo.vercel.app. Upload the contents of `dist/` to a static host with directory indexes and configure 404.html as its error document. No host was selected or configured. GitHub workflows become available once these changes are committed and pushed; they generate artifacts but do not deploy to a host.
-
-## Resume commands
-
-Use README.md for portable setup. The verified temporary environment in this workspace is `/tmp/cosmo-static-venv`:
-
-```bash
-/tmp/cosmo-static-venv/bin/python -m unittest discover -s tests -v
-/tmp/cosmo-static-venv/bin/python -m tools.build
-/tmp/cosmo-static-venv/bin/python -m tools.check dist
-/tmp/cosmo-static-venv/bin/python tests/browser_check.py
-python3 -m http.server 8000 --directory dist
-```
-
-For a new session, open this project and ask the assistant to read HANDOFF.md, README.md and GUIDE.md. Copy the full working project, including untracked source files, if moving to a different machine; the deployment ZIP alone does not contain the editable templates or automation.
+`dist/`, screenshots and ZIP artifacts are ignored. To continue on another machine, clone the updated `main` and install the Python requirements. To see whether the latest integration has been committed, pushed and deployed, check Git status and the GitHub Actions runs rather than relying on this document as a live status report.

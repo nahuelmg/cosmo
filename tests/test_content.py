@@ -65,4 +65,33 @@ class ContentTests(unittest.TestCase):
             self.assertIn('Disallow: /',(out/'robots.txt').read_text())
             self.assertIn('noindex,nofollow',(out/'en/index.html').read_text())
 
+    def test_github_pages_prefix_links_assets_and_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / 'site'
+            urls = build(out, 'https://nahuelmg.github.io/cosmo')
+            self.assertEqual(check(out), len(urls) + 2)
+            self.assertTrue((out / '.nojekyll').exists())
+            self.assertFalse((out / 'cosmo').exists())
+            self.assertEqual(json.loads((out / 'build-info.json').read_text())['base_path'], '/cosmo')
+            home = (out / 'es/index.html').read_text()
+            self.assertIn('href="/cosmo/es/personas/"', home)
+            self.assertIn('src="/cosmo/Portadas/portada_1.jpg"', home)
+            self.assertIn('href="/cosmo/assets/css/site.css"', home)
+            self.assertIn('src="/cosmo/assets/js/site.js"', home)
+            self.assertIn('href="https://nahuelmg.github.io/cosmo/en/"', home)
+            self.assertNotIn('/cosmo/cosmo/', home)
+            person = (out / 'en/people/juan-pablo-elia/index.html').read_text()
+            self.assertIn('src="/cosmo/people/juanpabloelia.jpeg"', person)
+            self.assertIn('href="/cosmo/es/personas/juan-pablo-elia/"', person)
+            self.assertIn('url=/cosmo/es/', (out / 'index.html').read_text())
+            self.assertIn('href="/cosmo/en/"', (out / '404.html').read_text())
+            sitemap = (out / 'sitemap.xml').read_text()
+            self.assertIn('https://nahuelmg.github.io/cosmo/es/personas/', sitemap)
+            self.assertNotIn('/cosmo/cosmo/', sitemap)
+            # An accidentally unprefixed local asset must fail the export check.
+            page = out / 'es/index.html'
+            page.write_text(home.replace('/cosmo/assets/css/site.css', '/assets/css/site.css'))
+            with self.assertRaisesRegex(ValueError, 'escapes site base path'):
+                check(out)
+
 if __name__=='__main__': unittest.main()

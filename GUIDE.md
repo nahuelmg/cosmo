@@ -45,6 +45,6 @@ JSON Schemas in `content/*.schema.json` are now maintained directly. They are us
 
 Environment variables are optional: `SITE_URL`, `PEOPLE_SHEET_CSV_URL`, `JOURNAL_CLUB_SHEET_CSV_URL`, `RESEARCH_DOC_TXT_URL`. Export them in your shell, or set GitHub repository variables of the same names. `.env.example` documents them; Python does not automatically load `.env` files.
 
-Run the checks described in README, generate `dist/`, and upload its contents to a static host at the domain root. Configure directory indexes and the supplied 404 document. Deploy the entire artifact together so content, links and assets stay consistent. Keep the previous host release to roll back if necessary.
+Run the checks described in README, generate `dist/`, and upload its contents at the URL prefix configured in `SITE_URL`. Configure directory indexes and the supplied 404 document. Deploy the entire artifact together so content, links and assets stay consistent. Keep the previous host release to roll back if necessary.
 
-The scheduled workflows generate downloadable artifacts, not a live deployment. No host credentials or publishing integration are assumed. Synchronization warnings and failures appear in the GitHub Actions logs; failed jobs do not push content or upload a new website artifact.
+The Pages workflow publishes `dist/` after a push to `main` or successful completion of the content-sync workflow. It uses GitHub’s built-in Pages token and retains the existing `/cosmo/` address. Local preview uses `python -m tools.preview` so the same prefix is tested. Synchronization warnings and failures appear in the GitHub Actions logs; failed jobs do not push content or upload a new website artifact.
