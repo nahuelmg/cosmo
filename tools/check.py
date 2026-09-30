@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import urlsplit, unquote
 import sys
 import json
+from .site_files import site_files
 
 class Page(HTMLParser):
     def __init__(self, text):
@@ -22,7 +23,7 @@ def check(root):
     root=Path(root).resolve()
     info = root / 'build-info.json'
     base_path = json.loads(info.read_text())['base_path'] if info.exists() else ''
-    pages={p:Page(p.read_text()) for p in root.rglob('*.html')}
+    pages={root / p:Page((root / p).read_text()) for p in site_files(root) if p.suffix == '.html'}
     errors=[]
     for path,page in pages.items():
         if path.name=='index.html' and path.parent!=root and page.headings!=1: errors.append(f'{path}: expected one h1')
@@ -42,4 +43,4 @@ def check(root):
     if errors: raise ValueError('\n'.join(errors[:30]))
     return len(pages)
 
-if __name__=='__main__': print(f'Checked {check(sys.argv[1] if len(sys.argv)>1 else "dist")} HTML files.')
+if __name__=='__main__': print(f'Checked {check(sys.argv[1] if len(sys.argv)>1 else ".")} HTML files.')

@@ -2,14 +2,17 @@
 
 ## Where to make changes
 
-- **Page markup:** edit the HTML/Jinja templates in `templates/`. Shared markup lives in `base.html` and `macros.html`; `page.html` selects the page body. Jinja automatically escapes content. Do not use `safe` on feed text.
-- **Design:** edit `assets/css/site.css`. Fonts are self-hosted under `assets/fonts/`, with their licenses. SVG icons live under `assets/icons/`; their upstream license is included.
-- **Browser behavior:** edit `assets/js/site.js`; the small `theme.js` runs before paint and preserves the existing theme cookie.
-- **Institutional information:** edit `content/site.json`. Resource links and bilingual descriptions live in `content/resources.json`.
-- **UI labels:** edit both `messages/es.json` and `messages/en.json`. Content translations are separate from UI labels.
-- **Routes:** the Spanish/English mapping is in `tools/build.py`. Every non-past member receives a profile in both languages. Outreach remains available by URL but hidden from navigation, matching the previous website.
+Edit `es/**/index.html` and `en/**/index.html` directly. Home, contact, outreach and resources are maintained entirely as HTML. Their older JSON records are retained as historical inputs, not page generators. Edit both languages when changing shared information. Header/footer edits must be applied to the relevant pages and `tools/templates/new-profile-*.html` for future profiles.
 
-Run `python -m tools.build` after editing. A failed build leaves the previous `dist/` intact. The generator validates data and local links in a staging directory before replacing the previous output. If interrupted during the final directory swap, recover `dist.previous/` before building again.
+CSS lives in `assets/css/site.css`; browser behavior lives in `assets/js/`. Images live directly under `people/` and `Portadas/`. Preview with `python -m tools.preview`; refresh to see changes immediately.
+
+Only content between `AUTO` markers is generated. Keep each marker pair intact and unique. Missing, duplicate or nested markers abort an update. `tools/templates/` contains automation fragments and scaffolds for new profiles, not a full-site templating system. Feed text is escaped by Jinja; do not mark it safe.
+
+`messages/` and `content/translations.en.json` affect automatic fragments. Static labels elsewhere must be edited directly in HTML. After editing JSON, translations or fragments, run `python -m tools.update_html SOURCE` for each affected source. Packaging does not run these updates implicitly.
+
+Sync stages data and HTML, checks links, detects concurrent local edits, and applies validated changes with rollback on write errors. Avoid editing while a local sync is applying changes. GitHub commits the completed data/HTML update together; it never publishes an intermediate copy. The CI driver uses disposable checkouts, retries concurrent pushes and never force-pushes.
+
+`python -m tools.build` copies an explicit website allowlist to `dist/`. Failed checks leave the previous package intact. If interrupted during the final directory swap, recover `dist.previous/` before packaging again.
 
 ## Content ownership
 
@@ -17,7 +20,9 @@ Run `python -m tools.build` after editing. A failed build leaves the previous `d
 
 The published Google Sheet supplies names, categories, roles, teaching positions, email, office, biography, and interests. `content/people-extra.json` supplies photos, identifiers, social accounts, and curated bilingual enrichment, keyed by stable slug. Sheet email/office win when present. Blank biography/interest cells omit those sections; curated placeholders are not inserted.
 
-Run `python -m tools.sync people --dry-run` before applying a changed sheet layout. Aliases and role translations are in `tools/sync_tables.json`. Update them when introducing new spellings or roles. Validate image paths relative to `public/`.
+Run `python -m tools.sync people --dry-run` before applying a changed sheet layout. Aliases and role translations are in `tools/sync_tables.json`. Update them when introducing new spellings or roles. Validate image paths relative to the repository root.
+
+Profiles are created in both languages from small HTML scaffolds. `content/profile-history.json` retains member records when they leave the current roster. Their existing pages remain available, marked as former members, with manual content and historical publication links preserved. Do not delete this registry during sync. People updates also refresh publication filter choices and profile metadata. Publication updates refresh the main list, article metadata and each retained profile’s publication list.
 
 ### Journal club
 
@@ -45,6 +50,6 @@ JSON Schemas in `content/*.schema.json` are now maintained directly. They are us
 
 Environment variables are optional: `SITE_URL`, `PEOPLE_SHEET_CSV_URL`, `JOURNAL_CLUB_SHEET_CSV_URL`, `RESEARCH_DOC_TXT_URL`. Export them in your shell, or set GitHub repository variables of the same names. `.env.example` documents them; Python does not automatically load `.env` files.
 
-Run the checks described in README, generate `dist/`, and upload its contents at the URL prefix configured in `SITE_URL`. Configure directory indexes and the supplied 404 document. Deploy the entire artifact together so content, links and assets stay consistent. Keep the previous host release to roll back if necessary.
+Run the checks described in README, package `dist/`, and upload its contents at the committed `/cosmo/` prefix. `SITE_URL` asserts that URL; it does not rewrite HTML. Configure directory indexes and the supplied 404 document. Deploy the entire artifact together so content, links and assets stay consistent. Keep the previous host release to roll back if necessary.
 
 The Pages workflow publishes `dist/` after a push to `main` or successful completion of the content-sync workflow. It uses GitHub’s built-in Pages token and retains the existing `/cosmo/` address. Local preview uses `python -m tools.preview` so the same prefix is tested. Synchronization warnings and failures appear in the GitHub Actions logs; failed jobs do not push content or upload a new website artifact.

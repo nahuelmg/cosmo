@@ -112,7 +112,7 @@ def run():
             assert not fallback.locator('.publication-filters').is_visible()
             fallback.goto(base+'/en/contact/'); assert fallback.locator('.map>a').is_visible()
             browser.close()
-            print('Browser checks passed: all generated routes served, 18 representative pages at 3 viewport sizes in both themes, filters, themes, locale links, mobile focus, carousel, email, disclosures, map, and no-JS content.')
+            print('Browser checks passed: all committed routes served, 18 representative pages at 3 viewport sizes in both themes, filters, themes, locale links, mobile focus, carousel, email, disclosures, map, and no-JS content.')
     finally: server.shutdown(); server.server_close()
 
 if __name__=='__main__': run()

@@ -47,30 +47,13 @@ jobs:
             publications|journal-club|people|research) echo "name=$source" >> "$GITHUB_OUTPUT" ;;
             *) exit 1 ;;
           esac
-      - name: Synchronize and validate
+      - name: Synchronize, validate, and commit data with HTML
         env:
           SOURCE: ${{ steps.source.outputs.name }}
           PEOPLE_SHEET_CSV_URL: ${{ vars.PEOPLE_SHEET_CSV_URL }}
           JOURNAL_CLUB_SHEET_CSV_URL: ${{ vars.JOURNAL_CLUB_SHEET_CSV_URL }}
           RESEARCH_DOC_TXT_URL: ${{ vars.RESEARCH_DOC_TXT_URL }}
-        run: |
-          python -m tools.sync "$SOURCE"
-          python -m tools.content
-      - name: Generate HTML before committing content
-        env:
-          SITE_URL: ${{ vars.SITE_URL }}
-        run: python -m tools.build
-      - name: Commit validated content
-        env:
-          SOURCE: ${{ steps.source.outputs.name }}
-        run: |
-          if ! git diff --quiet -- "content/$SOURCE.json"; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add "content/$SOURCE.json"
-            git commit -m "chore: sync $SOURCE content"
-            git push origin HEAD:main
-          fi
+        run: python -m tools.ci_sync "$SOURCE"
       # Bot commits do not trigger another push workflow: publish the build here.
       - uses: actions/upload-artifact@v4
         with:
@@ -79,4 +62,4 @@ jobs:
       - name: Summary
         env:
           SOURCE: ${{ steps.source.outputs.name }}
-        run: echo "Updated $SOURCE and generated the static website. The GitHub Pages workflow deploys after this workflow succeeds." >> "$GITHUB_STEP_SUMMARY"
+        run: echo "Updated $SOURCE data and marked HTML sections. The GitHub Pages workflow deploys after this workflow succeeds." >> "$GITHUB_STEP_SUMMARY"

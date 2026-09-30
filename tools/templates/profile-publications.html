@@ -1,0 +1,2 @@
+{% from 'macros.html' import publication, portrait, session %}
+{% if member_pubs %}<section class="spaced"><h2>{{ t.publications.title }}</h2><ol class="publications">{% for p in member_pubs %}{{ publication(p,t) }}{% endfor %}</ol></section>{% endif %}

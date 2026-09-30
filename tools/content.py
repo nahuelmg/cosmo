@@ -54,18 +54,20 @@ def validate(name, data, today=None):
     return data
 
 
-def load_content():
+def load_content(root=ROOT):
+    root = Path(root)
+    content = root / "content"
     result = {}
     for name in ('people', 'people-extra', 'research', 'publications', 'journal-club', 'outreach'):
-        result[name] = validate(name, read_json(CONTENT / f'{name}.json'))
-    result['translations'] = read_json(CONTENT / 'translations.en.json')
+        result[name] = validate(name, read_json(content / f'{name}.json'))
+    result['translations'] = read_json(content / 'translations.en.json')
     for text in result['translations'].values():
         if not isinstance(text, str) or not text or re.search('[“”‘’]', text):
             raise ValueError('Invalid English translation')
     for person in result['people']:
         if person.get('photo'):
-            path = (ROOT / 'public' / person['photo']).resolve()
-            if not path.is_relative_to(ROOT / 'public') or not path.is_file():
+            path = (root / person['photo']).resolve()
+            if not path.is_relative_to(root) or not path.is_file():
                 raise ValueError(f'Missing or invalid photo: {person["photo"]}')
     return result
 

@@ -65,3 +65,7 @@ dist.previous/
 tools/tmp/
 test-results/
 cosmo-static-site.zip
+
+# Staged automatic updates and local synchronization lock
+.cosmo-update-*/
+.cosmo-sync.lock

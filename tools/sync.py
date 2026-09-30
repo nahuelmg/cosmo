@@ -25,13 +25,19 @@ def run(args):
         else: data=merge_areas(parse_doc(text,warnings),existing,warnings)
     validate(source,data)
     for warning in warnings: print('Warning: '+warning,file=sys.stderr)
-    if source=='publications' and args.member: path=ROOT/'tools/tmp'/f'sync-{args.member}.json'
     rows=data['publications'] if source=='publications' else data
-    if args.dry_run: print(f'[dry-run] {len(rows)} {source} records; would write {path}'); return
-    # Timestamp-only drift must not create daily publication commits.
-    unchanged=source=='publications' and not args.member and data['publications']==existing['publications']
-    changed=False if unchanged else atomic_json(path,data)
-    print(f'{"Wrote" if changed else "Unchanged"}: {len(rows)} {source} records ({len(warnings)} warnings)')
+    if source=='publications' and args.member:
+        path=ROOT/'tools/tmp'/f'sync-{args.member}.json'
+        if not args.dry_run: atomic_json(path,data)
+        print(f'{"[dry-run] Would write" if args.dry_run else "Wrote"} {len(rows)} records to {path}; shared HTML unchanged')
+        return
+    # Ignore timestamp-only drift, but still refresh marked HTML and date-dependent views.
+    if source=='publications' and data['publications']==existing['publications']:
+        data=existing
+    from .update_html import update
+    changed=update(source,payload=data,dry_run=args.dry_run)
+    print(f'{"[dry-run] " if args.dry_run else ""}{len(rows)} {source} records; {len(changed)} related files ({len(warnings)} warnings)')
+
 
 
 def main():

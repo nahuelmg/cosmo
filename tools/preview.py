@@ -1,4 +1,4 @@
-"""Preview generated files at the same URL prefix used in production."""
+"""Preview editable HTML files at the same URL prefix used in production."""
 import argparse
 import functools
 import json
@@ -53,11 +53,11 @@ class SiteHandler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--directory', type=Path, default=Path('dist'))
+    parser.add_argument('--directory', type=Path, default=Path('.'))
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--bind', default='127.0.0.1')
     args = parser.parse_args()
-    if not (args.directory / 'index.html').exists(): parser.error('Build the website first: python -m tools.build')
+    if not (args.directory / 'index.html').exists(): parser.error('Choose the website root containing index.html')
     base_path = read_base_path(args.directory)
     handler = functools.partial(SiteHandler, directory=str(args.directory.resolve()), base_path=base_path)
     with ThreadingHTTPServer((args.bind, args.port), handler) as server:

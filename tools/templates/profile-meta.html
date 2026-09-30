@@ -1,0 +1,8 @@
+{% from 'macros.html' import publication, portrait, session %}
+<title>{{ site.groupName if page == 'home' else site.groupName ~ ' — ' ~ title }}</title>
+<meta name="description" content="{{ description }}">
+{% if not production %}<meta name="robots" content="noindex,nofollow">{% endif %}
+<link rel="canonical" href="{{ site.url }}{{ path }}">
+{% for lang in ['es','en','x-default'] %}<link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ raw_route('es' if lang == 'x-default' else lang, page, person.slug if person else none) }}">{% endfor %}
+<meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ description }}"><meta property="og:type" content="{{ 'profile' if person else 'website' }}"><meta property="og:url" content="{{ site.url }}{{ path }}"><meta property="og:site_name" content="{{ site.groupName }}"><meta property="og:locale" content="{{ 'es_AR' if locale == 'es' else 'en_US' }}"><meta property="og:image" content="{{ site.url }}/Portadas/portada_1.jpg">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{ title }}"><meta name="twitter:description" content="{{ description }}"><meta name="twitter:image" content="{{ site.url }}/Portadas/portada_1.jpg">

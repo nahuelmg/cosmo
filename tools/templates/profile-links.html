@@ -1,0 +1,2 @@
+{% from 'macros.html' import publication, portrait, session %}
+{% if person.contact.scholar|default('') or person.social_links|default([]) %}<section class="spaced"><h2>{{ t.people.links }}</h2><ul class="links">{% if person.contact.scholar|default('') %}<li><a href="{{ person.contact.scholar }}" target="_blank" rel="noopener noreferrer">{{ t.people.scholar }}</a></li>{% endif %}{% for link in person.social_links|default([]) %}<li><a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.platform }}</a></li>{% endfor %}</ul></section>{% endif %}

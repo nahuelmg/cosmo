@@ -5,7 +5,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from tools.content import load_content, localize, matches, validate, CONTENT
-from tools.build import build, route, publication_view
+from tools.build import build
+from tools.render import route, publication_view
 from tools.check import check
 
 class ContentTests(unittest.TestCase):
@@ -40,28 +41,21 @@ class ContentTests(unittest.TestCase):
         s={'id':'x','date':'2099-01-01','speaker':'Name','title':'Talk','status':'past','academic_year':'2098-2099'}
         with self.assertRaises(ValueError): validate('journal-club',[s],today='2026-01-01')
 
-    def test_build_routes_metadata_content_and_atomicity(self):
+    def test_packaging_preserves_source_and_excludes_tooling(self):
+        from tools.content import ROOT
+        from tools.site_files import site_files
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp)/'site'
-            urls=build(out,'https://example.org')
-            expected=16+2*sum(p['category']!='past' for p in self.data['people'])
-            self.assertEqual(len(urls),expected)
-            self.assertEqual(check(out),expected+2)
-            for locale,page,slug,path in urls:
-                html=(out/path.lstrip('/')/'index.html').read_text()
-                self.assertIn(f'<html lang="{locale}">',html)
-                self.assertIn('https://example.org'+path,html)
-                self.assertNotIn('/_next/',html)
-            pubs=(out/'en/publications/index.html').read_text()
-            self.assertIn('ScholarlyArticle',pubs)
-            for pub in self.data['publications']['publications']:
-                self.assertIn('pub-'+pub['id'],pubs)
-            # Failed rendering/validation cannot replace an existing successful build.
+            urls=build(out)
+            self.assertEqual(check(out), len(urls))
+            for relative in site_files(ROOT):
+                self.assertEqual((ROOT/relative).read_bytes(), (out/relative).read_bytes())
+            for name in ('content','tools','tests','.git','README.md'):
+                self.assertFalse((out/name).exists())
             before=(out/'sitemap.xml').read_bytes()
-            with patch('tools.build.load_content',side_effect=ValueError('invalid content')):
-                with self.assertRaises(ValueError): build(out)
+            with self.assertRaises(ValueError): build(out, 'https://example.org')
             self.assertEqual(before,(out/'sitemap.xml').read_bytes())
-            build(out,'https://example.org',production=False)
+            build(out,production=False)
             self.assertIn('Disallow: /',(out/'robots.txt').read_text())
             self.assertIn('noindex,nofollow',(out/'en/index.html').read_text())
 
@@ -69,7 +63,7 @@ class ContentTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / 'site'
             urls = build(out, 'https://nahuelmg.github.io/cosmo')
-            self.assertEqual(check(out), len(urls) + 2)
+            self.assertEqual(check(out), len(urls))
             self.assertTrue((out / '.nojekyll').exists())
             self.assertFalse((out / 'cosmo').exists())
             self.assertEqual(json.loads((out / 'build-info.json').read_text())['base_path'], '/cosmo')
