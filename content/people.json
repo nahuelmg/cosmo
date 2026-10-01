@@ -2,14 +2,11 @@
   {
     "slug": "esteban-calzetta",
     "name": "Esteban Calzetta",
+    "category": "pi",
     "role": {
       "es": "Investigador Principal",
       "en": "Principal Researcher"
     },
-    "category": "pi",
-    "photo": "people/Esteban_C.png",
-    "inspirehep_id": "E.Calzetta.1",
-    "orcid_id": "0000-0002-3083-3420",
     "display_name_normalized": "esteban calzetta",
     "contact": {
       "email": "calzetta@df.uba.ar",
@@ -22,6 +19,9 @@
         "url": "https://orcid.org/0000-0001-7842-3105"
       }
     ],
+    "photo": "people/Esteban_C.png",
+    "inspirehep_id": "E.Calzetta.1",
+    "orcid_id": "0000-0002-3083-3420",
     "teaching_role": {
       "es": "Profesor Emérito",
       "en": "Professor Emeritus"
@@ -30,14 +30,11 @@
   {
     "slug": "diana-lopez-nacir",
     "name": "Diana López Nacir",
+    "category": "pi",
     "role": {
       "es": "Investigadora Independiente",
       "en": "Independent Researcher"
     },
-    "category": "pi",
-    "photo": "people/Diana_LN.png",
-    "inspirehep_id": "D.Lopez.Nacir.1",
-    "orcid_id": "0000-0003-4398-1147",
     "display_name_normalized": "diana lopez nacir",
     "contact": {
       "email": "dnacir@df.uba.ar",
@@ -50,6 +47,9 @@
         "url": "https://orcid.org/0000-0001-5533-9821"
       }
     ],
+    "photo": "people/Diana_LN.png",
+    "inspirehep_id": "D.Lopez.Nacir.1",
+    "orcid_id": "0000-0003-4398-1147",
     "teaching_role": {
       "es": "Profesora Adjunta",
       "en": "Adjunct Professor"
@@ -58,12 +58,26 @@
   {
     "slug": "susana-landau",
     "name": "Susana Landau",
+    "category": "pi",
     "role": {
       "es": "Investigadora Independiente",
       "en": "Independent Researcher"
     },
-    "category": "pi",
+    "display_name_normalized": "susana landau",
+    "contact": {
+      "email": "slandau@df.uba.ar",
+      "orcid": "0000-0002-4411-8732",
+      "office": "Oficina 2173, 2do piso, Dpto. de Física, Pabellón 1"
+    },
+    "social_links": [
+      {
+        "platform": "orcid",
+        "url": "https://orcid.org/0000-0002-4411-8732"
+      }
+    ],
     "photo": "people/susana_landau_foto.jpg",
+    "inspirehep_id": "S.J.Landau.1",
+    "orcid_id": "0000-0003-2645-9197",
     "research_interests": [
       {
         "es": "Análisis de Datos e Inferencia",
@@ -77,31 +91,25 @@
         "es": "Gravedad Modificada",
         "en": "Gravedad Modificada"
       }
-    ],
-    "inspirehep_id": "S.J.Landau.1",
-    "orcid_id": "0000-0003-2645-9197",
-    "display_name_normalized": "susana landau",
-    "contact": {
-      "email": "slandau@df.uba.ar",
-      "orcid": "0000-0002-4411-8732",
-      "office": "Oficina 2173, 2do piso, Dpto. de Física, Pabellón 1"
-    },
-    "social_links": [
-      {
-        "platform": "orcid",
-        "url": "https://orcid.org/0000-0002-4411-8732"
-      }
     ]
   },
   {
     "slug": "cecilia-scannapieco",
     "name": "Cecilia Scannapieco",
+    "category": "pi",
     "role": {
       "es": "Investigadora Independiente",
       "en": "Independent Researcher"
     },
-    "category": "pi",
+    "display_name_normalized": "cecilia scannapieco",
+    "contact": {
+      "email": "cscannapieco@df.uba.ar",
+      "office": "Oficina 2177, 2do piso, Dpto. de Física, Pabellón 1"
+    },
+    "social_links": [],
     "photo": "people/Cecilia_C.png",
+    "inspirehep_id": "C.Scannapieco.2",
+    "orcid_id": "0000-0003-0376-333X",
     "research_interests": [
       {
         "es": "Simulaciones cosmológicas de la evolución de galaxias",
@@ -116,14 +124,6 @@
         "en": "Evolución química de galaxias"
       }
     ],
-    "inspirehep_id": "C.Scannapieco.2",
-    "orcid_id": "0000-0003-0376-333X",
-    "display_name_normalized": "cecilia scannapieco",
-    "contact": {
-      "email": "cscannapieco@df.uba.ar",
-      "office": "Oficina 2177, 2do piso, Dpto. de Física, Pabellón 1"
-    },
-    "social_links": [],
     "teaching_role": {
       "es": "Jefa de Trabajos Prácticos",
       "en": "Head of Practical Works"
@@ -132,29 +132,26 @@
   {
     "slug": "claudio-simeone",
     "name": "Claudio Simeone",
+    "category": "pi",
     "role": {
       "es": "Investigador Independiente",
       "en": "Independent Researcher"
     },
-    "category": "pi",
-    "photo": "people/claudio-simeone.svg",
     "display_name_normalized": "claudio simeone",
     "contact": {
       "email": "csimeone@df.uba.ar"
     },
-    "social_links": []
+    "social_links": [],
+    "photo": "people/claudio-simeone.svg"
   },
   {
     "slug": "nahuel-miron-granese",
     "name": "Nahuel Mirón Granese",
+    "category": "pi",
     "role": {
       "es": "Investigador",
       "en": "Researcher"
     },
-    "category": "pi",
-    "photo": "people/nmg.jpg",
-    "inspirehep_id": "N.MironGranese.1",
-    "orcid_id": "0000-0003-0770-1865",
     "display_name_normalized": "nahuel miron granese",
     "contact": {
       "email": "nahuelmg@df.uba.ar",
@@ -162,6 +159,9 @@
       "office": "Oficina 2166 2do piso, Dpto. de Física, Pabellón 1"
     },
     "social_links": [],
+    "photo": "people/nmg.jpg",
+    "inspirehep_id": "N.MironGranese.1",
+    "orcid_id": "0000-0003-0770-1865",
     "teaching_role": {
       "es": "Jefe de Trabajos Prácticos",
       "en": "Head of Practical Works"
@@ -170,20 +170,20 @@
   {
     "slug": "javier-badia",
     "name": "Javier Badía",
+    "category": "postdoc",
     "role": {
       "es": "Posdoc",
       "en": "Postdoctoral Researcher"
     },
-    "category": "postdoc",
-    "photo": "people/Javier_B.jpeg",
-    "inspirehep_id": "J.Badia.1",
-    "orcid_id": "0000-0002-9095-9594",
     "display_name_normalized": "javier badia",
     "contact": {
       "email": "j.badia@df.uba.ar",
       "office": "Oficina 2.024"
     },
     "social_links": [],
+    "photo": "people/Javier_B.jpeg",
+    "inspirehep_id": "J.Badia.1",
+    "orcid_id": "0000-0002-9095-9594",
     "teaching_role": {
       "es": "Jefe de Trabajos Prácticos",
       "en": "Head of Practical Works"
@@ -192,19 +192,19 @@
   {
     "slug": "tomas-ferreira-chase",
     "name": "Tomas Ferreira Chase",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "photo": "people/Tomas_C.png",
-    "inspirehep_id": "Tomas.F.Chase.1",
-    "orcid_id": "0009-0001-0286-2136",
     "display_name_normalized": "tomas ferreira chase",
     "contact": {
       "email": "tomas.ferreirachase@df.uba.ar"
     },
     "social_links": [],
+    "photo": "people/Tomas_C.png",
+    "inspirehep_id": "Tomas.F.Chase.1",
+    "orcid_id": "0009-0001-0286-2136",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
@@ -213,19 +213,19 @@
   {
     "slug": "matias-leizerovich",
     "name": "Matias Leizerovich",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "photo": "people/Matias_L.png",
-    "inspirehep_id": "M.Leizerovich.1",
-    "orcid_id": "0000-0002-6438-2285",
     "display_name_normalized": "matias leizerovich",
     "contact": {
       "email": "matias.leizerovich@df.uba.ar"
     },
     "social_links": [],
+    "photo": "people/Matias_L.png",
+    "inspirehep_id": "M.Leizerovich.1",
+    "orcid_id": "0000-0002-6438-2285",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
@@ -234,11 +234,11 @@
   {
     "slug": "guadalupe-ahumada-acuna",
     "name": "Guadalupe Ahumada Acuña",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
     "display_name_normalized": "guadalupe ahumada acuna",
     "contact": {
       "email": "guadalupe.ahumada@df.uba.ar"
@@ -248,17 +248,17 @@
   {
     "slug": "gonzalo-santa-cruz",
     "name": "Gonzalo Santa Cruz",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "photo": "people/Gonzalo_SC.png",
     "display_name_normalized": "gonzalo santa cruz",
     "contact": {
       "email": "gonzalo.santacruz@df.uba.ar"
     },
     "social_links": [],
+    "photo": "people/Gonzalo_SC.png",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
@@ -267,33 +267,33 @@
   {
     "slug": "juan-pablo-elia",
     "name": "Juan Pablo Elia",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "photo": "people/juanpabloelia.jpeg",
     "display_name_normalized": "juan pablo elia",
     "contact": {
       "email": "juanpablo.elia@df.uba.ar"
     },
-    "social_links": []
+    "social_links": [],
+    "photo": "people/juanpabloelia.jpeg"
   },
   {
     "slug": "augusto-chantada",
     "name": "Augusto Chantada",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "inspirehep_id": "A.T.Chantada.1",
-    "orcid_id": "0000-0002-4480-9595",
     "display_name_normalized": "augusto chantada",
     "contact": {
       "email": "a.chantada@df.uba.ar"
     },
     "social_links": [],
+    "inspirehep_id": "A.T.Chantada.1",
+    "orcid_id": "0000-0002-4480-9595",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
@@ -302,11 +302,11 @@
   {
     "slug": "luis-biaus",
     "name": "Luis Biaus",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
     "display_name_normalized": "luis biaus",
     "contact": {
       "email": "lbiaus@df.uba.ar",
@@ -317,26 +317,26 @@
   {
     "slug": "ezequiel-lozano",
     "name": "Ezequiel Lozano",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
-    "photo": "people/Ezequiel_L.jpeg",
     "display_name_normalized": "ezequiel lozano",
     "contact": {
       "email": "elozano@df.uba.ar"
     },
-    "social_links": []
+    "social_links": [],
+    "photo": "people/Ezequiel_L.jpeg"
   },
   {
     "slug": "federico-huxhagen",
     "name": "Federico Huxhagen",
+    "category": "phd",
     "role": {
       "es": "Estudiante de doctorado",
       "en": "PhD Student"
     },
-    "category": "phd",
     "display_name_normalized": "federico huxhagen",
     "contact": {},
     "social_links": [],
@@ -348,24 +348,24 @@
   {
     "slug": "martin-castelli",
     "name": "Martin Castelli",
+    "category": "undergrad",
     "role": {
       "es": "Estudiante de licenciatura",
       "en": "Undergraduate Student"
     },
-    "category": "undergrad",
-    "photo": "people/martin_castelli.JPG",
     "display_name_normalized": "martin castelli",
     "contact": {},
-    "social_links": []
+    "social_links": [],
+    "photo": "people/martin_castelli.JPG"
   },
   {
     "slug": "joaquin-sequeira",
     "name": "Joaquín Sequeira",
+    "category": "undergrad",
     "role": {
       "es": "Estudiante de licenciatura",
       "en": "Undergraduate Student"
     },
-    "category": "undergrad",
     "display_name_normalized": "joaquin sequeira",
     "contact": {},
     "social_links": []
@@ -373,11 +373,11 @@
   {
     "slug": "santiago-iannucci",
     "name": "Santiago Iannucci",
+    "category": "undergrad",
     "role": {
       "es": "Estudiante de licenciatura",
       "en": "Undergraduate Student"
     },
-    "category": "undergrad",
     "display_name_normalized": "santiago iannucci",
     "contact": {},
     "social_links": []
@@ -385,11 +385,11 @@
   {
     "slug": "santiago-paramio",
     "name": "Santiago Paramio",
+    "category": "undergrad",
     "role": {
       "es": "Estudiante de licenciatura",
       "en": "Undergraduate Student"
     },
-    "category": "undergrad",
     "display_name_normalized": "santiago paramio",
     "contact": {},
     "social_links": []
@@ -397,11 +397,11 @@
   {
     "slug": "javier-pineau",
     "name": "Javier Pineau",
+    "category": "past",
     "role": {
       "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
-    "category": "past",
     "display_name_normalized": "javier pineau",
     "contact": {
       "email": "javier.pineau@df.uba.ar"
@@ -411,11 +411,11 @@
   {
     "slug": "pedro-rozin",
     "name": "Pedro Rozin",
+    "category": "past",
     "role": {
       "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
-    "category": "past",
     "display_name_normalized": "pedro rozin",
     "contact": {},
     "social_links": []
@@ -423,11 +423,11 @@
   {
     "slug": "tomas-ciccarella",
     "name": "Tomas Ciccarella",
+    "category": "past",
     "role": {
       "es": "Estudiante de licenciatura, 2026",
       "en": "Undergraduate Student, 2026"
     },
-    "category": "past",
     "display_name_normalized": "tomas ciccarella",
     "contact": {
       "email": "tomas.cicarella@df.uba.ar"
@@ -437,11 +437,11 @@
   {
     "slug": "federico-iza",
     "name": "Federico Iza",
+    "category": "past",
     "role": {
       "es": "Estudiante de doctorado, 2026",
       "en": "PhD Student, 2026"
     },
-    "category": "past",
     "display_name_normalized": "federico iza",
     "contact": {},
     "social_links": []
@@ -449,11 +449,11 @@
   {
     "slug": "luca-gomez-bachar",
     "name": "Luca Gomez Bachar",
+    "category": "past",
     "role": {
       "es": "Estudiante de Licenciatura, 2023",
       "en": "Undergraduate Student, 2023"
     },
-    "category": "past",
     "display_name_normalized": "luca gomez bachar",
     "contact": {},
     "social_links": []
@@ -461,11 +461,11 @@
   {
     "slug": "matias-zaldarriaga",
     "name": "Matias Zaldarriaga",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "matias zaldarriaga",
     "contact": {},
     "social_links": [],
@@ -477,11 +477,11 @@
   {
     "slug": "giorgio-torrieri",
     "name": "Giorgio Torrieri",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "giorgio torrieri",
     "contact": {},
     "social_links": [],
@@ -493,11 +493,11 @@
   {
     "slug": "elia-battistelli",
     "name": "Elia Battistelli",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "elia battistelli",
     "contact": {},
     "social_links": [],
@@ -509,11 +509,11 @@
   {
     "slug": "alejandra-kandus",
     "name": "Alejandra Kandus",
+    "category": "visitors",
     "role": {
       "es": "Investigadora Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "alejandra kandus",
     "contact": {},
     "social_links": [],
@@ -525,11 +525,11 @@
   {
     "slug": "juan-manuel-armaleo",
     "name": "Juan Manuel Armaleo",
+    "category": "visitors",
     "role": {
       "es": "Investigador Postdoctoral",
       "en": "Postdoctoral Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "juan manuel armaleo",
     "contact": {
       "email": "juanmanuel.armaleo@df.uba.ar"
@@ -543,11 +543,11 @@
   {
     "slug": "nicolas-yunes",
     "name": "Nicolas Yunes",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "nicolas yunes",
     "contact": {},
     "social_links": [],
@@ -559,11 +559,11 @@
   {
     "slug": "arttu-rajantie",
     "name": "Arttu Rajantie",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "arttu rajantie",
     "contact": {},
     "social_links": [],
@@ -575,11 +575,11 @@
   {
     "slug": "martin-makler",
     "name": "Martin Makler",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "martin makler",
     "contact": {},
     "social_links": [],
@@ -591,11 +591,11 @@
   {
     "slug": "leonardo-trombetta",
     "name": "Leonardo Trombetta",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "leonardo trombetta",
     "contact": {},
     "social_links": [],
@@ -607,11 +607,11 @@
   {
     "slug": "lucas-pinol",
     "name": "Lucas Pinol",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "lucas pinol",
     "contact": {},
     "social_links": [],
@@ -623,11 +623,11 @@
   {
     "slug": "sebastian-cespedes",
     "name": "Sebastian Cespedes",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "sebastian cespedes",
     "contact": {},
     "social_links": [],
@@ -639,11 +639,11 @@
   {
     "slug": "jailson-alcaniz",
     "name": "Jailson Alcaniz",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "jailson alcaniz",
     "contact": {},
     "social_links": [],
@@ -655,11 +655,11 @@
   {
     "slug": "pavlos-protopapas",
     "name": "Pavlos Protopapas",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "pavlos protopapas",
     "contact": {},
     "social_links": [],
@@ -671,11 +671,11 @@
   {
     "slug": "giovanni-otalora",
     "name": "Giovanni Otalora",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "giovanni otalora",
     "contact": {},
     "social_links": [],
@@ -687,11 +687,11 @@
   {
     "slug": "martin-richarte",
     "name": "Martín Richarte",
+    "category": "visitors",
     "role": {
       "es": "Investigador Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "martin richarte",
     "contact": {},
     "social_links": [],
@@ -703,11 +703,11 @@
   {
     "slug": "lucila-kraiselburd",
     "name": "Lucila Kraiselburd",
+    "category": "visitors",
     "role": {
       "es": "Investigadora Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "lucila kraiselburd",
     "contact": {},
     "social_links": [],
@@ -719,11 +719,11 @@
   {
     "slug": "claudia-scoccola",
     "name": "Claudia Scoccola",
+    "category": "visitors",
     "role": {
       "es": "Investigadora Visitante",
       "en": "Visiting Researcher"
     },
-    "category": "visitors",
     "display_name_normalized": "claudia scoccola",
     "contact": {},
     "social_links": [],
