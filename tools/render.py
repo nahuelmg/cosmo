@@ -1,9 +1,10 @@
 """Render only automatic HTML regions; ordinary pages are never generated here."""
 from datetime import datetime, timezone
 from urllib.parse import quote
-from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape
+from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoescape, pass_context
 from markupsafe import Markup
 from .content import ROOT, read_json, localize, fold, matches, sort_publications
+from .urls import relative_url
 ROUTES = {
     'home': ('', ''), 'people': ('personas', 'people'),
     'research': ('investigacion', 'research'), 'publications': ('publicaciones', 'publications'),
@@ -59,14 +60,13 @@ def render_regions(data, root, profiles):
     info = read_json(root / 'build-info.json')
     if site['url'] != info['site_url'].rstrip('/'):
         raise ValueError('Site URL differs from committed HTML')
-    base_path = info['base_path']
     env = Environment(loader=FileSystemLoader(ROOT / 'tools/templates'), autoescape=select_autoescape(['html']), undefined=StrictUndefined)
     env.filters['date'] = long_date
     env.filters['year_label'] = lambda rows: '-'.join(dict.fromkeys([min(s['date'][:4] for s in rows), max(s['date'][:4] for s in rows)]))
     env.globals.update(
-        route=lambda locale, page, slug=None: base_path + route(locale, page, slug),
+        route=pass_context(lambda ctx, locale, page, slug=None: relative_url(ctx['path'], route(locale, page, slug))),
         raw_route=route,
-        asset=lambda path: base_path + '/' + path.lstrip('/'),
+        asset=pass_context(lambda ctx, path: relative_url(ctx['path'], path)),
         nav=NAV,
         year=datetime.now(timezone.utc).year,
     )

@@ -3,7 +3,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 import sys
-import json
+import re
 from .site_files import site_files
 
 class Page(HTMLParser):
@@ -15,14 +15,16 @@ class Page(HTMLParser):
             if attrs['id'] in self.ids: raise ValueError(f'Duplicate HTML id: {attrs["id"]}')
             self.ids.add(attrs['id'])
         if tag=='h1': self.headings+=1
-        for key in ('href','src'):
+        if tag == 'base': raise ValueError('Base elements defeat document-relative site URLs')
+        if tag == 'meta' and attrs.get('http-equiv', '').lower() == 'refresh':
+            refresh = re.search(r';\s*url\s*=\s*(.+)', attrs.get('content', ''), re.I)
+            if refresh: self.links.append(refresh[1].strip().strip('\"\''))
+        for key in ('href','src','data-src','action','poster'):
             if key in attrs: self.links.append(attrs[key])
         if tag=='img' and 'alt' not in attrs: raise ValueError('Image missing alt text')
 
 def check(root):
     root=Path(root).resolve()
-    info = root / 'build-info.json'
-    base_path = json.loads(info.read_text())['base_path'] if info.exists() else ''
     pages={root / p:Page((root / p).read_text()) for p in site_files(root) if p.suffix == '.html'}
     errors=[]
     for path,page in pages.items():
@@ -31,12 +33,10 @@ def check(root):
             url=urlsplit(link)
             if url.scheme or url.netloc: continue
             local_path = unquote(url.path)
-            if local_path.startswith('/') and base_path:
-                if local_path != base_path and not local_path.startswith(base_path + '/'):
-                    errors.append(f'{path.relative_to(root)}: link escapes site base path: {link}')
-                    continue
-                local_path = local_path[len(base_path):] or '/'
-            target=((root/local_path.lstrip('/')) if local_path.startswith('/') else path.parent/local_path).resolve() if local_path else path
+            if local_path.startswith('/'):
+                errors.append(f'{path.relative_to(root)}: use a document-relative URL: {link}')
+                continue
+            target=(path.parent/local_path).resolve() if local_path else path
             if target.is_dir(): target=target/'index.html'
             if not target.is_relative_to(root) or not target.exists(): errors.append(f'{path.relative_to(root)}: missing {link}')
             elif url.fragment and target in pages and unquote(url.fragment) not in pages[target].ids: errors.append(f'{path.relative_to(root)}: missing anchor {link}')

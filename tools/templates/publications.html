@@ -1,4 +1,4 @@
-{% from 'macros.html' import publication, portrait, session %}
+{% from 'macros.html' import publication, portrait, session with context %}
 <p class="updated muted small">{{ t.publications.updatedAt|replace('{date}',pub_meta.synced_at|date(locale)) }}</p>
 <div class="publication-filters spaced" hidden><div><label for="publication-query">{{ t.publications.search.label }}</label><input id="publication-query" type="search" placeholder="{{ t.publications.search.placeholder }}"></div><div><label for="publication-member">{{ t.publications.member.label }}</label><select id="publication-member"><option value="">{{ t.publications.member.all }}</option>{% for p in member_options %}<option value="{{ p.slug }}">{{ p.name }}</option>{% endfor %}</select></div><button id="publication-clear" class="control">{{ t.publications['clear'] }}</button><p id="publication-count" aria-live="polite"></p></div>
 <p id="publication-empty" hidden>{{ t.publications.noResults }}</p>

@@ -1,3 +1,3 @@
-{% from 'macros.html' import publication, portrait, session %}
+{% from 'macros.html' import publication, portrait, session with context %}
 <div class="research-grid spaced">{% for a in research %}<a class="research-card" href="#detail-{{ a.id }}">{{ icon(a.icon|default('fallback')) }}<h2>{{ a.title }}</h2><p>{{ a.short_description }}</p></a>{% endfor %}</div>
 <div class="research-details">{% for a in research %}<section class="research-detail" id="detail-{{ a.id }}"><figure aria-hidden="true">{{ icon(a.icon|default('fallback')) }}</figure><div><h2>{{ a.title }}</h2>{% for para in a.full_description.split('\n\n') %}<p>{{ para }}</p>{% endfor %}</div></section>{% endfor %}</div>

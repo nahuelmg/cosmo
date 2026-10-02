@@ -15,7 +15,14 @@ Preview directly from the repository using Python 3.11+ (no packages required):
 python -m tools.preview
 ```
 
-Open http://127.0.0.1:8000/cosmo/. Use HTTP preview because the existing URLs include the `/cosmo/` hosting prefix. No build is needed to see HTML edits.
+Open http://127.0.0.1:8000/cosmo/. No build is needed to see HTML edits. Internal navigation and assets use document-relative URLs, so the same files also work at the server root or under another folder:
+
+```bash
+python -m tools.preview --base-path /
+python -m tools.preview --base-path /demo/site/
+```
+
+For a standard server at http://127.0.0.1:8000/, use `python -m http.server 8000`. Serve the repository or the contents of `dist/` with directory indexes and trailing-slash redirects. Direct `file://` browsing is not supported.
 
 Automatic content is enclosed by `<!-- AUTO:name:START -->` and `<!-- AUTO:name:END -->` comments. Edit outside these regions freely. Changes inside them are replaced by the next relevant sync; use the source data or automation fragments for those changes. See [GUIDE.md](GUIDE.md) for content ownership.
 
@@ -51,7 +58,9 @@ python -m tools.check dist
 
 Pushes to `main` run the Pages workflow, including tests and browser checks, before deployment. Pull requests do not deploy. Successful scheduled syncs trigger Pages through `workflow_run`, since bot commits do not trigger push workflows. Keep the workflow name **Sync content and generate HTML** for that connection.
 
-The website is committed for `/cosmo/`. To move domains or paths, update HTML links and metadata, sitemap, robots, `content/site.json`, `build-info.json`, new-profile scaffolds and workflow URL settings together. `--site-url` and `SITE_URL` assert the expected URL; they do not rewrite pages.
+The production address remains `https://nahuelmg.github.io/cosmo/`. Hosting the same files at another HTTP path needs no link changes. Canonical/alternate links, social metadata, structured data, sitemap and robots retain the production URL. To change the canonical production address, update that metadata, `content/site.json`, `build-info.json`, new-profile scaffolds and workflow URL settings together. `--site-url` and `SITE_URL` assert the production URL; they do not control the preview mount path or rewrite pages.
+
+The self-contained 404 page links to the absolute production homepages. An error document can be served at any missing URL depth, where document-relative homepage links would be unreliable. Configure your host to serve `404.html` with status 404; Python's standard HTTP server uses its own error document.
 
 Optional browser checks:
 

@@ -1,4 +1,4 @@
-"""Preview editable HTML files at the same URL prefix used in production."""
+"""Preview editable HTML at the production prefix or a custom mounting path."""
 import argparse
 import functools
 import json
@@ -56,9 +56,13 @@ def main():
     parser.add_argument('--directory', type=Path, default=Path('.'))
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--bind', default='127.0.0.1')
+    parser.add_argument('--base-path', help='Mount path, e.g. / or /demo/site/ (default: production prefix)')
     args = parser.parse_args()
     if not (args.directory / 'index.html').exists(): parser.error('Choose the website root containing index.html')
-    base_path = read_base_path(args.directory)
+    base_path = read_base_path(args.directory) if args.base_path is None else args.base_path
+    if base_path and (not base_path.startswith('/') or any(c in base_path for c in ('?', '#', '\\')) or '..' in base_path.split('/') or '//' in base_path):
+        parser.error('--base-path must be an absolute URL path without queries, fragments or parent segments')
+    base_path = base_path.rstrip('/')
     handler = functools.partial(SiteHandler, directory=str(args.directory.resolve()), base_path=base_path)
     with ThreadingHTTPServer((args.bind, args.port), handler) as server:
         print(f'Preview: http://{args.bind}:{server.server_port}{base_path}/', flush=True)

@@ -2,6 +2,7 @@
 Uses installed Chrome, or Playwright Chromium when CHROME_PATH=chromium.
 """
 import functools
+import json
 import http.server
 import os
 import threading
@@ -16,14 +17,14 @@ from tools.preview import SiteHandler, read_base_path
 BASE_PATH = read_base_path(ROOT / 'dist')
 class QuietHandler(SiteHandler):
     def log_message(self,*args): pass
-handler=functools.partial(QuietHandler,directory=str(ROOT/'dist'),base_path=BASE_PATH)
 
 
-def run():
+def run(base_path=BASE_PATH):
+    handler=functools.partial(QuietHandler,directory=str(ROOT/'dist'),base_path=base_path)
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),handler)
     threading.Thread(target=server.serve_forever,daemon=True).start()
     origin=f'http://127.0.0.1:{server.server_port}'
-    base=origin+BASE_PATH
+    base=origin+base_path
     shots=ROOT/'test-results'; shots.mkdir(exist_ok=True)
     try:
         with sync_playwright() as p:
@@ -38,8 +39,12 @@ def run():
             page.wait_for_url(base + '/es/')
             missing = context.request.get(base + '/does-not-exist/')
             assert missing.status == 404
-            assert f'href="{BASE_PATH}/es/"' in missing.text()
-            if BASE_PATH:
+            production=json.loads((ROOT/'dist/build-info.json').read_text())['site_url'].rstrip('/')
+            assert f'href="{production}/es/"' in missing.text()
+            nested_missing = context.request.get(base + '/en/people/missing/deep/')
+            assert nested_missing.status == 404
+            assert f'href="{production}/en/"' in nested_missing.text()
+            if base_path:
                 assert context.request.get(origin + '/en/').status == 404
             profile = base + '/en/people/cecilia-scannapieco/?from=profile'
             page.goto(profile)
@@ -58,6 +63,9 @@ def run():
                     assert page.locator('h1').count()==1
                     assert page.locator('html').get_attribute('lang')==locale
                     page.evaluate('document.fonts.ready')
+                    page.evaluate('document.querySelectorAll("img").forEach(img => img.loading = "eager")')
+                    page.wait_for_function('Array.from(document.images).every(img => img.complete && img.naturalWidth > 0)')
+                    assert page.evaluate('document.fonts.size > 0 && Array.from(document.fonts).some(font => font.status === "loaded")')
                     for width in (390,768,1440):
                         page.set_viewport_size({'width':width,'height':1000})
                         for dark in (False, True):
@@ -110,9 +118,16 @@ def run():
             assert fallback.locator('.publication').count()==total
             assert fallback.locator('.fallback-nav').is_visible()
             assert not fallback.locator('.publication-filters').is_visible()
+            fallback.locator('.fallback-nav a').first.click()
+            assert fallback.url == base + '/es/'
+            fallback.goto(base+'/en/people/cecilia-scannapieco/')
+            fallback.locator('.fallback-nav a[hreflang], .fallback-nav a').last.click()
+            assert fallback.url == base + '/es/personas/cecilia-scannapieco/'
             fallback.goto(base+'/en/contact/'); assert fallback.locator('.map>a').is_visible()
             browser.close()
-            print('Browser checks passed: all committed routes served, 18 representative pages at 3 viewport sizes in both themes, filters, themes, locale links, mobile focus, carousel, email, disclosures, map, and no-JS content.')
+            print(f'Browser checks passed at {base_path or "/"}: all committed routes served, 18 representative pages at 3 viewport sizes in both themes, filters, themes, locale links, mobile focus, carousel, email, disclosures, map, assets, fonts, and no-JS navigation.')
     finally: server.shutdown(); server.server_close()
 
-if __name__=='__main__': run()
+if __name__=='__main__':
+    for prefix in dict.fromkeys((BASE_PATH, '', '/demo/site')):
+        run(prefix)

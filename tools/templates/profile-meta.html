@@ -1,4 +1,4 @@
-{% from 'macros.html' import publication, portrait, session %}
+{% from 'macros.html' import publication, portrait, session with context %}
 <title>{{ site.groupName if page == 'home' else site.groupName ~ ' — ' ~ title }}</title>
 <meta name="description" content="{{ description }}">
 {% if not production %}<meta name="robots" content="noindex,nofollow">{% endif %}

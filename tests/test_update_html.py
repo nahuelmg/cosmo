@@ -52,6 +52,10 @@ class UpdateTests(unittest.TestCase):
         update('people', payload, root=self.root)
         page = self.root/'en/people/test-new-member/index.html'
         self.assertIn('Test New Member',page.read_text())
+        self.assertIn('src="../../../assets/js/site.js"', page.read_text())
+        self.assertIn('href="../../../es/personas/test-new-member/"', page.read_text())
+        self.assertNotIn('href="/cosmo/', page.read_text())
+        self.assertNotIn('src="/cosmo/', page.read_text())
         self.assertIn('test-new-member/',(self.root/'sitemap.xml').read_text())
         page.write_text(page.read_text().replace('</article>','<p>Personal history</p></article>'))
         update('people', people, root=self.root)
