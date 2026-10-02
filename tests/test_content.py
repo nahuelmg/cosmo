@@ -50,7 +50,7 @@ class ContentTests(unittest.TestCase):
             self.assertEqual(check(out), len(urls))
             for relative in site_files(ROOT):
                 self.assertEqual((ROOT/relative).read_bytes(), (out/relative).read_bytes())
-            for name in ('content','tools','tests','.git','README.md'):
+            for name in ('content','tools','tests','.git','AGENTS.md'):
                 self.assertFalse((out/name).exists())
             before=(out/'sitemap.xml').read_bytes()
             with self.assertRaises(ValueError): build(out, 'https://example.org')
