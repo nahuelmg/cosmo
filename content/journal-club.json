@@ -7,7 +7,8 @@
     "abstract": "Si la materia oscura está compuesta por bosones ultralivianos, puede comportarse como un campo oscilante capaz de perturbar las órbitas de púlsares binarios. Esas perturbaciones modifican los tiempos de llegada de los pulsos a la Tierra y pueden amplificarse cuando la frecuencia del campo entra en resonancia con la órbita. En esta charla presentaré una búsqueda de estas señales en los datos de temporización de 50 púlsares binarios de NANOGrav. Consideramos acoplamientos lineales y cuadráticos de un campo escalar a la materia, así como un campo vectorial. A partir de estos datos, obtenemos cotas sobre la intensidad de los distintos acoplamientos en un amplio rango de masas. Finalmente, compararé los resultados con los de otras búsquedas y discutiré qué aportan los púlsares binarios al estudio de la materia oscura ultraliviana.",
     "id": "2026-10-05-federico-huxhagen",
     "date": "2026-10-05",
-    "status": "upcoming",
+    "status": "past",
+    "academic_year": "2026-2027",
     "start_time": "15:00",
     "location": "Aula Federman"
   },
