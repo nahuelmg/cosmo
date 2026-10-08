@@ -19,7 +19,7 @@
         "url": "https://orcid.org/0000-0001-7842-3105"
       }
     ],
-    "photo": "people/Esteban_C.png",
+    "photo": "people/Esteban_C.jpg",
     "inspirehep_id": "E.Calzetta.1",
     "orcid_id": "0000-0002-3083-3420",
     "teaching_role": {
@@ -243,7 +243,8 @@
     "contact": {
       "email": "guadalupe.ahumada@df.uba.ar"
     },
-    "social_links": []
+    "social_links": [],
+    "photo": "people/guadalupe_acuna.jpg"
   },
   {
     "slug": "gonzalo-santa-cruz",
@@ -297,7 +298,8 @@
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
-    }
+    },
+    "photo": "people/augusto_chantada.jpg"
   },
   {
     "slug": "luis-biaus",
@@ -312,7 +314,8 @@
       "email": "lbiaus@df.uba.ar",
       "office": "Oficina 2.133"
     },
-    "social_links": []
+    "social_links": [],
+    "photo": "people/luis_biaus.jpeg"
   },
   {
     "slug": "ezequiel-lozano",
@@ -343,7 +346,8 @@
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
-    }
+    },
+    "photo": "people/federico_huxhagen.jpg"
   },
   {
     "slug": "martin-castelli",

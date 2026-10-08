@@ -2,7 +2,7 @@
   "esteban-calzetta": {
     "inspirehep_id": "E.Calzetta.1",
     "orcid_id": "0000-0002-3083-3420",
-    "photo": "people/Esteban_C.png",
+    "photo": "people/Esteban_C.jpg",
     "contact": {
       "email": "calzetta@df.uba.ar",
       "orcid": "0000-0001-7842-3105",
@@ -97,7 +97,8 @@
   "guadalupe-ahumada-acuna": {
     "contact": {
       "email": "guadalupe.ahumada@df.uba.ar"
-    }
+    },
+    "photo": "people/guadalupe_acuna.jpg"
   },
   "gonzalo-santa-cruz": {
     "photo": "people/Gonzalo_SC.png",
@@ -116,7 +117,8 @@
     "orcid_id": "0000-0002-4480-9595",
     "contact": {
       "email": "augusto.chantada@df.uba.ar"
-    }
+    },
+    "photo": "people/augusto_chantada.jpg"
   },
   "ezequiel-lozano": {
     "photo": "people/Ezequiel_L.jpeg"
@@ -306,5 +308,11 @@
   },
   "martin-castelli": {
     "photo": "people/martin_castelli.JPG"
+  },
+  "luis-biaus": {
+    "photo": "people/luis_biaus.jpeg"
+  },
+  "federico-huxhagen": {
+    "photo": "people/federico_huxhagen.jpg"
   }
 }
