@@ -293,13 +293,13 @@
       "email": "a.chantada@df.uba.ar"
     },
     "social_links": [],
+    "photo": "people/augusto_chantada.jpg",
     "inspirehep_id": "A.T.Chantada.1",
     "orcid_id": "0000-0002-4480-9595",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
-    },
-    "photo": "people/augusto_chantada.jpg"
+    }
   },
   {
     "slug": "luis-biaus",
@@ -343,11 +343,11 @@
     "display_name_normalized": "federico huxhagen",
     "contact": {},
     "social_links": [],
+    "photo": "people/federico_huxhagen.jpg",
     "teaching_role": {
       "es": "Ayudante de primera",
       "en": "First-rank Teaching Assistant"
-    },
-    "photo": "people/federico_huxhagen.jpg"
+    }
   },
   {
     "slug": "martin-castelli",
