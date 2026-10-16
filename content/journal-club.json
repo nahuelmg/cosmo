@@ -10,7 +10,8 @@
     "status": "past",
     "academic_year": "2026-2027",
     "start_time": "15:00",
-    "location": "Aula Federman"
+    "location": "Aula Federman",
+    "paper_link": "https://arxiv.org/abs/2604.26092"
   },
   {
     "speaker": "Tomas Chase",
@@ -25,19 +26,5 @@
     "start_time": "15:00",
     "location": "Aula Federman",
     "paper_link": "https://arxiv.org/abs/2609.02823"
-  },
-  {
-    "speaker": "Nahuel Mirón-Granese",
-    "speaker_position": "Investigador",
-    "affiliation": "DF-IFIBA, UBA-CONICET",
-    "title": "¿Cómo se ve el universo cuando la luz no alcanza?",
-    "abstract": "La luz ha sido nuestra principal herramienta para observar el Universo, pero no puede mostrarnos todo. Las ondas gravitacionales abren una nueva ventana de observación, permitiéndonos estudiar fenómenos extremos y explorar épocas del Universo inaccesibles mediante la radiación electromagnética. En esta charla veremos qué son las ondas gravitacionales, cómo las detectamos y qué pueden contarnos sobre el Universo, desde colisiones de objetos compactos hasta sus primeros instantes.",
-    "id": "2026-09-07-nahuel-miron-granese",
-    "date": "2026-09-07",
-    "status": "past",
-    "academic_year": "2026-2027",
-    "start_time": "14:30",
-    "location": "Aula Federman",
-    "paper_link": "https://arxiv.org/abs/2601.06017"
   }
 ]
