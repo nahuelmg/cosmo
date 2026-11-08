@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-10-22T03:21:10+00:00",
+    "synced_at": "2026-11-08T04:30:37+00:00",
     "sources": [
       "inspirehep",
       "orcid",
@@ -240,12 +240,13 @@
         "Battat, James B.R."
       ],
       "title": "Liquid argon purification and purity monitoring: apparatus and first results",
-      "journal": "Preprint",
+      "journal": "JINST 21 (2026) P11007",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
+      "doi": "10.1088/1748-0221/21/11/P11007",
       "arxiv": "2604.21307",
-      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College in Massachusetts, USA. The system includes a single-pass liquid-phase purification column that can achieve sub-part-per-billion impurity levels. The liquid argon purity is measured with a double-gridded purity monitor to assess the electron lifetime. Measurements demonstrate an O2-equivalent impurity concentration of $0.21 \\pm 0.05$ ppb (stable over a 20-hour duration), corresponding to an electron lifetime of 1.6 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout for liquid argon time projection chambers, such as Q-Pix and other cold electronics systems."
+      "abstract": "We report results from a 13-liter purified liquid argon test stand at Wellesley College in Massachusetts, U.S.A.. The system includes a single-pass liquid-phase purification column that can achieve sub-part-per-billion impurity levels. The liquid argon purity is measured with a double-gridded purity monitor to assess the electron lifetime. Measurements demonstrate an O$_{2}$-equivalent impurity concentration of 0.21 ± 0.05 ppb (stable over a 20-hour duration), corresponding to an electron lifetime of 1.6 ms at a drift field of 500 V/cm. This test stand supports ongoing detector R&D on charge and light readout for liquid argon time projection chambers, such as Q-Pix and other cold electronics systems."
     },
     {
       "id": "2604.21080",
