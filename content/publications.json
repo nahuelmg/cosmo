@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "synced_at": "2026-11-08T04:30:37+00:00",
+    "synced_at": "2026-11-13T05:08:25+00:00",
     "sources": [
       "inspirehep",
       "orcid",
       "arxiv"
     ],
     "counts": {
-      "inspirehep": 328,
+      "inspirehep": 329,
       "arxiv": 85,
       "orcid": 94,
       "manual": 0,
@@ -24,6 +24,22 @@
     ]
   },
   "publications": [
+    {
+      "id": "2611.14556",
+      "authors": [
+        "Richarte, M.G.",
+        "Guimarães, L.F.",
+        "Landau, S.J.",
+        "Leizerovich, M."
+      ],
+      "title": "Energy exchange confined to the perturbations: the frozen dark sector confronted with Planck, DESI, supernovae and cosmic shear",
+      "journal": "Preprint",
+      "year": 2026,
+      "topic_tags": [],
+      "source": "inspirehep",
+      "arxiv": "2611.14556",
+      "abstract": "We present cosmological constraints on the frozen model, in which dark matter and dark energy exchange energy only at the level of the perturbations. The expansion history is that of flat $Λ$CDM, while on sub-horizon scales a dimensionless coupling $Σ$ enhances ($Σ<0$) or suppresses ($Σ>0$) the growth of the dark-matter density contrast. We use Planck 2018 CMB and lensing data, DESI DR2 baryon acoustic oscillations (BAO), the DES five-year supernovae (Dovekie recalibration), and the KiDS-Legacy and DES Year 3 cosmic-shear amplitudes, corrected for the model's growth. Planck alone gives $Σ=-0.22\\pm0.11$, a preference driven by the lensing smoothing of the acoustic peaks and the low large-scale temperature power. Since BAO and supernovae do not constrain $Σ$, the coupling acts only through the Planck posterior, lowering the Planck--DESI tension from $1.9σ$ to $1.0$--$1.5σ$, and that between Planck plus supernovae and DESI from $2.4$--$2.5σ$ to $1.7$--$2.1σ$. Combining Planck, DESI and supernovae we find $Σ=-0.24\\pm0.09$ and $\\ln B=1.5$ relative to $Λ$CDM, a preference that vanishes when the strongest-coupling region is excluded. The enhanced growth, however, raises the Planck--shear tension from $1.9σ$ to $2.5$--$2.7σ$. With shear included, $Σ=0.01\\pm0.08$ and $S_8=0.808\\pm0.025$, while $\\ln B=-1.3$ favors $Λ$CDM. $H_0$ and the age of the Universe agree with $Λ$CDM for every data combination, and the SH0ES discrepancy remains at $4.4σ$. Without shear, the favored coupling predicts half the $Λ$CDM integrated Sachs--Wolfe amplitude at $z=0.5$ and an enhanced shear signal in the lowest tomographic bins. These signatures and the redshift distribution of cluster counts test the coupling independently of the amplitude of the fluctuations."
+    },
     {
       "id": "2610.27209",
       "authors": [
