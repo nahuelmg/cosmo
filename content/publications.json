@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "synced_at": "2026-11-13T05:08:25+00:00",
+    "synced_at": "2026-11-17T06:37:02+00:00",
     "sources": [
       "inspirehep",
       "orcid",
@@ -211,13 +211,13 @@
       "authors": [
         "Calzetta, Esteban"
       ],
-      "title": "Scale invariant solutions in relativistic hydrodynamics",
+      "title": "Quantum Field Approach to Relativistic Turbulence",
       "journal": "Preprint",
       "year": 2026,
       "topic_tags": [],
       "source": "inspirehep",
       "arxiv": "2605.25329",
-      "abstract": "The goal of this work is to describe the scale invariant solutions of a typical relativistic hydrodynamic model. We shall take as representative model an Israel-Stewart framework, where the energy-momentum conservation laws for a conformal invariant fluid are supplemented by a Cattaneo-Maxwell equation for its viscous energy-momentum tensor. In these models the viscous energy-momentum tensor relaxes to its Landau-Lifshitz value on a finite time scale. We assume the parameters of the model depend on the speed of light $c$ in such a way that as $c\\to\\infty$ the fluid becomes an incompressible fluid obeying the Navier-Stokes equations. We seek the scale invariant solutions for this model and find that for finite $c$ there are two basic patterns, one which reproduces Kolmogorov turbulence when $c\\to\\infty$, and another whose damping rate diverges in that limit. We point out the scaling relations that allow the latter flow pattern to sustain an entropy cascade."
+      "abstract": "The goal of this work is to apply quantum field theory methods to a typical relativistic hydrodynamic model. We shall take as representative model an Israel-Stewart framework, where the energy-momentum conservation laws for a conformal invariant fluid are supplemented by a Cattaneo-Maxwell equation for its viscous energy-momentum tensor. In these models the viscous energy-momentum tensor relaxes to its Landau-Lifshitz value on a finite time scale. We assume the parameters of the model depend on the speed of light $c$ in such a way that as $c\\to\\infty$ the fluid becomes an incompressible fluid obeying the Navier-Stokes equations. We show that because the relativistic model must be hyperbolic, each mode behaves as an overdamped oscillator with two decay constants, one of which diverges as $c\\to\\infty$. Thus for finite $c$ there are two basic patterns, one which contains only slowly decaying modes, and reproduces Kolmogorov turbulence when $c\\to\\infty$, and another made of fast decaying modes only. Each flow pattern is associated to definite relations among the velocity and viscous energy tensor correlators."
     },
     {
       "id": "2604.26092",
