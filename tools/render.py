@@ -90,7 +90,7 @@ def render_regions(data, root, profiles):
             path = route(locale, page, slug)
             title = person['name'] if person else (site['groupName'] if page == 'home' else t['seo'][page]['title'])
             description = person['role'] + ' — ' + site['groupName'] if person else t['seo'][page]['description']
-            org = {'@context': 'https://schema.org', '@type': 'ResearchOrganization', '@id': site['url'] + '/#organization', 'name': site['groupName'], 'url': site['url'] + route(locale, 'home'), 'logo': site['url'] + '/logo_cosmo.png', 'parentOrganization': [{'@type': a.get('schemaType', 'Organization'), 'name': a['name'][locale], **{k:a[k] for k in ('url','sameAs') if k in a}} for a in site['affiliations']], 'contactPoint': {'@type': 'ContactPoint', 'url': site['url'] + route(locale, 'contact')}}
+            org = {'@context': 'https://schema.org', '@type': 'ResearchOrganization', '@id': site['url'] + '/#organization', 'name': site['groupName'], 'url': site['url'] + route(locale, 'home'), 'logo': site['url'] + '/logo_df_color.png', 'parentOrganization': [{'@type': a.get('schemaType', 'Organization'), 'name': a['name'][locale], **{k:a[k] for k in ('url','sameAs') if k in a}} for a in site['affiliations']], 'contactPoint': {'@type': 'ContactPoint', 'url': site['url'] + route(locale, 'contact')}}
             structured = [org]
             if person:
                 structured.append({'@context':'https://schema.org', '@type':'Person', 'name':person['name'], 'url':site['url']+path, 'jobTitle':person['role'], 'affiliation':{'@id':site['url']+'/#organization'}, 'sameAs':[s['url'] for s in person.get('social_links', [])] + ([f"https://orcid.org/{person['contact']['orcid']}"] if person['contact'].get('orcid') else [])})

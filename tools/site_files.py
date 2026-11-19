@@ -2,7 +2,7 @@
 from pathlib import Path
 
 SITE_DIRS = ('es', 'en', 'assets', 'Portadas', 'people')
-SITE_FILES = ('logo_cosmo.png', 'favicon.ico', 'sitemap.xml', 'robots.txt', '.nojekyll', 'build-info.json')
+SITE_FILES = ('logo_df_color.png', 'favicon.ico', 'sitemap.xml', 'robots.txt', '.nojekyll', 'build-info.json')
 
 
 def site_files(root):

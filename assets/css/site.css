@@ -35,7 +35,8 @@ ul,ol{padding:0;list-style:none}
 .site-header{height:96px;position:sticky;top:0;z-index:30;background:var(--surface);box-shadow:var(--shadow)}
 .header-inner{height:100%;display:flex;align-items:center}
 .brand,.header-controls{display:flex;flex:1;align-items:center}
-.brand img{height:64px;width:auto}
+.brand{margin-right:16px}
+.brand img{width:min(100%,250px);height:auto}
 .header-controls{justify-content:flex-end}
 .desktop-nav{display:flex;align-items:center;gap:20px;font-size:18px;white-space:nowrap}
 .desktop-nav [aria-current],dialog [aria-current]{color:var(--accent);font-weight:600}
