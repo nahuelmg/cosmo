@@ -37,6 +37,7 @@ ul,ol{padding:0;list-style:none}
 .brand,.header-controls{display:flex;flex:1;align-items:center}
 .brand{margin-right:16px}
 .brand img{width:min(100%,250px);height:auto}
+.dark .brand img{content:url(../../logo_df_blanco.png)}
 .header-controls{justify-content:flex-end}
 .desktop-nav{display:flex;align-items:center;gap:20px;font-size:18px;white-space:nowrap}
 .desktop-nav [aria-current],dialog [aria-current]{color:var(--accent);font-weight:600}

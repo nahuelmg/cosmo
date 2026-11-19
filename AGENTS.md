@@ -7,7 +7,7 @@ This is the single repository guide for agents and maintainers. The committed HT
 - `es/` and `en/`: editable pages, including individual profiles.
 - `index.html` and `404.html`: root redirect and error page.
 - `assets/`: CSS, JavaScript, fonts and icons.
-- `people/`, `Portadas/`, `logo_df_color.png`, `favicon.ico`: images.
+- `people/`, `Portadas/`, `logo_df_color.png`, `logo_df_blanco.png`, `favicon.ico`: images.
 
 Preview directly from the repository using Python 3.11+ (no packages required):
 
